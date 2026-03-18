@@ -1,0 +1,768 @@
+/**
+ * Pipeline Surface — EdgeEmployer
+ *
+ * Hiring pipeline management. Kanban (default) and list views.
+ * Shared data model — the toggle is display-only.
+ *
+ * Layer 3 scope:
+ * - Kanban: column-per-stage, candidate cards, stage advancement
+ * - List: dense sortable table, same candidates
+ * - Role filter (which open job)
+ * - Candidate detail drawer (slide-in)
+ * - Sophia insight per candidate / stage
+ * - View preference persists in session state
+ */
+
+import { useState, useCallback } from "react";
+import { useParams, useNavigate } from "react-router";
+import { motion, AnimatePresence } from "motion/react";
+import { RoleShell, GlassCard, SophiaInsight } from "../role-shell";
+import { SophiaMark } from "../sophia-mark";
+import { useSophia } from "../sophia-context";
+import { toast } from "../ui/feedback";
+import { EmptyState } from "../ui/feedback";
+
+// ─── Types ───────────────────────────────────────────────────────────────────
+
+type Stage = "new" | "screening" | "interview" | "final" | "offer";
+type SortKey = "name" | "match" | "stage" | "applied" | "activity";
+type ViewMode = "kanban" | "list";
+
+interface Candidate {
+  id: string;
+  name: string;
+  initial: string;
+  role: string; // which job they applied to
+  match: number;
+  stage: Stage;
+  skills: string[];
+  appliedDate: string;
+  lastActivity: string;
+  location: string;
+  sophiaNote: string;
+  starred: boolean;
+  status: "active" | "hold" | "rejected";
+}
+
+// ─── Data ────────────────────────────────────────────────────────────────────
+
+const JOBS = [
+  { id: "all",       label: "All roles",           count: 18 },
+  { id: "pd",        label: "Product Designer",     count: 12 },
+  { id: "ux-lead",   label: "UX Lead",              count: 6  },
+];
+
+const STAGES: { id: Stage; label: string; color: string }[] = [
+  { id: "new",       label: "New",         color: "#6B7280" },
+  { id: "screening", label: "Screening",   color: "#22D3EE" },
+  { id: "interview", label: "Interview",   color: "#8B5CF6" },
+  { id: "final",     label: "Final Round", color: "#F59E0B" },
+  { id: "offer",     label: "Offer",       color: "#10B981" },
+];
+
+const STAGE_ORDER: Stage[] = ["new", "screening", "interview", "final", "offer"];
+
+const CANDIDATES: Candidate[] = [
+  // Product Designer
+  { id: "c1",  name: "Sharon Lee",     initial: "S", role: "pd",      match: 94, stage: "interview", skills: ["Figma", "Design Systems", "User Research"],     appliedDate: "Mar 10", lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Strongest portfolio in the batch. Her Airbnb redesign case study is exactly what you asked for. Interview performance has been excellent.", starred: true,  status: "active" },
+  { id: "c2",  name: "Marcus Rivera",  initial: "M", role: "pd",      match: 89, stage: "interview", skills: ["Interaction Design", "Figma", "Prototyping"],    appliedDate: "Mar 11", lastActivity: "Yesterday", location: "New York, NY",      sophiaNote: "Strong interaction design background. Slightly weaker on systems thinking but compensates with velocity. Good culture fit signals.", starred: false, status: "active" },
+  { id: "c3",  name: "Aisha Patel",    initial: "A", role: "pd",      match: 86, stage: "screening", skills: ["UX Research", "Figma", "Accessibility"],          appliedDate: "Mar 12", lastActivity: "2 days ago", location: "Austin, TX",       sophiaNote: "Excellent research background. Accessibility specialization is rare. Consider for a research-heavy team.", starred: true,  status: "active" },
+  { id: "c4",  name: "James Park",     initial: "J", role: "pd",      match: 82, stage: "screening", skills: ["Product Design", "Sketch", "User Testing"],       appliedDate: "Mar 13", lastActivity: "3 days ago", location: "Seattle, WA",      sophiaNote: "Good generalist. Switch from Sketch to Figma is a minor concern — assess adaptability.", starred: false, status: "active" },
+  { id: "c5",  name: "Elena Russo",    initial: "E", role: "pd",      match: 78, stage: "new",       skills: ["UI Design", "Framer", "Motion Design"],            appliedDate: "Mar 14", lastActivity: "5 days ago", location: "Los Angeles, CA",  sophiaNote: "Motion design specialist — rare skill. Strong if your roadmap includes richer interactions. Needs review.", starred: false, status: "active" },
+  { id: "c6",  name: "David Kim",      initial: "D", role: "pd",      match: 75, stage: "new",       skills: ["Visual Design", "Figma", "Brand"],                  appliedDate: "Mar 15", lastActivity: "5 days ago", location: "Chicago, IL",      sophiaNote: "Heavy brand background. Needs assessment on product-specific experience.", starred: false, status: "active" },
+  { id: "c7",  name: "Nadia Chen",     initial: "N", role: "pd",      match: 91, stage: "final",     skills: ["Design Systems", "Figma", "React"],                 appliedDate: "Mar 8",  lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Top contender. Design systems depth + basic React is exactly the rare combo your team needs. Strong communicator in panel.", starred: true,  status: "active" },
+  { id: "c8",  name: "Tom Okafor",     initial: "T", role: "pd",      match: 72, stage: "new",       skills: ["UX Design", "Figma", "Usability Testing"],           appliedDate: "Mar 16", lastActivity: "Today",     location: "Remote",            sophiaNote: "Good fundamentals, limited senior-level impact quantification. Worth a screening call.", starred: false, status: "active" },
+  { id: "c9",  name: "Rachel Wong",    initial: "R", role: "pd",      match: 88, stage: "offer",     skills: ["Design Systems", "Figma", "Research"],              appliedDate: "Mar 5",  lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Offer extended. Competing with 2 other companies — Sophia recommends a founder call to accelerate decision.", starred: true,  status: "active" },
+  // UX Lead
+  { id: "c10", name: "Luis Morales",   initial: "L", role: "ux-lead", match: 92, stage: "final",     skills: ["Design Leadership", "Figma", "Stakeholder Mgmt"], appliedDate: "Mar 9",  lastActivity: "Yesterday", location: "New York, NY",      sophiaNote: "Best leadership candidate so far. Has scaled a design team from 2 to 14. Panel gave unanimous strong hire signal.", starred: true,  status: "active" },
+  { id: "c11", name: "Priya Kapoor",   initial: "P", role: "ux-lead", match: 87, stage: "interview", skills: ["UX Strategy", "Design Systems", "Team Building"], appliedDate: "Mar 11", lastActivity: "2 days ago", location: "Remote",            sophiaNote: "Strong strategy background. Less hands-on than Luis but compensates with clear systems thinking.", starred: false, status: "active" },
+  { id: "c12", name: "Ben Nguyen",     initial: "B", role: "ux-lead", match: 79, stage: "screening", skills: ["Product Design", "Leadership", "Mentorship"],      appliedDate: "Mar 13", lastActivity: "4 days ago", location: "Austin, TX",       sophiaNote: "Growing into a lead role. Strong mentorship track record. May be slightly early for a VP-level scope.", starred: false, status: "active" },
+];
+
+// ─── Candidate Card (Kanban) ──────────────────────────────────────────────────
+
+function CandidateCard({
+  candidate,
+  onSelect,
+  onAdvance,
+  onStar,
+}: {
+  candidate: Candidate;
+  onSelect: (c: Candidate) => void;
+  onAdvance: (id: string) => void;
+  onStar: (id: string) => void;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const stageInfo = STAGES.find((s) => s.id === candidate.stage)!;
+  const canAdvance = STAGE_ORDER.indexOf(candidate.stage) < STAGE_ORDER.length - 1;
+
+  const matchColor = candidate.match >= 90 ? "#B3FF3B" : candidate.match >= 80 ? EMPLOYER_GREEN : candidate.match >= 70 ? "#F59E0B" : "#9CA3AF";
+
+  return (
+    <motion.div
+      className="rounded-xl p-3.5 cursor-pointer relative"
+      style={{
+        background: hovered ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.025)",
+        border: `1px solid ${candidate.starred ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.06)"}`,
+      }}
+      whileHover={{ y: -1 }}
+      transition={{ duration: 0.15 }}
+      onHoverStart={() => setHovered(true)}
+      onHoverEnd={() => setHovered(false)}
+      onClick={() => onSelect(candidate)}
+      layout
+    >
+      {/* Header row */}
+      <div className="flex items-start justify-between mb-2.5">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="w-8 h-8 rounded-lg flex items-center justify-center text-[13px] flex-shrink-0"
+            style={{
+              background: `${matchColor}15`,
+              border: `1px solid ${matchColor}25`,
+              color: matchColor,
+              fontFamily: "var(--font-display)",
+              fontWeight: 600,
+            }}
+          >
+            {candidate.initial}
+          </div>
+          <div>
+            <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              {candidate.name}
+            </span>
+            <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+              {candidate.location}
+            </span>
+          </div>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <button
+            onClick={(e) => { e.stopPropagation(); onStar(candidate.id); }}
+            className="cursor-pointer"
+          >
+            <Star
+              className="w-3.5 h-3.5 transition-colors"
+              style={{ color: candidate.starred ? "#F59E0B" : "#374151", fill: candidate.starred ? "rgba(245,158,11,0.3)" : "none" }}
+            />
+          </button>
+          <div className="tabular-nums px-1.5 py-0.5 rounded" style={{
+            background: `${matchColor}12`,
+            color: matchColor,
+            fontSize: 11,
+            fontFamily: "var(--font-body)",
+            fontWeight: 500,
+          }}>
+            {candidate.match}%
+          </div>
+        </div>
+      </div>
+
+      {/* Skills */}
+      <div className="flex flex-wrap gap-1 mb-2.5">
+        {candidate.skills.slice(0, 2).map((skill) => (
+          <span key={skill} className="text-[9px] px-2 py-0.5 rounded-full" style={{
+            background: "rgba(255,255,255,0.04)",
+            border: "1px solid rgba(255,255,255,0.06)",
+            color: "#6B7280",
+            fontFamily: "var(--font-body)",
+          }}>
+            {skill}
+          </span>
+        ))}
+        {candidate.skills.length > 2 && (
+          <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+            +{candidate.skills.length - 2}
+          </span>
+        )}
+      </div>
+
+      {/* Footer */}
+      <div className="flex items-center justify-between">
+        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+          <Clock className="w-2.5 h-2.5 inline mr-1 -mt-0.5" />
+          {candidate.lastActivity}
+        </span>
+        <AnimatePresence>
+          {hovered && canAdvance && (
+            <motion.button
+              initial={{ opacity: 0, scale: 0.85 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.85 }}
+              transition={{ duration: 0.15 }}
+              onClick={(e) => { e.stopPropagation(); onAdvance(candidate.id); }}
+              className="flex items-center gap-1 text-[10px] px-2 py-1 rounded-md cursor-pointer transition-colors"
+              style={{
+                background: `${EMPLOYER_GREEN}12`,
+                border: `1px solid ${EMPLOYER_GREEN}20`,
+                color: EMPLOYER_GREEN,
+                fontFamily: "var(--font-body)",
+              }}
+            >
+              Advance <ArrowRight className="w-2.5 h-2.5" />
+            </motion.button>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Sophia dot indicator if note exists */}
+      {candidate.starred && (
+        <div className="absolute top-2 right-2 w-1.5 h-1.5 rounded-full" style={{ background: EMPLOYER_GREEN, boxShadow: `0 0 4px ${EMPLOYER_GREEN}60` }} />
+      )}
+    </motion.div>
+  );
+}
+
+// ─── Candidate Detail Drawer ──────────────────────────────────────────────────
+
+function CandidateDrawer({
+  candidate,
+  onClose,
+  onAdvance,
+  onStar,
+  onNavigate,
+}: {
+  candidate: Candidate;
+  onClose: () => void;
+  onAdvance: (id: string) => void;
+  onStar: (id: string) => void;
+  onNavigate: (t: string) => void;
+}) {
+  const { openSophia } = useSophia();
+  const stageInfo = STAGES.find((s) => s.id === candidate.stage)!;
+  const stageIdx = STAGE_ORDER.indexOf(candidate.stage);
+  const canAdvance = stageIdx < STAGE_ORDER.length - 1;
+  const nextStage = canAdvance ? STAGES[stageIdx + 1] : null;
+  const matchColor = candidate.match >= 90 ? "#B3FF3B" : candidate.match >= 80 ? EMPLOYER_GREEN : candidate.match >= 70 ? "#F59E0B" : "#9CA3AF";
+
+  return (
+    <motion.div
+      className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
+      style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+      initial={{ x: 400 }}
+      animate={{ x: 0 }}
+      exit={{ x: 400 }}
+      transition={{ duration: 0.35, ease: EASE }}
+    >
+      {/* Drawer header */}
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[16px]" style={{ background: `${matchColor}12`, border: `1.5px solid ${matchColor}25`, color: matchColor, fontFamily: "var(--font-display)", fontWeight: 600 }}>
+            {candidate.initial}
+          </div>
+          <div>
+            <span className="text-[15px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.name}</span>
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: `${stageInfo.color}12`, color: stageInfo.color, border: `1px solid ${stageInfo.color}20`, fontFamily: "var(--font-body)" }}>
+                {stageInfo.label}
+              </span>
+              <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{candidate.location}</span>
+            </div>
+          </div>
+        </div>
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors">
+          <X className="w-4 h-4 text-[#6B7280]" />
+        </button>
+      </div>
+
+      {/* Scrollable content */}
+      <div className="flex-1 overflow-y-auto">
+        {/* Match score */}
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Match score</span>
+            <span className="text-[24px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.match}%</span>
+          </div>
+          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+            <motion.div className="h-full rounded-full" style={{ background: matchColor }}
+              initial={{ width: 0 }} animate={{ width: `${candidate.match}%` }} transition={{ delay: 0.3, duration: 0.6, ease: EASE }} />
+          </div>
+        </div>
+
+        {/* Sophia note */}
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+          <div className="flex items-center gap-1.5 mb-2">
+            <SophiaMark size={12} glowing={false} />
+            <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
+          </div>
+          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+            {candidate.sophiaNote}
+          </p>
+        </div>
+
+        {/* Stage progression */}
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+          <span className="text-[10px] text-[#374151] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>STAGE PROGRESSION</span>
+          <div className="flex items-center gap-1">
+            {STAGES.map((s, i) => {
+              const sIdx = STAGE_ORDER.indexOf(s.id);
+              const isActive = s.id === candidate.stage;
+              const isDone = sIdx < stageIdx;
+              return (
+                <div key={s.id} className="flex items-center flex-1">
+                  <div className="flex flex-col items-center flex-1">
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{
+                      background: isDone ? `${EMPLOYER_GREEN}20` : isActive ? `${s.color}20` : "rgba(255,255,255,0.04)",
+                      border: `1.5px solid ${isDone ? EMPLOYER_GREEN : isActive ? s.color : "rgba(255,255,255,0.1)"}`,
+                      boxShadow: isActive ? `0 0 8px ${s.color}40` : "none",
+                    }}>
+                      {isDone ? <Check className="w-2.5 h-2.5" style={{ color: EMPLOYER_GREEN }} /> : null}
+                    </div>
+                    <span className="text-[8px] mt-1 text-center" style={{ color: isActive ? s.color : isDone ? EMPLOYER_GREEN : "#374151", fontFamily: "var(--font-body)" }}>
+                      {s.label}
+                    </span>
+                  </div>
+                  {i < STAGES.length - 1 && (
+                    <div className="h-px flex-1 mb-4" style={{ background: sIdx < stageIdx ? `${EMPLOYER_GREEN}40` : "rgba(255,255,255,0.06)" }} />
+                  )}
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Skills */}
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+          <span className="text-[10px] text-[#374151] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS</span>
+          <div className="flex flex-wrap gap-1.5">
+            {candidate.skills.map((skill) => (
+              <span key={skill} className="text-[11px] px-2.5 py-1 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+                {skill}
+              </span>
+            ))}
+          </div>
+        </div>
+
+        {/* Meta */}
+        <div className="px-5 py-4">
+          <span className="text-[10px] text-[#374151] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DETAILS</span>
+          {[
+            { label: "Applied",         value: candidate.appliedDate },
+            { label: "Last active",     value: candidate.lastActivity },
+            { label: "Applying for",    value: JOBS.find(j => j.id === candidate.role)?.label ?? candidate.role },
+          ].map((item) => (
+            <div key={item.label} className="flex items-center justify-between py-1.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+              <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{item.value}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Drawer actions */}
+      <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+        {canAdvance && nextStage && (
+          <button
+            onClick={() => { onAdvance(candidate.id); onClose(); }}
+            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+            style={{ background: `${EMPLOYER_GREEN}12`, border: `1px solid ${EMPLOYER_GREEN}25`, color: EMPLOYER_GREEN, fontFamily: "var(--font-display)", fontWeight: 500 }}
+          >
+            <ArrowRight className="w-3.5 h-3.5" />
+            Move to {nextStage.label}
+          </button>
+        )}
+        <div className="flex gap-2">
+          <button
+            onClick={() => { onClose(); onNavigate("messages"); }}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(34,211,238,0.08)] transition-colors"
+            style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+            <MessageSquare className="w-3.5 h-3.5" /> Message
+          </button>
+          <button
+            onClick={() => { onClose(); onNavigate("sessions"); }}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(139,92,246,0.08)] transition-colors"
+            style={{ background: "rgba(139,92,246,0.04)", border: "1px solid rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "var(--font-body)" }}>
+            <Calendar className="w-3.5 h-3.5" /> Schedule
+          </button>
+          <button
+            onClick={() => openSophia(`Review the resume and application materials for ${candidate.name} applying for ${JOBS.find(j => j.id === candidate.role)?.label ?? candidate.role}. Match score: ${candidate.match}%. Skills: ${candidate.skills.join(", ")}. Sophia noted: ${candidate.sophiaNote}`)}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+            <FileText className="w-3.5 h-3.5" /> Resume
+          </button>
+          <button
+            onClick={() => onStar(candidate.id)}
+            className="px-3 py-2 rounded-xl cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: candidate.starred ? "#F59E0B" : "#6B7280" }}
+          >
+            <Star className="w-3.5 h-3.5" style={{ fill: candidate.starred ? "rgba(245,158,11,0.3)" : "none" }} />
+          </button>
+        </div>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Kanban Column ────────────────────────────────────────────────────────────
+
+function KanbanColumn({
+  stage,
+  candidates,
+  onSelect,
+  onAdvance,
+  onStar,
+}: {
+  stage: typeof STAGES[0];
+  candidates: Candidate[];
+  onSelect: (c: Candidate) => void;
+  onAdvance: (id: string) => void;
+  onStar: (id: string) => void;
+}) {
+  return (
+    <div className="flex flex-col min-w-[220px] flex-1">
+      {/* Column header */}
+      <div className="flex items-center justify-between mb-3 px-0.5">
+        <div className="flex items-center gap-2">
+          <div className="w-2 h-2 rounded-full" style={{ background: stage.color, boxShadow: `0 0 4px ${stage.color}50` }} />
+          <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            {stage.label}
+          </span>
+        </div>
+        <span className="text-[10px] px-1.5 py-0.5 rounded-full tabular-nums" style={{ background: "rgba(255,255,255,0.06)", color: "#6B7280", fontFamily: "var(--font-body)" }}>
+          {candidates.length}
+        </span>
+      </div>
+
+      {/* Cards */}
+      <div className="flex flex-col gap-2 flex-1" style={{ minHeight: 80 }}>
+        <AnimatePresence>
+          {candidates.map((c) => (
+            <CandidateCard key={c.id} candidate={c} onSelect={onSelect} onAdvance={onAdvance} onStar={onStar} />
+          ))}
+        </AnimatePresence>
+        {candidates.length === 0 && (
+          <div className="flex-1 rounded-xl flex items-center justify-center" style={{ border: "1px dashed rgba(255,255,255,0.06)", minHeight: 80 }}>
+            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Empty</span>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// ─── List View ───────────────────────────────────────────────────��────────────
+
+function ListView({
+  candidates,
+  onSelect,
+  onStar,
+}: {
+  candidates: Candidate[];
+  onSelect: (c: Candidate) => void;
+  onStar: (id: string) => void;
+}) {
+  const [sortKey, setSortKey] = useState<SortKey>("match");
+  const [sortAsc, setSortAsc] = useState(false);
+
+  const handleSort = (key: SortKey) => {
+    if (sortKey === key) setAsc(!sortAsc);
+    else { setSortKey(key); setAsc(false); }
+  };
+  const setAsc = setSortAsc;
+
+  const sorted = [...candidates].sort((a, b) => {
+    let diff = 0;
+    if (sortKey === "match")    diff = a.match - b.match;
+    if (sortKey === "name")     diff = a.name.localeCompare(b.name);
+    if (sortKey === "stage")    diff = STAGE_ORDER.indexOf(a.stage) - STAGE_ORDER.indexOf(b.stage);
+    if (sortKey === "applied")  diff = a.appliedDate.localeCompare(b.appliedDate);
+    if (sortKey === "activity") diff = a.lastActivity.localeCompare(b.lastActivity);
+    return sortAsc ? diff : -diff;
+  });
+
+  const ColHeader = ({ k, label }: { k: SortKey; label: string }) => (
+    <button onClick={() => handleSort(k)} className="flex items-center gap-1 cursor-pointer hover:text-[#9CA3AF] transition-colors">
+      <span className="text-[10px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: sortKey === k ? "#E8E8ED" : "#6B7280" }}>
+        {label}
+      </span>
+      {sortKey === k && (sortAsc ? <ChevronUp className="w-2.5 h-2.5 text-[#6B7280]" /> : <ChevronDown className="w-2.5 h-2.5 text-[#6B7280]" />)}
+    </button>
+  );
+
+  return (
+    <div className="rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)" }}>
+      {/* Table header */}
+      <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 60px 120px 90px 90px 80px", borderBottom: "1px solid rgba(255,255,255,0.05)", gap: 12 }}>
+        <ColHeader k="name"     label="CANDIDATE" />
+        <ColHeader k="match"    label="MATCH" />
+        <ColHeader k="stage"    label="STAGE" />
+        <ColHeader k="applied"  label="APPLIED" />
+        <ColHeader k="activity" label="LAST ACTIVE" />
+        <span />
+      </div>
+
+      {/* Rows */}
+      {sorted.map((c, i) => {
+        const stageInfo = STAGES.find((s) => s.id === c.stage)!;
+        const matchColor = c.match >= 90 ? "#B3FF3B" : c.match >= 80 ? EMPLOYER_GREEN : c.match >= 70 ? "#F59E0B" : "#9CA3AF";
+        return (
+          <motion.div
+            key={c.id}
+            className="grid px-4 py-3 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors items-center"
+            style={{ gridTemplateColumns: "1fr 60px 120px 90px 90px 80px", borderBottom: i < sorted.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none", gap: 12 }}
+            onClick={() => onSelect(c)}
+            initial={{ opacity: 0, x: -4 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: i * 0.04, duration: 0.25, ease: EASE }}
+          >
+            {/* Name */}
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0" style={{ background: `${matchColor}12`, color: matchColor, fontFamily: "var(--font-display)", fontWeight: 600 }}>
+                {c.initial}
+              </div>
+              <div className="min-w-0">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[12px] text-[#E8E8ED] truncate" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
+                  {c.starred && <Star className="w-3 h-3 flex-shrink-0" style={{ color: "#F59E0B", fill: "rgba(245,158,11,0.3)" }} />}
+                </div>
+                <span className="text-[10px] text-[#374151] truncate block" style={{ fontFamily: "var(--font-body)" }}>{c.location}</span>
+              </div>
+            </div>
+            {/* Match */}
+            <span className="text-[13px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              {c.match}%
+            </span>
+            {/* Stage */}
+            <span className="text-[10px] px-2 py-1 rounded-full w-fit" style={{ background: `${stageInfo.color}10`, color: stageInfo.color, border: `1px solid ${stageInfo.color}20`, fontFamily: "var(--font-body)" }}>
+              {stageInfo.label}
+            </span>
+            {/* Applied */}
+            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{c.appliedDate}</span>
+            {/* Last active */}
+            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{c.lastActivity}</span>
+            {/* Actions */}
+            <div className="flex items-center gap-1.5">
+              <button onClick={(e) => { e.stopPropagation(); onStar(c.id); }} className="cursor-pointer p-1 rounded hover:bg-[rgba(255,255,255,0.04)] transition-colors">
+                <Star className="w-3 h-3" style={{ color: c.starred ? "#F59E0B" : "#374151", fill: c.starred ? "rgba(245,158,11,0.3)" : "none" }} />
+              </button>
+              <ChevronRight className="w-3.5 h-3.5 text-[#374151]" />
+            </div>
+          </motion.div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ─── Main Export ──────────────────────────────────────────────────────────────
+
+export function PipelineSurface() {
+  const { role: roleParam } = useParams<{ role: string }>();
+  const navigate = useNavigate();
+  const role = "employer" as const;
+
+  const [view, setView] = useState<ViewMode>("kanban");
+  const [candidates, setCandidates] = useState<Candidate[]>(CANDIDATES);
+  const [selectedJob, setSelectedJob] = useState("all");
+  const [search, setSearch] = useState("");
+  const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
+  const [jobDropOpen, setJobDropOpen] = useState(false);
+
+  const handleNavigate = useCallback((target: string) => {
+    const paths: Record<string, string> = {
+      synthesis: `/${role}`, pipeline: `/${role}/pipeline`,
+      analytics: `/${role}/analytics`, messages: `/${role}/messages`,
+      sessions: `/${role}/sessions`, landing: "/",
+    };
+    navigate(paths[target] ?? `/${role}`);
+  }, [navigate, role]);
+
+  const handleAdvance = useCallback((id: string) => {
+    setCandidates((prev) =>
+      prev.map((c) => {
+        if (c.id !== id) return c;
+        const idx = STAGE_ORDER.indexOf(c.stage);
+        const next = STAGE_ORDER[idx + 1];
+        if (!next) return c;
+        const nextLabel = STAGES.find(s => s.id === next)?.label ?? next;
+        toast.success(`Moved to ${nextLabel}`, `${candidates.find(c2 => c2.id === id)?.name ?? "Candidate"} advanced`);
+        return { ...c, stage: next };
+      })
+    );
+  }, [candidates]);
+
+  const handleStar = useCallback((id: string) => {
+    setCandidates((prev) => prev.map((c) => {
+      if (c.id !== id) return c;
+      const nowStarred = !c.starred;
+      toast.info(nowStarred ? "Shortlisted" : "Removed from shortlist", c.name);
+      return { ...c, starred: nowStarred };
+    }));
+    setSelectedCandidate((prev) => prev?.id === id ? { ...prev, starred: !prev.starred } : prev);
+  }, []);
+
+  const filtered = candidates.filter((c) => {
+    const matchesJob = selectedJob === "all" || c.role === selectedJob;
+    const matchesSearch = !search || c.name.toLowerCase().includes(search.toLowerCase()) || c.skills.some((s) => s.toLowerCase().includes(search.toLowerCase()));
+    return matchesJob && matchesSearch;
+  });
+
+  // Contextual bottom bar — updates when a candidate is selected
+  const sophiaOverride = selectedCandidate
+    ? {
+        message: `${selectedCandidate.name} — ${selectedCandidate.match}% match · ${STAGES.find(s => s.id === selectedCandidate.stage)?.label}`,
+        chips: [
+          { label: "Sophia's full read", action: `Give me a detailed assessment of candidate ${selectedCandidate.name} for the ${JOBS.find(j => j.id === selectedCandidate.role)?.label} role. ${selectedCandidate.sophiaNote}` },
+          { label: "Draft interview invite", action: `Draft an interview invitation email for ${selectedCandidate.name} for the ${JOBS.find(j => j.id === selectedCandidate.role)?.label} position.` },
+        ],
+      }
+    : {
+        message: "Nadia Chen (91% match) is ready for an offer — 2 competitors are moving fast",
+        chips: [
+          { label: "Top candidates", action: "Show me the top 3 candidates across all roles and what I should do next to close them" },
+          { label: "Pipeline strategy", action: "What's the current state of my hiring pipeline and what actions should I take this week?" },
+        ],
+      };
+
+  // Stage summary for header
+  const stageSummary = STAGES.map((s) => ({ ...s, count: filtered.filter((c) => c.stage === s.id).length }));
+
+  return (
+    <RoleShell role={role} userName="Jordan" userInitial="J" edgeGas={72} onNavigate={handleNavigate} sophiaOverride={sophiaOverride}>
+      <div className="max-w-[1400px] mx-auto">
+        {/* Page header */}
+        <motion.div className="pt-8 pb-5 flex items-center justify-between"
+          initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.4, ease: EASE }}>
+          <div>
+            <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              Hiring Pipeline
+            </h1>
+            <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+              {filtered.length} candidates across {JOBS.filter(j => j.id !== "all").length} open roles
+            </p>
+          </div>
+
+          {/* View toggle */}
+          <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            {(["kanban", "list"] as ViewMode[]).map((v) => (
+              <button
+                key={v}
+                onClick={() => setView(v)}
+                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all"
+                style={{
+                  background: view === v ? "rgba(255,255,255,0.08)" : "transparent",
+                  color: view === v ? "#E8E8ED" : "#6B7280",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {v === "kanban" ? <Kanban className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
+                {v.charAt(0).toUpperCase() + v.slice(1)}
+              </button>
+            ))}
+          </div>
+        </motion.div>
+
+        {/* Stage summary strip */}
+        <motion.div className="flex gap-2 mb-5"
+          initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}>
+          {stageSummary.map((s) => (
+            <div key={s.id} className="flex-1 rounded-xl px-3 py-2.5 flex items-center justify-between" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${s.count > 0 ? `${s.color}15` : "rgba(255,255,255,0.04)"}` }}>
+              <div className="flex items-center gap-1.5">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: s.count > 0 ? s.color : "#374151" }} />
+                <span className="text-[11px]" style={{ color: s.count > 0 ? "#9CA3AF" : "#374151", fontFamily: "var(--font-body)" }}>{s.label}</span>
+              </div>
+              <span className="text-[15px] tabular-nums" style={{ color: s.count > 0 ? s.color : "#374151", fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.count}</span>
+            </div>
+          ))}
+        </motion.div>
+
+        {/* Toolbar */}
+        <motion.div className="flex items-center gap-3 mb-5"
+          initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.28, duration: 0.35, ease: EASE }}>
+          {/* Search */}
+          <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
+            <Search className="w-3.5 h-3.5 text-[#374151]" />
+            <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder="Search candidates or skills..."
+              className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none"
+              style={{ fontFamily: "var(--font-body)" }}
+            />
+            {search && (
+              <button onClick={() => setSearch("")} className="cursor-pointer">
+                <X className="w-3.5 h-3.5 text-[#374151]" />
+              </button>
+            )}
+          </div>
+
+          {/* Job filter */}
+          <div className="relative">
+            <button
+              onClick={() => setJobDropOpen(!jobDropOpen)}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+            >
+              <Briefcase className="w-3.5 h-3.5 text-[#6B7280]" />
+              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>
+                {JOBS.find((j) => j.id === selectedJob)?.label ?? "All roles"}
+              </span>
+              <ChevronDown className="w-3 h-3 text-[#374151]" />
+            </button>
+            <AnimatePresence>
+              {jobDropOpen && (
+                <motion.div
+                  className="absolute top-full left-0 mt-1 w-[200px] rounded-xl z-20 overflow-hidden"
+                  style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(16px)" }}
+                  initial={{ opacity: 0, y: -4, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -4, scale: 0.97 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {JOBS.map((j) => (
+                    <button key={j.id} onClick={() => { setSelectedJob(j.id); setJobDropOpen(false); }}
+                      className="w-full flex items-center justify-between px-3 py-2.5 cursor-pointer hover:bg-[rgba(255,255,255,0.03)] transition-colors text-left"
+                      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                      <span className="text-[12px]" style={{ color: selectedJob === j.id ? EMPLOYER_GREEN : "#9CA3AF", fontFamily: "var(--font-body)" }}>{j.label}</span>
+                      <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{j.count}</span>
+                    </button>
+                  ))}
+                </motion.div>
+              )}
+            </AnimatePresence>
+          </div>
+        </motion.div>
+
+        {/* Main content */}
+        <AnimatePresence mode="wait">
+          {view === "kanban" ? (
+            <motion.div key="kanban" className="flex gap-4 overflow-x-auto pb-4"
+              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+              {STAGES.map((stage) => (
+                <KanbanColumn
+                  key={stage.id}
+                  stage={stage}
+                  candidates={filtered.filter((c) => c.stage === stage.id)}
+                  onSelect={setSelectedCandidate}
+                  onAdvance={handleAdvance}
+                  onStar={handleStar}
+                />
+              ))}
+            </motion.div>
+          ) : (
+            <motion.div key="list"
+              initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+              <ListView candidates={filtered} onSelect={setSelectedCandidate} onStar={handleStar} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Candidate detail drawer overlay */}
+      <AnimatePresence>
+        {selectedCandidate && (
+          <>
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(0,0,0,0.4)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
+              onClick={() => setSelectedCandidate(null)} />
+            <CandidateDrawer
+              candidate={selectedCandidate}
+              onClose={() => setSelectedCandidate(null)}
+              onAdvance={handleAdvance}
+              onStar={handleStar}
+              onNavigate={handleNavigate}
+            />
+          </>
+        )}
+      </AnimatePresence>
+    </RoleShell>
+  );
+}
