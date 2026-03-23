@@ -24,7 +24,7 @@ import { SophiaMark } from "./sophia-mark";
 import { useSophia } from "./sophia-context";
 import {
   Timer, Zap, Coffee, ChevronDown, Sparkles,
-  CheckCircle2, Target, Flame,
+  CheckCircle2, Target, Flame, Users,
 } from "lucide-react";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -134,9 +134,9 @@ export function EdgeBuddy({
             className="w-[260px] rounded-2xl overflow-hidden"
             style={{
               background: "rgba(10,12,16,0.96)",
-              border: "1px solid rgba(34,211,238,0.12)",
+              border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)",
               backdropFilter: "blur(24px)",
-              boxShadow: "0 8px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,211,238,0.04)",
+              boxShadow: "0 8px 40px rgba(var(--ce-shadow-tint),0.5), 0 0 0 1px rgba(var(--ce-role-edgestar-rgb),0.04)",
             }}
             initial={{ opacity: 0, scale: 0.88, y: 16 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -146,12 +146,12 @@ export function EdgeBuddy({
             {/* Header */}
             <div
               className="flex items-center justify-between px-3.5 py-2.5"
-              style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+              style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
             >
               <div className="flex items-center gap-2">
                 <SophiaMark size={16} glowing={false} />
                 <span
-                  className="text-[11px] text-[#22D3EE]"
+                  className="text-[11px] text-ce-cyan"
                   style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
                 >
                   EdgeBuddy
@@ -159,9 +159,9 @@ export function EdgeBuddy({
               </div>
               <button
                 onClick={() => setExpanded(false)}
-                className="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors"
+                className="w-5 h-5 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
               >
-                <ChevronDown className="w-3 h-3 text-[#374151]" />
+                <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
               </button>
             </div>
 
@@ -170,19 +170,19 @@ export function EdgeBuddy({
               {needsBreak && (
                 <motion.div
                   className="flex items-center gap-2 px-3.5 py-2"
-                  style={{ background: "rgba(245,158,11,0.05)", borderBottom: "1px solid rgba(245,158,11,0.1)" }}
+                  style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.05)", borderBottom: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.1)" }}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                 >
-                  <Coffee className="w-3 h-3 text-[#F59E0B] flex-shrink-0" />
-                  <span className="text-[10px] text-[#F59E0B]" style={{ fontFamily: "var(--font-body)" }}>
+                  <Coffee className="w-3 h-3 text-[var(--ce-role-edgepreneur)] flex-shrink-0" />
+                  <span className="text-[10px] text-[var(--ce-role-edgepreneur)]" style={{ fontFamily: "var(--font-body)" }}>
                     45min in — a 5 min break will improve focus
                   </span>
                   <button
                     onClick={() => { setBreakNudge(false); setPaused(true); setTimeout(() => setPaused(false), 5 * 60 * 1000); }}
                     className="ml-auto text-[9px] cursor-pointer px-1.5 py-0.5 rounded"
-                    style={{ background: "rgba(245,158,11,0.1)", color: "#F59E0B", fontFamily: "var(--font-body)" }}
+                    style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.1)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}
                   >
                     Take it
                   </button>
@@ -195,13 +195,13 @@ export function EdgeBuddy({
               {celebrated && (
                 <motion.div
                   className="flex items-center justify-center gap-2 py-2"
-                  style={{ background: "rgba(179,255,59,0.05)", borderBottom: "1px solid rgba(179,255,59,0.1)" }}
+                  style={{ background: "rgba(var(--ce-lime-rgb),0.05)", borderBottom: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: "auto", opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
                 >
-                  <CheckCircle2 className="w-3.5 h-3.5 text-[#B3FF3B]" />
-                  <span className="text-[11px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                  <CheckCircle2 className="w-3.5 h-3.5 text-ce-lime" />
+                  <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                     Task complete — nice work
                   </span>
                 </motion.div>
@@ -209,10 +209,10 @@ export function EdgeBuddy({
             </AnimatePresence>
 
             {/* Session stats */}
-            <div className="px-3.5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+            <div className="px-3.5 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
               {/* Milestone name */}
               <p
-                className="text-[11px] text-[#6B7280] mb-2.5 truncate"
+                className="text-[11px] text-ce-text-tertiary mb-2.5 truncate"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {milestoneTitle}
@@ -221,8 +221,8 @@ export function EdgeBuddy({
               {/* Stats row */}
               <div className="flex items-center gap-3">
                 {[
-                  { icon: <Timer className="w-3 h-3" />, label: "Session", value: formatTime(sessionSecs), color: paused ? "#6B7280" : "#22D3EE" },
-                  { icon: <Flame className="w-3 h-3" />, label: "Tasks", value: `${tasksCompleted}/${totalTasks}`, color: "#B3FF3B" },
+                  { icon: <Timer className="w-3 h-3" />, label: "Session", value: formatTime(sessionSecs), color: paused ? "var(--ce-text-tertiary)" : "var(--ce-role-edgestar)" },
+                  { icon: <Flame className="w-3 h-3" />, label: "Tasks", value: `${tasksCompleted}/${totalTasks}`, color: "var(--ce-lime)" },
                 ].map((stat) => (
                   <div key={stat.label} className="flex items-center gap-1.5">
                     <div style={{ color: stat.color }}>{stat.icon}</div>
@@ -232,7 +232,7 @@ export function EdgeBuddy({
                     >
                       {stat.value}
                     </span>
-                    <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+                    <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
                       {stat.label}
                     </span>
                   </div>
@@ -240,8 +240,8 @@ export function EdgeBuddy({
                 {/* Pause / resume */}
                 <button
                   onClick={() => setPaused(!paused)}
-                  className="ml-auto text-[9px] cursor-pointer px-2 py-0.5 rounded-md hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-                  style={{ color: paused ? "#22D3EE" : "#374151", fontFamily: "var(--font-body)", border: "1px solid rgba(255,255,255,0.06)" }}
+                  className="ml-auto text-[9px] cursor-pointer px-2 py-0.5 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+                  style={{ color: paused ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
                 >
                   {paused ? "Resume" : "Pause"}
                 </button>
@@ -250,16 +250,16 @@ export function EdgeBuddy({
               {/* Progress bar */}
               {totalTasks > 0 && (
                 <div className="mt-2.5">
-                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ background: "linear-gradient(90deg, #22D3EE, #B3FF3B)" }}
+                      style={{ background: "linear-gradient(90deg, var(--ce-role-edgestar), var(--ce-lime))" }}
                       initial={{ width: 0 }}
                       animate={{ width: `${progressPct}%` }}
                       transition={{ duration: 0.6, ease: EASE }}
                     />
                   </div>
-                  <span className="text-[9px] text-[#374151] mt-1 block" style={{ fontFamily: "var(--font-body)" }}>
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)] mt-1 block" style={{ fontFamily: "var(--font-body)" }}>
                     {progressPct}% of milestone complete
                   </span>
                 </div>
@@ -268,7 +268,7 @@ export function EdgeBuddy({
 
             {/* Quick Sophia prompts */}
             <div className="px-3.5 py-2.5">
-              <span className="text-[9px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <span className="text-[9px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 QUICK HELP
               </span>
               <div className="flex flex-col gap-1.5">
@@ -277,13 +277,13 @@ export function EdgeBuddy({
                     key={p.label}
                     onClick={() => handleSophia(p.label)}
                     className="flex items-center gap-2 px-2.5 py-2 rounded-lg cursor-pointer text-left transition-colors group"
-                    style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+                    style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                   >
-                    <div style={{ color: "#374151" }} className="group-hover:text-[#22D3EE] transition-colors flex-shrink-0">
+                    <div style={{ color: "var(--ce-text-quaternary)" }} className="group-hover:text-ce-cyan transition-colors flex-shrink-0">
                       {p.icon}
                     </div>
                     <span
-                      className="text-[10px] text-[#9CA3AF] group-hover:text-[#E8E8ED] transition-colors"
+                      className="text-[10px] text-ce-text-secondary group-hover:text-ce-text-primary transition-colors"
                       style={{ fontFamily: "var(--font-body)" }}
                     >
                       {p.label}
@@ -292,6 +292,39 @@ export function EdgeBuddy({
                 ))}
               </div>
             </div>
+
+            {/* Buddy section — shows when paired */}
+            {(() => {
+              try {
+                const bd = localStorage.getItem("ce-buddy");
+                if (!bd) return null;
+                const buddy = JSON.parse(bd);
+                return (
+                  <div className="px-3.5 py-2.5" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                    <span className="text-[9px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      YOUR BUDDY
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <div className="w-6 h-6 rounded-md flex items-center justify-center text-[10px] font-medium" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)" }}>
+                        {buddy.initial}
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="text-[11px] text-ce-text-primary truncate" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{buddy.name}</div>
+                        <div className="text-[9px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{buddy.frequency} check-ins</div>
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => handleSophia(`Check in with ${buddy.name} — what should I update them on?`)}
+                      className="mt-2 w-full py-1.5 rounded-md text-[10px] cursor-pointer transition-colors flex items-center justify-center gap-1"
+                      style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", fontFamily: "var(--font-body)" }}
+                    >
+                      <Users className="w-3 h-3" />
+                      Check in with {buddy.name.split(" ")[0]}
+                    </button>
+                  </div>
+                );
+              } catch { return null; }
+            })()}
           </motion.div>
         ) : (
           // ── Minimized pill ──────────────────────────────────
@@ -301,7 +334,7 @@ export function EdgeBuddy({
             className="flex items-center gap-2 px-3 py-2 rounded-full cursor-pointer group"
             style={{
               background: "rgba(10,12,16,0.9)",
-              border: `1px solid ${celebrated ? "rgba(179,255,59,0.3)" : needsBreak ? "rgba(245,158,11,0.25)" : "rgba(34,211,238,0.12)"}`,
+              border: `1px solid ${celebrated ? "rgba(var(--ce-lime-rgb),0.3)" : needsBreak ? "rgba(var(--ce-role-edgepreneur-rgb),0.25)" : "rgba(var(--ce-role-edgestar-rgb),0.12)"}`,
               backdropFilter: "blur(16px)",
             }}
             initial={{ opacity: 0, y: 8 }}
@@ -309,10 +342,10 @@ export function EdgeBuddy({
               opacity: 1,
               y: 0,
               boxShadow: celebrated
-                ? ["0 0 0px rgba(179,255,59,0)", "0 0 20px rgba(179,255,59,0.2)", "0 0 0px rgba(179,255,59,0)"]
+                ? ["0 0 0px rgba(var(--ce-lime-rgb),0)", "0 0 20px rgba(var(--ce-lime-rgb),0.2)", "0 0 0px rgba(var(--ce-lime-rgb),0)"]
                 : needsBreak
-                ? ["0 0 0px rgba(245,158,11,0)", "0 0 16px rgba(245,158,11,0.15)", "0 0 0px rgba(245,158,11,0)"]
-                : "0 0 0px rgba(0,0,0,0)",
+                ? ["0 0 0px rgba(var(--ce-role-edgepreneur-rgb),0)", "0 0 16px rgba(var(--ce-role-edgepreneur-rgb),0.15)", "0 0 0px rgba(var(--ce-role-edgepreneur-rgb),0)"]
+                : "0 0 0px rgba(var(--ce-shadow-tint),0)",
             }}
             exit={{ opacity: 0, y: 8 }}
             transition={{ duration: 0.22, ease: EASE }}
@@ -324,20 +357,20 @@ export function EdgeBuddy({
             <motion.div
               className="w-1.5 h-1.5 rounded-full flex-shrink-0"
               style={{
-                background: celebrated ? "#B3FF3B" : needsBreak ? "#F59E0B" : paused ? "#374151" : "#22D3EE",
+                background: celebrated ? "var(--ce-lime)" : needsBreak ? "var(--ce-role-edgepreneur)" : paused ? "var(--ce-text-quaternary)" : "var(--ce-role-edgestar)",
               }}
               animate={{
                 boxShadow: paused
                   ? "none"
                   : celebrated
-                  ? ["0 0 3px rgba(179,255,59,0.8)", "0 0 8px rgba(179,255,59,0.4)", "0 0 3px rgba(179,255,59,0.8)"]
-                  : ["0 0 3px rgba(34,211,238,0.8)", "0 0 6px rgba(34,211,238,0.3)", "0 0 3px rgba(34,211,238,0.8)"],
+                  ? ["0 0 3px rgba(var(--ce-lime-rgb),0.8)", "0 0 8px rgba(var(--ce-lime-rgb),0.4)", "0 0 3px rgba(var(--ce-lime-rgb),0.8)"]
+                  : ["0 0 3px rgba(var(--ce-role-edgestar-rgb),0.8)", "0 0 6px rgba(var(--ce-role-edgestar-rgb),0.3)", "0 0 3px rgba(var(--ce-role-edgestar-rgb),0.8)"],
               }}
               transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
             />
             <span
               className="text-[11px] tabular-nums"
-              style={{ color: paused ? "#374151" : "#22D3EE", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ color: paused ? "var(--ce-text-quaternary)" : "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             >
               {formatTime(sessionSecs)}
             </span>

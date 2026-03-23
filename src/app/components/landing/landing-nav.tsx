@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, Sun, Moon } from "lucide-react";
+import { useThemeToggle } from "../ui/use-theme";
 
 interface LandingNavProps {
   onNavigate: (page: string) => void;
@@ -17,6 +18,7 @@ const solutionsItems = [
 export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [solutionsOpen, setSolutionsOpen] = useState(false);
+  const { isDark, toggle: toggleTheme } = useThemeToggle();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 40);
@@ -29,10 +31,10 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
       style={{
         background: scrolled
-          ? "rgba(8, 9, 12, 0.85)"
+          ? "rgba(var(--ce-glass-tint), 0.85)"
           : "transparent",
         backdropFilter: scrolled ? "blur(20px) saturate(1.2)" : "none",
-        borderBottom: scrolled ? "1px solid rgba(255,255,255,0.04)" : "1px solid transparent",
+        borderBottom: scrolled ? "1px solid rgba(var(--ce-glass-tint),0.04)" : "1px solid transparent",
       }}
     >
       <div className="max-w-[1400px] mx-auto px-6 lg:px-10 h-[72px] flex items-center justify-between">
@@ -42,12 +44,12 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
           className="flex items-center gap-3 cursor-pointer group"
         >
           <svg width="28" height="38" viewBox="0 0 133 180" fill="none" className="transition-transform duration-300 group-hover:scale-105">
-            <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="#B3FF3B"/>
-            <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="#B3FF3B"/>
-            <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="#B3FF3B"/>
+            <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="var(--ce-lime)"/>
+            <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="var(--ce-lime)"/>
+            <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="var(--ce-lime)"/>
           </svg>
           <span
-            className="text-[#E8E8ED] tracking-[-0.02em]"
+            className="text-[var(--ce-text-primary)] tracking-[-0.02em]"
             style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "18px" }}
           >
             CareerEdged
@@ -69,10 +71,10 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
               style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 500,
-                color: currentPage === item.id ? "#E8E8ED" : "#6B7280",
+                color: currentPage === item.id ? "var(--ce-text-primary)" : "var(--ce-text-secondary)",
               }}
-              onMouseEnter={(e) => { if (currentPage !== item.id) e.currentTarget.style.color = "#9CA3AF"; }}
-              onMouseLeave={(e) => { if (currentPage !== item.id) e.currentTarget.style.color = "#6B7280"; }}
+              onMouseEnter={(e) => { if (currentPage !== item.id) e.currentTarget.style.color = "var(--ce-text-tertiary)"; }}
+              onMouseLeave={(e) => { if (currentPage !== item.id) e.currentTarget.style.color = "var(--ce-text-secondary)"; }}
             >
               {item.label}
             </button>
@@ -89,7 +91,7 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
               style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 500,
-                color: solutionsOpen ? "#E8E8ED" : "#6B7280",
+                color: solutionsOpen ? "var(--ce-text-primary)" : "var(--ce-text-secondary)",
               }}
             >
               Solutions
@@ -112,10 +114,10 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
               <div
                 className="rounded-xl py-2 min-w-[200px]"
                 style={{
-                  background: "rgba(18, 20, 26, 0.95)",
+                  background: "var(--ce-surface-modal-bg)",
                   backdropFilter: "blur(20px)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  boxShadow: "0 20px 60px rgba(0,0,0,0.5)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                  boxShadow: "0 20px 60px rgba(var(--ce-shadow-tint),0.5)",
                 }}
               >
                 {solutionsItems.map((item) => (
@@ -129,14 +131,14 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
                     style={{
                       fontFamily: "'Satoshi', sans-serif",
                       fontWeight: 500,
-                      color: "#9CA3AF",
+                      color: "var(--ce-text-tertiary)",
                     }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = "#E8E8ED";
-                      e.currentTarget.style.background = "rgba(255,255,255,0.04)";
+                      e.currentTarget.style.color = "var(--ce-text-primary)";
+                      e.currentTarget.style.background = "rgba(var(--ce-glass-tint),0.04)";
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = "#9CA3AF";
+                      e.currentTarget.style.color = "var(--ce-text-tertiary)";
                       e.currentTarget.style.background = "transparent";
                     }}
                   >
@@ -148,18 +150,28 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
           </div>
         </div>
 
-        {/* Right: Auth */}
+        {/* Right: Theme + Auth */}
         <div className="flex items-center gap-3">
+          <button
+            onClick={toggleTheme}
+            className="p-2 rounded-lg transition-colors duration-200 cursor-pointer"
+            style={{ color: "var(--ce-text-tertiary)" }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--ce-text-primary)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-text-tertiary)"; }}
+            aria-label={isDark ? "Switch to light mode" : "Switch to dark mode"}
+          >
+            {isDark ? <Moon size={16} /> : <Sun size={16} />}
+          </button>
           <button
             onClick={() => onNavigate("login")}
             className="px-4 py-2 rounded-lg text-[13px] transition-colors duration-200 cursor-pointer"
             style={{
               fontFamily: "'Satoshi', sans-serif",
               fontWeight: 500,
-              color: "#9CA3AF",
+              color: "var(--ce-text-tertiary)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.color = "#E8E8ED"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.color = "#9CA3AF"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.color = "var(--ce-text-primary)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-text-tertiary)"; }}
           >
             Log in
           </button>
@@ -169,15 +181,15 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
             style={{
               fontFamily: "'Satoshi', sans-serif",
               fontWeight: 600,
-              background: "#B3FF3B",
-              color: "#0A0C10",
+              background: "var(--ce-lime)",
+              color: "var(--ce-surface-0)",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.background = "#c4ff6a";
               e.currentTarget.style.transform = "translateY(-1px)";
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.background = "#B3FF3B";
+              e.currentTarget.style.background = "var(--ce-lime)";
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >

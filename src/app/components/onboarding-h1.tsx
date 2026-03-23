@@ -245,18 +245,18 @@ const EASE = [0.32, 0.72, 0, 1] as const;
 function TopoBackground({ intensity }: { intensity: "normal" | "deep" | "dim" }) {
   // Real topographic contour paths from the Figma design file
   const topoPaths = [
-    { d: topoSvgPaths.p338f9380, color: "#22D3EE" },
-    { d: topoSvgPaths.p36a4b5b0, color: "#042C01" },
-    { d: topoSvgPaths.p7035a40, color: "#042C01" },
-    { d: topoSvgPaths.p3983ca60, color: "#22D3EE" },
-    { d: topoSvgPaths.p1be07340, color: "#042C01" },
-    { d: topoSvgPaths.p21888e60, color: "#042C01" },
-    { d: topoSvgPaths.p3e16f200, color: "#22D3EE" },
-    { d: topoSvgPaths.p9101500, color: "#042C01" },
-    { d: topoSvgPaths.p2d0f2fc0, color: "#042C01" },
-    { d: topoSvgPaths.p19740c00, color: "#22D3EE" },
-    { d: topoSvgPaths.p80b8920, color: "#042C01" },
-    { d: topoSvgPaths.p296fb600, color: "#042C01" },
+    { d: topoSvgPaths.p338f9380, color: "var(--ce-role-edgestar)" },
+    { d: topoSvgPaths.p36a4b5b0, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p7035a40, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p3983ca60, color: "var(--ce-role-edgestar)" },
+    { d: topoSvgPaths.p1be07340, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p21888e60, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p3e16f200, color: "var(--ce-role-edgestar)" },
+    { d: topoSvgPaths.p9101500, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p2d0f2fc0, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p19740c00, color: "var(--ce-role-edgestar)" },
+    { d: topoSvgPaths.p80b8920, color: "var(--ce-forest)" },
+    { d: topoSvgPaths.p296fb600, color: "var(--ce-forest)" },
   ];
 
   return (
@@ -273,7 +273,7 @@ function TopoBackground({ intensity }: { intensity: "normal" | "deep" | "dim" })
       <div className="absolute rounded-full"
         style={{
           width: "693px", height: "693px", right: "-100px", bottom: "-100px",
-          background: "radial-gradient(circle, rgba(34,211,238,0.05) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(var(--ce-role-edgestar-rgb),0.05) 0%, transparent 70%)",
           filter: "blur(90px)",
         }} />
 
@@ -313,14 +313,14 @@ function GlassCard({ children, selected, onClick, delay = 0, allSelected }: {
       style={{ willChange: "transform, opacity" }}>
       {/* Gradient border */}
       <div className={`absolute -inset-px rounded-2xl transition-opacity duration-300 ${selected ? "opacity-100" : "opacity-0 group-hover:opacity-40"}`}
-        style={{ background: selected ? "linear-gradient(135deg, rgba(34,211,238,0.3), rgba(179,255,59,0.15))" : "linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.02))", borderRadius: "16px" }} />
+        style={{ background: selected ? "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.3), rgba(var(--ce-lime-rgb),0.15))" : "linear-gradient(135deg, rgba(var(--ce-glass-tint),0.08), rgba(var(--ce-glass-tint),0.02))", borderRadius: "16px" }} />
       {/* Lime pulse on selection */}
       {selected && (
-        <motion.div className="absolute -inset-px rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(179,255,59,0.2), rgba(34,211,238,0.1))", borderRadius: "16px" }}
+        <motion.div className="absolute -inset-px rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.2), rgba(var(--ce-role-edgestar-rgb),0.1))", borderRadius: "16px" }}
           initial={{ opacity: 0.4 }} animate={{ opacity: 0 }} transition={{ duration: 0.5 }} />
       )}
-      <div className={`relative rounded-2xl border transition-all duration-300 ${selected ? "bg-[rgba(34,211,238,0.06)] border-transparent" : "bg-[rgba(255,255,255,0.03)] border-[rgba(255,255,255,0.05)] group-hover:bg-[rgba(255,255,255,0.05)]"}`}
-        style={{ boxShadow: selected ? "inset 0 1px 1px rgba(255,255,255,0.06), 0 0 30px rgba(34,211,238,0.04)" : "inset 0 1px 1px rgba(255,255,255,0.03), 0 2px 8px rgba(0,0,0,0.2)" }}>
+      <div className={`relative rounded-2xl border transition-all duration-300 ${selected ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] border-transparent" : "bg-[rgba(var(--ce-glass-tint),0.03)] border-[rgba(var(--ce-glass-tint),0.05)] group-hover:bg-[rgba(var(--ce-glass-tint),0.05)]"}`}
+        style={{ boxShadow: selected ? "inset 0 1px 1px rgba(var(--ce-glass-tint),0.06), 0 0 30px rgba(var(--ce-role-edgestar-rgb),0.04)" : "inset 0 1px 1px rgba(var(--ce-glass-tint),0.03), 0 2px 8px rgba(var(--ce-shadow-tint),0.2)" }}>
         {children}
       </div>
     </motion.div>
@@ -385,9 +385,9 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
               exit={{ opacity: 0, scale: 0.95, transition: { duration: 0.5 } }}>
               <SophiaMark size={48} glowing />
               <div className="flex flex-col items-center gap-2">
-                <motion.div className="text-[28px] text-[#E8E8ED] tabular-nums"
+                <motion.div className="text-[28px] text-ce-text-primary tabular-nums"
                   style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{displayPct}</motion.div>
-                <motion.p className="text-[#9CA3AF] text-sm" style={{ fontFamily: "var(--font-body)" }}>
+                <motion.p className="text-ce-text-secondary text-sm" style={{ fontFamily: "var(--font-body)" }}>
                   {statusTexts[Math.min(3, Math.floor(progress.get() / 25))]}
                 </motion.p>
               </div>
@@ -397,7 +397,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 80" preserveAspectRatio="xMidYMid meet">
                   <defs>
                     <linearGradient id="conn-h1" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.4" /><stop offset="100%" stopColor="#B3FF3B" stopOpacity="0.2" />
+                      <stop offset="0%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.4" /><stop offset="100%" stopColor="var(--ce-lime)" stopOpacity="0.2" />
                     </linearGradient>
                   </defs>
                   {dots.map((d, i) => {
@@ -406,7 +406,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                     const clustering = p > 80;
                     return (
                       <motion.circle key={i} r={d.size}
-                        fill={i % 6 === 0 ? "#B3FF3B" : i % 3 === 0 ? "#22D3EE" : "rgba(255,255,255,0.3)"}
+                        fill={i % 6 === 0 ? "var(--ce-lime)" : i % 3 === 0 ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.3)"}
                         animate={{
                           cx: migrating ? d.tx + (clustering ? Math.sin(i) * 1.5 : Math.sin(i) * 5) : d.sx + Math.sin(i * 0.8) * 2,
                           cy: migrating ? d.ty + (clustering ? Math.cos(i) * 1.5 : Math.cos(i) * 4) : d.sy + Math.cos(i * 0.8) * 1.5,
@@ -435,7 +435,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.6, ease: EASE }}>
             <div className="flex flex-col items-center gap-3">
               <SophiaMark size={36} glowing />
-              <motion.p className="text-[#9CA3AF] text-center max-w-md" style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}
+              <motion.p className="text-ce-text-secondary text-center max-w-md" style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}
                 initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.5, ease: EASE }}>
                 Here's your roadmap. I've organized it by what matters most right now.
               </motion.p>
@@ -447,7 +447,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
               <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
                 <defs>
                   <linearGradient id="road-conn" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="#22D3EE" stopOpacity="0.4" /><stop offset="50%" stopColor="#B3FF3B" stopOpacity="0.2" /><stop offset="100%" stopColor="#22D3EE" stopOpacity="0.1" />
+                    <stop offset="0%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.4" /><stop offset="50%" stopColor="var(--ce-lime)" stopOpacity="0.2" /><stop offset="100%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.1" />
                   </linearGradient>
                   <filter id="road-glow"><feGaussianBlur stdDeviation="2" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
                 </defs>
@@ -476,57 +476,57 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                     animate={{ opacity: 1, scale: l.scale, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 + i * 0.18, ease: EASE }}>
                     <div className={`relative rounded-2xl ${isActive ? "p-px" : ""}`}
-                      style={isActive ? { background: "linear-gradient(135deg, rgba(34,211,238,0.35), rgba(179,255,59,0.2), rgba(34,211,238,0.1))" } : {}}>
+                      style={isActive ? { background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.35), rgba(var(--ce-lime-rgb),0.2), rgba(var(--ce-role-edgestar-rgb),0.1))" } : {}}>
                       <div className={`rounded-2xl p-5 ${isActive ? "" : ""}`}
                         style={{
-                          background: isActive ? "linear-gradient(135deg, rgba(4,44,1,0.2) 0%, rgba(12,14,19,0.95) 50%, rgba(34,211,238,0.03) 100%)" : "rgba(255,255,255,0.025)",
-                          border: isActive ? "none" : "1px solid rgba(255,255,255,0.06)",
-                          boxShadow: isActive ? "inset 0 1px 2px rgba(255,255,255,0.05), 0 4px 24px rgba(0,0,0,0.4), 0 0 40px rgba(34,211,238,0.04)" : "inset 0 1px 1px rgba(255,255,255,0.02), 0 2px 12px rgba(0,0,0,0.3)",
+                          background: isActive ? "linear-gradient(135deg, rgba(4,44,1,0.2) 0%, rgba(12,14,19,0.95) 50%, rgba(var(--ce-role-edgestar-rgb),0.03) 100%)" : "rgba(var(--ce-glass-tint),0.025)",
+                          border: isActive ? "none" : "1px solid rgba(var(--ce-glass-tint),0.06)",
+                          boxShadow: isActive ? "inset 0 1px 2px rgba(var(--ce-glass-tint),0.05), 0 4px 24px rgba(var(--ce-shadow-tint),0.4), 0 0 40px rgba(var(--ce-role-edgestar-rgb),0.04)" : "inset 0 1px 1px rgba(var(--ce-glass-tint),0.02), 0 2px 12px rgba(var(--ce-shadow-tint),0.3)",
                           backdropFilter: "blur(20px)",
                         }}>
                         {/* Header */}
                         <div className="flex items-center justify-between mb-3">
                           <div className="flex items-center gap-2.5">
                             <div className="relative">
-                              {isActive && <motion.div className="absolute -inset-1.5 rounded-full" style={{ background: "radial-gradient(circle, rgba(34,211,238,0.3), transparent)" }}
+                              {isActive && <motion.div className="absolute -inset-1.5 rounded-full" style={{ background: "radial-gradient(circle, rgba(var(--ce-role-edgestar-rgb),0.3), transparent)" }}
                                 animate={{ scale: [1, 1.5, 1], opacity: [0.6, 0.2, 0.6] }} transition={{ duration: 3, repeat: Infinity }} />}
-                              <div className={`w-3 h-3 rounded-full ${isActive ? "bg-[#22D3EE]" : "bg-[#374151]"}`} style={isActive ? { boxShadow: "0 0 10px rgba(34,211,238,0.5)" } : {}} />
+                              <div className={`w-3 h-3 rounded-full ${isActive ? "bg-[var(--ce-role-edgestar)]" : "bg-[var(--ce-text-quaternary)]"}`} style={isActive ? { boxShadow: "0 0 10px rgba(var(--ce-role-edgestar-rgb),0.5)" } : {}} />
                             </div>
-                            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] uppercase tracking-[0.08em] ${isActive ? "bg-[rgba(34,211,238,0.08)] text-[#22D3EE]" : "bg-[rgba(255,255,255,0.03)] text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
+                            <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md text-[10px] uppercase tracking-[0.08em] ${isActive ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] text-ce-cyan" : "bg-[rgba(var(--ce-glass-tint),0.03)] text-ce-text-tertiary"}`} style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>
                               {isActive && <Sparkles className="w-2.5 h-2.5" />}Phase {p.id}
                             </span>
                           </div>
                           <div className="flex items-center gap-2">
-                            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{p.duration}</span>
-                            {isActive && <span className="inline-flex items-center gap-1 text-[11px] text-[#22D3EE] cursor-pointer">Begin <ChevronRight className="w-3 h-3" /></span>}
+                            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{p.duration}</span>
+                            {isActive && <span className="inline-flex items-center gap-1 text-[11px] text-ce-cyan cursor-pointer">Begin <ChevronRight className="w-3 h-3" /></span>}
                           </div>
                         </div>
 
-                        <h3 className={`mb-3 ${isActive ? "text-[#E8E8ED]" : "text-[#9CA3AF]"}`} style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: isActive ? "17px" : "15px" }}>{p.title}</h3>
+                        <h3 className={`mb-3 ${isActive ? "text-ce-text-primary" : "text-ce-text-secondary"}`} style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: isActive ? "17px" : "15px" }}>{p.title}</h3>
 
                         {isActive && (
                           <>
                             <div className="flex flex-wrap gap-1.5 mb-3">
                               {p.items.map((item, mi) => (
-                                <span key={mi} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] ${mi === 0 ? "bg-[rgba(34,211,238,0.08)] text-[#E8E8ED] border border-[rgba(34,211,238,0.12)]" : "bg-[rgba(255,255,255,0.025)] text-[#6B7280] border border-[rgba(255,255,255,0.04)]"}`} style={{ fontFamily: "var(--font-body)" }}>
-                                  <span className={mi === 0 ? "text-[#22D3EE]" : "text-[#374151]"}>{item.icon}</span>{item.text}
+                                <span key={mi} className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] ${mi === 0 ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] text-ce-text-primary border border-[rgba(var(--ce-role-edgestar-rgb),0.12)]" : "bg-[rgba(var(--ce-glass-tint),0.025)] text-ce-text-tertiary border border-[rgba(var(--ce-glass-tint),0.04)]"}`} style={{ fontFamily: "var(--font-body)" }}>
+                                  <span className={mi === 0 ? "text-ce-cyan" : "text-[var(--ce-text-quaternary)]"}>{item.icon}</span>{item.text}
                                 </span>
                               ))}
                             </div>
                             {p.paths && (
                               <div className="flex items-center gap-2 mb-3">
-                                <span className="text-[10px] text-[#374151] uppercase tracking-wider">Paths:</span>
+                                <span className="text-[10px] text-[var(--ce-text-quaternary)] uppercase tracking-wider">Paths:</span>
                                 {p.paths.map(pt => (
-                                  <span key={pt.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] ${pt.recommended ? "bg-[rgba(34,211,238,0.08)] text-[#22D3EE] border border-[rgba(34,211,238,0.1)]" : "bg-[rgba(255,255,255,0.02)] text-[#6B7280] border border-[rgba(255,255,255,0.03)]"}`}>
+                                  <span key={pt.id} className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] ${pt.recommended ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] text-ce-cyan border border-[rgba(var(--ce-role-edgestar-rgb),0.1)]" : "bg-[rgba(var(--ce-glass-tint),0.02)] text-ce-text-tertiary border border-[rgba(var(--ce-glass-tint),0.03)]"}`}>
                                     {pt.recommended && <Sparkles className="w-2.5 h-2.5" />}{pt.title}
                                   </span>
                                 ))}
                               </div>
                             )}
                             {p.sophiaInsight && (
-                              <div className="flex items-start gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
-                                <Sparkles className="w-3 h-3 text-[#22D3EE] flex-shrink-0 mt-0.5" />
-                                <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{p.sophiaInsight}</span>
+                              <div className="flex items-start gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                                <Sparkles className="w-3 h-3 text-ce-cyan flex-shrink-0 mt-0.5" />
+                                <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{p.sophiaInsight}</span>
                               </div>
                             )}
                           </>
@@ -534,8 +534,8 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
 
                         {!isActive && (
                           <div className="flex items-center justify-between">
-                            <span className="text-[11px] text-[#374151]">{p.items.length} milestones{p.paths && ` · ${p.paths.length} paths`}</span>
-                            <button onClick={() => setExpandedUpcoming(isExpanded ? null : p.id)} className="text-[#374151] hover:text-[#6B7280] cursor-pointer transition-colors">
+                            <span className="text-[11px] text-[var(--ce-text-quaternary)]">{p.items.length} milestones{p.paths && ` · ${p.paths.length} paths`}</span>
+                            <button onClick={() => setExpandedUpcoming(isExpanded ? null : p.id)} className="text-[var(--ce-text-quaternary)] hover:text-ce-text-tertiary cursor-pointer transition-colors">
                               <motion.div animate={{ rotate: isExpanded ? 180 : 0 }} transition={{ duration: 0.2 }}><ChevronDown className="w-3.5 h-3.5" /></motion.div>
                             </button>
                           </div>
@@ -544,8 +544,8 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                           {!isActive && isExpanded && (
                             <motion.div className="flex flex-wrap gap-1.5 mt-3" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.3, ease: EASE }}>
                               {p.items.map((item, mi) => (
-                                <span key={mi} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[11px] bg-[rgba(255,255,255,0.02)] text-[#6B7280] border border-[rgba(255,255,255,0.03)]">
-                                  <span className="text-[#374151]">{item.icon}</span>{item.text}
+                                <span key={mi} className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg text-[11px] bg-[rgba(var(--ce-glass-tint),0.02)] text-ce-text-tertiary border border-[rgba(var(--ce-glass-tint),0.03)]">
+                                  <span className="text-[var(--ce-text-quaternary)]">{item.icon}</span>{item.text}
                                 </span>
                               ))}
                             </motion.div>
@@ -564,17 +564,17 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                 <motion.div className="flex flex-col items-center gap-4"
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE }}>
                   <motion.button onClick={onSave} className="group flex items-center gap-2.5 px-7 py-3.5 rounded-xl cursor-pointer"
-                    style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C", boxShadow: "0 0 30px rgba(34,211,238,0.15), 0 4px 12px rgba(0,0,0,0.3)" }}
+                    style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 30px rgba(var(--ce-role-edgestar-rgb),0.15), 0 4px 12px rgba(var(--ce-shadow-tint),0.3)" }}
                     whileTap={{ scale: 0.97 }}>
                     <Sparkles className="w-4 h-4" /> Save my roadmap <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                   </motion.button>
-                  <button className="flex items-center gap-2 px-5 py-3.5 rounded-xl cursor-pointer border border-[rgba(255,255,255,0.08)] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#E8E8ED] transition-colors text-[14px]"
+                  <button className="flex items-center gap-2 px-5 py-3.5 rounded-xl cursor-pointer border border-[rgba(var(--ce-glass-tint),0.08)] text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.04)] hover:text-ce-text-primary transition-colors text-[14px]"
                     style={{ fontFamily: "var(--font-body)" }}>
                     Tell me more
                   </button>
                   <div className="flex items-center gap-5 mt-1">
-                    <button className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RefreshCw className="w-3.5 h-3.5" /> Not quite right?</button>
-                    <button onClick={onAdjust} className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3.5 h-3.5" /> Adjust my answers</button>
+                    <button className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RefreshCw className="w-3.5 h-3.5" /> Not quite right?</button>
+                    <button onClick={onAdjust} className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3.5 h-3.5" /> Adjust my answers</button>
                   </div>
                 </motion.div>
               )}
@@ -596,26 +596,26 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
       <motion.div className="relative z-10 w-full max-w-sm mx-4"
         initial={{ y: 50, opacity: 0, scale: 0.96 }} animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 160, damping: 24, delay: 0.2 }}>
-        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.25), rgba(179,255,59,0.15), rgba(34,211,238,0.08))" }}>
-          <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.1) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05)" }}>
+        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.25), rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))" }}>
+          <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.1) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(var(--ce-shadow-tint),0.6), inset 0 1px 1px rgba(var(--ce-glass-tint),0.05)" }}>
             <div className="flex items-center gap-3">
               <SophiaMark size={28} glowing />
               <div>
-                <div className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>This map is yours.</div>
-                <div className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Sign in to keep it.</div>
+                <div className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>This map is yours.</div>
+                <div className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Sign in to keep it.</div>
               </div>
             </div>
-            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1a1a1a] hover:bg-white/90 transition-colors cursor-pointer" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-[var(--ce-surface-1)] hover:bg-white/90 transition-colors cursor-pointer" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               <svg className="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
               Continue with Google
             </button>
-            <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(255,255,255,0.05)]" /><span className="text-[11px] text-[#6B7280]">or</span><div className="flex-1 h-px bg-[rgba(255,255,255,0.05)]" /></div>
-            <input type="email" placeholder="Where should I send this?" className="w-full px-4 py-3 rounded-xl border border-[rgba(255,255,255,0.06)] text-[#E8E8ED] placeholder:text-[#6B7280] focus:outline-none focus:border-[rgba(34,211,238,0.3)] transition-colors" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)", fontSize: "14px" }} />
-            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer" style={{ background: "linear-gradient(135deg, #B3FF3B, #22D3EE)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C" }}>
+            <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /><span className="text-[11px] text-ce-text-tertiary">or</span><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /></div>
+            <input type="email" placeholder="Where should I send this?" className="w-full px-4 py-3 rounded-xl border border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-primary placeholder:text-ce-text-tertiary focus:outline-none focus:border-[rgba(var(--ce-role-edgestar-rgb),0.3)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)", fontSize: "14px" }} />
+            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer" style={{ background: "linear-gradient(135deg, var(--ce-lime), var(--ce-role-edgestar))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
               <Sparkles className="w-4 h-4" /> Save my roadmap
             </button>
-            <p className="text-[11px] text-[#6B7280] text-center">Free. No catch.</p>
-            <button onClick={onDismiss} className="text-[12px] text-[#374151] hover:text-[#6B7280] transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Maybe later</button>
+            <p className="text-[11px] text-ce-text-tertiary text-center">Free. No catch.</p>
+            <button onClick={onDismiss} className="text-[12px] text-[var(--ce-text-quaternary)] hover:text-ce-text-tertiary transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Maybe later</button>
           </div>
         </div>
       </motion.div>
@@ -674,12 +674,12 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
   const bgIntensity = isOverlay ? "deep" : step === "intro" ? "normal" : "normal";
 
   return (
-    <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full flex flex-col items-center justify-center relative overflow-hidden" style={{ backgroundColor: "var(--ce-void)" }}>
       <TopoBackground intensity={bgIntensity} />
 
       <AnimatePresence>
         {canBack && (
-          <motion.button onClick={back} className="absolute top-6 left-6 z-30 flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer"
+          <motion.button onClick={back} className="absolute top-6 left-6 z-30 flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer"
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} whileTap={{ scale: 0.95 }} style={{ fontFamily: "var(--font-body)" }}>
             <ArrowLeft className="w-3.5 h-3.5" /> Back
           </motion.button>
@@ -694,8 +694,8 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
                 <SophiaMark size={100} glowing />
               </motion.div>
               <motion.div className="flex flex-col items-center gap-2" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.5, ease: EASE }}>
-                <h1 className="text-[#E8E8ED] text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "32px" }}>
-                  Your world is about to<br /><span style={{ color: "#B3FF3B" }}>open up.</span>
+                <h1 className="text-ce-text-primary text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "32px" }}>
+                  Your world is about to<br /><span style={{ color: "var(--ce-lime)" }}>open up.</span>
                 </h1>
               </motion.div>
             </motion.div>
@@ -705,15 +705,15 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
             <motion.div key="intent" className="flex flex-col items-center gap-10 w-full max-w-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -16, transition: { duration: 0.3 } }}>
               <motion.div className="flex flex-col items-center gap-4" initial={{ scale: 1.15 }} animate={{ scale: 1 }} transition={{ duration: 0.5, ease: "easeOut" }}>
                 <SophiaMark size={40} glowing={false} />
-                <motion.p className="text-[#9CA3AF] text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("intent")}</motion.p>
+                <motion.p className="text-ce-text-secondary text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("intent")}</motion.p>
               </motion.div>
               <div className="grid gap-3 w-full">
                 {INTENTS.map((o, i) => (
                   <GlassCard key={o.id} selected={intent === o.id} allSelected={intent} onClick={() => { setIntent(o.id); setTimeout(() => go("sub"), 500); }} delay={0.5 + i * 0.12}>
                     <div className="flex items-center gap-4 p-5">
-                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${intent === o.id ? "bg-[rgba(34,211,238,0.1)] text-[#22D3EE]" : "bg-[rgba(255,255,255,0.04)] text-[#6B7280] group-hover:text-[#9CA3AF]"}`}>{o.icon}</div>
-                      <div><div className="text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{o.label}</div><div className="text-[13px] text-[#6B7280] mt-0.5">{o.sub}</div></div>
-                      {intent === o.id && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} className="ml-auto w-5 h-5 rounded-full bg-[#22D3EE] flex items-center justify-center"><Check className="w-3 h-3 text-[#08090C]" /></motion.div>}
+                      <div className={`w-11 h-11 rounded-xl flex items-center justify-center transition-colors ${intent === o.id ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)] text-ce-cyan" : "bg-[rgba(var(--ce-glass-tint),0.04)] text-ce-text-tertiary group-hover:text-ce-text-secondary"}`}>{o.icon}</div>
+                      <div><div className="text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{o.label}</div><div className="text-[13px] text-ce-text-tertiary mt-0.5">{o.sub}</div></div>
+                      {intent === o.id && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }} className="ml-auto w-5 h-5 rounded-full bg-[var(--ce-role-edgestar)] flex items-center justify-center"><Check className="w-3 h-3 text-[var(--ce-void)]" /></motion.div>}
                     </div>
                   </GlassCard>
                 ))}
@@ -725,14 +725,14 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
             <motion.div key="sub" className="flex flex-col items-center gap-10 w-full max-w-lg" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -16, transition: { duration: 0.3 } }}>
               <div className="flex flex-col items-center gap-4">
                 <SophiaMark size={40} glowing={false} />
-                <motion.p className="text-[#9CA3AF] text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("sub")}</motion.p>
+                <motion.p className="text-ce-text-secondary text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("sub")}</motion.p>
               </div>
               <div className="grid gap-3 w-full">
                 {SUBS[intent]?.map((o, i) => (
                   <GlassCard key={o.id} selected={sub === o.id} allSelected={sub} onClick={() => { setSub(o.id); setTimeout(() => go("target"), 500); }} delay={0.5 + i * 0.1}>
                     <div className="flex items-center gap-4 p-4">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${sub === o.id ? "bg-[rgba(34,211,238,0.1)] text-[#22D3EE]" : "bg-[rgba(255,255,255,0.04)] text-[#6B7280]"}`}>{o.icon}</div>
-                      <div><div className="text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{o.label}</div><div className="text-[12px] text-[#6B7280] mt-0.5">{o.sub}</div></div>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${sub === o.id ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)] text-ce-cyan" : "bg-[rgba(var(--ce-glass-tint),0.04)] text-ce-text-tertiary"}`}>{o.icon}</div>
+                      <div><div className="text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{o.label}</div><div className="text-[12px] text-ce-text-tertiary mt-0.5">{o.sub}</div></div>
                     </div>
                   </GlassCard>
                 ))}
@@ -744,17 +744,17 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
             <motion.div key="target" className="flex flex-col items-center gap-10 w-full max-w-xl" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -16, transition: { duration: 0.3 } }}>
               <div className="flex flex-col items-center gap-4">
                 <SophiaMark size={40} glowing={false} />
-                <motion.p className="text-[#9CA3AF] text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("target")}</motion.p>
+                <motion.p className="text-ce-text-secondary text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("target")}</motion.p>
               </div>
               <div className="flex flex-wrap justify-center gap-3">
                 {(pathQ?.targetOpts || TARGETS).map((o, i) => (
                   <motion.button key={o.id} onClick={() => { setTarget(o.id); setTimeout(() => go("level"), 450); }}
-                    className={`flex items-center gap-2.5 pl-3 pr-4 py-3 rounded-xl cursor-pointer border transition-all duration-200 ${target === o.id ? "border-[rgba(179,255,59,0.2)] text-[#E8E8ED]" : "border-[rgba(255,255,255,0.06)] text-[#9CA3AF] hover:border-[rgba(255,255,255,0.1)] hover:text-[#E8E8ED]"}`}
-                    style={{ background: target === o.id ? "linear-gradient(135deg, rgba(179,255,59,0.08), rgba(34,211,238,0.04))" : "rgba(255,255,255,0.025)", fontFamily: "var(--font-body)", fontSize: "14px", willChange: "transform, opacity" }}
+                    className={`flex items-center gap-2.5 pl-3 pr-4 py-3 rounded-xl cursor-pointer border transition-all duration-200 ${target === o.id ? "border-[rgba(var(--ce-lime-rgb),0.2)] text-ce-text-primary" : "border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:border-[rgba(var(--ce-glass-tint),0.1)] hover:text-ce-text-primary"}`}
+                    style={{ background: target === o.id ? "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.08), rgba(var(--ce-role-edgestar-rgb),0.04))" : "rgba(var(--ce-glass-tint),0.025)", fontFamily: "var(--font-body)", fontSize: "14px", willChange: "transform, opacity" }}
                     initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 + i * 0.05, duration: 0.35, ease: EASE }}
                     whileTap={{ scale: 0.96 }} whileHover={{ scale: 1.02 }}>
-                    <span className={target === o.id ? "text-[#B3FF3B]" : "text-[#6B7280]"}>{o.icon}</span>{o.label}
+                    <span className={target === o.id ? "text-ce-lime" : "text-ce-text-tertiary"}>{o.icon}</span>{o.label}
                   </motion.button>
                 ))}
               </div>
@@ -765,16 +765,16 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
             <motion.div key="level" className="flex flex-col items-center gap-10 w-full max-w-md" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, y: -16, transition: { duration: 0.3 } }}>
               <div className="flex flex-col items-center gap-4">
                 <SophiaMark size={40} glowing={false} />
-                <motion.p className="text-[#9CA3AF] text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("level")}</motion.p>
+                <motion.p className="text-ce-text-secondary text-center max-w-md" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }} style={{ fontFamily: "var(--font-body)", lineHeight: 1.6 }}>{sophia("level")}</motion.p>
               </div>
               <div className="grid grid-cols-2 gap-3 w-full">
                 {(pathQ?.levelOpts || LEVELS).map((o, i) => (
                   <GlassCard key={o.id} selected={level === o.id} allSelected={level} onClick={() => { setLevel(o.id); setTimeout(() => go("generating"), 450); }} delay={0.5 + i * 0.08}>
                     <div className="flex flex-col items-center gap-2 p-4 text-center">
-                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${level === o.id ? "bg-[rgba(34,211,238,0.1)] text-[#22D3EE]" : "bg-[rgba(255,255,255,0.04)] text-[#6B7280]"}`}>{o.icon}</div>
+                      <div className={`w-10 h-10 rounded-xl flex items-center justify-center transition-colors ${level === o.id ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)] text-ce-cyan" : "bg-[rgba(var(--ce-glass-tint),0.04)] text-ce-text-tertiary"}`}>{o.icon}</div>
                       <div>
-                        <div className={`text-[14px] ${level === o.id ? "text-[#E8E8ED]" : "text-[#9CA3AF]"}`} style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{o.label}</div>
-                        {o.sub && <div className="text-[11px] text-[#6B7280] mt-0.5">{o.sub}</div>}
+                        <div className={`text-[14px] ${level === o.id ? "text-ce-text-primary" : "text-ce-text-secondary"}`} style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{o.label}</div>
+                        {o.sub && <div className="text-[11px] text-ce-text-tertiary mt-0.5">{o.sub}</div>}
                       </div>
                     </div>
                   </GlassCard>
@@ -815,7 +815,7 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
       </AnimatePresence>
 
       <motion.div className="absolute bottom-5 left-1/2 -translate-x-1/2 z-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2.5 }}>
-        <span className="text-[11px] tracking-[0.2em] text-[#1F2937]" style={{ fontFamily: "var(--font-display)" }}>CAREEREDGE</span>
+        <span className="text-[11px] tracking-[0.2em] text-[var(--ce-text-ghost)]" style={{ fontFamily: "var(--font-display)" }}>CAREEREDGE</span>
       </motion.div>
 
       <AnimatePresence>

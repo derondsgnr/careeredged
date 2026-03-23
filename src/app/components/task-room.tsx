@@ -1,3 +1,4 @@
+import { EASE } from "./tokens";
 /**
  * Task Room — Full-page workspace scoped to a single milestone.
  * Two-column: primary content left, context panel right.
@@ -19,7 +20,6 @@ import {
   Lock, Share2, Eye, ChevronLeft,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 type NavigateFn = (target: string) => void;
 
@@ -206,22 +206,22 @@ function SubTaskList({ tasks, onToggle }: { tasks: SubTask[]; onToggle: (id: str
     <div>
       {/* Progress bar */}
       <div className="flex items-center gap-3 mb-3">
-        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+        <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
           <motion.div
             className="h-full rounded-full"
-            style={{ background: progress === 1 ? "#B3FF3B" : "linear-gradient(90deg, #22D3EE, #B3FF3B)" }}
+            style={{ background: progress === 1 ? "var(--ce-lime)" : "linear-gradient(90deg, var(--ce-role-edgestar), var(--ce-lime))" }}
             animate={{ width: `${progress * 100}%` }}
             transition={{ duration: 0.4, ease: EASE }}
           />
         </div>
-        <span className="text-[11px] text-[#6B7280] tabular-nums flex-shrink-0" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[11px] text-[var(--ce-text-secondary)] tabular-nums flex-shrink-0" style={{ fontFamily: "var(--font-body)" }}>
           {doneCount}/{tasks.length}
         </span>
       </div>
 
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SUB-TASKS</span>
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SUB-TASKS</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
           {Math.round(doneMinutes / 60)}h done · {Math.round((totalMinutes - doneMinutes) / 60)}h remaining
         </span>
       </div>
@@ -234,28 +234,28 @@ function SubTaskList({ tasks, onToggle }: { tasks: SubTask[]; onToggle: (id: str
               key={task.id}
               className="flex items-center gap-2.5 px-3 py-2 rounded-lg transition-colors cursor-pointer"
               style={{
-                background: isNext ? "rgba(34,211,238,0.02)" : "transparent",
-                border: `1px solid ${isNext ? "rgba(34,211,238,0.06)" : "transparent"}`,
+                background: isNext ? "rgba(var(--ce-role-edgestar-rgb),0.02)" : "transparent",
+                border: `1px solid ${isNext ? "rgba(var(--ce-role-edgestar-rgb),0.06)" : "transparent"}`,
               }}
               onClick={() => onToggle(task.id)}
               layout
             >
               <div className="w-4.5 h-4.5 rounded-full flex items-center justify-center flex-shrink-0 transition-all" style={{
-                background: task.done ? "rgba(179,255,59,0.1)" : "transparent",
-                border: `1.5px solid ${task.done ? "#B3FF3B" : isNext ? "#22D3EE" : "rgba(255,255,255,0.1)"}`,
+                background: task.done ? "rgba(var(--ce-lime-rgb),0.1)" : "transparent",
+                border: `1.5px solid ${task.done ? "var(--ce-lime)" : isNext ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.1)"}`,
                 width: 18, height: 18,
               }}>
-                {task.done && <Check className="w-2.5 h-2.5 text-[#B3FF3B]" />}
+                {task.done && <Check className="w-2.5 h-2.5 text-ce-lime" />}
               </div>
-              <span className={`text-[12px] flex-1 ${task.done ? "text-[#6B7280] line-through" : isNext ? "text-[#E8E8ED]" : "text-[#9CA3AF]"}`}
+              <span className={`text-[12px] flex-1 ${task.done ? "text-[var(--ce-text-secondary)] line-through" : isNext ? "text-[var(--ce-text-primary)]" : "text-[var(--ce-text-tertiary)]"}`}
                 style={{ fontFamily: "var(--font-body)" }}>
                 {task.label}
               </span>
-              <span className="text-[10px] text-[#374151] flex-shrink-0 tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0 tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
                 {task.estimatedMinutes < 60 ? `${task.estimatedMinutes}m` : `${(task.estimatedMinutes / 60).toFixed(1)}h`}
               </span>
               {isNext && (
-                <span className="text-[9px] text-[#22D3EE] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(34,211,238,0.06)", fontFamily: "var(--font-body)" }}>
+                <span className="text-[9px] text-ce-cyan px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", fontFamily: "var(--font-body)" }}>
                   Up next
                 </span>
               )}
@@ -283,8 +283,8 @@ function CoachingThread({ messages, onSend }: { messages: CoachingMessage[]; onS
     <div>
       <button className="flex items-center gap-2 mb-3 cursor-pointer" onClick={() => setCollapsed(!collapsed)}>
         <SophiaMark size={14} glowing={false} />
-        <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA COACHING</span>
-        {collapsed ? <ChevronDown className="w-3 h-3 text-[#374151]" /> : <ChevronUp className="w-3 h-3 text-[#374151]" />}
+        <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA COACHING</span>
+        {collapsed ? <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" /> : <ChevronUp className="w-3 h-3 text-[var(--ce-text-quaternary)]" />}
       </button>
 
       {!collapsed && (
@@ -295,17 +295,17 @@ function CoachingThread({ messages, onSend }: { messages: CoachingMessage[]; onS
                 key={msg.id}
                 className={`rounded-xl px-3 py-2.5 ${msg.role === "sophia" ? "" : "ml-6"}`}
                 style={{
-                  background: msg.role === "sophia" ? "rgba(34,211,238,0.02)" : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${msg.role === "sophia" ? "rgba(34,211,238,0.05)" : "rgba(255,255,255,0.05)"}`,
+                  background: msg.role === "sophia" ? "rgba(var(--ce-role-edgestar-rgb),0.02)" : "rgba(var(--ce-glass-tint),0.03)",
+                  border: `1px solid ${msg.role === "sophia" ? "rgba(var(--ce-role-edgestar-rgb),0.05)" : "rgba(var(--ce-glass-tint),0.05)"}`,
                 }}
               >
                 {msg.role === "sophia" && (
                   <div className="flex items-center gap-1.5 mb-1">
                     <SophiaMark size={10} glowing={false} />
-                    <span className="text-[9px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+                    <span className="text-[9px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
                   </div>
                 )}
-                <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                   {msg.content}
                 </p>
               </div>
@@ -313,24 +313,24 @@ function CoachingThread({ messages, onSend }: { messages: CoachingMessage[]; onS
           </div>
 
           {/* Input */}
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
             <input
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
               placeholder="Ask Sophia about this task..."
-              className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none"
+              className="flex-1 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none"
               style={{ fontFamily: "var(--font-body)" }}
             />
-            <button className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer transition-colors">
-              <Mic className="w-3.5 h-3.5 text-[#6B7280]" />
+            <button className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer transition-colors">
+              <Mic className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
             </button>
             <button
-              className="p-1 rounded-md hover:bg-[rgba(34,211,238,0.06)] cursor-pointer transition-colors"
+              className="p-1 rounded-md hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] cursor-pointer transition-colors"
               onClick={handleSubmit}
             >
-              <Send className="w-3.5 h-3.5 text-[#22D3EE]" />
+              <Send className="w-3.5 h-3.5 text-ce-cyan" />
             </button>
           </div>
         </>
@@ -353,17 +353,17 @@ function ResourceList({ resources }: { resources: Resource[] }) {
   };
 
   const statusColors: Record<string, string> = {
-    not_started: "#374151",
-    viewed: "#22D3EE",
-    completed: "#B3FF3B",
+    not_started: "var(--ce-text-quaternary)",
+    viewed: "var(--ce-role-edgestar)",
+    completed: "var(--ce-lime)",
   };
 
   return (
     <div>
       <button className="flex items-center gap-2 mb-3 cursor-pointer" onClick={() => setCollapsed(!collapsed)}>
-        <BookOpen className="w-3.5 h-3.5 text-[#6B7280]" />
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>RESOURCES ({resources.length})</span>
-        {collapsed ? <ChevronDown className="w-3 h-3 text-[#374151]" /> : <ChevronUp className="w-3 h-3 text-[#374151]" />}
+        <BookOpen className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>RESOURCES ({resources.length})</span>
+        {collapsed ? <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" /> : <ChevronUp className="w-3 h-3 text-[var(--ce-text-quaternary)]" />}
       </button>
 
       {!collapsed && (
@@ -373,13 +373,13 @@ function ResourceList({ resources }: { resources: Resource[] }) {
             return (
               <div
                 key={r.id}
-                className="flex items-start gap-2.5 px-3 py-2 rounded-lg hover:bg-[rgba(255,255,255,0.015)] cursor-pointer transition-colors"
-                style={{ border: "1px solid rgba(255,255,255,0.03)" }}
+                className="flex items-start gap-2.5 px-3 py-2 rounded-lg hover:bg-[rgba(var(--ce-glass-tint),0.015)] cursor-pointer transition-colors"
+                style={{ border: "1px solid rgba(var(--ce-glass-tint),0.03)" }}
               >
                 <RIcon className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" style={{ color: statusColors[r.status] }} />
                 <div className="flex-1 min-w-0">
-                  <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{r.title}</span>
-                  <span className="text-[10px] text-[#6B7280] block mt-0.5 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{r.relevanceNote}</span>
+                  <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{r.title}</span>
+                  <span className="text-[10px] text-[var(--ce-text-secondary)] block mt-0.5 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{r.relevanceNote}</span>
                 </div>
                 <div className="flex items-center gap-1.5 flex-shrink-0 mt-0.5">
                   <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{
@@ -389,7 +389,7 @@ function ResourceList({ resources }: { resources: Resource[] }) {
                   }}>
                     {r.status === "not_started" ? "New" : r.status === "viewed" ? "Viewed" : "Done"}
                   </span>
-                  <ExternalLink className="w-3 h-3 text-[#374151]" />
+                  <ExternalLink className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                 </div>
               </div>
             );
@@ -408,9 +408,9 @@ function CrossSurfaceConnections({ links, onNavigate }: { links: CrossSurfaceLin
   return (
     <div>
       <button className="flex items-center gap-2 mb-3 cursor-pointer" onClick={() => setCollapsed(!collapsed)}>
-        <Compass className="w-3.5 h-3.5 text-[#6B7280]" />
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CONNECTIONS ({links.length})</span>
-        {collapsed ? <ChevronDown className="w-3 h-3 text-[#374151]" /> : <ChevronUp className="w-3 h-3 text-[#374151]" />}
+        <Compass className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CONNECTIONS ({links.length})</span>
+        {collapsed ? <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" /> : <ChevronUp className="w-3 h-3 text-[var(--ce-text-quaternary)]" />}
       </button>
 
       {!collapsed && (
@@ -420,16 +420,16 @@ function CrossSurfaceConnections({ links, onNavigate }: { links: CrossSurfaceLin
             return (
               <button
                 key={i}
-                className="flex items-start gap-2.5 w-full px-3 py-2.5 rounded-lg hover:bg-[rgba(255,255,255,0.015)] cursor-pointer transition-colors text-left"
-                style={{ border: "1px solid rgba(255,255,255,0.03)" }}
+                className="flex items-start gap-2.5 w-full px-3 py-2.5 rounded-lg hover:bg-[rgba(var(--ce-glass-tint),0.015)] cursor-pointer transition-colors text-left"
+                style={{ border: "1px solid rgba(var(--ce-glass-tint),0.03)" }}
                 onClick={() => onNavigate(link.route)}
               >
-                <LIcon className="w-3.5 h-3.5 text-[#22D3EE] flex-shrink-0 mt-0.5" />
+                <LIcon className="w-3.5 h-3.5 text-ce-cyan flex-shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
-                  <span className="text-[10px] text-[#22D3EE] block mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{link.surface}</span>
-                  <span className="text-[11px] text-[#9CA3AF] block leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{link.note}</span>
+                  <span className="text-[10px] text-ce-cyan block mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{link.surface}</span>
+                  <span className="text-[11px] text-[var(--ce-text-tertiary)] block leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{link.note}</span>
                 </div>
-                <ArrowRight className="w-3 h-3 text-[#374151] flex-shrink-0 mt-0.5" />
+                <ArrowRight className="w-3 h-3 text-[var(--ce-text-quaternary)] flex-shrink-0 mt-0.5" />
               </button>
             );
           })}
@@ -447,18 +447,18 @@ function PrimaryContent({ type, title, isComplete }: { type: "learning" | "creat
       <motion.div
         className="rounded-2xl p-8 flex flex-col items-center justify-center h-full min-h-[400px]"
         style={{
-          background: "linear-gradient(145deg, rgba(179,255,59,0.03), rgba(34,211,238,0.02))",
-          border: "1px solid rgba(179,255,59,0.08)",
+          background: "linear-gradient(145deg, rgba(var(--ce-lime-rgb),0.03), rgba(var(--ce-role-edgestar-rgb),0.02))",
+          border: "1px solid rgba(var(--ce-lime-rgb),0.08)",
         }}
         initial={{ opacity: 0, scale: 0.98 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: EASE }}
       >
-        <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: "rgba(179,255,59,0.1)", border: "2px solid rgba(179,255,59,0.2)" }}>
-          <Check className="w-8 h-8 text-[#B3FF3B]" />
+        <div className="w-16 h-16 rounded-full flex items-center justify-center mb-4" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", border: "2px solid rgba(var(--ce-lime-rgb),0.2)" }}>
+          <Check className="w-8 h-8 text-ce-lime" />
         </div>
-        <h3 className="text-[18px] text-[#E8E8ED] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Complete</h3>
-        <p className="text-[13px] text-[#9CA3AF] text-center max-w-[360px]" style={{ fontFamily: "var(--font-body)" }}>
+        <h3 className="text-[18px] text-[var(--ce-text-primary)] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Complete</h3>
+        <p className="text-[13px] text-[var(--ce-text-tertiary)] text-center max-w-[360px]" style={{ fontFamily: "var(--font-body)" }}>
           This milestone is done. The skill has been added to your profile and Sophia will update your resume accordingly.
         </p>
       </motion.div>
@@ -472,8 +472,8 @@ function PrimaryContent({ type, title, isComplete }: { type: "learning" | "creat
         <motion.div
           className="rounded-2xl overflow-hidden relative"
           style={{
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.05)",
+            background: "rgba(var(--ce-glass-tint),0.02)",
+            border: "1px solid rgba(var(--ce-glass-tint),0.05)",
             aspectRatio: "16/9",
           }}
           initial={{ opacity: 0, scale: 0.98 }}
@@ -483,40 +483,40 @@ function PrimaryContent({ type, title, isComplete }: { type: "learning" | "creat
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="flex flex-col items-center">
               <div className="w-14 h-14 rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform"
-                style={{ background: "rgba(34,211,238,0.1)", border: "2px solid rgba(34,211,238,0.2)" }}>
-                <Play className="w-6 h-6 text-[#22D3EE] ml-0.5" />
+                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "2px solid rgba(var(--ce-role-edgestar-rgb),0.2)" }}>
+                <Play className="w-6 h-6 text-ce-cyan ml-0.5" />
               </div>
-              <span className="text-[13px] text-[#9CA3AF] mt-3" style={{ fontFamily: "var(--font-body)" }}>
+              <span className="text-[13px] text-[var(--ce-text-tertiary)] mt-3" style={{ fontFamily: "var(--font-body)" }}>
                 Module 3: Microinteractions
               </span>
-              <span className="text-[11px] text-[#374151] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>35 min</span>
+              <span className="text-[11px] text-[var(--ce-text-quaternary)] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>35 min</span>
             </div>
           </div>
 
           {/* Progress bar at bottom */}
-          <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "rgba(255,255,255,0.04)" }}>
-            <div className="h-full rounded-full" style={{ width: "0%", background: "#22D3EE" }} />
+          <div className="absolute bottom-0 left-0 right-0 h-1" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
+            <div className="h-full rounded-full" style={{ width: "0%", background: "var(--ce-role-edgestar)" }} />
           </div>
         </motion.div>
 
         {/* Notes area */}
         <motion.div
           className="rounded-xl p-4 flex-1"
-          style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}
+          style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.3, duration: 0.4, ease: EASE }}
         >
-          <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>YOUR NOTES</span>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>YOUR NOTES</span>
           <textarea
-            className="w-full h-32 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none resize-none leading-relaxed"
+            className="w-full h-32 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none resize-none leading-relaxed"
             style={{ fontFamily: "var(--font-body)" }}
             placeholder="Take notes as you go through the module... Sophia can reference these later."
             defaultValue="Triggers vs affordances: trigger = action that starts interaction. Affordance = what the element CAN do.&#10;&#10;Key principle: make triggers obvious and affordances consistent."
           />
-          <div className="flex items-center justify-between mt-2 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
-            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Auto-saved</span>
-            <span className="flex items-center gap-1 text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+          <div className="flex items-center justify-between mt-2 pt-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Auto-saved</span>
+            <span className="flex items-center gap-1 text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
               <Check className="w-2.5 h-2.5" /> Saved
             </span>
           </div>
@@ -529,13 +529,13 @@ function PrimaryContent({ type, title, isComplete }: { type: "learning" | "creat
   return (
     <motion.div
       className="rounded-2xl p-6 h-full min-h-[400px]"
-      style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}
+      style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.2, duration: 0.5, ease: EASE }}
     >
-      <span className="text-[10px] text-[#374151] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>WORKSPACE</span>
-      <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+      <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>WORKSPACE</span>
+      <p className="text-[13px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
         Your creation workspace for this milestone. Upload files, write notes, and track your progress here.
       </p>
     </motion.div>
@@ -590,7 +590,7 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
 
   return (
     <SophiaCtx.Provider value={{ openSophia, openVoice: () => {} }}>
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-surface-bg)" }}>
       <SophiaForwardBackground />
 
       {/* Breadcrumb header */}
@@ -598,7 +598,7 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
         className="fixed top-0 left-0 right-0 h-14 z-40 flex items-center px-6 gap-3"
         style={{
           background: "rgba(8,9,12,0.85)",
-          borderBottom: "1px solid rgba(255,255,255,0.04)",
+          borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
           backdropFilter: "blur(20px)",
         }}
         initial={{ y: -56 }}
@@ -606,18 +606,18 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
         transition={{ duration: 0.5, ease: EASE }}
       >
         <div className="flex items-center gap-3 cursor-pointer" onClick={() => onNavigate("synthesis")}>
-          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-            <Sparkles className="w-3.5 h-3.5 text-[#B3FF3B]" />
+          <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+            <Sparkles className="w-3.5 h-3.5 text-ce-lime" />
           </div>
-          <span className="text-[14px] text-[#E8E8ED] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
+          <span className="text-[14px] text-[var(--ce-text-primary)] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
         </div>
 
-        <span className="text-[#374151] text-[12px]">›</span>
-        <button onClick={() => onNavigate("edgepath")} className="text-[12px] text-[#6B7280] hover:text-[#9CA3AF] cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[var(--ce-text-quaternary)] text-[12px]">›</span>
+        <button onClick={() => onNavigate("edgepath")} className="text-[12px] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-tertiary)] cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>
           <Compass className="w-3.5 h-3.5 inline mr-1 -mt-0.5" />EdgePath
         </button>
-        <span className="text-[#374151] text-[12px]">›</span>
-        <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>Task Room</span>
+        <span className="text-[var(--ce-text-quaternary)] text-[12px]">›</span>
+        <span className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>Task Room</span>
       </motion.div>
 
     <div className="px-6 mt-14 pb-8">
@@ -631,21 +631,21 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
         >
           <div>
             <div className="flex items-center gap-2 mb-1">
-              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: isComplete ? "rgba(179,255,59,0.1)" : "rgba(34,211,238,0.08)" }}>
-                {isComplete ? <Check className="w-3.5 h-3.5 text-[#B3FF3B]" /> : <GraduationCap className="w-3.5 h-3.5 text-[#22D3EE]" />}
+              <div className="w-6 h-6 rounded-md flex items-center justify-center" style={{ background: isComplete ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
+                {isComplete ? <Check className="w-3.5 h-3.5 text-ce-lime" /> : <GraduationCap className="w-3.5 h-3.5 text-ce-cyan" />}
               </div>
-              <h1 className="text-[18px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <h1 className="text-[18px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 {roomData.title}
               </h1>
             </div>
             <div className="flex items-center gap-3 ml-8">
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{roomData.phase}</span>
-              <span className="text-[10px] text-[#374151]">•</span>
-              <span className="text-[11px] tabular-nums" style={{ color: isComplete ? "#B3FF3B" : "#22D3EE", fontFamily: "var(--font-body)" }}>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{roomData.phase}</span>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)]">•</span>
+              <span className="text-[11px] tabular-nums" style={{ color: isComplete ? "var(--ce-lime)" : "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
                 {progress}% complete
               </span>
-              <span className="text-[10px] text-[#374151]">•</span>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)]">•</span>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
                 <Clock className="w-3 h-3 inline mr-1 -mt-0.5" />
                 Last visited 2h ago
               </span>
@@ -656,29 +656,29 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
             {/* Visible exit — for users unfamiliar with breadcrumbs */}
             <button
               onClick={() => onNavigate("edgepath")}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.04)]"
-              style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+              className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.04)]"
+              style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
             >
               <ChevronLeft className="w-3.5 h-3.5" />
               Back to roadmap
             </button>
 
             <button
-              className="p-2 rounded-lg cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-              style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+              className="p-2 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+              style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
               onClick={() => setContextCollapsed(!contextCollapsed)}
               title={contextCollapsed ? "Show context panel" : "Hide context panel"}
             >
-              {contextCollapsed ? <Maximize2 className="w-4 h-4 text-[#6B7280]" /> : <Minimize2 className="w-4 h-4 text-[#6B7280]" />}
+              {contextCollapsed ? <Maximize2 className="w-4 h-4 text-[var(--ce-text-secondary)]" /> : <Minimize2 className="w-4 h-4 text-[var(--ce-text-secondary)]" />}
             </button>
 
             {isComplete && (
               <button
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer transition-colors"
                 style={{
-                  background: "rgba(179,255,59,0.08)",
-                  border: "1px solid rgba(179,255,59,0.15)",
-                  color: "#B3FF3B",
+                  background: "rgba(var(--ce-lime-rgb),0.08)",
+                  border: "1px solid rgba(var(--ce-lime-rgb),0.15)",
+                  color: "var(--ce-lime)",
                   fontFamily: "var(--font-display)", fontWeight: 500,
                 }}
                 onClick={() => onNavigate("edgepath")}
@@ -698,16 +698,16 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
               {showOpenRoomsNudge && doneCount > 0 && roomData.crossSurface.some(l => l.surface === "Sessions") && (
                 <motion.div
                   className="flex items-start gap-3 px-4 py-3 rounded-xl"
-                  style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.05), rgba(179,255,59,0.025))", border: "1px solid rgba(34,211,238,0.1)" }}
+                  style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-lime-rgb),0.025))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}
                   initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.35, ease: EASE }}
                 >
                   <SophiaMark size={16} glowing={false} />
                   <div className="flex-1 min-w-0">
-                    <span className="text-[12px] text-[#E8E8ED] block mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                    <span className="text-[12px] text-[var(--ce-text-primary)] block mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                       Good progress — book a session while it's fresh
                     </span>
-                    <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>
+                    <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>
                       Your mentor can review your work and help you move faster on the next milestone.
                     </span>
                   </div>
@@ -715,12 +715,12 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
                     <button
                       onClick={() => onNavigate("sessions")}
                       className="text-[11px] px-3 py-1.5 rounded-lg cursor-pointer"
-                      style={{ background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.15)", color: "#22D3EE", fontFamily: "var(--font-body)" }}
+                      style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}
                     >
                       Book session →
                     </button>
                     <button onClick={() => setShowOpenRoomsNudge(false)} className="cursor-pointer">
-                      <X className="w-3.5 h-3.5 text-[#374151]" />
+                      <X className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
                     </button>
                   </div>
                 </motion.div>
@@ -738,47 +738,47 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
               transition={{ delay: 0.3, duration: 0.4, ease: EASE }}
             >
               {/* Sub-tasks */}
-              <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <SubTaskList tasks={subTasks} onToggle={handleToggleTask} />
               </div>
 
               {/* Coaching Thread with share-with-mentor toggle */}
-              <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA COACHING</span>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA COACHING</span>
                   <button
                     onClick={() => setShareWithMentor(prev => ({ ...prev, all: !prev.all }))}
                     className="flex items-center gap-1.5 px-2 py-1 rounded-md cursor-pointer transition-colors"
                     style={{
-                      background: shareWithMentor.all ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.02)",
-                      border: `1px solid ${shareWithMentor.all ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.05)"}`,
+                      background: shareWithMentor.all ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.02)",
+                      border: `1px solid ${shareWithMentor.all ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.05)"}`,
                     }}
                   >
-                    <Share2 className="w-2.5 h-2.5" style={{ color: shareWithMentor.all ? "#22D3EE" : "#374151" }} />
-                    <span className="text-[9px]" style={{ color: shareWithMentor.all ? "#22D3EE" : "#374151", fontFamily: "var(--font-body)" }}>
+                    <Share2 className="w-2.5 h-2.5" style={{ color: shareWithMentor.all ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }} />
+                    <span className="text-[9px]" style={{ color: shareWithMentor.all ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>
                       {shareWithMentor.all ? "Shared with mentor" : "Share with mentor"}
                     </span>
                   </button>
                 </div>
                 {shareWithMentor.all && (
                   <motion.div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg mb-2"
-                    style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.08)" }}
+                    style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}
                     initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}>
-                    <Users className="w-3 h-3 text-[#22D3EE]" />
-                    <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Alice Chen can see this thread · She'll be notified</span>
+                    <Users className="w-3 h-3 text-ce-cyan" />
+                    <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Alice Chen can see this thread · She'll be notified</span>
                   </motion.div>
                 )}
                 <CoachingThread messages={coaching} onSend={handleSendCoaching} />
               </div>
 
               {/* Resources */}
-              <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <ResourceList resources={roomData.resources} />
               </div>
 
               {/* Cross-surface connections */}
               {roomData.crossSurface.length > 0 && (
-                <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                   <CrossSurfaceConnections links={roomData.crossSurface} onNavigate={onNavigate} />
                 </div>
               )}

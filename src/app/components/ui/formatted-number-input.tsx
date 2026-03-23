@@ -4,6 +4,7 @@
  */
 
 import { useState, useRef } from "react";
+import { TEXT, SURFACE, GLASS_TINT } from "../tokens";
 
 interface FormattedNumberInputProps {
   value: string;
@@ -82,7 +83,7 @@ export function FormattedNumberInput({
       {prefix && (
         <span
           className="absolute left-3 text-[12px] select-none pointer-events-none"
-          style={{ color: "#6B7280", fontFamily: "var(--font-body)" }}
+          style={{ color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
         >
           {prefix}
         </span>
@@ -102,7 +103,7 @@ export function FormattedNumberInput({
       {suffix && (
         <span
           className="absolute right-3 text-[12px] select-none pointer-events-none"
-          style={{ color: "#6B7280", fontFamily: "var(--font-body)" }}
+          style={{ color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
         >
           {suffix}
         </span>

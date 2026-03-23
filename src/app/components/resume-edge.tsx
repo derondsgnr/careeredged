@@ -1,3 +1,4 @@
+import { EASE } from "./tokens";
 /**
  * ResumeEdge — Resume optimization surface
  * 
@@ -22,7 +23,6 @@ import {
   User, Building2, Trophy, Crosshair, Wrench, Plus,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 type NavigateFn = (target: string) => void;
 
@@ -79,10 +79,10 @@ const INITIAL_SUGGESTIONS: Suggestion[] = [
 ];
 
 const SCORE_BREAKDOWN: ScoreBreakdown[] = [
-  { label: "ATS Compat.", score: 92, max: 100, color: "#B3FF3B" },
-  { label: "Keywords", score: 67, max: 100, color: "#22D3EE" },
-  { label: "Impact", score: 71, max: 100, color: "#22D3EE" },
-  { label: "Format", score: 95, max: 100, color: "#B3FF3B" },
+  { label: "ATS Compat.", score: 92, max: 100, color: "var(--ce-lime)" },
+  { label: "Keywords", score: 67, max: 100, color: "var(--ce-role-edgestar)" },
+  { label: "Impact", score: 71, max: 100, color: "var(--ce-role-edgestar)" },
+  { label: "Format", score: 95, max: 100, color: "var(--ce-lime)" },
 ];
 
 const SECTION_VERDICTS = [
@@ -107,10 +107,10 @@ function EmptyState({ onUpload, onBuildFromScratch }: { onUpload: () => void; on
         transition={{ duration: 0.6, ease: EASE }}
       >
         <SophiaMark size={40} glowing />
-        <h2 className="text-[20px] text-[#E8E8ED] mt-6 mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <h2 className="text-[20px] text-ce-text-primary mt-6 mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Let's get your resume working for you.
         </h2>
-        <p className="text-[13px] text-[#6B7280] text-center mb-8" style={{ fontFamily: "var(--font-body)" }}>
+        <p className="text-[13px] text-ce-text-tertiary text-center mb-8" style={{ fontFamily: "var(--font-body)" }}>
           Upload your current resume and I'll analyze it against your target roles, or we can build one together from scratch.
         </p>
 
@@ -118,30 +118,30 @@ function EmptyState({ onUpload, onBuildFromScratch }: { onUpload: () => void; on
           <div
             className="rounded-xl p-8 text-center cursor-pointer transition-all"
             style={{
-              background: dragOver ? "rgba(179,255,59,0.04)" : "rgba(255,255,255,0.02)",
-              border: `2px dashed ${dragOver ? "rgba(179,255,59,0.3)" : "rgba(255,255,255,0.06)"}`,
+              background: dragOver ? "rgba(var(--ce-lime-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)",
+              border: `2px dashed ${dragOver ? "rgba(var(--ce-lime-rgb),0.3)" : "rgba(var(--ce-glass-tint),0.06)"}`,
             }}
             onClick={onUpload}
             onDragOver={(e) => { e.preventDefault(); setDragOver(true); }}
             onDragLeave={() => setDragOver(false)}
             onDrop={(e) => { e.preventDefault(); setDragOver(false); onUpload(); }}
           >
-            <Upload className="w-8 h-8 text-[#6B7280] mx-auto mb-3" />
-            <p className="text-[14px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Upload className="w-8 h-8 text-ce-text-tertiary mx-auto mb-3" />
+            <p className="text-[14px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               Upload your resume
             </p>
-            <p className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
               Drop your file here or click to browse · PDF, DOCX, TXT
             </p>
           </div>
 
           <button
-            className="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-xl cursor-pointer transition-colors hover:bg-[rgba(34,211,238,0.06)]"
-            style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.08)" }}
+            className="w-full flex items-center justify-center gap-2 px-4 py-4 rounded-xl cursor-pointer transition-colors hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)]"
+            style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}
             onClick={onBuildFromScratch}
           >
-            <Sparkles className="w-4 h-4 text-[#22D3EE]" />
-            <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Sparkles className="w-4 h-4 text-ce-cyan" />
+            <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               Build from scratch with Sophia
             </span>
           </button>
@@ -190,10 +190,10 @@ function ParseConfirmState({ onConfirm, onBack }: { onConfirm: () => void; onBac
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <p className="text-[14px] text-[#E8E8ED] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <p className="text-[14px] text-ce-text-primary mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
             Here's what I found in your resume.
           </p>
-          <p className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
             Let me know if this looks right, and I'll run a full analysis.
           </p>
         </motion.div>
@@ -207,8 +207,8 @@ function ParseConfirmState({ onConfirm, onBack }: { onConfirm: () => void; onBac
                 key={field.label}
                 className="flex items-start gap-3 px-4 py-3 rounded-xl"
                 style={{
-                  background: "rgba(255,255,255,0.02)",
-                  border: "1px solid rgba(255,255,255,0.05)",
+                  background: "rgba(var(--ce-glass-tint),0.02)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.05)",
                 }}
                 initial={{ opacity: 0, x: -12 }}
                 animate={{ opacity: revealed > i ? 1 : 0, x: revealed > i ? 0 : -12 }}
@@ -216,15 +216,15 @@ function ParseConfirmState({ onConfirm, onBack }: { onConfirm: () => void; onBac
               >
                 <div
                   className="w-6 h-6 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
-                  style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.12)" }}
+                  style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)" }}
                 >
-                  <FieldIcon className="w-3 h-3 text-[#22D3EE]" />
+                  <FieldIcon className="w-3 h-3 text-ce-cyan" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-[10px] text-[#6B7280] block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>
+                  <span className="text-[10px] text-ce-text-tertiary block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>
                     {field.label}
                   </span>
-                  <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>
+                  <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>
                     {field.value}
                   </span>
                 </div>
@@ -242,20 +242,20 @@ function ParseConfirmState({ onConfirm, onBack }: { onConfirm: () => void; onBac
         >
           <button
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-colors hover:brightness-110"
-            style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.15)" }}
+            style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)" }}
             onClick={onConfirm}
           >
-            <Check className="w-4 h-4 text-[#B3FF3B]" />
-            <span className="text-[13px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Check className="w-4 h-4 text-ce-lime" />
+            <span className="text-[13px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               Looks right — analyze it
             </span>
           </button>
           <button
-            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.03)]"
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+            className="flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]"
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
             onClick={onBack}
           >
-            <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
               Re-upload
             </span>
           </button>
@@ -449,16 +449,16 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
         <div className="flex items-center gap-3 mb-6">
           <SophiaMark size={28} glowing />
           <div>
-            <h2 className="text-[16px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <h2 className="text-[16px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               Build your resume
             </h2>
-            <p className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
               {generating ? "Generating your first draft..." : `Question ${Math.min(currentStep + 1, BUILD_STEPS.length)} of ${BUILD_STEPS.length}`}
             </p>
           </div>
           <button
-            className="ml-auto text-[11px] text-[#374151] px-2.5 py-1 rounded-md cursor-pointer hover:text-[#6B7280] transition-colors"
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}
+            className="ml-auto text-[11px] text-[var(--ce-text-quaternary)] px-2.5 py-1 rounded-md cursor-pointer hover:text-ce-text-tertiary transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}
             onClick={onBack}
           >
             Back
@@ -471,11 +471,11 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
             <div
               key={i}
               className="flex-1 h-1 rounded-full overflow-hidden transition-all duration-500"
-              style={{ background: "rgba(255,255,255,0.04)" }}
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}
             >
               <motion.div
                 className="h-full rounded-full"
-                style={{ background: i <= currentStep || generating ? "#22D3EE" : "transparent" }}
+                style={{ background: i <= currentStep || generating ? "var(--ce-role-edgestar)" : "transparent" }}
                 initial={{ width: "0%" }}
                 animate={{ width: i < currentStep || generating ? "100%" : i === currentStep ? "50%" : "0%" }}
                 transition={{ duration: 0.4, ease: EASE }}
@@ -489,8 +489,8 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
           ref={scrollRef}
           className="rounded-xl overflow-y-auto px-4 py-4 flex flex-col gap-4 mb-4"
           style={{
-            background: "rgba(255,255,255,0.02)",
-            border: "1px solid rgba(255,255,255,0.05)",
+            background: "rgba(var(--ce-glass-tint),0.02)",
+            border: "1px solid rgba(var(--ce-glass-tint),0.05)",
             maxHeight: "calc(100vh - 22rem)",
             minHeight: 280,
           }}
@@ -498,8 +498,8 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
           {/* Sophia greeting */}
           <div className="flex gap-2.5">
             <SophiaMark size={12} glowing={false} />
-            <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-              Since you're at the <strong className="text-[#E8E8ED]">mid-career stage</strong>, I'll skip the experience-level questions — I already have that context. I just need 5 quick details about your background and target, and I'll generate a polished first draft. Takes about 2 minutes.
+            <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+              Since you're at the <strong className="text-ce-text-primary">mid-career stage</strong>, I'll skip the experience-level questions — I already have that context. I just need 5 quick details about your background and target, and I'll generate a polished first draft. Takes about 2 minutes.
             </p>
           </div>
 
@@ -520,11 +520,11 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                 >
                   <div
                     className="w-5 h-5 rounded-md flex items-center justify-center flex-shrink-0 mt-0.5"
-                    style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.15)" }}
+                    style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)" }}
                   >
-                    <StepIcon className="w-2.5 h-2.5 text-[#22D3EE]" />
+                    <StepIcon className="w-2.5 h-2.5 text-ce-cyan" />
                   </div>
-                  <p className="text-[12px] text-[#E8E8ED] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                  <p className="text-[12px] text-ce-text-primary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                     {step.question}
                   </p>
                 </motion.div>
@@ -537,7 +537,7 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15, duration: 0.3, ease: EASE }}
                   >
-                    <p className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+                    <p className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                       Based on "{answers["target"] || "your target"}" — tap to select, or add your own:
                     </p>
                     <div className="flex flex-wrap gap-1.5">
@@ -550,9 +550,9 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                             className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all"
                             style={{
                               fontFamily: "var(--font-body)",
-                              background: isSelected ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.03)",
-                              border: `1px solid ${isSelected ? "rgba(179,255,59,0.25)" : "rgba(255,255,255,0.06)"}`,
-                              color: isSelected ? "#B3FF3B" : "#9CA3AF",
+                              background: isSelected ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.03)",
+                              border: `1px solid ${isSelected ? "rgba(var(--ce-lime-rgb),0.25)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                              color: isSelected ? "var(--ce-lime)" : "var(--ce-text-secondary)",
                             }}
                           >
                             {isSelected && <Check className="w-2.5 h-2.5" />}
@@ -568,9 +568,9 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                           className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all"
                           style={{
                             fontFamily: "var(--font-body)",
-                            background: "rgba(179,255,59,0.1)",
-                            border: "1px solid rgba(179,255,59,0.25)",
-                            color: "#B3FF3B",
+                            background: "rgba(var(--ce-lime-rgb),0.1)",
+                            border: "1px solid rgba(var(--ce-lime-rgb),0.25)",
+                            color: "var(--ce-lime)",
                           }}
                         >
                           <Check className="w-2.5 h-2.5" />
@@ -581,7 +581,7 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                       {showCustomInput ? (
                         <div
                           className="flex items-center gap-1 px-2 py-1 rounded-lg"
-                          style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(34,211,238,0.2)" }}
+                          style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)" }}
                         >
                           <input
                             ref={customSkillRef}
@@ -594,19 +594,19 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                             }}
                             onBlur={() => { if (customSkillInput.trim()) addCustomSkill(); else setShowCustomInput(false); }}
                             placeholder="Type skill..."
-                            className="w-20 text-[11px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none"
+                            className="w-20 text-[11px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none"
                             style={{ fontFamily: "var(--font-body)" }}
                           />
                         </div>
                       ) : (
                         <button
                           onClick={() => setShowCustomInput(true)}
-                          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all hover:bg-[rgba(255,255,255,0.05)]"
+                          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all hover:bg-[rgba(var(--ce-glass-tint),0.05)]"
                           style={{
                             fontFamily: "var(--font-body)",
-                            background: "rgba(255,255,255,0.02)",
-                            border: "1px dashed rgba(255,255,255,0.1)",
-                            color: "#6B7280",
+                            background: "rgba(var(--ce-glass-tint),0.02)",
+                            border: "1px dashed rgba(var(--ce-glass-tint),0.1)",
+                            color: "var(--ce-text-tertiary)",
                           }}
                         >
                           <Plus className="w-2.5 h-2.5" /> Add skill
@@ -619,9 +619,9 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                         className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer mt-1"
                         style={{
                           fontFamily: "var(--font-body)",
-                          background: "rgba(34,211,238,0.08)",
-                          border: "1px solid rgba(34,211,238,0.15)",
-                          color: "#22D3EE",
+                          background: "rgba(var(--ce-role-edgestar-rgb),0.08)",
+                          border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
+                          color: "var(--ce-role-edgestar)",
                         }}
                         initial={{ opacity: 0, scale: 0.95 }}
                         animate={{ opacity: 1, scale: 1 }}
@@ -641,8 +641,8 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, ease: EASE }}
                   >
-                    <div className="max-w-[85%] px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <p className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{answer}</p>
+                    <div className="max-w-[85%] px-3 py-2 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                      <p className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{answer}</p>
                     </div>
                   </motion.div>
                 )}
@@ -656,7 +656,7 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                     transition={{ delay: 0.2, duration: 0.3 }}
                   >
                     <SophiaMark size={12} glowing={false} />
-                    <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                    <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                       {step.sophiaFollowUp}
                     </p>
                   </motion.div>
@@ -677,7 +677,7 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                 {[0, 1, 2].map((dotIdx) => (
                   <motion.div
                     key={dotIdx}
-                    className="w-1.5 h-1.5 rounded-full bg-[#22D3EE]"
+                    className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]"
                     animate={{ opacity: [0.3, 1, 0.3] }}
                     transition={{ duration: 1, repeat: Infinity, delay: dotIdx * 0.2 }}
                   />
@@ -696,7 +696,7 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
             >
               <div className="flex gap-2.5 mb-2">
                 <SophiaMark size={12} glowing />
-                <p className="text-[12px] text-[#E8E8ED] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-[12px] text-ce-text-primary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                   Perfect. Give me a moment — I'm building your resume now.
                 </p>
               </div>
@@ -705,25 +705,25 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
                   key={label}
                   className="flex items-center gap-2.5 px-3 py-2 rounded-lg"
                   style={{
-                    background: genStep > i ? "rgba(179,255,59,0.03)" : "rgba(255,255,255,0.015)",
-                    border: `1px solid ${genStep > i ? "rgba(179,255,59,0.08)" : "rgba(255,255,255,0.04)"}`,
+                    background: genStep > i ? "rgba(var(--ce-lime-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.015)",
+                    border: `1px solid ${genStep > i ? "rgba(var(--ce-lime-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)"}`,
                   }}
                   initial={{ opacity: 0.3 }}
                   animate={{ opacity: genStep >= i ? 1 : 0.3 }}
                 >
                   {genStep > i ? (
-                    <Check className="w-3.5 h-3.5 text-[#B3FF3B] flex-shrink-0" />
+                    <Check className="w-3.5 h-3.5 text-ce-lime flex-shrink-0" />
                   ) : genStep === i ? (
                     <motion.div
-                      className="w-3.5 h-3.5 rounded-full border-2 border-[#22D3EE] border-t-transparent flex-shrink-0"
+                      className="w-3.5 h-3.5 rounded-full border-2 border-[var(--ce-role-edgestar)] border-t-transparent flex-shrink-0"
                       animate={{ rotate: 360 }}
                       transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }}
                     />
                   ) : (
-                    <div className="w-3.5 h-3.5 rounded-full border border-[rgba(255,255,255,0.08)] flex-shrink-0" />
+                    <div className="w-3.5 h-3.5 rounded-full border border-[rgba(var(--ce-glass-tint),0.08)] flex-shrink-0" />
                   )}
                   <span
-                    className={`text-[11px] ${genStep > i ? "text-[#9CA3AF]" : genStep === i ? "text-[#E8E8ED]" : "text-[#374151]"}`}
+                    className={`text-[11px] ${genStep > i ? "text-ce-text-secondary" : genStep === i ? "text-ce-text-primary" : "text-[var(--ce-text-quaternary)]"}`}
                     style={{ fontFamily: "var(--font-body)" }}
                   >
                     {label}
@@ -738,7 +738,7 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
         {!generating && !isSkillsStep && (
           <motion.div
             className="flex items-center gap-2 px-3 py-2.5 rounded-xl"
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.3 }}
@@ -751,18 +751,18 @@ function BuildFromScratchState({ onComplete, onBack }: { onComplete: () => void;
               onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
               placeholder={currentStep < BUILD_STEPS.length ? BUILD_STEPS[currentStep].placeholder : ""}
               disabled={isTyping}
-              className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none disabled:text-[#374151]"
+              className="flex-1 text-[12px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none disabled:text-[var(--ce-text-quaternary)]"
               style={{ fontFamily: "var(--font-body)" }}
             />
-            <button className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer transition-colors">
-              <Mic className="w-3.5 h-3.5 text-[#6B7280]" />
+            <button className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer transition-colors">
+              <Mic className="w-3.5 h-3.5 text-ce-text-tertiary" />
             </button>
             <button
-              className="p-1 rounded-md hover:bg-[rgba(34,211,238,0.06)] cursor-pointer transition-colors disabled:opacity-30"
+              className="p-1 rounded-md hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] cursor-pointer transition-colors disabled:opacity-30"
               onClick={handleSubmit}
               disabled={!input.trim() || isTyping}
             >
-              <Send className="w-3.5 h-3.5 text-[#22D3EE]" />
+              <Send className="w-3.5 h-3.5 text-ce-cyan" />
             </button>
           </motion.div>
         )}
@@ -799,7 +799,7 @@ function AnalyzingState({ onComplete }: { onComplete: () => void }) {
     <div className="flex items-center justify-center min-h-[calc(100vh-3.5rem)]">
       <motion.div className="max-w-[440px] w-full flex flex-col items-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
         <SophiaMark size={32} glowing />
-        <p className="text-[14px] text-[#E8E8ED] mt-6 mb-6" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <p className="text-[14px] text-ce-text-primary mt-6 mb-6" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Analyzing your resume...
         </p>
         <div className="w-full flex flex-col gap-3">
@@ -808,20 +808,20 @@ function AnalyzingState({ onComplete }: { onComplete: () => void }) {
               key={i}
               className="flex items-center gap-3 px-4 py-2.5 rounded-xl"
               style={{
-                background: step > i ? "rgba(34,211,238,0.03)" : "rgba(255,255,255,0.015)",
-                border: `1px solid ${step > i ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.04)"}`,
+                background: step > i ? "rgba(var(--ce-role-edgestar-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.015)",
+                border: `1px solid ${step > i ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)"}`,
               }}
               initial={{ opacity: 0.3 }}
               animate={{ opacity: step >= i ? 1 : 0.3 }}
             >
               {step > i ? (
-                <Check className="w-4 h-4 text-[#22D3EE] flex-shrink-0" />
+                <Check className="w-4 h-4 text-ce-cyan flex-shrink-0" />
               ) : step === i ? (
-                <motion.div className="w-4 h-4 rounded-full border-2 border-[#22D3EE] border-t-transparent flex-shrink-0" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }} />
+                <motion.div className="w-4 h-4 rounded-full border-2 border-[var(--ce-role-edgestar)] border-t-transparent flex-shrink-0" animate={{ rotate: 360 }} transition={{ repeat: Infinity, duration: 0.8, ease: "linear" }} />
               ) : (
-                <div className="w-4 h-4 rounded-full border border-[rgba(255,255,255,0.08)] flex-shrink-0" />
+                <div className="w-4 h-4 rounded-full border border-[rgba(var(--ce-glass-tint),0.08)] flex-shrink-0" />
               )}
-              <span className={`text-[12px] ${step > i ? "text-[#9CA3AF]" : step === i ? "text-[#E8E8ED]" : "text-[#374151]"}`}
+              <span className={`text-[12px] ${step > i ? "text-ce-text-secondary" : step === i ? "text-ce-text-primary" : "text-[var(--ce-text-quaternary)]"}`}
                 style={{ fontFamily: "var(--font-body)" }}>
                 {s.label}
               </span>
@@ -840,27 +840,27 @@ function InlineDiff({ suggestion, justAccepted }: { suggestion: Suggestion; just
   if (suggestion.status === "accepted") {
     return (
       <motion.span
-        className="text-[#E8E8ED] inline"
-        initial={justAccepted ? { backgroundColor: "rgba(179,255,59,0.15)" } : false}
-        animate={{ backgroundColor: "rgba(179,255,59,0)" }}
+        className="text-ce-text-primary inline"
+        initial={justAccepted ? { backgroundColor: "rgba(var(--ce-lime-rgb),0.15)" } : false}
+        animate={{ backgroundColor: "rgba(var(--ce-lime-rgb),0)" }}
         transition={{ duration: 1.2, ease: "easeOut" }}
       >
-        <span className="inline-block w-1.5 h-1.5 rounded-full bg-[#B3FF3B] mr-1.5 -mt-0.5 align-middle" />
+        <span className="inline-block w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)] mr-1.5 -mt-0.5 align-middle" />
         {suggestion.suggested}
       </motion.span>
     );
   }
 
   if (suggestion.status === "rejected") {
-    return <span className="text-[#9CA3AF]">{suggestion.original}</span>;
+    return <span className="text-ce-text-secondary">{suggestion.original}</span>;
   }
 
   // Pending — show both with visual diff
   return (
     <span>
       <span className="line-through text-[#994444]">{suggestion.original}</span>
-      <span className="block mt-1.5 px-2 py-1 rounded-md text-[#B3FF3B]" style={{ background: "rgba(179,255,59,0.03)", border: "1px solid rgba(179,255,59,0.08)" }}>
-        <Sparkles className="w-2.5 h-2.5 inline mr-1 -mt-0.5 text-[#B3FF3B]" />
+      <span className="block mt-1.5 px-2 py-1 rounded-md text-ce-lime" style={{ background: "rgba(var(--ce-lime-rgb),0.03)", border: "1px solid rgba(var(--ce-lime-rgb),0.08)" }}>
+        <Sparkles className="w-2.5 h-2.5 inline mr-1 -mt-0.5 text-ce-lime" />
         {suggestion.suggested}
       </span>
     </span>
@@ -883,14 +883,14 @@ function DocumentPreview({ suggestions, activeSuggestionKey, onSectionClick, jus
     const hasSuggestion = !!sug;
     return {
       background: isActive
-        ? "rgba(34,211,238,0.04)"
+        ? "rgba(var(--ce-role-edgestar-rgb),0.04)"
         : hasSuggestion && sug!.status === "pending"
-          ? "rgba(179,255,59,0.01)"
+          ? "rgba(var(--ce-lime-rgb),0.01)"
           : "transparent",
       border: isActive
-        ? "1px solid rgba(34,211,238,0.15)"
+        ? "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)"
         : hasSuggestion && sug!.status === "pending"
-          ? "1px solid rgba(179,255,59,0.06)"
+          ? "1px solid rgba(var(--ce-lime-rgb),0.06)"
           : "1px solid transparent",
       cursor: hasSuggestion ? "pointer" : "default",
       borderRadius: 10,
@@ -903,7 +903,7 @@ function DocumentPreview({ suggestions, activeSuggestionKey, onSectionClick, jus
 
   const renderText = (key: string, fallback: string) => {
     const sug = getSuggestion(key);
-    if (!sug) return <span className="text-[#9CA3AF]">{fallback}</span>;
+    if (!sug) return <span className="text-ce-text-secondary">{fallback}</span>;
     return <InlineDiff suggestion={sug} justAccepted={sug.id === justAcceptedId} />;
   };
 
@@ -911,30 +911,30 @@ function DocumentPreview({ suggestions, activeSuggestionKey, onSectionClick, jus
     <motion.div
       className="rounded-2xl overflow-auto mx-auto"
       style={{
-        background: "rgba(255,255,255,0.03)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "rgba(var(--ce-glass-tint),0.03)",
+        border: "1px solid rgba(var(--ce-glass-tint),0.06)",
         maxHeight: "calc(100vh - 8rem)",
         width: "100%",
         maxWidth: 640,
         aspectRatio: "8.5 / 11",
         padding: "40px 36px",
-        boxShadow: "0 4px 24px rgba(0,0,0,0.3), 0 0 0 1px rgba(255,255,255,0.02)",
+        boxShadow: "0 4px 24px rgba(var(--ce-shadow-tint),0.3), 0 0 0 1px rgba(var(--ce-glass-tint),0.02)",
       }}
       initial={{ opacity: 0, scale: 0.98 }}
       animate={{ opacity: 1, scale: 1 }}
       transition={{ delay: 0.2, duration: 0.5, ease: EASE }}
     >
       {/* Header */}
-      <div className="text-center mb-6 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-        <h2 className="text-[18px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sharon Chen</h2>
-        <p className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+      <div className="text-center mb-6 pb-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+        <h2 className="text-[18px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sharon Chen</h2>
+        <p className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           sharon.chen@email.com · San Francisco, CA · linkedin.com/in/sharonchen
         </p>
       </div>
 
       {/* Summary */}
       <div style={sectionStyle("summary")} onClick={() => onSectionClick("summary")}>
-        <h3 className="text-[11px] text-[#22D3EE] mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SUMMARY</h3>
+        <h3 className="text-[11px] text-ce-cyan mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SUMMARY</h3>
         <div className="text-[12px] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
           {renderText("summary", "Experienced professional looking for new opportunities in product design.")}
         </div>
@@ -942,32 +942,32 @@ function DocumentPreview({ suggestions, activeSuggestionKey, onSectionClick, jus
 
       {/* Experience */}
       <div className="mt-4">
-        <h3 className="text-[11px] text-[#22D3EE] mb-1.5 tracking-wide px-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EXPERIENCE</h3>
+        <h3 className="text-[11px] text-ce-cyan mb-1.5 tracking-wide px-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EXPERIENCE</h3>
         <div className="px-3 mb-2">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>Revenue Ops Manager</span>
-            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>2020 – Present</span>
+            <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>Revenue Ops Manager</span>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>2020 – Present</span>
           </div>
-          <span className="text-[11px] text-[#6B7280] block mb-2" style={{ fontFamily: "var(--font-body)" }}>TechCorp Inc.</span>
+          <span className="text-[11px] text-ce-text-tertiary block mb-2" style={{ fontFamily: "var(--font-body)" }}>TechCorp Inc.</span>
         </div>
 
         <div style={sectionStyle("exp-1")} onClick={() => onSectionClick("exp-1")}>
           <div className="text-[12px] leading-relaxed flex gap-2" style={{ fontFamily: "var(--font-body)" }}>
-            <span className="text-[#374151] mt-0.5 flex-shrink-0">•</span>
+            <span className="text-[var(--ce-text-quaternary)] mt-0.5 flex-shrink-0">•</span>
             <span>{renderText("exp-1", "Managed team operations and improved workflow efficiency.")}</span>
           </div>
         </div>
 
         <div style={sectionStyle("exp-2")} onClick={() => onSectionClick("exp-2")}>
           <div className="text-[12px] leading-relaxed flex gap-2" style={{ fontFamily: "var(--font-body)" }}>
-            <span className="text-[#374151] mt-0.5 flex-shrink-0">•</span>
+            <span className="text-[var(--ce-text-quaternary)] mt-0.5 flex-shrink-0">•</span>
             <span>{renderText("exp-2", "Created dashboards and reports for stakeholders.")}</span>
           </div>
         </div>
 
         <div className="px-3 mt-1">
-          <div className="text-[12px] text-[#9CA3AF] leading-relaxed flex gap-2" style={{ fontFamily: "var(--font-body)" }}>
-            <span className="text-[#374151] mt-0.5">•</span>
+          <div className="text-[12px] text-ce-text-secondary leading-relaxed flex gap-2" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[var(--ce-text-quaternary)] mt-0.5">•</span>
             Spearheaded quarterly business reviews with C-suite stakeholders
           </div>
         </div>
@@ -975,7 +975,7 @@ function DocumentPreview({ suggestions, activeSuggestionKey, onSectionClick, jus
 
       {/* Skills */}
       <div className="mt-4" style={sectionStyle("skills")} onClick={() => onSectionClick("skills")}>
-        <h3 className="text-[11px] text-[#22D3EE] mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS</h3>
+        <h3 className="text-[11px] text-ce-cyan mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS</h3>
         <div className="text-[12px] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
           {renderText("skills", "Excel, SQL, Salesforce, Project Management")}
         </div>
@@ -983,20 +983,20 @@ function DocumentPreview({ suggestions, activeSuggestionKey, onSectionClick, jus
 
       {/* Education */}
       <div className="mt-4 px-3">
-        <h3 className="text-[11px] text-[#22D3EE] mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EDUCATION</h3>
+        <h3 className="text-[11px] text-ce-cyan mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EDUCATION</h3>
         <div className="flex items-center justify-between">
-          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>B.S. Business Administration — UC Berkeley</span>
-          <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>2016</span>
+          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>B.S. Business Administration — UC Berkeley</span>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>2016</span>
         </div>
       </div>
 
       {/* Projects */}
       <div className="mt-4 px-3">
-        <h3 className="text-[11px] text-[#22D3EE] mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROJECTS</h3>
-        <div className="text-[12px] text-[#9CA3AF] flex flex-col gap-1.5" style={{ fontFamily: "var(--font-body)" }}>
-          <div className="flex gap-2"><span className="text-[#374151]">•</span> Fitness App Redesign — Case Study</div>
-          <div className="flex gap-2"><span className="text-[#374151]">•</span> E-commerce Checkout Flow — Case Study</div>
-          <div className="flex gap-2"><span className="text-[#374151]">•</span> Design System Starter Kit — Open Source</div>
+        <h3 className="text-[11px] text-ce-cyan mb-1.5 tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROJECTS</h3>
+        <div className="text-[12px] text-ce-text-secondary flex flex-col gap-1.5" style={{ fontFamily: "var(--font-body)" }}>
+          <div className="flex gap-2"><span className="text-[var(--ce-text-quaternary)]">•</span> Fitness App Redesign — Case Study</div>
+          <div className="flex gap-2"><span className="text-[var(--ce-text-quaternary)]">•</span> E-commerce Checkout Flow — Case Study</div>
+          <div className="flex gap-2"><span className="text-[var(--ce-text-quaternary)]">•</span> Design System Starter Kit — Open Source</div>
         </div>
       </div>
     </motion.div>
@@ -1017,37 +1017,37 @@ function ScoreBar({ score, breakdown, verdicts, onSectionClick, onNavigate }: {
   return (
     <motion.div
       className="rounded-xl overflow-hidden flex-shrink-0"
-      style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.3, duration: 0.4, ease: EASE }}
     >
       {/* Compact bar — always visible */}
       <div
-        className="w-full flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-[rgba(255,255,255,0.01)] transition-colors"
+        className="w-full flex items-center gap-3 px-4 py-2.5 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.01)] transition-colors"
         onClick={() => setExpanded(!expanded)}
       >
         {/* Score badge */}
         <div className="flex items-center gap-2">
           <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{
-            background: score >= 80 ? "rgba(179,255,59,0.08)" : "rgba(34,211,238,0.08)",
-            border: `1px solid ${score >= 80 ? "rgba(179,255,59,0.15)" : "rgba(34,211,238,0.15)"}`,
+            background: score >= 80 ? "rgba(var(--ce-lime-rgb),0.08)" : "rgba(var(--ce-role-edgestar-rgb),0.08)",
+            border: `1px solid ${score >= 80 ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-role-edgestar-rgb),0.15)"}`,
           }}>
             <span className="text-[14px] tabular-nums" style={{
-              color: score >= 80 ? "#B3FF3B" : "#22D3EE",
+              color: score >= 80 ? "var(--ce-lime)" : "var(--ce-role-edgestar)",
               fontFamily: "var(--font-display)", fontWeight: 500,
             }}>{score}</span>
           </div>
           <div>
-            <span className="text-[11px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ATS Score</span>
-            <span className="text-[9px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Product Designer</span>
+            <span className="text-[11px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ATS Score</span>
+            <span className="text-[9px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Product Designer</span>
           </div>
         </div>
 
         {/* Mini breakdown bars */}
         <div className="flex-1 flex gap-1 items-center px-2">
           {breakdown.map((item) => (
-            <div key={item.label} className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div key={item.label} className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
               <div className="h-full rounded-full" style={{ background: item.color, width: `${(item.score / item.max) * 100}%` }} />
             </div>
           ))}
@@ -1057,19 +1057,19 @@ function ScoreBar({ score, breakdown, verdicts, onSectionClick, onNavigate }: {
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
             className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] cursor-pointer transition-colors"
-            style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.12)", color: "#B3FF3B", fontFamily: "var(--font-display)", fontWeight: 500 }}
+            style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             onClick={(e) => { e.stopPropagation(); }}
           >
             <Download className="w-3 h-3" /> Save
           </button>
           <button
             className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] cursor-pointer transition-colors"
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
             onClick={(e) => { e.stopPropagation(); onNavigate("jobs"); }}
           >
-            <Briefcase className="w-3 h-3 text-[#22D3EE]" /> Jobs
+            <Briefcase className="w-3 h-3 text-ce-cyan" /> Jobs
           </button>
-          {expanded ? <ChevronUp className="w-3.5 h-3.5 text-[#374151]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#374151]" />}
+          {expanded ? <ChevronUp className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" /> : <ChevronDown className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />}
         </div>
       </div>
 
@@ -1083,13 +1083,13 @@ function ScoreBar({ score, breakdown, verdicts, onSectionClick, onNavigate }: {
             transition={{ duration: 0.2 }}
             className="overflow-hidden"
           >
-            <div className="px-4 pb-3 pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+            <div className="px-4 pb-3 pt-1" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
               {/* Full breakdown */}
               <div className="flex flex-col gap-1.5 mb-3">
                 {breakdown.map((item) => (
                   <div key={item.label} className="flex items-center gap-2">
-                    <span className="text-[10px] text-[#6B7280] w-[70px] text-right truncate" style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
-                    <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+                    <span className="text-[10px] text-ce-text-tertiary w-[70px] text-right truncate" style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+                    <div className="flex-1 h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
                       <div className="h-full rounded-full" style={{ background: item.color, width: `${(item.score / item.max) * 100}%` }} />
                     </div>
                     <span className="text-[10px] tabular-nums w-[20px] text-right" style={{ color: item.color, fontFamily: "var(--font-body)" }}>{item.score}</span>
@@ -1100,18 +1100,18 @@ function ScoreBar({ score, breakdown, verdicts, onSectionClick, onNavigate }: {
               {/* Section verdicts */}
               <div className="flex flex-wrap gap-1">
                 {verdicts.map((s) => {
-                  const colors = { good: "#22C55E", warn: "#F59E0B", fix: "#EF4444" };
+                  const colors = { good: "#22C55E", warn: "var(--ce-role-edgepreneur)", fix: "var(--ce-status-error)" };
                   const icons = { good: Check, warn: AlertTriangle, fix: Target };
                   const VIcon = icons[s.verdict];
                   return (
                     <button
                       key={s.name}
-                      className="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-[rgba(255,255,255,0.015)] cursor-pointer transition-colors"
+                      className="flex items-center gap-1 px-2 py-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.015)] cursor-pointer transition-colors"
                       onClick={() => onSectionClick(s.key)}
                     >
                       <VIcon className="w-2.5 h-2.5" style={{ color: colors[s.verdict] }} />
-                      <span className="text-[10px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{s.name}</span>
-                      <span className="text-[8px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{s.detail}</span>
+                      <span className="text-[10px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{s.name}</span>
+                      <span className="text-[8px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{s.detail}</span>
                     </button>
                   );
                 })}
@@ -1159,10 +1159,10 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
   return (
     <div className="flex flex-col h-full">
       {/* Chat header */}
-      <div className="flex items-center gap-2 px-4 py-2.5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="flex items-center gap-2 px-4 py-2.5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <SophiaMark size={14} glowing={false} />
-        <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia — Resume Coach</span>
-        <span className="text-[9px] text-[#374151] ml-auto" style={{ fontFamily: "var(--font-body)" }}>Chat with me as we edit</span>
+        <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia — Resume Coach</span>
+        <span className="text-[9px] text-[var(--ce-text-quaternary)] ml-auto" style={{ fontFamily: "var(--font-body)" }}>Chat with me as we edit</span>
       </div>
 
       {/* Messages — takes all available space */}
@@ -1178,14 +1178,14 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                     <div className="flex flex-wrap gap-2">
                       <button
                         className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-110"
-                        style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.12)", color: "#22D3EE", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                        style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                         onClick={() => onNavigate("jobs")}
                       >
                         <Search className="w-3 h-3" /> See matching jobs
                       </button>
                       <button
                         className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-110"
-                        style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.12)", color: "#B3FF3B", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                        style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                         onClick={() => onNavigate("edgepath")}
                       >
                         <Compass className="w-3 h-3" /> Back to roadmap
@@ -1193,7 +1193,7 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                     </div>
                   ) : (
                   <>
-                  <p className="text-[12px] text-[#9CA3AF] leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                  <p className="text-[12px] text-ce-text-secondary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
                     {msg.content}
                   </p>
 
@@ -1201,7 +1201,7 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                   {msg.promptAction && onStartSuggestions && (
                     <motion.button
                       className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-110 mt-1"
-                      style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.12)", color: "#B3FF3B", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                      style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                       onClick={onStartSuggestions}
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -1213,23 +1213,23 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
 
                   {/* Suggestion card — compact since diff is on the document */}
                   {msg.suggestion && (
-                    <div className="rounded-lg overflow-hidden mb-1" style={{ border: "1px solid rgba(255,255,255,0.05)" }}>
-                      <div className="px-3 py-2" style={{ background: "rgba(255,255,255,0.02)" }}>
+                    <div className="rounded-lg overflow-hidden mb-1" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                      <div className="px-3 py-2" style={{ background: "rgba(var(--ce-glass-tint),0.02)" }}>
                         <div className="flex items-center gap-2 mb-1.5">
-                          <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                          <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                             {msg.suggestion.section}
                           </span>
                           {msg.suggestion.status === "accepted" && (
-                            <span className="text-[9px] text-[#B3FF3B] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(179,255,59,0.06)" }}>Applied</span>
+                            <span className="text-[9px] text-ce-lime px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.06)" }}>Applied</span>
                           )}
                           {msg.suggestion.status === "rejected" && (
-                            <span className="text-[9px] text-[#6B7280] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.03)" }}>Skipped</span>
+                            <span className="text-[9px] text-ce-text-tertiary px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>Skipped</span>
                           )}
                         </div>
 
                         {/* Reason */}
-                        <p className="text-[10px] text-[#6B7280] leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
-                          <Sparkles className="w-2.5 h-2.5 text-[#22D3EE] inline mr-1 -mt-0.5" />
+                        <p className="text-[10px] text-ce-text-tertiary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                          <Sparkles className="w-2.5 h-2.5 text-ce-cyan inline mr-1 -mt-0.5" />
                           {msg.suggestion.reason}
                         </p>
 
@@ -1238,14 +1238,14 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                           <div className="flex gap-2">
                             <button
                               className="flex-1 flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
-                              style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.12)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}
+                              style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}
                               onClick={() => onAccept(msg.suggestion!.id)}
                             >
                               <Check className="w-3 h-3" /> Accept
                             </button>
                             <button
                               className="flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
-                              style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#6B7280", fontFamily: "var(--font-body)" }}
+                              style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
                               onClick={() => onReject(msg.suggestion!.id)}
                             >
                               <X className="w-3 h-3" /> Skip
@@ -1254,7 +1254,7 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                         )}
                         {msg.suggestion.status === "accepted" && (
                           <button
-                            className="flex items-center gap-1 text-[10px] text-[#6B7280] cursor-pointer hover:text-[#9CA3AF] transition-colors"
+                            className="flex items-center gap-1 text-[10px] text-ce-text-tertiary cursor-pointer hover:text-ce-text-secondary transition-colors"
                             style={{ fontFamily: "var(--font-body)" }}
                             onClick={() => onUndo(msg.suggestion!.id)}
                           >
@@ -1272,15 +1272,15 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
 
             {msg.role === "user" && (
               <div className="flex justify-end">
-                <div className="max-w-[85%] px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <p className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{msg.content}</p>
+                <div className="max-w-[85%] px-3 py-2 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                  <p className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{msg.content}</p>
                 </div>
               </div>
             )}
 
             {msg.role === "system" && (
               <div className="text-center py-1">
-                <span className="text-[10px] text-[#374151] px-3 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.02)", fontFamily: "var(--font-body)" }}>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)] px-3 py-1 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}>
                   {msg.content}
                 </span>
               </div>
@@ -1290,22 +1290,22 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
       </div>
 
       {/* Input — always at bottom */}
-      <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-4 py-3 flex-shrink-0" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+        <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
           <input
             type="text"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && handleSubmit()}
             placeholder="Ask Sophia about your resume..."
-            className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none"
+            className="flex-1 text-[12px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none"
             style={{ fontFamily: "var(--font-body)" }}
           />
-          <button className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer transition-colors">
-            <Mic className="w-3.5 h-3.5 text-[#6B7280]" />
+          <button className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer transition-colors">
+            <Mic className="w-3.5 h-3.5 text-ce-text-tertiary" />
           </button>
-          <button className="p-1 rounded-md hover:bg-[rgba(34,211,238,0.06)] cursor-pointer transition-colors" onClick={handleSubmit}>
-            <Send className="w-3.5 h-3.5 text-[#22D3EE]" />
+          <button className="p-1 rounded-md hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] cursor-pointer transition-colors" onClick={handleSubmit}>
+            <Send className="w-3.5 h-3.5 text-ce-cyan" />
           </button>
         </div>
       </div>
@@ -1488,7 +1488,7 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
 
   if (state === "empty") {
     return (
-      <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+      <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
         <SophiaForwardBackground />
         <SharedTopNav role={role} onOpenSophia={() => {}} />
         <div className="mt-14">
@@ -1500,7 +1500,7 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
 
   if (state === "building") {
     return (
-      <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+      <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
         <SophiaForwardBackground />
         <SharedTopNav role={role} onOpenSophia={() => {}} />
         <div className="mt-14">
@@ -1512,7 +1512,7 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
 
   if (state === "parseConfirm") {
     return (
-      <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+      <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
         <SophiaForwardBackground />
         <SharedTopNav role={role} onOpenSophia={() => {}} />
         <div className="mt-14">
@@ -1524,7 +1524,7 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
 
   if (state === "analyzing") {
     return (
-      <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+      <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
         <SophiaForwardBackground />
         <SharedTopNav role={role} onOpenSophia={() => {}} />
         <div className="mt-14">
@@ -1538,7 +1538,7 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
   const pendingCount = suggestions.filter((s) => s.status === "pending").length;
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
       <SophiaForwardBackground />
       <SharedTopNav role={role} onOpenSophia={() => {}} />
 
@@ -1552,20 +1552,20 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
             transition={{ delay: 0.1, duration: 0.4, ease: EASE }}
           >
             <div>
-              <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ResumeEdge</h1>
+              <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ResumeEdge</h1>
               <div className="flex items-center gap-3">
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
-                  Optimizing for: <span className="text-[#22D3EE]">Product Designer</span>
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
+                  Optimizing for: <span className="text-ce-cyan">Product Designer</span>
                 </span>
-                <span className="text-[10px] text-[#374151]">·</span>
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)]">·</span>
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                   {acceptedCount} applied · {pendingCount} pending
                 </span>
               </div>
             </div>
             <button
               className="text-[10px] px-2.5 py-1 rounded-md cursor-pointer"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#374151", fontFamily: "var(--font-body)" }}
+              style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}
               onClick={() => setState("empty")}
             >
               Upload New
@@ -1604,7 +1604,7 @@ export function ResumeEdge({ role = "edgestar", onNavigate }: { role?: RoleId; o
               </AnimatePresence>
 
               {/* Sophia coaching chat — fills ALL remaining space */}
-              <div className="flex-1 min-h-0 rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="flex-1 min-h-0 rounded-xl overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
                 <SophiaCoachingChat
                   messages={chatMessages}
                   onSend={handleChatSend}

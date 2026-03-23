@@ -21,10 +21,12 @@ import {
   Target, BookOpen, Compass, Zap, TrendingUp, Award, FileText, Users,
   MessageSquare, Calendar, Search, Rocket, Shield, Lightbulb, BarChart3,
   Home, Bell, Settings, ChevronRight, ArrowRight, RefreshCw, RotateCcw,
+  QrCode, Heart, Eye,
 } from "lucide-react";
 import { EditAnswersPanel } from "./edit-answers-panel";
+import { EASE, SPRING } from "./tokens";
 
-type Step = "intro" | "intent" | "sub" | "target" | "level" | "building" | "ready" | "signup";
+type Step = "intro" | "intent" | "sub" | "target" | "level" | "child-link" | "building" | "ready" | "signup";
 
 interface Option { id: string; label: string; sub?: string; icon: React.ReactNode; }
 
@@ -197,9 +199,6 @@ const PATH_QS: Record<string, PathQ> = {
   },
 };
 
-const EASE = [0.32, 0.72, 0, 1] as const;
-const SPRING = { stiffness: 160, damping: 24 };
-
 // ─── Dashboard Components ───────────────────────────────────────────────────
 
 function DashboardSidebar({ visible, fillLevel }: { visible: boolean; fillLevel: number }) {
@@ -215,18 +214,18 @@ function DashboardSidebar({ visible, fillLevel }: { visible: boolean; fillLevel:
 
   return (
     <motion.div className="absolute left-0 top-0 bottom-0 w-[52px] z-20 flex flex-col items-center py-3 gap-1"
-      style={{ background: "linear-gradient(180deg, rgba(12,14,19,0.95) 0%, rgba(10,12,16,0.98) 100%)", borderRight: "1px solid rgba(255,255,255,0.04)" }}
+      style={{ background: "linear-gradient(180deg, rgba(12,14,19,0.95) 0%, rgba(10,12,16,0.98) 100%)", borderRight: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
       initial={{ x: -52, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: "spring", ...SPRING }}>
       <motion.div className="w-7 h-7 rounded-lg mb-4 flex items-center justify-center"
-        animate={{ backgroundColor: fillLevel >= 1 ? "rgba(179,255,59,0.12)" : "rgba(255,255,255,0.04)" }}
+        animate={{ backgroundColor: fillLevel >= 1 ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)" }}
         transition={{ duration: 0.6 }}>
-        {fillLevel >= 1 && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}><Sparkles className="w-3.5 h-3.5 text-[#B3FF3B]" /></motion.div>}
+        {fillLevel >= 1 && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}><Sparkles className="w-3.5 h-3.5 text-ce-lime" /></motion.div>}
       </motion.div>
       {items.map((item, i) => (
         <motion.div key={i}
-          className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${item.active && fillLevel >= 1 ? "bg-[rgba(255,255,255,0.06)] text-[#B3FF3B]" : "text-[#374151]"}`}
+          className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${item.active && fillLevel >= 1 ? "bg-[rgba(var(--ce-glass-tint),0.06)] text-ce-lime" : "text-[var(--ce-text-quaternary)]"}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: fillLevel >= 1 ? (item.active ? 1 : 0.4) : 0.15 }}
           transition={{ delay: 0.08 + i * 0.06, duration: 0.5 }}
@@ -235,7 +234,7 @@ function DashboardSidebar({ visible, fillLevel }: { visible: boolean; fillLevel:
         </motion.div>
       ))}
       <div className="mt-auto">
-        <motion.div className="w-9 h-9 rounded-lg flex items-center justify-center text-[#374151]"
+        <motion.div className="w-9 h-9 rounded-lg flex items-center justify-center text-[var(--ce-text-quaternary)]"
           animate={{ opacity: fillLevel >= 1 ? 0.35 : 0.1 }}>
           <Settings className="w-[16px] h-[16px]" />
         </motion.div>
@@ -249,24 +248,24 @@ function DashboardTopBar({ visible, filled, target }: { visible: boolean; filled
   const tl = TARGETS.find(t => t.id === target)?.label || "Dashboard";
   return (
     <motion.div className="absolute top-0 left-[52px] right-0 h-12 z-20 flex items-center justify-between px-4"
-      style={{ background: "rgba(10,12,16,0.85)", borderBottom: "1px solid rgba(255,255,255,0.04)", backdropFilter: "blur(12px)" }}
+      style={{ background: "rgba(10,12,16,0.85)", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)", backdropFilter: "blur(12px)" }}
       initial={{ y: -48, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", ...SPRING }}>
       <div className="flex items-center gap-2">
         {filled ? (
-          <motion.span className="text-[13px] text-[#9CA3AF]" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
+          <motion.span className="text-[13px] text-ce-text-secondary" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.4 }}
             style={{ fontFamily: "var(--font-body)" }}>
-            <span className="text-[#6B7280]">Home</span><span className="text-[#374151] mx-2">/</span>{tl}
+            <span className="text-ce-text-tertiary">Home</span><span className="text-[var(--ce-text-quaternary)] mx-2">/</span>{tl}
           </motion.span>
-        ) : <div className="h-3 w-20 rounded bg-[rgba(255,255,255,0.04)]" />}
+        ) : <div className="h-3 w-20 rounded bg-[rgba(var(--ce-glass-tint),0.04)]" />}
       </div>
       <div className="flex items-center gap-2">
-        <motion.div className="w-8 h-8 rounded-lg flex items-center justify-center" animate={{ backgroundColor: filled ? "rgba(255,255,255,0.04)" : "transparent" }}>
-          {filled && <Bell className="w-3.5 h-3.5 text-[#6B7280]" />}
+        <motion.div className="w-8 h-8 rounded-lg flex items-center justify-center" animate={{ backgroundColor: filled ? "rgba(var(--ce-glass-tint),0.04)" : "transparent" }}>
+          {filled && <Bell className="w-3.5 h-3.5 text-ce-text-tertiary" />}
         </motion.div>
-        <motion.div className="w-7 h-7 rounded-full" animate={{ backgroundColor: filled ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.04)" }}>
-          {filled && <div className="w-full h-full rounded-full flex items-center justify-center text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>U</div>}
+        <motion.div className="w-7 h-7 rounded-full" animate={{ backgroundColor: filled ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)" }}>
+          {filled && <div className="w-full h-full rounded-full flex items-center justify-center text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>U</div>}
         </motion.div>
       </div>
     </motion.div>
@@ -293,21 +292,21 @@ function DashboardCards({ visible, fillLevel, target }: { visible: boolean; fill
         {kpis.map((kpi, i) => (
           <motion.div key={i} className="rounded-xl p-3.5"
             style={{
-              background: filled ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.015)",
-              border: `1px solid ${filled ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)"}`,
-              boxShadow: filled ? "inset 0 1px 1px rgba(255,255,255,0.03)" : "none",
+              background: filled ? "rgba(var(--ce-glass-tint),0.03)" : "rgba(var(--ce-glass-tint),0.015)",
+              border: `1px solid ${filled ? "rgba(var(--ce-glass-tint),0.06)" : "rgba(var(--ce-glass-tint),0.03)"}`,
+              boxShadow: filled ? "inset 0 1px 1px rgba(var(--ce-glass-tint),0.03)" : "none",
             }}
             initial={{ opacity: 0, x: 30, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ delay: 0.1 + i * 0.12, type: "spring", ...SPRING }}>
             <div className="flex items-center gap-2 mb-2">
               <div className={`w-6 h-6 rounded-md flex items-center justify-center ${
-                filled ? kpi.color === "cyan" ? "bg-[rgba(34,211,238,0.1)] text-[#22D3EE]" : kpi.color === "lime" ? "bg-[rgba(179,255,59,0.1)] text-[#B3FF3B]" : "bg-[rgba(255,255,255,0.04)] text-[#6B7280]"
-                : "bg-[rgba(255,255,255,0.03)] text-[#1F2937]"
+                filled ? kpi.color === "cyan" ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)] text-ce-cyan" : kpi.color === "lime" ? "bg-[rgba(var(--ce-lime-rgb),0.1)] text-ce-lime" : "bg-[rgba(var(--ce-glass-tint),0.04)] text-ce-text-tertiary"
+                : "bg-[rgba(var(--ce-glass-tint),0.03)] text-[var(--ce-text-ghost)]"
               }`}>{kpi.icon}</div>
-              {filled ? <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</span> : <div className="h-2 w-14 rounded bg-[rgba(255,255,255,0.03)]" />}
+              {filled ? <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</span> : <div className="h-2 w-14 rounded bg-[rgba(var(--ce-glass-tint),0.03)]" />}
             </div>
-            <div className="text-[20px] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: filled ? "#E8E8ED" : "#1F2937" }}>
+            <div className="text-[20px] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: filled ? "var(--ce-text-primary)" : "var(--ce-text-ghost)" }}>
               {filled ? kpi.value : "—"}
             </div>
           </motion.div>
@@ -317,25 +316,25 @@ function DashboardCards({ visible, fillLevel, target }: { visible: boolean; fill
       {/* Roadmap card */}
       <motion.div className="rounded-xl p-4"
         style={{
-          background: fillLevel >= 2 ? "linear-gradient(171deg, rgba(4,44,1,0.08), rgba(255,255,255,0.03))" : "rgba(255,255,255,0.015)",
-          border: `1px solid ${fillLevel >= 2 ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)"}`,
-          boxShadow: fillLevel >= 2 ? "inset 0 1px 1px rgba(255,255,255,0.03), 0 0 20px rgba(34,211,238,0.02)" : "none",
+          background: fillLevel >= 2 ? "linear-gradient(171deg, rgba(4,44,1,0.08), rgba(var(--ce-glass-tint),0.03))" : "rgba(var(--ce-glass-tint),0.015)",
+          border: `1px solid ${fillLevel >= 2 ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)"}`,
+          boxShadow: fillLevel >= 2 ? "inset 0 1px 1px rgba(var(--ce-glass-tint),0.03), 0 0 20px rgba(var(--ce-role-edgestar-rgb),0.02)" : "none",
         }}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4 }}>
         <div className="flex items-center justify-between mb-3">
           {fillLevel >= 2 ? (
             <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-[#22D3EE]" style={{ boxShadow: "0 0 8px rgba(34,211,238,0.4)" }} />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{tl} Roadmap</span>
+              <div className="w-2.5 h-2.5 rounded-full bg-[var(--ce-role-edgestar)]" style={{ boxShadow: "0 0 8px rgba(var(--ce-role-edgestar-rgb),0.4)" }} />
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{tl} Roadmap</span>
             </div>
           ) : (
             <div className="flex items-center gap-2">
-              <div className="w-2.5 h-2.5 rounded-full bg-[rgba(255,255,255,0.06)]" />
-              <div className="h-3 w-24 rounded bg-[rgba(255,255,255,0.03)]" />
+              <div className="w-2.5 h-2.5 rounded-full bg-[rgba(var(--ce-glass-tint),0.06)]" />
+              <div className="h-3 w-24 rounded bg-[rgba(var(--ce-glass-tint),0.03)]" />
             </div>
           )}
           {fillLevel >= 2 && (
-            <span className="inline-flex items-center gap-1 text-[11px] text-[#22D3EE] bg-[rgba(34,211,238,0.08)] px-2 py-0.5 rounded-md" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="inline-flex items-center gap-1 text-[11px] text-ce-cyan bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] px-2 py-0.5 rounded-md" style={{ fontFamily: "var(--font-body)" }}>
               <Sparkles className="w-2.5 h-2.5" /> Phase 1
             </span>
           )}
@@ -343,21 +342,21 @@ function DashboardCards({ visible, fillLevel, target }: { visible: boolean; fill
         <div className="flex gap-1.5">
           {[1, 2, 3, 4].map(p => (
             <motion.div key={p} className="flex-1 h-1.5 rounded-full"
-              animate={{ backgroundColor: fillLevel >= 2 && p === 1 ? "rgba(34,211,238,0.5)" : fillLevel >= 2 ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.02)" }}
+              animate={{ backgroundColor: fillLevel >= 2 && p === 1 ? "rgba(var(--ce-role-edgestar-rgb),0.5)" : fillLevel >= 2 ? "rgba(var(--ce-glass-tint),0.04)" : "rgba(var(--ce-glass-tint),0.02)" }}
               transition={{ delay: 0.5 + p * 0.08 }} />
           ))}
         </div>
         {fillLevel >= 2 && (
           <>
             <div className="flex items-center gap-2 mt-3">
-              <span className="inline-flex items-center gap-1 text-[11px] text-[#E8E8ED] bg-[rgba(34,211,238,0.08)] border border-[rgba(34,211,238,0.1)] px-2 py-1 rounded-md">
-                <Check className="w-2.5 h-2.5 text-[#22D3EE]" /> Discover & Position
+              <span className="inline-flex items-center gap-1 text-[11px] text-ce-text-primary bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] border border-[rgba(var(--ce-role-edgestar-rgb),0.1)] px-2 py-1 rounded-md">
+                <Check className="w-2.5 h-2.5 text-ce-cyan" /> Discover & Position
               </span>
-              <span className="inline-flex text-[11px] text-[#6B7280] bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.04)] px-2 py-1 rounded-md">Weeks 1–3</span>
+              <span className="inline-flex text-[11px] text-ce-text-tertiary bg-[rgba(var(--ce-glass-tint),0.03)] border border-[rgba(var(--ce-glass-tint),0.04)] px-2 py-1 rounded-md">Weeks 1–3</span>
             </div>
-            <div className="flex items-start gap-2 mt-3 px-3 py-2 rounded-lg" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
-              <Sparkles className="w-3 h-3 text-[#22D3EE] flex-shrink-0 mt-0.5" />
-              <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Start with resume optimization — it's the highest-leverage move.</span>
+            <div className="flex items-start gap-2 mt-3 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+              <Sparkles className="w-3 h-3 text-ce-cyan flex-shrink-0 mt-0.5" />
+              <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Start with resume optimization — it's the highest-leverage move.</span>
             </div>
           </>
         )}
@@ -366,21 +365,21 @@ function DashboardCards({ visible, fillLevel, target }: { visible: boolean; fill
       {/* Sophia insight card */}
       <motion.div className="rounded-xl p-4"
         style={{
-          background: filled ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.015)",
-          border: `1px solid ${filled ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)"}`,
+          background: filled ? "rgba(var(--ce-glass-tint),0.03)" : "rgba(var(--ce-glass-tint),0.015)",
+          border: `1px solid ${filled ? "rgba(var(--ce-glass-tint),0.06)" : "rgba(var(--ce-glass-tint),0.03)"}`,
         }}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}>
         <div className="flex items-center gap-2 mb-2">
-          <Sparkles className="w-3.5 h-3.5" style={{ color: fillLevel >= 3 ? "#22D3EE" : "#1F2937" }} />
-          <span className="text-[12px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: fillLevel >= 3 ? "#22D3EE" : "#1F2937" }}>Sophia</span>
+          <Sparkles className="w-3.5 h-3.5" style={{ color: fillLevel >= 3 ? "var(--ce-role-edgestar)" : "var(--ce-text-ghost)" }} />
+          <span className="text-[12px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: fillLevel >= 3 ? "var(--ce-role-edgestar)" : "var(--ce-text-ghost)" }}>Sophia</span>
         </div>
         {fillLevel >= 3 ? (
-          <motion.p className="text-[13px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}
+          <motion.p className="text-[13px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.5 }}>
             Based on your profile, I'd start with resume optimization. Your ATS score will unlock after your first upload.
           </motion.p>
         ) : (
-          <div className="flex flex-col gap-1.5"><div className="h-2 w-full rounded bg-[rgba(255,255,255,0.02)]" /><div className="h-2 w-3/4 rounded bg-[rgba(255,255,255,0.02)]" /></div>
+          <div className="flex flex-col gap-1.5"><div className="h-2 w-full rounded bg-[rgba(var(--ce-glass-tint),0.02)]" /><div className="h-2 w-3/4 rounded bg-[rgba(var(--ce-glass-tint),0.02)]" /></div>
         )}
       </motion.div>
     </motion.div>
@@ -391,15 +390,15 @@ function DashboardSophiaBar({ visible, filled }: { visible: boolean; filled: boo
   if (!visible) return null;
   return (
     <motion.div className="absolute bottom-0 left-[52px] right-0 h-12 z-20 flex items-center px-3 gap-2.5"
-      style={{ background: "rgba(10,12,16,0.9)", borderTop: "1px solid rgba(255,255,255,0.04)", backdropFilter: "blur(12px)" }}
+      style={{ background: "rgba(10,12,16,0.9)", borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)", backdropFilter: "blur(12px)" }}
       initial={{ y: 48, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ type: "spring", ...SPRING }}>
-      <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: filled ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.03)" }}>
-        <Sparkles className="w-3.5 h-3.5" style={{ color: filled ? "#22D3EE" : "#1F2937" }} />
+      <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: filled ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.03)" }}>
+        <Sparkles className="w-3.5 h-3.5" style={{ color: filled ? "var(--ce-role-edgestar)" : "var(--ce-text-ghost)" }} />
       </div>
-      <div className="flex-1 h-8 rounded-lg flex items-center px-3" style={{ background: filled ? "rgba(255,255,255,0.03)" : "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}>
-        {filled && <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia anything...</span>}
+      <div className="flex-1 h-8 rounded-lg flex items-center px-3" style={{ background: filled ? "rgba(var(--ce-glass-tint),0.03)" : "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+        {filled && <span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia anything...</span>}
       </div>
     </motion.div>
   );
@@ -432,8 +431,8 @@ function BuildProcess({ target, onFillChange }: { target: string; onFillChange: 
       <div className="flex items-center gap-3">
         <SophiaMark size={40} glowing />
         <div>
-          <div className="text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Setting things up</div>
-          <div className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Based on what you told me.</div>
+          <div className="text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Setting things up</div>
+          <div className="text-[13px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Based on what you told me.</div>
         </div>
       </div>
 
@@ -446,16 +445,16 @@ function BuildProcess({ target, onFillChange }: { target: string; onFillChange: 
             <div className="w-5 flex items-center justify-center">
               {i < active ? (
                 <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                  <Check className="w-3.5 h-3.5 text-[#22D3EE]" />
+                  <Check className="w-3.5 h-3.5 text-ce-cyan" />
                 </motion.div>
               ) : i === active ? (
-                <motion.div className="w-2 h-2 rounded-full bg-[#22D3EE]"
+                <motion.div className="w-2 h-2 rounded-full bg-[var(--ce-role-edgestar)]"
                   animate={{ opacity: [1, 0.25, 1] }} transition={{ duration: 1, repeat: Infinity, ease: "easeInOut" }} />
-              ) : <div className="w-1.5 h-1.5 rounded-full bg-[#374151]" />}
+              ) : <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-text-quaternary)]" />}
             </div>
             <span className="flex items-center gap-2 text-[13px]"
-              style={{ fontFamily: "var(--font-body)", color: i <= active ? "#9CA3AF" : "#374151" }}>
-              <span className={i < active ? "text-[#22D3EE]" : i === active ? "text-[#6B7280]" : "text-[#374151]"}>{s.icon}</span>
+              style={{ fontFamily: "var(--font-body)", color: i <= active ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)" }}>
+              <span className={i < active ? "text-ce-cyan" : i === active ? "text-ce-text-tertiary" : "text-[var(--ce-text-quaternary)]"}>{s.icon}</span>
               {s.text}
             </span>
           </motion.div>
@@ -471,21 +470,21 @@ function ConvoOption({ option, selected, onClick, delay }: { option: Option; sel
   return (
     <motion.button onClick={onClick}
       className={`w-full flex items-center gap-3 px-3.5 py-3 rounded-xl cursor-pointer border transition-all ${
-        selected ? "bg-[rgba(34,211,238,0.08)] border-[rgba(34,211,238,0.15)]" : "bg-[rgba(255,255,255,0.025)] border-[rgba(255,255,255,0.06)] hover:bg-[rgba(255,255,255,0.04)] hover:border-[rgba(255,255,255,0.1)]"
+        selected ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] border-[rgba(var(--ce-role-edgestar-rgb),0.15)]" : "bg-[rgba(var(--ce-glass-tint),0.025)] border-[rgba(var(--ce-glass-tint),0.06)] hover:bg-[rgba(var(--ce-glass-tint),0.04)] hover:border-[rgba(var(--ce-glass-tint),0.1)]"
       }`}
-      style={{ boxShadow: selected ? "0 0 16px rgba(34,211,238,0.04)" : "inset 0 1px 1px rgba(255,255,255,0.02)", willChange: "transform, opacity" }}
+      style={{ boxShadow: selected ? "0 0 16px rgba(var(--ce-role-edgestar-rgb),0.04)" : "inset 0 1px 1px rgba(var(--ce-glass-tint),0.02)", willChange: "transform, opacity" }}
       initial={{ opacity: 0, x: -8 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.35, delay, ease: EASE }}
       whileTap={{ scale: 0.98 }}>
-      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${selected ? "bg-[rgba(34,211,238,0.1)] text-[#22D3EE]" : "bg-[rgba(255,255,255,0.04)] text-[#6B7280]"}`}>{option.icon}</div>
+      <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${selected ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)] text-ce-cyan" : "bg-[rgba(var(--ce-glass-tint),0.04)] text-ce-text-tertiary"}`}>{option.icon}</div>
       <div className="flex-1 text-left">
-        <div className={`text-[13px] ${selected ? "text-[#E8E8ED]" : "text-[#9CA3AF]"}`} style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{option.label}</div>
-        {option.sub && <div className="text-[11px] text-[#6B7280]">{option.sub}</div>}
+        <div className={`text-[13px] ${selected ? "text-ce-text-primary" : "text-ce-text-secondary"}`} style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{option.label}</div>
+        {option.sub && <div className="text-[11px] text-ce-text-tertiary">{option.sub}</div>}
       </div>
       {selected && (
         <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 20 }}
-          className="w-4 h-4 rounded-full bg-[#22D3EE] flex items-center justify-center"><Check className="w-2.5 h-2.5 text-[#08090C]" /></motion.div>
+          className="w-4 h-4 rounded-full bg-[var(--ce-role-edgestar)] flex items-center justify-center"><Check className="w-2.5 h-2.5 text-[var(--ce-void)]" /></motion.div>
       )}
     </motion.button>
   );
@@ -503,26 +502,26 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
         initial={{ y: 50, opacity: 0, scale: 0.96 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", ...SPRING, delay: 0.2 }}>
-        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.2), rgba(179,255,59,0.1), rgba(34,211,238,0.06))" }}>
-          <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.08) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05)" }}>
+        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.2), rgba(var(--ce-lime-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))" }}>
+          <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.08) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(var(--ce-shadow-tint),0.6), inset 0 1px 1px rgba(var(--ce-glass-tint),0.05)" }}>
             <div className="flex items-center gap-3">
               <SophiaMark size={28} glowing />
               <div>
-                <div className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Everything's set up.</div>
-                <div className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Ready when you are.</div>
+                <div className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Everything's set up.</div>
+                <div className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Ready when you are.</div>
               </div>
             </div>
-            <button onClick={onComplete} className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1a1a1a] hover:bg-white/90 transition-colors cursor-pointer" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <button onClick={onComplete} className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-[var(--ce-surface-1)] hover:bg-white/90 transition-colors cursor-pointer" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               <svg className="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
               Continue with Google
             </button>
-            <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(255,255,255,0.05)]" /><span className="text-[11px] text-[#6B7280]">or</span><div className="flex-1 h-px bg-[rgba(255,255,255,0.05)]" /></div>
-            <input type="email" placeholder="Where should I send this?" className="w-full px-3.5 py-2.5 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] text-[#E8E8ED] placeholder:text-[#6B7280] focus:outline-none focus:border-[rgba(34,211,238,0.2)] text-[13px]" style={{ fontFamily: "var(--font-body)" }} />
-            <button onClick={onComplete} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C" }}>
+            <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /><span className="text-[11px] text-ce-text-tertiary">or</span><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /></div>
+            <input type="email" placeholder="Where should I send this?" className="w-full px-3.5 py-2.5 rounded-xl bg-[rgba(var(--ce-glass-tint),0.03)] border border-[rgba(var(--ce-glass-tint),0.05)] text-ce-text-primary placeholder:text-ce-text-tertiary focus:outline-none focus:border-[rgba(var(--ce-role-edgestar-rgb),0.2)] text-[13px]" style={{ fontFamily: "var(--font-body)" }} />
+            <button onClick={onComplete} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
               <Sparkles className="w-3.5 h-3.5" /> Save workspace
             </button>
-            <p className="text-[11px] text-[#6B7280] text-center">Free. No catch.</p>
-            <button onClick={onDismiss} className="text-[12px] text-[#374151] hover:text-[#6B7280] transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Maybe later</button>
+            <p className="text-[11px] text-ce-text-tertiary text-center">Free. No catch.</p>
+            <button onClick={onDismiss} className="text-[12px] text-[var(--ce-text-quaternary)] hover:text-ce-text-tertiary transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Maybe later</button>
           </div>
         </div>
       </motion.div>
@@ -535,7 +534,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
 function PowerOnFlash() {
   return (
     <motion.div className="fixed inset-0 z-30 pointer-events-none"
-      style={{ background: "rgba(179,255,59,0.03)" }}
+      style={{ background: "rgba(var(--ce-lime-rgb),0.03)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: [0, 1, 0] }}
       transition={{ duration: 0.6, times: [0, 0.15, 1] }} />
@@ -555,6 +554,8 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
   const [buildFillLevel, setBuildFillLevel] = useState(0);
   const [showPowerOn, setShowPowerOn] = useState(false);
   const [showEditPanel, setShowEditPanel] = useState(false);
+  const [childLinkScanning, setChildLinkScanning] = useState(false);
+  const [childLinkFound, setChildLinkFound] = useState(false);
   const hist = useRef<Step[]>([]);
 
   const go = useCallback((next: Step) => {
@@ -568,6 +569,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
     else if (prev === "sub") { setSub(null); setTarget(null); setLevel(null); }
     else if (prev === "target") { setTarget(null); setLevel(null); }
     else if (prev === "level") { setLevel(null); }
+    else if (prev === "child-link") { setChildLinkScanning(false); setChildLinkFound(false); }
     setStep(prev);
   }, []);
 
@@ -579,7 +581,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
   }, []);
 
   const pathQ = sub ? PATH_QS[sub] : null;
-  const canBack = !["intro", "intent", "building"].includes(step);
+  const canBack = !["intro", "intent", "building"].includes(step) && !(step === "child-link" && childLinkScanning);
 
   useEffect(() => { if (step === "intro") { const t = setTimeout(() => go("intent"), 2800); return () => clearTimeout(t); } }, [step, go]);
   useEffect(() => {
@@ -607,10 +609,10 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
     : 0;
 
   return (
-    <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full relative overflow-hidden" style={{ backgroundColor: "var(--ce-void)" }}>
       {/* Dot grid */}
       <div className="absolute inset-0 pointer-events-none" style={{
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.04) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(circle, rgba(var(--ce-glass-tint),0.04) 1px, transparent 1px)",
         backgroundSize: "24px 24px",
         maskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)",
         WebkitMaskImage: "radial-gradient(ellipse 90% 80% at 50% 50%, black 30%, transparent 80%)",
@@ -632,7 +634,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
 
           <AnimatePresence>
             {canBack && (
-              <motion.button onClick={back} className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer mb-4 self-start"
+              <motion.button onClick={back} className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer mb-4 self-start"
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
                 whileTap={{ scale: 0.95 }} style={{ fontFamily: "var(--font-body)" }}>
                 <ArrowLeft className="w-3.5 h-3.5" /> Back
@@ -643,9 +645,9 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
           <motion.div className="rounded-2xl p-6"
             style={{
               background: step === "intro" ? "transparent" : "rgba(12,14,19,0.88)",
-              border: step === "intro" ? "none" : "1px solid rgba(255,255,255,0.05)",
+              border: step === "intro" ? "none" : "1px solid rgba(var(--ce-glass-tint),0.05)",
               backdropFilter: step === "intro" ? "none" : "blur(24px)",
-              boxShadow: step === "intro" ? "none" : "0 4px 40px rgba(0,0,0,0.4), inset 0 1px 1px rgba(255,255,255,0.03)",
+              boxShadow: step === "intro" ? "none" : "0 4px 40px rgba(var(--ce-shadow-tint),0.4), inset 0 1px 1px rgba(var(--ce-glass-tint),0.03)",
             }}
             layout transition={{ duration: 0.5, ease: EASE }}>
 
@@ -658,10 +660,10 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                   </motion.div>
                   <motion.div className="text-center" initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.8, duration: 0.5, ease: EASE }}>
-                    <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "28px", color: "#E8E8ED" }}>
-                      Let's build<br /><span style={{ color: "#22D3EE" }}>your workspace.</span>
+                    <h1 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "28px", color: "var(--ce-text-primary)" }}>
+                      Let's build<br /><span style={{ color: "var(--ce-role-edgestar)" }}>your workspace.</span>
                     </h1>
-                    <p className="text-[#6B7280] text-sm mt-2" style={{ fontFamily: "var(--font-body)" }}>Every answer shapes what you see.</p>
+                    <p className="text-ce-text-tertiary text-sm mt-2" style={{ fontFamily: "var(--font-body)" }}>Every answer shapes what you see.</p>
                   </motion.div>
                 </motion.div>
               )}
@@ -670,7 +672,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                 <motion.div key="intent" className="flex flex-col gap-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -12, transition: { duration: 0.3 } }}>
                   <div className="flex items-center gap-3">
                     <SophiaMark size={28} glowing={false} />
-                    <span className="text-[#9CA3AF] text-[14px]" style={{ fontFamily: "var(--font-body)" }}>What brings you here?</span>
+                    <span className="text-ce-text-secondary text-[14px]" style={{ fontFamily: "var(--font-body)" }}>What brings you here?</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     {INTENTS.map((o, i) => <ConvoOption key={o.id} option={o} selected={intent === o.id} onClick={() => { setIntent(o.id); setTimeout(() => go("sub"), 450); }} delay={0.3 + i * 0.1} />)}
@@ -682,7 +684,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                 <motion.div key="sub" className="flex flex-col gap-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -12, transition: { duration: 0.3 } }}>
                   <div className="flex items-center gap-3">
                     <SophiaMark size={28} glowing={false} />
-                    <span className="text-[#9CA3AF] text-[14px]" style={{ fontFamily: "var(--font-body)" }}>{intent === "career" ? "Tell me more." : intent === "someone" ? "Who?" : "What kind?"}</span>
+                    <span className="text-ce-text-secondary text-[14px]" style={{ fontFamily: "var(--font-body)" }}>{intent === "career" ? "Tell me more." : intent === "someone" ? "Who?" : "What kind?"}</span>
                   </div>
                   <div className="flex flex-col gap-2">
                     {SUBS[intent]?.map((o, i) => <ConvoOption key={o.id} option={o} selected={sub === o.id} onClick={() => { setSub(o.id); setTimeout(() => go("target"), 450); }} delay={0.2 + i * 0.08} />)}
@@ -694,18 +696,18 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                 <motion.div key="target" className="flex flex-col gap-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -12, transition: { duration: 0.3 } }}>
                   <div className="flex items-center gap-3">
                     <SophiaMark size={28} glowing={false} />
-                    <span className="text-[#9CA3AF] text-[14px]" style={{ fontFamily: "var(--font-body)" }}>{pathQ?.targetQ || "What field?"}</span>
+                    <span className="text-ce-text-secondary text-[14px]" style={{ fontFamily: "var(--font-body)" }}>{pathQ?.targetQ || "What field?"}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {(pathQ?.targetOpts || TARGETS).map((o, i) => (
                       <motion.button key={o.id} onClick={() => { setTarget(o.id); setTimeout(() => go("level"), 400); }}
                         className={`flex items-center gap-2 px-3 py-2 rounded-lg border cursor-pointer transition-all text-[13px] ${
-                          target === o.id ? "bg-[rgba(34,211,238,0.08)] border-[rgba(34,211,238,0.15)] text-[#E8E8ED]" : "bg-[rgba(255,255,255,0.025)] border-[rgba(255,255,255,0.06)] text-[#9CA3AF] hover:border-[rgba(255,255,255,0.1)]"
+                          target === o.id ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] border-[rgba(var(--ce-role-edgestar-rgb),0.15)] text-ce-text-primary" : "bg-[rgba(var(--ce-glass-tint),0.025)] border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:border-[rgba(var(--ce-glass-tint),0.1)]"
                         }`}
                         initial={{ opacity: 0, scale: 0.92 }} animate={{ opacity: 1, scale: 1 }}
                         transition={{ delay: 0.25 + i * 0.04, duration: 0.3, ease: EASE }}
                         whileTap={{ scale: 0.96 }} style={{ fontFamily: "var(--font-body)" }}>
-                        <span className={target === o.id ? "text-[#22D3EE]" : "text-[#6B7280]"}>{o.icon}</span>{o.label}
+                        <span className={target === o.id ? "text-ce-cyan" : "text-ce-text-tertiary"}>{o.icon}</span>{o.label}
                       </motion.button>
                     ))}
                   </div>
@@ -716,11 +718,91 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                 <motion.div key="level" className="flex flex-col gap-5" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -12, transition: { duration: 0.3 } }}>
                   <div className="flex items-center gap-3">
                     <SophiaMark size={28} glowing={false} />
-                    <span className="text-[#9CA3AF] text-[14px]" style={{ fontFamily: "var(--font-body)" }}>{pathQ?.levelQ || "Where are you at?"}</span>
+                    <span className="text-ce-text-secondary text-[14px]" style={{ fontFamily: "var(--font-body)" }}>{pathQ?.levelQ || "Where are you at?"}</span>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    {(pathQ?.levelOpts || LEVELS).map((o, i) => <ConvoOption key={o.id} option={o} selected={level === o.id} onClick={() => { setLevel(o.id); setTimeout(() => go("building"), 400); }} delay={0.2 + i * 0.06} />)}
+                    {(pathQ?.levelOpts || LEVELS).map((o, i) => <ConvoOption key={o.id} option={o} selected={level === o.id} onClick={() => { setLevel(o.id); setTimeout(() => go(sub === "parent" ? "child-link" : "building"), 400); }} delay={0.2 + i * 0.06} />)}
                   </div>
+                </motion.div>
+              )}
+
+              {step === "child-link" && (
+                <motion.div key="child-link" className="flex flex-col gap-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, x: -12, transition: { duration: 0.3 } }}>
+                  <div className="flex items-center gap-3">
+                    <SophiaMark size={28} glowing={false} />
+                    <span className="text-ce-text-secondary text-[14px]" style={{ fontFamily: "var(--font-body)" }}>
+                      {childLinkFound ? "Is this your child?" : childLinkScanning ? "Scanning…" : "Connect your child's account"}
+                    </span>
+                  </div>
+
+                  {!childLinkScanning && !childLinkFound && (
+                    <motion.div className="flex flex-col gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                      {/* Info */}
+                      <div className="rounded-xl p-3.5" style={{ background: "rgba(var(--ce-role-parent-rgb),0.04)", border: "1px solid rgba(var(--ce-role-parent-rgb),0.1)" }}>
+                        <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                          Ask your child to open CareerEdge and share their QR code. You'll see their roadmap in read-only mode and can send encouragement notes.
+                        </p>
+                      </div>
+                      <motion.button
+                        onClick={() => { setChildLinkScanning(true); setTimeout(() => setChildLinkFound(true), 2600); }}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer"
+                        style={{ background: "linear-gradient(135deg, var(--ce-role-parent), var(--ce-role-guide))", fontFamily: "var(--font-display)", fontWeight: 500, color: "#fff", fontSize: "13px" }}
+                        initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, ease: EASE }}
+                        whileTap={{ scale: 0.97 }}>
+                        <QrCode className="w-4 h-4" /> Scan QR code <ArrowRight className="w-4 h-4" />
+                      </motion.button>
+                      <button
+                        onClick={() => go("building")}
+                        className="text-[12px] text-[var(--ce-text-quaternary)] hover:text-ce-text-tertiary transition-colors cursor-pointer text-center"
+                        style={{ fontFamily: "var(--font-body)" }}>
+                        Skip for now — link later from my dashboard
+                      </button>
+                    </motion.div>
+                  )}
+
+                  {childLinkScanning && !childLinkFound && (
+                    <motion.div className="flex flex-col items-center gap-4 py-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                      <div className="relative w-36 h-36">
+                        <div className="absolute inset-0 rounded-xl" style={{ background: "rgba(var(--ce-shadow-tint),0.5)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }} />
+                        {/* Corner markers */}
+                        {["top-1.5 left-1.5","top-1.5 right-1.5","bottom-1.5 left-1.5","bottom-1.5 right-1.5"].map((pos, i) => (
+                          <div key={i} className={`absolute ${pos} w-4 h-4`} style={{ borderColor: "var(--ce-role-parent)", borderStyle: "solid", borderWidth: 0, borderTopWidth: i < 2 ? 2 : 0, borderBottomWidth: i >= 2 ? 2 : 0, borderLeftWidth: i % 2 === 0 ? 2 : 0, borderRightWidth: i % 2 === 1 ? 2 : 0 }} />
+                        ))}
+                        <motion.div className="absolute left-2 right-2 h-px" style={{ background: "linear-gradient(90deg, transparent, var(--ce-role-parent), transparent)" }} initial={{ top: "8px" }} animate={{ top: ["8px", "120px", "8px"] }} transition={{ duration: 2, repeat: Infinity, ease: "linear" }} />
+                      </div>
+                      <motion.p className="text-[12px] text-ce-text-tertiary text-center" style={{ fontFamily: "var(--font-body)" }} animate={{ opacity: [1, 0.4, 1] }} transition={{ duration: 1.4, repeat: Infinity }}>Scanning for QR code…</motion.p>
+                    </motion.div>
+                  )}
+
+                  {childLinkFound && (
+                    <motion.div className="flex flex-col gap-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+                      <div className="flex items-center gap-2 py-2 px-3 rounded-xl" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+                        <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 400, damping: 16 }}>
+                          <Check className="w-3.5 h-3.5 text-ce-lime" />
+                        </motion.div>
+                        <span className="text-[12px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>QR code scanned</span>
+                      </div>
+                      {/* Mock child card */}
+                      <div className="rounded-xl p-3.5" style={{ background: "rgba(var(--ce-role-parent-rgb),0.04)", border: "1px solid rgba(var(--ce-role-parent-rgb),0.1)" }}>
+                        <div className="flex items-center gap-3">
+                          <div className="w-9 h-9 rounded-lg flex items-center justify-center text-[13px]" style={{ background: "rgba(var(--ce-role-parent-rgb),0.12)", color: "var(--ce-role-parent)", fontFamily: "var(--font-display)", fontWeight: 500 }}>A</div>
+                          <div>
+                            <div className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Alex Chen</div>
+                            <div className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>UCLA · Product Design · Phase 2</div>
+                          </div>
+                        </div>
+                      </div>
+                      <motion.button
+                        onClick={() => go("building")}
+                        className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer"
+                        style={{ background: "linear-gradient(135deg, var(--ce-role-parent), var(--ce-role-guide))", fontFamily: "var(--font-display)", fontWeight: 500, color: "#fff", fontSize: "13px" }}
+                        initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25, ease: EASE }}
+                        whileTap={{ scale: 0.97 }}>
+                        Yes, this is Alex <ArrowRight className="w-4 h-4" />
+                      </motion.button>
+                      <button onClick={() => { setChildLinkFound(false); setChildLinkScanning(false); }} className="text-[12px] text-[var(--ce-text-quaternary)] hover:text-ce-text-tertiary transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Not my child — scan again</button>
+                    </motion.div>
+                  )}
                 </motion.div>
               )}
 
@@ -735,29 +817,29 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                   <div className="flex items-center gap-3">
                     <SophiaMark size={32} glowing />
                     <div>
-                      <div className="text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Everything's set up.</div>
-                      <div className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Ready when you are.</div>
+                      <div className="text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Everything's set up.</div>
+                      <div className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Ready when you are.</div>
                     </div>
                   </div>
                   <motion.button onClick={() => setShowSignup(true)}
                     className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer"
-                    style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C", boxShadow: "0 0 24px rgba(34,211,238,0.12)" }}
+                    style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12)" }}
                     initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, ease: EASE }}
                     whileTap={{ scale: 0.97 }}>
                     <Sparkles className="w-4 h-4" /> Enter workspace <ArrowRight className="w-4 h-4" />
                   </motion.button>
-                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer border border-[rgba(255,255,255,0.08)] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.04)] hover:text-[#E8E8ED] transition-colors text-[13px]"
+                  <button className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer border border-[rgba(var(--ce-glass-tint),0.08)] text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.04)] hover:text-ce-text-primary transition-colors text-[13px]"
                     style={{ fontFamily: "var(--font-body)" }}>
                     Tell me more
                   </button>
                   <div className="flex items-center gap-4 justify-center">
-                    <button className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RefreshCw className="w-3 h-3" /> Not quite right?</button>
-                    <button onClick={() => setShowEditPanel(true)} className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3 h-3" /> Adjust my answers</button>
+                    <button className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RefreshCw className="w-3 h-3" /> Not quite right?</button>
+                    <button onClick={() => setShowEditPanel(true)} className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3 h-3" /> Adjust my answers</button>
                   </div>
                   {signupDismissed && (
-                    <motion.button onClick={() => setShowSignup(true)} className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[rgba(255,255,255,0.06)] bg-[rgba(255,255,255,0.02)] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+                    <motion.button onClick={() => setShowSignup(true)} className="flex items-center gap-2 px-3 py-2 rounded-lg border border-[rgba(var(--ce-glass-tint),0.06)] bg-[rgba(var(--ce-glass-tint),0.02)] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
                       initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-                      <Sparkles className="w-3 h-3 text-[#22D3EE]" /><span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Save your workspace before you go</span>
+                      <Sparkles className="w-3 h-3 text-ce-cyan" /><span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Save your workspace before you go</span>
                     </motion.button>
                   )}
                 </motion.div>
@@ -768,7 +850,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
       </div>
 
       <motion.div className="absolute bottom-4 right-4 z-10" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 2 }}>
-        <span className="text-[10px] tracking-[0.2em] text-[#1F2937]" style={{ fontFamily: "var(--font-display)" }}>CAREEREDGE</span>
+        <span className="text-[10px] tracking-[0.2em] text-[var(--ce-text-ghost)]" style={{ fontFamily: "var(--font-display)" }}>CAREEREDGE</span>
       </motion.div>
 
       <AnimatePresence>

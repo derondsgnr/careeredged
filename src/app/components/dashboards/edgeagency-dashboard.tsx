@@ -4,19 +4,20 @@
  */
 
 import { motion } from "motion/react";
-import { RoleShell, KPIRow, GlassCard, SophiaInsight, type NavigateFn } from "../role-shell";
+import { RoleShell, GlassCard, type NavigateFn } from "../role-shell";
 import {
   Building2, Users, BarChart3, Briefcase, ChevronRight,
   TrendingUp, Target, DollarSign, Calendar, ArrowUpRight,
 } from "lucide-react";
-
-const EASE = [0.32, 0.72, 0, 1] as const;
+import { EASE } from "../tokens";
+import { KPIRow } from "../kpi-patterns";
+import { SophiaInsight } from "../sophia-patterns";
 
 const KPIS = [
-  { label: "Active Programs", value: "3", trend: "2 regions", icon: <Building2 className="w-4 h-4" />, color: "#6366F1", gauge: null },
-  { label: "Total Participants", value: "312", trend: "+47 this Q", icon: <Users className="w-4 h-4" />, color: "#22D3EE", gauge: null },
-  { label: "Placements", value: "89", trend: "+21 this month", icon: <Briefcase className="w-4 h-4" />, color: "#B3FF3B", gauge: null },
-  { label: "Budget Utilization", value: "78%", trend: "On target", icon: <DollarSign className="w-4 h-4" />, color: "#6366F1", gauge: 0.78 },
+  { label: "Active Programs", value: "3", trend: "2 regions", icon: <Building2 className="w-4 h-4" />, color: "var(--ce-role-agency)", gauge: null },
+  { label: "Total Participants", value: "312", trend: "+47 this Q", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
+  { label: "Placements", value: "89", trend: "+21 this month", icon: <Briefcase className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "Budget Utilization", value: "78%", trend: "On target", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-role-agency)", gauge: 0.78 },
 ];
 
 const PROGRAMS = [
@@ -37,10 +38,10 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
       <div className="max-w-[1200px] mx-auto">
       {/* Greeting */}
       <motion.div className="pt-8 pb-6" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: EASE }}>
-        <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <h1 className="text-[22px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Good morning, Director Liu
         </h1>
-        <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+        <p className="text-[13px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           3 workforce programs active · Q1 targets 78% achieved
         </p>
       </motion.div>
@@ -55,52 +56,52 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
           <GlassCard delay={0.5}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Building2 className="w-4 h-4 text-[#6366F1]" />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Workforce Programs</span>
+                <Building2 className="w-4 h-4 text-[var(--ce-role-agency)]" />
+                <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Workforce Programs</span>
               </div>
-              <button onClick={() => onNavigate?.("programs")} className="flex items-center gap-1 text-[12px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+              <button onClick={() => onNavigate?.("programs")} className="flex items-center gap-1 text-[12px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
                 Full report <ChevronRight className="w-3 h-3" />
               </button>
             </div>
             {PROGRAMS.map((prog, i) => (
-              <div key={i} onClick={() => onNavigate?.("programs")} className="py-4 cursor-pointer" style={{ borderBottom: i < PROGRAMS.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+              <div key={i} onClick={() => onNavigate?.("programs")} className="py-4 cursor-pointer" style={{ borderBottom: i < PROGRAMS.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{prog.name}</span>
-                    <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{prog.region} · {prog.participants} participants</span>
+                    <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{prog.name}</span>
+                    <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{prog.region} · {prog.participants} participants</span>
                   </div>
                   <div className="text-right">
-                    <span className="text-[14px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{prog.placed}</span>
-                    <span className="text-[10px] text-[#6B7280] block" style={{ fontFamily: "var(--font-body)" }}>placed</span>
+                    <span className="text-[14px] text-ce-text-primary tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{prog.placed}</span>
+                    <span className="text-[10px] text-ce-text-tertiary block" style={{ fontFamily: "var(--font-body)" }}>placed</span>
                   </div>
                 </div>
                 {/* Budget utilization bar */}
                 <div className="flex items-center gap-2">
-                  <span className="text-[10px] text-[#6B7280] w-12" style={{ fontFamily: "var(--font-body)" }}>Budget</span>
-                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <span className="text-[10px] text-ce-text-tertiary w-12" style={{ fontFamily: "var(--font-body)" }}>Budget</span>
+                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ background: prog.budget > 80 ? "#F59E0B" : "linear-gradient(90deg, #6366F1, #22D3EE)" }}
+                      style={{ background: prog.budget > 80 ? "var(--ce-role-edgepreneur)" : "linear-gradient(90deg, var(--ce-role-agency), var(--ce-role-edgestar))" }}
                       initial={{ width: 0 }}
                       animate={{ width: `${prog.budget}%` }}
                       transition={{ delay: 0.8 + i * 0.15, duration: 0.6, ease: EASE }}
                     />
                   </div>
-                  <span className="text-[10px] text-[#6B7280] tabular-nums w-8 text-right" style={{ fontFamily: "var(--font-body)" }}>{prog.budget}%</span>
+                  <span className="text-[10px] text-ce-text-tertiary tabular-nums w-8 text-right" style={{ fontFamily: "var(--font-body)" }}>{prog.budget}%</span>
                 </div>
                 {/* Placement target bar */}
                 <div className="flex items-center gap-2 mt-1">
-                  <span className="text-[10px] text-[#6B7280] w-12" style={{ fontFamily: "var(--font-body)" }}>Target</span>
-                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+                  <span className="text-[10px] text-ce-text-tertiary w-12" style={{ fontFamily: "var(--font-body)" }}>Target</span>
+                  <div className="flex-1 h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ background: "linear-gradient(90deg, #B3FF3B, #22D3EE)" }}
+                      style={{ background: "linear-gradient(90deg, var(--ce-lime), var(--ce-role-edgestar))" }}
                       initial={{ width: 0 }}
                       animate={{ width: `${Math.min((prog.placed / prog.target) * 100, 100)}%` }}
                       transition={{ delay: 0.9 + i * 0.15, duration: 0.6, ease: EASE }}
                     />
                   </div>
-                  <span className="text-[10px] text-[#6B7280] tabular-nums w-16 text-right" style={{ fontFamily: "var(--font-body)" }}>{prog.placed}/{prog.target}</span>
+                  <span className="text-[10px] text-ce-text-tertiary tabular-nums w-16 text-right" style={{ fontFamily: "var(--font-body)" }}>{prog.placed}/{prog.target}</span>
                 </div>
               </div>
             ))}
@@ -110,10 +111,10 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
           <GlassCard delay={0.6}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-[#B3FF3B]" />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Workforce Opportunities</span>
+                <Briefcase className="w-4 h-4 text-ce-lime" />
+                <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Workforce Opportunities</span>
               </div>
-              <button onClick={() => onNavigate?.("programs")} className="text-[11px] text-[#6B7280] hover:text-[#9CA3AF] cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+              <button onClick={() => onNavigate?.("programs")} className="text-[11px] text-ce-text-tertiary hover:text-ce-text-secondary cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>
                 View all →
               </button>
             </div>
@@ -122,12 +123,12 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
               { title: "Data Entry Specialist", dept: "Dept of Labor", applicants: 18, type: "Government" },
               { title: "Community Health Worker", dept: "Health Services", applicants: 31, type: "Workforce Program" },
             ].map((job, i) => (
-              <div key={i} className="flex items-center gap-3 py-2.5" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+              <div key={i} className="flex items-center gap-3 py-2.5" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                 <div className="flex-1 min-w-0">
-                  <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
-                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.dept} · {job.type}</span>
+                  <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                  <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.dept} · {job.type}</span>
                 </div>
-                <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{job.applicants} applicants</span>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{job.applicants} applicants</span>
               </div>
             ))}
           </GlassCard>
@@ -144,8 +145,8 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
           {/* Key metrics */}
           <GlassCard delay={0.65}>
             <div className="flex items-center gap-2 mb-3">
-              <TrendingUp className="w-3.5 h-3.5 text-[#22D3EE]" />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Q1 Performance</span>
+              <TrendingUp className="w-3.5 h-3.5 text-ce-cyan" />
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Q1 Performance</span>
             </div>
             {[
               { label: "Overall placement rate", value: "29%", trend: "+7%" },
@@ -154,11 +155,11 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
               { label: "Cost per placement", value: "$2,140", trend: "-$340" },
               { label: "Employer satisfaction", value: "4.6/5", trend: "+0.3" },
             ].map((metric, i) => (
-              <div key={i} className="flex items-center justify-between py-2" style={{ borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{metric.label}</span>
+              <div key={i} className="flex items-center justify-between py-2" style={{ borderBottom: i < 4 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{metric.label}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-[12px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{metric.value}</span>
-                  <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>{metric.trend}</span>
+                  <span className="text-[12px] text-ce-text-primary tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{metric.value}</span>
+                  <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>{metric.trend}</span>
                 </div>
               </div>
             ))}
@@ -167,18 +168,18 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
           {/* Upcoming */}
           <GlassCard delay={0.7}>
             <div className="flex items-center gap-2 mb-3">
-              <Calendar className="w-3.5 h-3.5 text-[#8B5CF6]" />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming</span>
+              <Calendar className="w-3.5 h-3.5 text-[var(--ce-role-guide)]" />
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming</span>
             </div>
             {[
               { text: "Q1 Stakeholder Review", date: "March 28" },
               { text: "Youth Program orientation", date: "April 1" },
               { text: "Grant renewal deadline", date: "April 15" },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 py-2" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                <div className="w-1.5 h-1.5 rounded-full bg-[#6366F1] flex-shrink-0" />
-                <span className="text-[11px] text-[#9CA3AF] flex-1" style={{ fontFamily: "var(--font-body)" }}>{item.text}</span>
-                <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{item.date}</span>
+              <div key={i} className="flex items-center gap-2 py-2" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-agency)] flex-shrink-0" />
+                <span className="text-[11px] text-ce-text-secondary flex-1" style={{ fontFamily: "var(--font-body)" }}>{item.text}</span>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{item.date}</span>
               </div>
             ))}
           </GlassCard>
