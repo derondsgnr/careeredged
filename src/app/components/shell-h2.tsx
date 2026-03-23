@@ -36,7 +36,7 @@ function TopNav({ active, onNav }: { active: string; onNav: (id: string) => void
       className="fixed top-0 left-0 right-0 h-14 z-40 flex items-center justify-between px-6"
       style={{
         background: "rgba(8,9,12,0.85)",
-        borderBottom: "1px solid rgba(255,255,255,0.04)",
+        borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
         backdropFilter: "blur(20px)",
       }}
       initial={{ y: -56 }}
@@ -45,14 +45,14 @@ function TopNav({ active, onNav }: { active: string; onNav: (id: string) => void
     >
       {/* Logo */}
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-          <Sparkles className="w-3.5 h-3.5 text-[#B3FF3B]" />
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+          <Sparkles className="w-3.5 h-3.5 text-ce-lime" />
         </div>
-        <span className="text-[14px] text-[#E8E8ED] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
+        <span className="text-[14px] text-ce-text-primary tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
       </div>
 
       {/* Nav pills — centered */}
-      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         {NAV_PILLS.map((item) => {
           const Icon = item.icon;
           const isActive = active === item.id;
@@ -65,18 +65,18 @@ function TopNav({ active, onNav }: { active: string; onNav: (id: string) => void
               {isActive && (
                 <motion.div
                   className="absolute inset-0 rounded-lg"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.06)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
                   layoutId="nav-pill-active"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
               <div className="relative z-10 flex items-center gap-2">
-                <Icon className="w-4 h-4" style={{ color: isActive ? "#E8E8ED" : "#6B7280" }} />
-                <span className={`text-[13px] ${isActive ? "text-[#E8E8ED]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+                <Icon className="w-4 h-4" style={{ color: isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)" }} />
+                <span className={`text-[13px] ${isActive ? "text-ce-text-primary" : "text-ce-text-tertiary"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
                 {item.badge && (
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{
-                    background: isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)",
-                    color: isActive ? "#22D3EE" : "#6B7280",
+                    background: isActive ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)",
+                    color: isActive ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
                     fontFamily: "var(--font-body)",
                   }}>{item.badge}</span>
                 )}
@@ -89,20 +89,20 @@ function TopNav({ active, onNav }: { active: string; onNav: (id: string) => void
       {/* Right — avatar + EdgeGas */}
       <div className="flex items-center gap-3">
         {/* EdgeGas pill */}
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.1)" }}>
-          <Zap className="w-3 h-3 text-[#B3FF3B]" />
-          <span className="text-[11px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>45</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+          <Zap className="w-3 h-3 text-ce-lime" />
+          <span className="text-[11px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>45</span>
         </div>
 
         {/* Notifications */}
-        <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(255,255,255,0.03)" }}>
-          <Bell className="w-4 h-4 text-[#6B7280]" />
-          <div className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-[#22D3EE]" />
+        <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>
+          <Bell className="w-4 h-4 text-ce-text-tertiary" />
+          <div className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-[var(--ce-role-edgestar)]" />
         </button>
 
         {/* Avatar */}
-        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.15), rgba(179,255,59,0.1))", border: "1.5px solid rgba(255,255,255,0.08)" }}>
-          <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
+        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-lime-rgb),0.1))", border: "1.5px solid rgba(var(--ce-glass-tint),0.08)" }}>
+          <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
         </div>
       </div>
     </motion.header>
@@ -140,7 +140,7 @@ function SophiaBar() {
             transition={{ delay: 0.8 }}
           >
             <SophiaMark size={16} glowing={false} />
-            <p className="text-[13px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>
               You've been applying but haven't prepped for interviews yet — Figma's design challenge is common.
             </p>
           </motion.div>
@@ -157,9 +157,9 @@ function SophiaBar() {
                 key={i}
                 className="text-[12px] px-3 py-1.5 rounded-full cursor-pointer transition-colors"
                 style={{
-                  background: i === 0 ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)",
-                  border: `1px solid ${i === 0 ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.06)"}`,
-                  color: i === 0 ? "#22D3EE" : "#6B7280",
+                  background: i === 0 ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)",
+                  border: `1px solid ${i === 0 ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                  color: i === 0 ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
                   fontFamily: "var(--font-body)",
                 }}
               >
@@ -172,22 +172,22 @@ function SophiaBar() {
           <div
             className="flex items-center gap-3 px-4 py-3 rounded-2xl transition-all"
             style={{
-              background: focused ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.03)",
-              border: `1px solid ${focused ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.06)"}`,
-              boxShadow: focused ? "0 0 20px rgba(34,211,238,0.04)" : "none",
+              background: focused ? "rgba(var(--ce-glass-tint),0.05)" : "rgba(var(--ce-glass-tint),0.03)",
+              border: `1px solid ${focused ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+              boxShadow: focused ? "0 0 20px rgba(var(--ce-role-edgestar-rgb),0.04)" : "none",
             }}
           >
             <SophiaMark size={20} glowing={false} />
             <input
               type="text"
               placeholder="Ask Sophia anything..."
-              className="flex-1 bg-transparent text-[14px] text-[#E8E8ED] placeholder:text-[#374151] focus:outline-none"
+              className="flex-1 bg-transparent text-[14px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] focus:outline-none"
               style={{ fontFamily: "var(--font-body)" }}
               onFocus={() => setFocused(true)}
               onBlur={() => setFocused(false)}
             />
-            <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "rgba(34,211,238,0.1)" }}>
-              <ArrowRight className="w-4 h-4 text-[#22D3EE]" />
+            <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
+              <ArrowRight className="w-4 h-4 text-ce-cyan" />
             </button>
           </div>
         </div>
@@ -211,9 +211,9 @@ function HeroRoadmapCard() {
     <motion.div
       className="rounded-2xl p-6 h-full"
       style={{
-        background: "linear-gradient(165deg, rgba(34,211,238,0.06) 0%, rgba(255,255,255,0.02) 40%, rgba(179,255,59,0.03) 100%)",
-        border: "1px solid rgba(34,211,238,0.08)",
-        boxShadow: "inset 0 1px 1px rgba(255,255,255,0.03)",
+        background: "linear-gradient(165deg, rgba(var(--ce-role-edgestar-rgb),0.06) 0%, rgba(var(--ce-glass-tint),0.02) 40%, rgba(var(--ce-lime-rgb),0.03) 100%)",
+        border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
+        boxShadow: "inset 0 1px 1px rgba(var(--ce-glass-tint),0.03)",
       }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
@@ -223,13 +223,13 @@ function HeroRoadmapCard() {
       <div className="flex items-start justify-between mb-5">
         <div>
           <div className="flex items-center gap-2 mb-1">
-            <div className="w-2 h-2 rounded-full bg-[#22D3EE]" style={{ boxShadow: "0 0 8px rgba(34,211,238,0.4)" }} />
-            <span className="text-[11px] text-[#22D3EE] tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PHASE 1 — ACTIVE</span>
+            <div className="w-2 h-2 rounded-full bg-[var(--ce-role-edgestar)]" style={{ boxShadow: "0 0 8px rgba(var(--ce-role-edgestar-rgb),0.4)" }} />
+            <span className="text-[11px] text-ce-cyan tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PHASE 1 — ACTIVE</span>
           </div>
-          <h2 className="text-[18px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Discover & Position</h2>
-          <p className="text-[13px] text-[#6B7280] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>Product Design Roadmap · Weeks 1–3</p>
+          <h2 className="text-[18px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Discover & Position</h2>
+          <p className="text-[13px] text-ce-text-tertiary mt-0.5" style={{ fontFamily: "var(--font-body)" }}>Product Design Roadmap · Weeks 1–3</p>
         </div>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] text-[#9CA3AF] cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+        <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] text-ce-text-secondary cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
           Full roadmap <ChevronRight className="w-3 h-3" />
         </button>
       </div>
@@ -237,13 +237,13 @@ function HeroRoadmapCard() {
       {/* Progress bar */}
       <div className="mb-5">
         <div className="flex items-center justify-between mb-2">
-          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>3 of 5 milestones</span>
-          <span className="text-[12px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>60%</span>
+          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>3 of 5 milestones</span>
+          <span className="text-[12px] text-ce-text-primary tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>60%</span>
         </div>
-        <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+        <div className="h-2 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
           <motion.div
             className="h-full rounded-full"
-            style={{ background: "linear-gradient(90deg, #22D3EE, #B3FF3B)" }}
+            style={{ background: "linear-gradient(90deg, var(--ce-role-edgestar), var(--ce-lime))" }}
             initial={{ width: 0 }}
             animate={{ width: "60%" }}
             transition={{ delay: 0.8, duration: 0.8, ease: EASE }}
@@ -255,10 +255,10 @@ function HeroRoadmapCard() {
       <div className="flex flex-col gap-2">
         {milestones.map((m, i) => (
           <div key={i} className="flex items-center gap-3">
-            <div className={`w-5 h-5 rounded-md flex items-center justify-center ${m.done ? "bg-[rgba(34,211,238,0.1)]" : "bg-[rgba(255,255,255,0.03)]"}`} style={{ border: `1px solid ${m.done ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.06)"}` }}>
-              {m.done && <Check className="w-3 h-3 text-[#22D3EE]" />}
+            <div className={`w-5 h-5 rounded-md flex items-center justify-center ${m.done ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)]" : "bg-[rgba(var(--ce-glass-tint),0.03)]"}`} style={{ border: `1px solid ${m.done ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+              {m.done && <Check className="w-3 h-3 text-ce-cyan" />}
             </div>
-            <span className={`text-[13px] ${m.done ? "text-[#9CA3AF]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
+            <span className={`text-[13px] ${m.done ? "text-ce-text-secondary" : "text-ce-text-tertiary"}`} style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
           </div>
         ))}
       </div>
@@ -273,8 +273,8 @@ function NextActionCard() {
     <motion.div
       className="rounded-2xl p-5"
       style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "rgba(var(--ce-glass-tint),0.02)",
+        border: "1px solid rgba(var(--ce-glass-tint),0.06)",
       }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
@@ -282,23 +282,23 @@ function NextActionCard() {
     >
       <div className="flex items-center gap-2 mb-3">
         <SophiaMark size={16} glowing={false} />
-        <span className="text-[11px] text-[#22D3EE] tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA SUGGESTS</span>
+        <span className="text-[11px] text-ce-cyan tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA SUGGESTS</span>
       </div>
-      <h3 className="text-[15px] text-[#E8E8ED] mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Optimize your LinkedIn</h3>
-      <p className="text-[13px] text-[#6B7280] leading-relaxed mb-4" style={{ fontFamily: "var(--font-body)" }}>
+      <h3 className="text-[15px] text-ce-text-primary mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Optimize your LinkedIn</h3>
+      <p className="text-[13px] text-ce-text-tertiary leading-relaxed mb-4" style={{ fontFamily: "var(--font-body)" }}>
         Your resume scored 87 ATS — let's apply the same keywords to your LinkedIn headline and summary. Takes about 10 minutes.
       </p>
       <button
         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]"
         style={{
-          background: "linear-gradient(135deg, rgba(34,211,238,0.12), rgba(179,255,59,0.06))",
-          border: "1px solid rgba(34,211,238,0.15)",
-          color: "#E8E8ED",
+          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-lime-rgb),0.06))",
+          border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
+          color: "var(--ce-text-primary)",
           fontFamily: "var(--font-display)",
           fontWeight: 500,
         }}
       >
-        <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" /> Start optimization
+        <Sparkles className="w-3.5 h-3.5 text-ce-cyan" /> Start optimization
       </button>
     </motion.div>
   );
@@ -311,42 +311,42 @@ function TopJobMatchCard() {
     <motion.div
       className="rounded-2xl p-5"
       style={{
-        background: "rgba(255,255,255,0.02)",
-        border: "1px solid rgba(255,255,255,0.06)",
+        background: "rgba(var(--ce-glass-tint),0.02)",
+        border: "1px solid rgba(var(--ce-glass-tint),0.06)",
       }}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.7, duration: 0.5, ease: EASE }}
     >
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[11px] text-[#6B7280] tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TOP MATCH</span>
-        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.12)" }}>
-          <Star className="w-2.5 h-2.5 text-[#B3FF3B]" />
-          <span className="text-[10px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>92%</span>
+        <span className="text-[11px] text-ce-text-tertiary tracking-wide" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TOP MATCH</span>
+        <div className="flex items-center gap-1 px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)" }}>
+          <Star className="w-2.5 h-2.5 text-ce-lime" />
+          <span className="text-[10px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>92%</span>
         </div>
       </div>
 
-      <h3 className="text-[15px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Product Designer</h3>
+      <h3 className="text-[15px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Product Designer</h3>
       <div className="flex items-center gap-3 mb-3">
         <div className="flex items-center gap-1.5">
-          <Building2 className="w-3 h-3 text-[#6B7280]" />
-          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Figma</span>
+          <Building2 className="w-3 h-3 text-ce-text-tertiary" />
+          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Figma</span>
         </div>
         <div className="flex items-center gap-1.5">
-          <MapPin className="w-3 h-3 text-[#6B7280]" />
-          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>San Francisco</span>
+          <MapPin className="w-3 h-3 text-ce-text-tertiary" />
+          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>San Francisco</span>
         </div>
       </div>
       <div className="flex items-center gap-2 mb-4">
-        <span className="text-[11px] px-2 py-0.5 rounded-md text-[#9CA3AF]" style={{ background: "rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>$140–180k</span>
-        <span className="text-[11px] px-2 py-0.5 rounded-md text-[#9CA3AF]" style={{ background: "rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>Full-time</span>
+        <span className="text-[11px] px-2 py-0.5 rounded-md text-ce-text-secondary" style={{ background: "rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>$140–180k</span>
+        <span className="text-[11px] px-2 py-0.5 rounded-md text-ce-text-secondary" style={{ background: "rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>Full-time</span>
       </div>
 
       <div className="flex gap-2">
-        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-[#E8E8ED]" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }}>
+        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-ce-text-primary" style={{ background: "rgba(var(--ce-glass-tint),0.06)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }}>
           View details
         </button>
-        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-[#08090C]" style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-[var(--ce-void)]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Quick apply
         </button>
       </div>
@@ -358,10 +358,10 @@ function TopJobMatchCard() {
 
 function StatsRow() {
   const stats = [
-    { label: "Career Score", value: "72", trend: "+4", icon: <Target className="w-3.5 h-3.5 text-[#22D3EE]" /> },
-    { label: "ATS Score", value: "87", trend: "+12", icon: <FileText className="w-3.5 h-3.5 text-[#B3FF3B]" /> },
-    { label: "Applications", value: "12", trend: "+3", icon: <ArrowUpRight className="w-3.5 h-3.5 text-[#9CA3AF]" /> },
-    { label: "Job Matches", value: "23", trend: "new", icon: <Search className="w-3.5 h-3.5 text-[#22D3EE]" /> },
+    { label: "Career Score", value: "72", trend: "+4", icon: <Target className="w-3.5 h-3.5 text-ce-cyan" /> },
+    { label: "ATS Score", value: "87", trend: "+12", icon: <FileText className="w-3.5 h-3.5 text-ce-lime" /> },
+    { label: "Applications", value: "12", trend: "+3", icon: <ArrowUpRight className="w-3.5 h-3.5 text-ce-text-secondary" /> },
+    { label: "Job Matches", value: "23", trend: "new", icon: <Search className="w-3.5 h-3.5 text-ce-cyan" /> },
   ];
 
   return (
@@ -375,19 +375,19 @@ function StatsRow() {
         <motion.div
           key={i}
           className="flex-1 flex items-center gap-3 px-4 py-3 rounded-xl"
-          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+          style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
           initial={{ opacity: 0, y: 8 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.4 + i * 0.06, duration: 0.35, ease: EASE }}
         >
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.04)" }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
             {s.icon}
           </div>
           <div>
-            <div className="text-[18px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.value}</div>
-            <div className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{s.label}</div>
+            <div className="text-[18px] text-ce-text-primary tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.value}</div>
+            <div className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{s.label}</div>
           </div>
-          <span className="text-[10px] ml-auto px-1.5 py-0.5 rounded-md text-[#B3FF3B]" style={{ background: "rgba(179,255,59,0.06)", fontFamily: "var(--font-body)" }}>{s.trend}</span>
+          <span className="text-[10px] ml-auto px-1.5 py-0.5 rounded-md text-ce-lime" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", fontFamily: "var(--font-body)" }}>{s.trend}</span>
         </motion.div>
       ))}
     </motion.div>
@@ -400,10 +400,10 @@ export function ShellH2() {
   const [activeNav, setActiveNav] = useState("home");
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
       {/* Ambient gradient wash */}
       <div className="fixed inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(34,211,238,0.03) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 70% 60%, rgba(179,255,59,0.02) 0%, transparent 50%)",
+        background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(var(--ce-role-edgestar-rgb),0.03) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 70% 60%, rgba(var(--ce-lime-rgb),0.02) 0%, transparent 50%)",
       }} />
 
       <TopNav active={activeNav} onNav={setActiveNav} />
@@ -421,10 +421,10 @@ export function ShellH2() {
             <div className="flex items-center gap-3 mb-3">
               <SophiaMark size={32} glowing={false} />
               <div>
-                <h1 className="text-[24px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                <h1 className="text-[24px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                   Good morning, Sharon
                 </h1>
-                <p className="text-[14px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-[14px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                   You have 2 new job matches and a milestone due Friday.
                 </p>
               </div>

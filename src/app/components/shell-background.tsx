@@ -12,18 +12,18 @@
 import topoSvgPaths from "../../imports/svg-3bufurt997";
 
 const TOPO_PATHS = [
-  { d: topoSvgPaths.p338f9380, color: "#22D3EE" },
-  { d: topoSvgPaths.p36a4b5b0, color: "#042C01" },
-  { d: topoSvgPaths.p7035a40, color: "#042C01" },
-  { d: topoSvgPaths.p3983ca60, color: "#22D3EE" },
-  { d: topoSvgPaths.p1be07340, color: "#042C01" },
-  { d: topoSvgPaths.p21888e60, color: "#042C01" },
-  { d: topoSvgPaths.p3e16f200, color: "#22D3EE" },
-  { d: topoSvgPaths.p9101500, color: "#042C01" },
-  { d: topoSvgPaths.p2d0f2fc0, color: "#042C01" },
-  { d: topoSvgPaths.p19740c00, color: "#22D3EE" },
-  { d: topoSvgPaths.p80b8920, color: "#042C01" },
-  { d: topoSvgPaths.p296fb600, color: "#042C01" },
+  { d: topoSvgPaths.p338f9380, color: "var(--ce-role-edgestar)" },
+  { d: topoSvgPaths.p36a4b5b0, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p7035a40, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p3983ca60, color: "var(--ce-role-edgestar)" },
+  { d: topoSvgPaths.p1be07340, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p21888e60, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p3e16f200, color: "var(--ce-role-edgestar)" },
+  { d: topoSvgPaths.p9101500, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p2d0f2fc0, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p19740c00, color: "var(--ce-role-edgestar)" },
+  { d: topoSvgPaths.p80b8920, color: "var(--ce-forest)" },
+  { d: topoSvgPaths.p296fb600, color: "var(--ce-forest)" },
 ];
 
 const NOISE_URL = `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`;
@@ -37,7 +37,7 @@ export function CorridorBackground() {
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {/* Dot grid — center fade */}
       <div className="absolute inset-0" style={{
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.025) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(circle, rgba(var(--ce-glass-tint),0.025) 1px, transparent 1px)",
         backgroundSize: "24px 24px",
         maskImage: "radial-gradient(ellipse 80% 70% at 55% 45%, black 20%, transparent 75%)",
         WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 55% 45%, black 20%, transparent 75%)",
@@ -55,7 +55,7 @@ export function CorridorBackground() {
       <div className="absolute rounded-full"
         style={{
           width: "500px", height: "700px", right: "-150px", top: "20%",
-          background: "radial-gradient(circle, rgba(34,211,238,0.025) 0%, transparent 65%)",
+          background: "radial-gradient(circle, rgba(var(--ce-role-edgestar-rgb),0.025) 0%, transparent 65%)",
           filter: "blur(100px)",
         }} />
 
@@ -91,7 +91,7 @@ export function SophiaForwardBackground() {
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {/* Primary gradient wash — warm, centered, expansive */}
       <div className="absolute inset-0" style={{
-        background: "radial-gradient(ellipse 90% 60% at 50% 35%, rgba(34,211,238,0.035) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 65% 65%, rgba(179,255,59,0.02) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 25% 70%, rgba(4,44,1,0.06) 0%, transparent 50%)",
+        background: "radial-gradient(ellipse 90% 60% at 50% 35%, rgba(var(--ce-role-edgestar-rgb),0.035) 0%, transparent 55%), radial-gradient(ellipse 70% 50% at 65% 65%, rgba(var(--ce-lime-rgb),0.02) 0%, transparent 50%), radial-gradient(ellipse 50% 40% at 25% 70%, rgba(4,44,1,0.06) 0%, transparent 50%)",
       }} />
 
       {/* Topo lines — centered, radial mask to create "landscape" feel */}
@@ -123,7 +123,7 @@ export function SophiaForwardBackground() {
         style={{
           width: "600px", height: "300px", left: "50%", top: "8%",
           transform: "translateX(-50%)",
-          background: "radial-gradient(ellipse, rgba(34,211,238,0.04) 0%, transparent 70%)",
+          background: "radial-gradient(ellipse, rgba(var(--ce-role-edgestar-rgb),0.04) 0%, transparent 70%)",
           filter: "blur(60px)",
         }} />
 
@@ -153,7 +153,7 @@ export function MissionControlBackground() {
     <div className="fixed inset-0 pointer-events-none overflow-hidden">
       {/* Brand gradient band — top area, merges with the header gradient */}
       <div className="absolute top-0 left-[220px] right-0 h-[200px]" style={{
-        background: "linear-gradient(180deg, rgba(4,44,1,0.15) 0%, rgba(34,211,238,0.03) 40%, transparent 100%)",
+        background: "linear-gradient(180deg, rgba(4,44,1,0.15) 0%, rgba(var(--ce-role-edgestar-rgb),0.03) 40%, transparent 100%)",
       }} />
 
       {/* Forest green blob — left side, behind sidebar edge */}
@@ -168,7 +168,7 @@ export function MissionControlBackground() {
       <div className="absolute rounded-full"
         style={{
           width: "500px", height: "500px", right: "-100px", bottom: "10%",
-          background: "radial-gradient(circle, rgba(34,211,238,0.02) 0%, transparent 60%)",
+          background: "radial-gradient(circle, rgba(var(--ce-role-edgestar-rgb),0.02) 0%, transparent 60%)",
           filter: "blur(80px)",
         }} />
 
@@ -194,7 +194,7 @@ export function MissionControlBackground() {
 
       {/* Fine dot grid — dense, operational */}
       <div className="absolute inset-0" style={{
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.015) 0.5px, transparent 0.5px)",
+        backgroundImage: "radial-gradient(circle, rgba(var(--ce-glass-tint),0.015) 0.5px, transparent 0.5px)",
         backgroundSize: "16px 16px",
         maskImage: "linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%)",

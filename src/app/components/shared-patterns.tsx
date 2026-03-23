@@ -26,7 +26,8 @@ import {
 
 // ─── Motion constants ─────────────────────────────────────────────────────────
 
-export const EASE = [0.32, 0.72, 0, 1] as const;
+import { EASE, TEXT, SURFACE, GLASS_TINT } from "./tokens";
+export { EASE };
 
 export const MOTION = {
   /** Standard surface entry — fade + lift */
@@ -102,7 +103,7 @@ export function DelightPulse({
         {active && (
           <motion.div
             className="absolute inset-0 rounded-xl pointer-events-none"
-            style={{ boxShadow: "0 0 0 2px rgba(179,255,59,0.5), 0 0 12px rgba(179,255,59,0.15)" }}
+            style={{ boxShadow: "0 0 0 2px rgba(var(--ce-lime-rgb),0.5), 0 0 12px rgba(var(--ce-lime-rgb),0.15)" }}
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 1.06 }}
@@ -133,7 +134,7 @@ export function EmptyState({
   primaryAction,
   secondaryAction,
   sophiaAction,
-  roleColor = "#22D3EE",
+  roleColor = "var(--ce-role-edgestar)",
   delay = 0,
 }: {
   icon: LucideIcon;
@@ -165,13 +166,13 @@ export function EmptyState({
 
       {/* Copy */}
       <h2
-        className="text-[18px] text-[#E8E8ED] mb-2"
+        className="text-[18px] text-[var(--ce-text-primary)] mb-2"
         style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
       >
         {title}
       </h2>
       <p
-        className="text-[13px] text-[#6B7280] max-w-[300px] leading-relaxed mb-8"
+        className="text-[13px] text-[var(--ce-text-secondary)] max-w-[300px] leading-relaxed mb-8"
         style={{ fontFamily: "var(--font-body)" }}
       >
         {description}
@@ -185,7 +186,7 @@ export function EmptyState({
           style={{
             background: `linear-gradient(135deg, ${roleColor}22, ${roleColor}0A)`,
             border: `1px solid ${roleColor}28`,
-            color: "#E8E8ED",
+            color: "var(--ce-text-primary)",
             fontFamily: "var(--font-display)",
             fontWeight: 500,
           }}
@@ -196,11 +197,11 @@ export function EmptyState({
         {sophiaAction && (
           <button
             onClick={() => sophiaAction.onClick(sophiaAction.prompt)}
-            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-colors hover:bg-[rgba(34,211,238,0.06)]"
+            className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)]"
             style={{
-              background: "rgba(34,211,238,0.04)",
-              border: "1px solid rgba(34,211,238,0.1)",
-              color: "#22D3EE",
+              background: "rgba(var(--ce-role-edgestar-rgb),0.04)",
+              border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)",
+              color: "var(--ce-role-edgestar)",
               fontFamily: "var(--font-body)",
             }}
           >
@@ -211,11 +212,11 @@ export function EmptyState({
         {secondaryAction && (
           <button
             onClick={secondaryAction.onClick}
-            className="w-full px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.03)]"
+            className="w-full px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]"
             style={{
-              background: "rgba(255,255,255,0.02)",
-              border: "1px solid rgba(255,255,255,0.05)",
-              color: "#6B7280",
+              background: "rgba(var(--ce-glass-tint),0.02)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.05)",
+              color: "var(--ce-text-secondary)",
               fontFamily: "var(--font-body)",
             }}
           >
@@ -256,8 +257,8 @@ export function SophiaHandoff({
     <motion.div
       className="rounded-2xl p-6"
       style={{
-        background: "linear-gradient(145deg, rgba(34,211,238,0.05), rgba(255,255,255,0.02))",
-        border: "1px solid rgba(34,211,238,0.1)",
+        background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02))",
+        border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)",
       }}
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
@@ -267,7 +268,7 @@ export function SophiaHandoff({
       <div className="flex items-center gap-2 mb-4">
         <SophiaMark size={16} glowing={false} />
         <span
-          className="text-[11px] text-[#22D3EE] tracking-wide"
+          className="text-[11px] text-ce-cyan tracking-wide"
           style={{ fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "0.06em" }}
         >
           SOPHIA HANDLES THIS
@@ -275,13 +276,13 @@ export function SophiaHandoff({
       </div>
 
       <h3
-        className="text-[14px] text-[#E8E8ED] mb-1.5"
+        className="text-[14px] text-[var(--ce-text-primary)] mb-1.5"
         style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
       >
         {title}
       </h3>
       <p
-        className="text-[12px] text-[#6B7280] leading-relaxed mb-5"
+        className="text-[12px] text-[var(--ce-text-secondary)] leading-relaxed mb-5"
         style={{ fontFamily: "var(--font-body)" }}
       >
         {description}
@@ -294,11 +295,11 @@ export function SophiaHandoff({
             <button
               key={ex}
               onClick={() => onOpenSophia(ex)}
-              className="text-[11px] px-2.5 py-1 rounded-lg cursor-pointer transition-colors hover:bg-[rgba(34,211,238,0.08)]"
+              className="text-[11px] px-2.5 py-1 rounded-lg cursor-pointer transition-colors hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.08)]"
               style={{
-                background: "rgba(34,211,238,0.04)",
-                border: "1px solid rgba(34,211,238,0.08)",
-                color: "#9CA3AF",
+                background: "rgba(var(--ce-role-edgestar-rgb),0.04)",
+                border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
+                color: "var(--ce-text-tertiary)",
                 fontFamily: "var(--font-body)",
               }}
             >
@@ -313,9 +314,9 @@ export function SophiaHandoff({
         onClick={() => onOpenSophia(prompt)}
         className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all hover:brightness-110 active:scale-[0.98]"
         style={{
-          background: "rgba(34,211,238,0.08)",
-          border: "1px solid rgba(34,211,238,0.14)",
-          color: "#22D3EE",
+          background: "rgba(var(--ce-role-edgestar-rgb),0.08)",
+          border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.14)",
+          color: "var(--ce-role-edgestar)",
           fontFamily: "var(--font-body)",
         }}
       >
@@ -363,12 +364,12 @@ export function SectionCard({
         gradient
           ? {
               background:
-                "linear-gradient(145deg, rgba(34,211,238,0.04), rgba(255,255,255,0.02) 50%, rgba(179,255,59,0.02))",
-              border: "1px solid rgba(34,211,238,0.07)",
+                "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+              border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.07)",
             }
           : {
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.05)",
+              background: "rgba(var(--ce-glass-tint),0.025)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.05)",
             }
       }
       initial={{ opacity: 0, y: 10 }}
@@ -378,9 +379,9 @@ export function SectionCard({
       {/* Header */}
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center gap-2">
-          <Icon className="w-4 h-4 text-[#6B7280]" />
+          <Icon className="w-4 h-4 text-[var(--ce-text-secondary)]" />
           <span
-            className="text-[13px] text-[#E8E8ED]"
+            className="text-[13px] text-[var(--ce-text-primary)]"
             style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
           >
             {title}
@@ -389,8 +390,8 @@ export function SectionCard({
             <span
               className="text-[10px] px-1.5 py-0.5 rounded-full"
               style={{
-                background: "rgba(34,211,238,0.08)",
-                color: "#22D3EE",
+                background: "rgba(var(--ce-role-edgestar-rgb),0.08)",
+                color: "var(--ce-role-edgestar)",
                 fontFamily: "var(--font-display)",
               }}
             >
@@ -401,7 +402,7 @@ export function SectionCard({
         {action && (
           <button
             onClick={action.onClick}
-            className="text-[11px] text-[#22D3EE] cursor-pointer hover:text-[#67E8F9] transition-colors"
+            className="text-[11px] text-ce-cyan cursor-pointer hover:text-[#67E8F9] transition-colors"
             style={{ fontFamily: "var(--font-body)" }}
           >
             {action.label}
@@ -416,17 +417,17 @@ export function SectionCard({
       {exitChips && exitChips.length > 0 && (
         <div
           className="flex gap-2 mt-4 pt-4"
-          style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}
+          style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
         >
           {exitChips.map((chip) => (
             <button
               key={chip.label}
               onClick={chip.onClick}
-              className="text-[11px] px-2.5 py-1 rounded-md cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.04)]"
+              className="text-[11px] px-2.5 py-1 rounded-md cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.04)]"
               style={{
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.05)",
-                color: "#9CA3AF",
+                background: "rgba(var(--ce-glass-tint),0.02)",
+                border: "1px solid rgba(var(--ce-glass-tint),0.05)",
+                color: "var(--ce-text-tertiary)",
                 fontFamily: "var(--font-body)",
               }}
             >
@@ -449,7 +450,7 @@ export function SectionCard({
 export function ExitChip({
   label,
   onClick,
-  roleColor = "#22D3EE",
+  roleColor = "var(--ce-role-edgestar)",
 }: {
   label: string;
   onClick: () => void;
@@ -473,7 +474,7 @@ export function ExitChip({
 
 // ─── QR Code SVG ─────────────────────────────────────────────────────────────
 
-function MockQRCode({ size = 160, color = "#E8E8ED" }: { size?: number; color?: string }) {
+function MockQRCode({ size = 160, color = "var(--ce-text-primary)" }: { size?: number; color?: string }) {
   const modules = 21;
   const mod = size / modules;
 
@@ -482,7 +483,7 @@ function MockQRCode({ size = 160, color = "#E8E8ED" }: { size?: number; color?: 
     const x = col * mod;
     const y = row * mod;
     const w = 7 * mod;
-    const bg = "rgba(8,9,12,1)";
+    const bg = "var(--ce-surface-bg)";
     return (
       <g>
         {/* Outer ring */}
@@ -559,7 +560,7 @@ export function QRModal({
   showDescription = "Let the other person scan this code",
   scanDescription = "Point your camera at their QR code",
   onScanComplete,
-  roleColor = "#22D3EE",
+  roleColor = "var(--ce-role-edgestar)",
   identifier = "CE-2026",
 }: {
   isOpen: boolean;
@@ -606,7 +607,7 @@ export function QRModal({
           {/* Backdrop */}
           <motion.div
             className="fixed inset-0 z-[60]"
-            style={{ background: "rgba(8,9,12,0.8)", backdropFilter: "blur(8px)" }}
+            style={{ background: "var(--ce-surface-overlay)", backdropFilter: "blur(8px)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -618,8 +619,8 @@ export function QRModal({
           <motion.div
             className="fixed left-1/2 top-1/2 z-[61] w-[360px]"
             style={{
-              background: "rgba(14,16,20,0.98)",
-              border: "1px solid rgba(255,255,255,0.07)",
+              background: "var(--ce-surface-modal-bg)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.07)",
               backdropFilter: "blur(24px)",
               borderRadius: 20,
             }}
@@ -631,19 +632,19 @@ export function QRModal({
             {/* Header */}
             <div
               className="flex items-center justify-between px-5 py-4"
-              style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+              style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
             >
               <span
-                className="text-[14px] text-[#E8E8ED]"
+                className="text-[14px] text-[var(--ce-text-primary)]"
                 style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
                 {title}
               </span>
               <button
                 onClick={handleClose}
-                className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+                className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
               >
-                <X className="w-3.5 h-3.5 text-[#6B7280]" />
+                <X className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
               </button>
             </div>
 
@@ -658,9 +659,9 @@ export function QRModal({
                   onClick={() => { setTab(id); setScanState("idle"); }}
                   className="flex-1 flex items-center justify-center gap-2 py-2 rounded-lg text-[12px] cursor-pointer transition-colors"
                   style={{
-                    background: tab === id ? "rgba(255,255,255,0.06)" : "transparent",
-                    border: tab === id ? "1px solid rgba(255,255,255,0.08)" : "1px solid transparent",
-                    color: tab === id ? "#E8E8ED" : "#6B7280",
+                    background: tab === id ? "rgba(var(--ce-glass-tint),0.06)" : "transparent",
+                    border: tab === id ? "1px solid rgba(var(--ce-glass-tint),0.08)" : "1px solid transparent",
+                    color: tab === id ? "var(--ce-text-primary)" : "var(--ce-text-secondary)",
                     fontFamily: "var(--font-body)",
                   }}
                 >
@@ -686,13 +687,13 @@ export function QRModal({
                     <div
                       className="relative w-[180px] h-[180px] rounded-2xl flex items-center justify-center"
                       style={{
-                        background: "rgba(8,9,12,0.9)",
+                        background: "var(--ce-surface-overlay)",
                         border: `1px solid ${roleColor}20`,
                         boxShadow: `0 0 32px ${roleColor}10`,
                         padding: 12,
                       }}
                     >
-                      <MockQRCode size={156} color="#E8E8ED" />
+                      <MockQRCode size={156} color="var(--ce-text-primary)" />
                       {/* Corner glow */}
                       <div
                         className="absolute inset-0 rounded-2xl pointer-events-none"
@@ -701,7 +702,7 @@ export function QRModal({
                     </div>
 
                     <p
-                      className="text-[12px] text-[#6B7280] text-center"
+                      className="text-[12px] text-[var(--ce-text-secondary)] text-center"
                       style={{ fontFamily: "var(--font-body)" }}
                     >
                       {showDescription}
@@ -710,10 +711,10 @@ export function QRModal({
                     {/* Identifier */}
                     <div
                       className="px-3 py-1.5 rounded-lg"
-                      style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+                      style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
                     >
                       <span
-                        className="text-[10px] text-[#374151] tabular-nums"
+                        className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums"
                         style={{ fontFamily: "var(--font-display)", letterSpacing: "0.1em" }}
                       >
                         {identifier}
@@ -733,8 +734,8 @@ export function QRModal({
                     <div
                       className="relative w-[180px] h-[180px] rounded-2xl overflow-hidden flex items-center justify-center"
                       style={{
-                        background: "rgba(0,0,0,0.85)",
-                        border: `1px solid ${scanState === "success" ? "#B3FF3B" : roleColor}20`,
+                        background: "var(--ce-surface-overlay)",
+                        border: `1px solid ${scanState === "success" ? "var(--ce-lime)" : roleColor}20`,
                       }}
                     >
                       {scanState === "idle" && (
@@ -752,7 +753,7 @@ export function QRModal({
                               style={{ borderColor: roleColor, borderWidth: 2 }}
                             />
                           ))}
-                          <Camera className="w-8 h-8 text-[#374151]" />
+                          <Camera className="w-8 h-8 text-[var(--ce-text-quaternary)]" />
                         </>
                       )}
 
@@ -766,7 +767,7 @@ export function QRModal({
                             transition={{ duration: 1.6, repeat: Infinity, ease: "linear" }}
                           />
                           <span
-                            className="text-[11px] text-[#9CA3AF] absolute bottom-3"
+                            className="text-[11px] text-[var(--ce-text-tertiary)] absolute bottom-3"
                             style={{ fontFamily: "var(--font-body)" }}
                           >
                             Scanning…
@@ -781,9 +782,9 @@ export function QRModal({
                           animate={{ scale: 1, opacity: 1 }}
                           transition={{ type: "spring", stiffness: 350, damping: 20 }}
                         >
-                          <CheckCircle2 className="w-8 h-8 text-[#B3FF3B]" />
+                          <CheckCircle2 className="w-8 h-8 text-ce-lime" />
                           <span
-                            className="text-[11px] text-[#B3FF3B]"
+                            className="text-[11px] text-ce-lime"
                             style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
                           >
                             Connected
@@ -793,7 +794,7 @@ export function QRModal({
                     </div>
 
                     <p
-                      className="text-[12px] text-[#6B7280] text-center"
+                      className="text-[12px] text-[var(--ce-text-secondary)] text-center"
                       style={{ fontFamily: "var(--font-body)" }}
                     >
                       {scanDescription}
@@ -807,7 +808,7 @@ export function QRModal({
                         style={{
                           background: `linear-gradient(135deg, ${roleColor}20, ${roleColor}08)`,
                           border: `1px solid ${roleColor}28`,
-                          color: "#E8E8ED",
+                          color: "var(--ce-text-primary)",
                           fontFamily: "var(--font-display)",
                           fontWeight: 500,
                         }}
@@ -821,9 +822,9 @@ export function QRModal({
                         onClick={handleClose}
                         className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
                         style={{
-                          background: "rgba(179,255,59,0.12)",
-                          border: "1px solid rgba(179,255,59,0.2)",
-                          color: "#B3FF3B",
+                          background: "rgba(var(--ce-lime-rgb),0.12)",
+                          border: "1px solid rgba(var(--ce-lime-rgb),0.2)",
+                          color: "var(--ce-lime)",
                           fontFamily: "var(--font-display)",
                           fontWeight: 500,
                         }}

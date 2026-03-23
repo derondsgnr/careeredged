@@ -35,7 +35,7 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
         <motion.div
           className="absolute inset-0 rounded-full"
           style={{
-            background: "radial-gradient(circle, rgba(34, 211, 238, 0.15) 0%, transparent 70%)",
+            background: "radial-gradient(circle, rgba(var(--ce-role-edgestar-rgb), 0.15) 0%, transparent 70%)",
           }}
           animate={{
             scale: [1, 1.3, 1],
@@ -57,8 +57,8 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
       >
         <defs>
           <linearGradient id="sophia-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#22D3EE" />
-            <stop offset="100%" stopColor="#B3FF3B" />
+            <stop offset="0%" stopColor="var(--ce-role-edgestar)" />
+            <stop offset="100%" stopColor="var(--ce-lime)" />
           </linearGradient>
           <filter id="sophia-glow">
             <feGaussianBlur stdDeviation="2" result="blur" />
@@ -84,7 +84,7 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
         {/* Inner diamond — filled with gradient at low opacity */}
         <motion.path
           d={innerPath}
-          fill="rgba(34, 211, 238, 0.08)"
+          fill="rgba(var(--ce-role-edgestar-rgb), 0.08)"
           stroke="url(#sophia-gradient)"
           strokeWidth={0.8}
           initial={{ scale: 0, opacity: 0 }}
@@ -98,7 +98,7 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
           cx={r}
           cy={r}
           r={dotR}
-          fill="#22D3EE"
+          fill="var(--ce-role-edgestar)"
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ duration: 0.4, delay: 1.0, type: "spring" }}
@@ -111,7 +111,7 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
             cx={p.x}
             cy={p.y}
             r={dotR * 0.8}
-            fill="#B3FF3B"
+            fill="var(--ce-lime)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.8 }}
             transition={{ duration: 0.3, delay: 1.2 + i * 0.1 }}

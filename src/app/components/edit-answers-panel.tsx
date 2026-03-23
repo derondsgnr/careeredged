@@ -80,19 +80,19 @@ function QuestionRow({ label, currentId, options, field, onChange }: {
 
   return (
     <div className="flex flex-col gap-2">
-      <span className="text-[11px] text-[#6B7280] uppercase tracking-wider" style={{ fontFamily: "var(--font-body)" }}>{label}</span>
+      <span className="text-[11px] text-ce-text-tertiary uppercase tracking-wider" style={{ fontFamily: "var(--font-body)" }}>{label}</span>
       <button
         onClick={() => setOpen(!open)}
-        className="flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[rgba(255,255,255,0.06)] hover:border-[rgba(34,211,238,0.15)] transition-colors cursor-pointer"
-        style={{ background: "rgba(255,255,255,0.025)" }}>
+        className="flex items-center justify-between gap-2 px-3 py-2.5 rounded-lg border border-[rgba(var(--ce-glass-tint),0.06)] hover:border-[rgba(var(--ce-role-edgestar-rgb),0.15)] transition-colors cursor-pointer"
+        style={{ background: "rgba(var(--ce-glass-tint),0.025)" }}>
         <div className="flex items-center gap-2">
-          {current && <span className="text-[#22D3EE]">{current.icon}</span>}
-          <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>
+          {current && <span className="text-ce-cyan">{current.icon}</span>}
+          <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>
             {current?.label || "Select..."}
           </span>
         </div>
         <motion.div animate={{ rotate: open ? 180 : 0 }} transition={{ duration: 0.15 }}>
-          <ChevronDown className="w-3.5 h-3.5 text-[#6B7280]" />
+          <ChevronDown className="w-3.5 h-3.5 text-ce-text-tertiary" />
         </motion.div>
       </button>
 
@@ -108,13 +108,13 @@ function QuestionRow({ label, currentId, options, field, onChange }: {
                 onClick={() => { onChange(field, o.id); setOpen(false); }}
                 className={`flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer transition-all text-[12px] ${
                   o.id === currentId
-                    ? "bg-[rgba(34,211,238,0.08)] text-[#E8E8ED] border border-[rgba(34,211,238,0.12)]"
-                    : "text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.03)] border border-transparent"
+                    ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] text-ce-text-primary border border-[rgba(var(--ce-role-edgestar-rgb),0.12)]"
+                    : "text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.03)] border border-transparent"
                 }`}
                 style={{ fontFamily: "var(--font-body)" }}>
-                <span className={o.id === currentId ? "text-[#22D3EE]" : "text-[#6B7280]"}>{o.icon}</span>
+                <span className={o.id === currentId ? "text-ce-cyan" : "text-ce-text-tertiary"}>{o.icon}</span>
                 {o.label}
-                {o.id === currentId && <Check className="w-3 h-3 text-[#22D3EE] ml-auto" />}
+                {o.id === currentId && <Check className="w-3 h-3 text-ce-cyan ml-auto" />}
               </button>
             ))}
           </motion.div>
@@ -130,21 +130,21 @@ export function EditAnswersPanel({ intent, sub, target, level, targetOptions, le
       className="fixed top-0 right-0 bottom-0 z-50 w-[280px] flex flex-col"
       style={{
         background: "rgba(10,12,16,0.95)",
-        borderLeft: "1px solid rgba(255,255,255,0.06)",
+        borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)",
         backdropFilter: "blur(20px)",
-        boxShadow: "-4px 0 30px rgba(0,0,0,0.4)",
+        boxShadow: "-4px 0 30px rgba(var(--ce-shadow-tint),0.4)",
       }}
       initial={{ x: 280, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       exit={{ x: 280, opacity: 0 }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}>
       {/* Header */}
-      <div className="flex items-center justify-between px-4 py-3.5 border-b border-[rgba(255,255,255,0.06)]">
-        <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+      <div className="flex items-center justify-between px-4 py-3.5 border-b border-[rgba(var(--ce-glass-tint),0.06)]">
+        <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Edit answers
         </span>
-        <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-[rgba(255,255,255,0.04)] transition-colors cursor-pointer">
-          <X className="w-3.5 h-3.5 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors cursor-pointer">
+          <X className="w-3.5 h-3.5 text-ce-text-tertiary" />
         </button>
       </div>
 
@@ -157,8 +157,8 @@ export function EditAnswersPanel({ intent, sub, target, level, targetOptions, le
       </div>
 
       {/* Footer hint */}
-      <div className="px-4 py-3 border-t border-[rgba(255,255,255,0.04)]">
-        <p className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+      <div className="px-4 py-3 border-t border-[rgba(var(--ce-glass-tint),0.04)]">
+        <p className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
           Changes update your results instantly.
         </p>
       </div>

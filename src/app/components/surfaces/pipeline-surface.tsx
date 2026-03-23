@@ -1,3 +1,4 @@
+import { EASE } from "../tokens";
 /**
  * Pipeline Surface — EdgeEmployer
  *
@@ -16,7 +17,8 @@
 import { useState, useCallback } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { RoleShell, GlassCard, SophiaInsight } from "../role-shell";
+import { RoleShell, GlassCard } from "../role-shell";
+import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
 import { useSophia } from "../sophia-context";
 import { toast } from "../ui/feedback";
@@ -53,11 +55,11 @@ const JOBS = [
 ];
 
 const STAGES: { id: Stage; label: string; color: string }[] = [
-  { id: "new",       label: "New",         color: "#6B7280" },
-  { id: "screening", label: "Screening",   color: "#22D3EE" },
-  { id: "interview", label: "Interview",   color: "#8B5CF6" },
-  { id: "final",     label: "Final Round", color: "#F59E0B" },
-  { id: "offer",     label: "Offer",       color: "#10B981" },
+  { id: "new",       label: "New",         color: "var(--ce-text-secondary)" },
+  { id: "screening", label: "Screening",   color: "var(--ce-role-edgestar)" },
+  { id: "interview", label: "Interview",   color: "var(--ce-role-guide)" },
+  { id: "final",     label: "Final Round", color: "var(--ce-role-edgepreneur)" },
+  { id: "offer",     label: "Offer",       color: "var(--ce-role-employer)" },
 ];
 
 const STAGE_ORDER: Stage[] = ["new", "screening", "interview", "final", "offer"];
@@ -96,14 +98,14 @@ function CandidateCard({
   const stageInfo = STAGES.find((s) => s.id === candidate.stage)!;
   const canAdvance = STAGE_ORDER.indexOf(candidate.stage) < STAGE_ORDER.length - 1;
 
-  const matchColor = candidate.match >= 90 ? "#B3FF3B" : candidate.match >= 80 ? EMPLOYER_GREEN : candidate.match >= 70 ? "#F59E0B" : "#9CA3AF";
+  const matchColor = candidate.match >= 90 ? "var(--ce-lime)" : candidate.match >= 80 ? EMPLOYER_GREEN : candidate.match >= 70 ? "var(--ce-role-edgepreneur)" : "var(--ce-text-tertiary)";
 
   return (
     <motion.div
       className="rounded-xl p-3.5 cursor-pointer relative"
       style={{
-        background: hovered ? "rgba(255,255,255,0.04)" : "rgba(255,255,255,0.025)",
-        border: `1px solid ${candidate.starred ? "rgba(16,185,129,0.15)" : "rgba(255,255,255,0.06)"}`,
+        background: hovered ? "rgba(var(--ce-glass-tint),0.04)" : "rgba(var(--ce-glass-tint),0.025)",
+        border: `1px solid ${candidate.starred ? "rgba(var(--ce-role-employer-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}`,
       }}
       whileHover={{ y: -1 }}
       transition={{ duration: 0.15 }}
@@ -128,10 +130,10 @@ function CandidateCard({
             {candidate.initial}
           </div>
           <div>
-            <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               {candidate.name}
             </span>
-            <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               {candidate.location}
             </span>
           </div>
@@ -143,7 +145,7 @@ function CandidateCard({
           >
             <Star
               className="w-3.5 h-3.5 transition-colors"
-              style={{ color: candidate.starred ? "#F59E0B" : "#374151", fill: candidate.starred ? "rgba(245,158,11,0.3)" : "none" }}
+              style={{ color: candidate.starred ? "var(--ce-role-edgepreneur)" : "var(--ce-text-quaternary)", fill: candidate.starred ? "rgba(var(--ce-role-edgepreneur-rgb),0.3)" : "none" }}
             />
           </button>
           <div className="tabular-nums px-1.5 py-0.5 rounded" style={{
@@ -162,16 +164,16 @@ function CandidateCard({
       <div className="flex flex-wrap gap-1 mb-2.5">
         {candidate.skills.slice(0, 2).map((skill) => (
           <span key={skill} className="text-[9px] px-2 py-0.5 rounded-full" style={{
-            background: "rgba(255,255,255,0.04)",
-            border: "1px solid rgba(255,255,255,0.06)",
-            color: "#6B7280",
+            background: "rgba(var(--ce-glass-tint),0.04)",
+            border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+            color: "var(--ce-text-secondary)",
             fontFamily: "var(--font-body)",
           }}>
             {skill}
           </span>
         ))}
         {candidate.skills.length > 2 && (
-          <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+          <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
             +{candidate.skills.length - 2}
           </span>
         )}
@@ -179,7 +181,7 @@ function CandidateCard({
 
       {/* Footer */}
       <div className="flex items-center justify-between">
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
           <Clock className="w-2.5 h-2.5 inline mr-1 -mt-0.5" />
           {candidate.lastActivity}
         </span>
@@ -233,66 +235,66 @@ function CandidateDrawer({
   const stageIdx = STAGE_ORDER.indexOf(candidate.stage);
   const canAdvance = stageIdx < STAGE_ORDER.length - 1;
   const nextStage = canAdvance ? STAGES[stageIdx + 1] : null;
-  const matchColor = candidate.match >= 90 ? "#B3FF3B" : candidate.match >= 80 ? EMPLOYER_GREEN : candidate.match >= 70 ? "#F59E0B" : "#9CA3AF";
+  const matchColor = candidate.match >= 90 ? "var(--ce-lime)" : candidate.match >= 80 ? EMPLOYER_GREEN : candidate.match >= 70 ? "var(--ce-role-edgepreneur)" : "var(--ce-text-tertiary)";
 
   return (
     <motion.div
       className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
-      style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
       initial={{ x: 400 }}
       animate={{ x: 0 }}
       exit={{ x: 400 }}
       transition={{ duration: 0.35, ease: EASE }}
     >
       {/* Drawer header */}
-      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[16px]" style={{ background: `${matchColor}12`, border: `1.5px solid ${matchColor}25`, color: matchColor, fontFamily: "var(--font-display)", fontWeight: 600 }}>
             {candidate.initial}
           </div>
           <div>
-            <span className="text-[15px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.name}</span>
+            <span className="text-[15px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.name}</span>
             <div className="flex items-center gap-2">
               <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: `${stageInfo.color}12`, color: stageInfo.color, border: `1px solid ${stageInfo.color}20`, fontFamily: "var(--font-body)" }}>
                 {stageInfo.label}
               </span>
-              <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{candidate.location}</span>
+              <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{candidate.location}</span>
             </div>
           </div>
         </div>
-        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors">
-          <X className="w-4 h-4 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
         </button>
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto">
         {/* Match score */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <div className="flex items-center justify-between mb-2">
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Match score</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Match score</span>
             <span className="text-[24px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.match}%</span>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
             <motion.div className="h-full rounded-full" style={{ background: matchColor }}
               initial={{ width: 0 }} animate={{ width: `${candidate.match}%` }} transition={{ delay: 0.3, duration: 0.6, ease: EASE }} />
           </div>
         </div>
 
         {/* Sophia note */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <div className="flex items-center gap-1.5 mb-2">
             <SophiaMark size={12} glowing={false} />
-            <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
+            <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
           </div>
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
             {candidate.sophiaNote}
           </p>
         </div>
 
         {/* Stage progression */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-          <span className="text-[10px] text-[#374151] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>STAGE PROGRESSION</span>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>STAGE PROGRESSION</span>
           <div className="flex items-center gap-1">
             {STAGES.map((s, i) => {
               const sIdx = STAGE_ORDER.indexOf(s.id);
@@ -302,18 +304,18 @@ function CandidateDrawer({
                 <div key={s.id} className="flex items-center flex-1">
                   <div className="flex flex-col items-center flex-1">
                     <div className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" style={{
-                      background: isDone ? `${EMPLOYER_GREEN}20` : isActive ? `${s.color}20` : "rgba(255,255,255,0.04)",
-                      border: `1.5px solid ${isDone ? EMPLOYER_GREEN : isActive ? s.color : "rgba(255,255,255,0.1)"}`,
+                      background: isDone ? `${EMPLOYER_GREEN}20` : isActive ? `${s.color}20` : "rgba(var(--ce-glass-tint),0.04)",
+                      border: `1.5px solid ${isDone ? EMPLOYER_GREEN : isActive ? s.color : "rgba(var(--ce-glass-tint),0.1)"}`,
                       boxShadow: isActive ? `0 0 8px ${s.color}40` : "none",
                     }}>
                       {isDone ? <Check className="w-2.5 h-2.5" style={{ color: EMPLOYER_GREEN }} /> : null}
                     </div>
-                    <span className="text-[8px] mt-1 text-center" style={{ color: isActive ? s.color : isDone ? EMPLOYER_GREEN : "#374151", fontFamily: "var(--font-body)" }}>
+                    <span className="text-[8px] mt-1 text-center" style={{ color: isActive ? s.color : isDone ? EMPLOYER_GREEN : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>
                       {s.label}
                     </span>
                   </div>
                   {i < STAGES.length - 1 && (
-                    <div className="h-px flex-1 mb-4" style={{ background: sIdx < stageIdx ? `${EMPLOYER_GREEN}40` : "rgba(255,255,255,0.06)" }} />
+                    <div className="h-px flex-1 mb-4" style={{ background: sIdx < stageIdx ? `${EMPLOYER_GREEN}40` : "rgba(var(--ce-glass-tint),0.06)" }} />
                   )}
                 </div>
               );
@@ -322,11 +324,11 @@ function CandidateDrawer({
         </div>
 
         {/* Skills */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-          <span className="text-[10px] text-[#374151] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS</span>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS</span>
           <div className="flex flex-wrap gap-1.5">
             {candidate.skills.map((skill) => (
-              <span key={skill} className="text-[11px] px-2.5 py-1 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+              <span key={skill} className="text-[11px] px-2.5 py-1 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                 {skill}
               </span>
             ))}
@@ -335,22 +337,22 @@ function CandidateDrawer({
 
         {/* Meta */}
         <div className="px-5 py-4">
-          <span className="text-[10px] text-[#374151] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DETAILS</span>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DETAILS</span>
           {[
             { label: "Applied",         value: candidate.appliedDate },
             { label: "Last active",     value: candidate.lastActivity },
             { label: "Applying for",    value: JOBS.find(j => j.id === candidate.role)?.label ?? candidate.role },
           ].map((item) => (
-            <div key={item.label} className="flex items-center justify-between py-1.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
-              <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{item.value}</span>
+            <div key={item.label} className="flex items-center justify-between py-1.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+              <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{item.value}</span>
             </div>
           ))}
         </div>
       </div>
 
       {/* Drawer actions */}
-      <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         {canAdvance && nextStage && (
           <button
             onClick={() => { onAdvance(candidate.id); onClose(); }}
@@ -364,28 +366,28 @@ function CandidateDrawer({
         <div className="flex gap-2">
           <button
             onClick={() => { onClose(); onNavigate("messages"); }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(34,211,238,0.08)] transition-colors"
-            style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] transition-colors"
+            style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
             <MessageSquare className="w-3.5 h-3.5" /> Message
           </button>
           <button
             onClick={() => { onClose(); onNavigate("sessions"); }}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(139,92,246,0.08)] transition-colors"
-            style={{ background: "rgba(139,92,246,0.04)", border: "1px solid rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "var(--font-body)" }}>
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-role-guide-rgb),0.08)] transition-colors"
+            style={{ background: "rgba(var(--ce-role-guide-rgb),0.04)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.1)", color: "var(--ce-role-guide)", fontFamily: "var(--font-body)" }}>
             <Calendar className="w-3.5 h-3.5" /> Schedule
           </button>
           <button
             onClick={() => openSophia(`Review the resume and application materials for ${candidate.name} applying for ${JOBS.find(j => j.id === candidate.role)?.label ?? candidate.role}. Match score: ${candidate.match}%. Skills: ${candidate.skills.join(", ")}. Sophia noted: ${candidate.sophiaNote}`)}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
             <FileText className="w-3.5 h-3.5" /> Resume
           </button>
           <button
             onClick={() => onStar(candidate.id)}
-            className="px-3 py-2 rounded-xl cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: candidate.starred ? "#F59E0B" : "#6B7280" }}
+            className="px-3 py-2 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: candidate.starred ? "var(--ce-role-edgepreneur)" : "var(--ce-text-tertiary)" }}
           >
-            <Star className="w-3.5 h-3.5" style={{ fill: candidate.starred ? "rgba(245,158,11,0.3)" : "none" }} />
+            <Star className="w-3.5 h-3.5" style={{ fill: candidate.starred ? "rgba(var(--ce-role-edgepreneur-rgb),0.3)" : "none" }} />
           </button>
         </div>
       </div>
@@ -414,11 +416,11 @@ function KanbanColumn({
       <div className="flex items-center justify-between mb-3 px-0.5">
         <div className="flex items-center gap-2">
           <div className="w-2 h-2 rounded-full" style={{ background: stage.color, boxShadow: `0 0 4px ${stage.color}50` }} />
-          <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <span className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
             {stage.label}
           </span>
         </div>
-        <span className="text-[10px] px-1.5 py-0.5 rounded-full tabular-nums" style={{ background: "rgba(255,255,255,0.06)", color: "#6B7280", fontFamily: "var(--font-body)" }}>
+        <span className="text-[10px] px-1.5 py-0.5 rounded-full tabular-nums" style={{ background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
           {candidates.length}
         </span>
       </div>
@@ -431,8 +433,8 @@ function KanbanColumn({
           ))}
         </AnimatePresence>
         {candidates.length === 0 && (
-          <div className="flex-1 rounded-xl flex items-center justify-center" style={{ border: "1px dashed rgba(255,255,255,0.06)", minHeight: 80 }}>
-            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Empty</span>
+          <div className="flex-1 rounded-xl flex items-center justify-center" style={{ border: "1px dashed rgba(var(--ce-glass-tint),0.06)", minHeight: 80 }}>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Empty</span>
           </div>
         )}
       </div>
@@ -471,18 +473,18 @@ function ListView({
   });
 
   const ColHeader = ({ k, label }: { k: SortKey; label: string }) => (
-    <button onClick={() => handleSort(k)} className="flex items-center gap-1 cursor-pointer hover:text-[#9CA3AF] transition-colors">
-      <span className="text-[10px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: sortKey === k ? "#E8E8ED" : "#6B7280" }}>
+    <button onClick={() => handleSort(k)} className="flex items-center gap-1 cursor-pointer hover:text-[var(--ce-text-tertiary)] transition-colors">
+      <span className="text-[10px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: sortKey === k ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)" }}>
         {label}
       </span>
-      {sortKey === k && (sortAsc ? <ChevronUp className="w-2.5 h-2.5 text-[#6B7280]" /> : <ChevronDown className="w-2.5 h-2.5 text-[#6B7280]" />)}
+      {sortKey === k && (sortAsc ? <ChevronUp className="w-2.5 h-2.5 text-[var(--ce-text-secondary)]" /> : <ChevronDown className="w-2.5 h-2.5 text-[var(--ce-text-secondary)]" />)}
     </button>
   );
 
   return (
-    <div className="rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)" }}>
+    <div className="rounded-xl overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
       {/* Table header */}
-      <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 60px 120px 90px 90px 80px", borderBottom: "1px solid rgba(255,255,255,0.05)", gap: 12 }}>
+      <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 60px 120px 90px 90px 80px", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)", gap: 12 }}>
         <ColHeader k="name"     label="CANDIDATE" />
         <ColHeader k="match"    label="MATCH" />
         <ColHeader k="stage"    label="STAGE" />
@@ -494,12 +496,12 @@ function ListView({
       {/* Rows */}
       {sorted.map((c, i) => {
         const stageInfo = STAGES.find((s) => s.id === c.stage)!;
-        const matchColor = c.match >= 90 ? "#B3FF3B" : c.match >= 80 ? EMPLOYER_GREEN : c.match >= 70 ? "#F59E0B" : "#9CA3AF";
+        const matchColor = c.match >= 90 ? "var(--ce-lime)" : c.match >= 80 ? EMPLOYER_GREEN : c.match >= 70 ? "var(--ce-role-edgepreneur)" : "var(--ce-text-tertiary)";
         return (
           <motion.div
             key={c.id}
-            className="grid px-4 py-3 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors items-center"
-            style={{ gridTemplateColumns: "1fr 60px 120px 90px 90px 80px", borderBottom: i < sorted.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none", gap: 12 }}
+            className="grid px-4 py-3 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] transition-colors items-center"
+            style={{ gridTemplateColumns: "1fr 60px 120px 90px 90px 80px", borderBottom: i < sorted.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none", gap: 12 }}
             onClick={() => onSelect(c)}
             initial={{ opacity: 0, x: -4 }}
             animate={{ opacity: 1, x: 0 }}
@@ -512,10 +514,10 @@ function ListView({
               </div>
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[12px] text-[#E8E8ED] truncate" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
-                  {c.starred && <Star className="w-3 h-3 flex-shrink-0" style={{ color: "#F59E0B", fill: "rgba(245,158,11,0.3)" }} />}
+                  <span className="text-[12px] text-[var(--ce-text-primary)] truncate" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
+                  {c.starred && <Star className="w-3 h-3 flex-shrink-0" style={{ color: "var(--ce-role-edgepreneur)", fill: "rgba(var(--ce-role-edgepreneur-rgb),0.3)" }} />}
                 </div>
-                <span className="text-[10px] text-[#374151] truncate block" style={{ fontFamily: "var(--font-body)" }}>{c.location}</span>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)] truncate block" style={{ fontFamily: "var(--font-body)" }}>{c.location}</span>
               </div>
             </div>
             {/* Match */}
@@ -527,15 +529,15 @@ function ListView({
               {stageInfo.label}
             </span>
             {/* Applied */}
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{c.appliedDate}</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{c.appliedDate}</span>
             {/* Last active */}
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{c.lastActivity}</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{c.lastActivity}</span>
             {/* Actions */}
             <div className="flex items-center gap-1.5">
-              <button onClick={(e) => { e.stopPropagation(); onStar(c.id); }} className="cursor-pointer p-1 rounded hover:bg-[rgba(255,255,255,0.04)] transition-colors">
-                <Star className="w-3 h-3" style={{ color: c.starred ? "#F59E0B" : "#374151", fill: c.starred ? "rgba(245,158,11,0.3)" : "none" }} />
+              <button onClick={(e) => { e.stopPropagation(); onStar(c.id); }} className="cursor-pointer p-1 rounded hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors">
+                <Star className="w-3 h-3" style={{ color: c.starred ? "var(--ce-role-edgepreneur)" : "var(--ce-text-quaternary)", fill: c.starred ? "rgba(var(--ce-role-edgepreneur-rgb),0.3)" : "none" }} />
               </button>
-              <ChevronRight className="w-3.5 h-3.5 text-[#374151]" />
+              <ChevronRight className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
             </div>
           </motion.div>
         );
@@ -624,24 +626,24 @@ export function PipelineSurface() {
         <motion.div className="pt-8 pb-5 flex items-center justify-between"
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <h1 className="text-[22px] text-[var(--ce-text-primary)] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               Hiring Pipeline
             </h1>
-            <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               {filtered.length} candidates across {JOBS.filter(j => j.id !== "all").length} open roles
             </p>
           </div>
 
           {/* View toggle */}
-          <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
             {(["kanban", "list"] as ViewMode[]).map((v) => (
               <button
                 key={v}
                 onClick={() => setView(v)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all"
                 style={{
-                  background: view === v ? "rgba(255,255,255,0.08)" : "transparent",
-                  color: view === v ? "#E8E8ED" : "#6B7280",
+                  background: view === v ? "rgba(var(--ce-glass-tint),0.08)" : "transparent",
+                  color: view === v ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
                   fontFamily: "var(--font-body)",
                 }}
               >
@@ -656,12 +658,12 @@ export function PipelineSurface() {
         <motion.div className="flex gap-2 mb-5"
           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}>
           {stageSummary.map((s) => (
-            <div key={s.id} className="flex-1 rounded-xl px-3 py-2.5 flex items-center justify-between" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${s.count > 0 ? `${s.color}15` : "rgba(255,255,255,0.04)"}` }}>
+            <div key={s.id} className="flex-1 rounded-xl px-3 py-2.5 flex items-center justify-between" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${s.count > 0 ? `${s.color}15` : "rgba(var(--ce-glass-tint),0.04)"}` }}>
               <div className="flex items-center gap-1.5">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ background: s.count > 0 ? s.color : "#374151" }} />
-                <span className="text-[11px]" style={{ color: s.count > 0 ? "#9CA3AF" : "#374151", fontFamily: "var(--font-body)" }}>{s.label}</span>
+                <div className="w-1.5 h-1.5 rounded-full" style={{ background: s.count > 0 ? s.color : "var(--ce-text-quaternary)" }} />
+                <span className="text-[11px]" style={{ color: s.count > 0 ? "var(--ce-text-tertiary)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>{s.label}</span>
               </div>
-              <span className="text-[15px] tabular-nums" style={{ color: s.count > 0 ? s.color : "#374151", fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.count}</span>
+              <span className="text-[15px] tabular-nums" style={{ color: s.count > 0 ? s.color : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.count}</span>
             </div>
           ))}
         </motion.div>
@@ -670,18 +672,18 @@ export function PipelineSurface() {
         <motion.div className="flex items-center gap-3 mb-5"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.28, duration: 0.35, ease: EASE }}>
           {/* Search */}
-          <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
-            <Search className="w-3.5 h-3.5 text-[#374151]" />
+          <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)" }}>
+            <Search className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               placeholder="Search candidates or skills..."
-              className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none"
+              className="flex-1 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none"
               style={{ fontFamily: "var(--font-body)" }}
             />
             {search && (
               <button onClick={() => setSearch("")} className="cursor-pointer">
-                <X className="w-3.5 h-3.5 text-[#374151]" />
+                <X className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
               </button>
             )}
           </div>
@@ -690,29 +692,29 @@ export function PipelineSurface() {
           <div className="relative">
             <button
               onClick={() => setJobDropOpen(!jobDropOpen)}
-              className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
+              className="flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+              style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)" }}
             >
-              <Briefcase className="w-3.5 h-3.5 text-[#6B7280]" />
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>
+              <Briefcase className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
+              <span className="text-[12px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>
                 {JOBS.find((j) => j.id === selectedJob)?.label ?? "All roles"}
               </span>
-              <ChevronDown className="w-3 h-3 text-[#374151]" />
+              <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
             </button>
             <AnimatePresence>
               {jobDropOpen && (
                 <motion.div
                   className="absolute top-full left-0 mt-1 w-[200px] rounded-xl z-20 overflow-hidden"
-                  style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(16px)" }}
+                  style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", backdropFilter: "blur(16px)" }}
                   initial={{ opacity: 0, y: -4, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -4, scale: 0.97 }}
                   transition={{ duration: 0.18 }}
                 >
                   {JOBS.map((j) => (
                     <button key={j.id} onClick={() => { setSelectedJob(j.id); setJobDropOpen(false); }}
-                      className="w-full flex items-center justify-between px-3 py-2.5 cursor-pointer hover:bg-[rgba(255,255,255,0.03)] transition-colors text-left"
-                      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-                      <span className="text-[12px]" style={{ color: selectedJob === j.id ? EMPLOYER_GREEN : "#9CA3AF", fontFamily: "var(--font-body)" }}>{j.label}</span>
-                      <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{j.count}</span>
+                      className="w-full flex items-center justify-between px-3 py-2.5 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors text-left"
+                      style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                      <span className="text-[12px]" style={{ color: selectedJob === j.id ? EMPLOYER_GREEN : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>{j.label}</span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{j.count}</span>
                     </button>
                   ))}
                 </motion.div>
@@ -750,7 +752,7 @@ export function PipelineSurface() {
       <AnimatePresence>
         {selectedCandidate && (
           <>
-            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(0,0,0,0.4)" }}
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} transition={{ duration: 0.2 }}
               onClick={() => setSelectedCandidate(null)} />
             <CandidateDrawer

@@ -33,6 +33,7 @@ import { EdgeSight } from "./components/edgesight";
 import { Sessions } from "./components/sessions";
 import { EdgePreneurDashboard } from "./components/dashboards/edgepreneur-dashboard";
 import { EdgeParentDashboard } from "./components/dashboards/edgeparent-dashboard";
+import { ParentEdgepath } from "./components/parent-edgepath";
 import { EdgeGuideDashboard } from "./components/dashboards/edgeguide-dashboard";
 import { EdgeEmployerDashboard } from "./components/dashboards/edgeemployer-dashboard";
 import { EdgeEducationDashboard } from "./components/dashboards/edgeeducation-dashboard";
@@ -42,6 +43,7 @@ import { EdgeAgencyDashboard } from "./components/dashboards/edgeagency-dashboar
 // ─── Layer 3 surfaces ────────────────────────────────────────────────
 
 import { FamilySurface }   from "./components/surfaces/family-surface";
+import { FamilySurfaceSwitcher } from "./components/surfaces/family-switcher";
 import { PipelineSurface } from "./components/surfaces/pipeline-surface";
 import { EventsSurface }   from "./components/surfaces/events-surface";
 import { ProgramsSurface } from "./components/surfaces/programs-surface";
@@ -198,6 +200,25 @@ function EdgePathPage() {
     navigate(`/${role}/taskroom/${milestoneId}`);
   }, [role, navigate]);
   return <EdgePathOptionA role={role} onOpenTaskRoom={handleOpenTaskRoom} onNavigate={onNavigate} />;
+}
+
+function ParentEdgepathPage() {
+  const navigate = useNavigate();
+  const onNavigate = useCallback((target: string) => {
+    const paths: Record<string, string> = {
+      synthesis: "/parent",
+      edgepath:  "/parent/edgepath",
+      family:    "/parent/family",
+      messages:  "/parent/messages",
+      taskroom:  "/parent/taskroom",
+      landing:   "/",
+    };
+    navigate(paths[target] || "/parent");
+  }, [navigate]);
+  const onOpenTaskRoom = useCallback((milestoneId: string) => {
+    navigate(`/parent/taskroom/${milestoneId}`);
+  }, [navigate]);
+  return <ParentEdgepath onNavigate={onNavigate} onOpenTaskRoom={onOpenTaskRoom} />;
 }
 
 function TaskRoomPage() {
@@ -366,12 +387,13 @@ export const router = createBrowserRouter([
       { path: ":role/resume",                   Component: ResumePage },
       { path: ":role/messages",                 Component: MessagesPage },
       { path: ":role/analytics",                Component: AnalyticsPage },
+      { path: "parent/edgepath",                Component: ParentEdgepathPage },
       { path: ":role/edgepath",                 Component: EdgePathPage },
       { path: ":role/taskroom",                 Component: TaskRoomPage },
       { path: ":role/taskroom/:milestoneId",    Component: TaskRoomPage },
       { path: ":role/sessions",                 Component: SessionsPage },
       // Layer 3 surfaces
-      { path: ":role/family",                   Component: FamilySurface },
+      { path: ":role/family",                   Component: FamilySurfaceSwitcher },
       { path: ":role/clients",                  Component: ClientsSurface },
       { path: ":role/pipeline",                 Component: PipelineSurface },
       { path: ":role/events",                   Component: EventsSurface },

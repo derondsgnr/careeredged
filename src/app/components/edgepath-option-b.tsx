@@ -89,9 +89,9 @@ const PHASE_2_MILESTONES: Milestone[] = [
 ];
 
 const CATEGORY_META = {
-  skill: { label: "Skills to Build", icon: GraduationCap, color: "#22D3EE" },
-  action: { label: "Actions to Take", icon: Target, color: "#B3FF3B" },
-  resource: { label: "Resources to Complete", icon: BookOpen, color: "#9CA3AF" },
+  skill: { label: "Skills to Build", icon: GraduationCap, color: "var(--ce-role-edgestar)" },
+  action: { label: "Actions to Take", icon: Target, color: "var(--ce-lime)" },
+  resource: { label: "Resources to Complete", icon: BookOpen, color: "var(--ce-text-secondary)" },
 };
 
 // ─── Top Nav ────────────────────────────────────────────────────────────────
@@ -110,7 +110,7 @@ function TopNav() {
       className="fixed top-0 left-0 right-0 h-14 z-40 flex items-center justify-between px-6"
       style={{
         background: "rgba(8,9,12,0.85)",
-        borderBottom: "1px solid rgba(255,255,255,0.04)",
+        borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
         backdropFilter: "blur(20px)",
       }}
       initial={{ y: -56 }}
@@ -118,13 +118,13 @@ function TopNav() {
       transition={{ duration: 0.5, ease: EASE }}
     >
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-          <Sparkles className="w-3.5 h-3.5 text-[#B3FF3B]" />
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+          <Sparkles className="w-3.5 h-3.5 text-ce-lime" />
         </div>
-        <span className="text-[14px] text-[#E8E8ED] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
+        <span className="text-[14px] text-ce-text-primary tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
       </div>
 
-      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         {NAV_PILLS.map((item) => {
           const Icon = item.icon;
           const isActive = item.id === "roadmap";
@@ -133,18 +133,18 @@ function TopNav() {
               {isActive && (
                 <motion.div
                   className="absolute inset-0 rounded-lg"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.06)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
                   layoutId="ep-nav-pill-b"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
               <div className="relative z-10 flex items-center gap-2">
-                <Icon className="w-4 h-4" style={{ color: isActive ? "#E8E8ED" : "#6B7280" }} />
-                <span className={`text-[13px] ${isActive ? "text-[#E8E8ED]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+                <Icon className="w-4 h-4" style={{ color: isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)" }} />
+                <span className={`text-[13px] ${isActive ? "text-ce-text-primary" : "text-ce-text-tertiary"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
                 {item.badge && (
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{
-                    background: isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)",
-                    color: isActive ? "#22D3EE" : "#6B7280",
+                    background: isActive ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)",
+                    color: isActive ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
                   }}>{item.badge}</span>
                 )}
               </div>
@@ -154,15 +154,15 @@ function TopNav() {
       </nav>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.1)" }}>
-          <Zap className="w-3 h-3 text-[#B3FF3B]" />
-          <span className="text-[11px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>45</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+          <Zap className="w-3 h-3 text-ce-lime" />
+          <span className="text-[11px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>45</span>
         </div>
-        <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(255,255,255,0.03)" }}>
-          <Bell className="w-4 h-4 text-[#6B7280]" />
+        <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>
+          <Bell className="w-4 h-4 text-ce-text-tertiary" />
         </button>
-        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.15), rgba(179,255,59,0.1))", border: "1.5px solid rgba(255,255,255,0.08)" }}>
-          <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
+        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-lime-rgb),0.1))", border: "1.5px solid rgba(var(--ce-glass-tint),0.08)" }}>
+          <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
         </div>
       </div>
     </motion.header>
@@ -175,7 +175,7 @@ function PhaseStrip({ activePhase, onPhaseClick }: { activePhase: number; onPhas
   return (
     <motion.div
       className="rounded-2xl px-6 py-5"
-      style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
       initial={{ opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.2, duration: 0.5, ease: EASE }}
@@ -183,11 +183,11 @@ function PhaseStrip({ activePhase, onPhaseClick }: { activePhase: number; onPhas
       {/* Journey line visualization */}
       <div className="relative flex items-center">
         {/* Background line */}
-        <div className="absolute top-4 left-4 right-4 h-[2px]" style={{ background: "rgba(255,255,255,0.04)" }} />
+        <div className="absolute top-4 left-4 right-4 h-[2px]" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }} />
         {/* Progress line */}
         <motion.div
           className="absolute top-4 left-4 h-[2px]"
-          style={{ background: "linear-gradient(90deg, #B3FF3B, #22D3EE, rgba(34,211,238,0.1))" }}
+          style={{ background: "linear-gradient(90deg, var(--ce-lime), var(--ce-role-edgestar), rgba(var(--ce-role-edgestar-rgb),0.1))" }}
           initial={{ width: 0 }}
           animate={{ width: "42%" }}
           transition={{ delay: 0.5, duration: 1, ease: EASE }}
@@ -209,44 +209,44 @@ function PhaseStrip({ activePhase, onPhaseClick }: { activePhase: number; onPhas
                 className="w-8 h-8 rounded-full flex items-center justify-center z-10 transition-all duration-300"
                 style={{
                   background: isComplete
-                    ? "rgba(179,255,59,0.15)"
+                    ? "rgba(var(--ce-lime-rgb),0.15)"
                     : isActive
-                      ? "#0A0C10"
-                      : "#0A0C10",
+                      ? "var(--ce-surface-0)"
+                      : "var(--ce-surface-0)",
                   border: `2.5px solid ${isComplete
-                    ? "#B3FF3B"
+                    ? "var(--ce-lime)"
                     : isActive
-                      ? "#22D3EE"
-                      : "rgba(255,255,255,0.08)"
+                      ? "var(--ce-role-edgestar)"
+                      : "rgba(var(--ce-glass-tint),0.08)"
                     }`,
                   boxShadow: isActive
-                    ? "0 0 20px rgba(34,211,238,0.2), 0 0 40px rgba(34,211,238,0.05)"
+                    ? "0 0 20px rgba(var(--ce-role-edgestar-rgb),0.2), 0 0 40px rgba(var(--ce-role-edgestar-rgb),0.05)"
                     : isComplete
-                      ? "0 0 12px rgba(179,255,59,0.1)"
+                      ? "0 0 12px rgba(var(--ce-lime-rgb),0.1)"
                       : "none",
                 }}
               >
                 {isComplete ? (
-                  <Check className="w-4 h-4 text-[#B3FF3B]" />
+                  <Check className="w-4 h-4 text-ce-lime" />
                 ) : isActive ? (
                   <motion.div
-                    className="w-2.5 h-2.5 rounded-full bg-[#22D3EE]"
+                    className="w-2.5 h-2.5 rounded-full bg-[var(--ce-role-edgestar)]"
                     animate={{ scale: [1, 1.4, 1], opacity: [1, 0.6, 1] }}
                     transition={{ duration: 2.5, repeat: Infinity }}
                   />
                 ) : (
-                  <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{phase.id}</span>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{phase.id}</span>
                 )}
               </div>
 
               {/* Label */}
               <span
-                className={`text-[12px] mt-2 text-center ${isActive ? "text-[#E8E8ED]" : isComplete ? "text-[#9CA3AF]" : "text-[#6B7280]"}`}
+                className={`text-[12px] mt-2 text-center ${isActive ? "text-ce-text-primary" : isComplete ? "text-ce-text-secondary" : "text-ce-text-tertiary"}`}
                 style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
                 {phase.title}
               </span>
-              <span className="text-[10px] text-[#374151] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
                 {phase.weeks}
               </span>
 
@@ -258,23 +258,23 @@ function PhaseStrip({ activePhase, onPhaseClick }: { activePhase: number; onPhas
                   animate={{ opacity: 1 }}
                   transition={{ delay: 0.8 }}
                 >
-                  <div className="w-16 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                  <div className="w-16 h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
                     <motion.div
                       className="h-full rounded-full"
-                      style={{ background: "#22D3EE" }}
+                      style={{ background: "var(--ce-role-edgestar)" }}
                       initial={{ width: 0 }}
                       animate={{ width: `${phase.progress * 100}%` }}
                       transition={{ delay: 1, duration: 0.6, ease: EASE }}
                     />
                   </div>
-                  <span className="text-[9px] text-[#22D3EE] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
+                  <span className="text-[9px] text-ce-cyan tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
                     {phase.milestonesDone}/{phase.milestonesTotal}
                   </span>
                 </motion.div>
               )}
 
               {isComplete && (
-                <span className="text-[9px] text-[#B3FF3B] mt-1.5 px-2 py-0.5 rounded-full" style={{ background: "rgba(179,255,59,0.06)" }}>
+                <span className="text-[9px] text-ce-lime mt-1.5 px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.06)" }}>
                   Done
                 </span>
               )}
@@ -293,15 +293,15 @@ function SophiaInlineCard({ children, icon, delay = 0.5 }: { children: React.Rea
     <motion.div
       className="relative rounded-xl px-5 py-4 my-1"
       style={{
-        background: "linear-gradient(135deg, rgba(34,211,238,0.04), rgba(255,255,255,0.015) 60%, rgba(179,255,59,0.02))",
-        border: "1px solid rgba(34,211,238,0.06)",
+        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.015) 60%, rgba(var(--ce-lime-rgb),0.02))",
+        border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)",
       }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay, duration: 0.4, ease: EASE }}
     >
       {/* Sophia accent line on left */}
-      <div className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full" style={{ background: "linear-gradient(180deg, #22D3EE, rgba(179,255,59,0.3))" }} />
+      <div className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full" style={{ background: "linear-gradient(180deg, var(--ce-role-edgestar), rgba(var(--ce-lime-rgb),0.3))" }} />
 
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 mt-0.5">
@@ -328,8 +328,8 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
       <div
         className="flex items-start gap-4 px-5 py-3.5 rounded-xl cursor-pointer transition-all duration-200"
         style={{
-          background: expanded ? "rgba(255,255,255,0.025)" : "transparent",
-          border: expanded ? "1px solid rgba(255,255,255,0.05)" : "1px solid transparent",
+          background: expanded ? "rgba(var(--ce-glass-tint),0.025)" : "transparent",
+          border: expanded ? "1px solid rgba(var(--ce-glass-tint),0.05)" : "1px solid transparent",
         }}
         onClick={() => milestone.status !== "done" && setExpanded(!expanded)}
       >
@@ -337,8 +337,8 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
         <button
           className="mt-0.5 flex-shrink-0 w-5 h-5 rounded-md flex items-center justify-center transition-all duration-300 cursor-pointer"
           style={{
-            background: checked ? "rgba(179,255,59,0.15)" : "transparent",
-            border: `1.5px solid ${checked ? "#B3FF3B" : milestone.status === "current" ? "#22D3EE" : "rgba(255,255,255,0.1)"}`,
+            background: checked ? "rgba(var(--ce-lime-rgb),0.15)" : "transparent",
+            border: `1.5px solid ${checked ? "var(--ce-lime)" : milestone.status === "current" ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.1)"}`,
           }}
           onClick={(e) => {
             e.stopPropagation();
@@ -351,7 +351,7 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
               animate={{ scale: 1 }}
               transition={{ type: "spring", stiffness: 500, damping: 20 }}
             >
-              <Check className="w-3 h-3 text-[#B3FF3B]" />
+              <Check className="w-3 h-3 text-ce-lime" />
             </motion.div>
           )}
         </button>
@@ -361,14 +361,14 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
           <div className="flex items-center justify-between gap-3">
             <div className="flex items-center gap-3 min-w-0">
               <span
-                className={`text-[13px] ${checked ? "text-[#6B7280] line-through" : milestone.status === "current" ? "text-[#E8E8ED]" : "text-[#9CA3AF]"}`}
+                className={`text-[13px] ${checked ? "text-ce-text-tertiary line-through" : milestone.status === "current" ? "text-ce-text-primary" : "text-ce-text-secondary"}`}
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 {milestone.label}
               </span>
               {milestone.status === "current" && !checked && (
-                <span className="flex items-center gap-1 text-[10px] text-[#22D3EE] px-2 py-0.5 rounded-full flex-shrink-0" style={{ background: "rgba(34,211,238,0.08)" }}>
-                  <div className="w-1.5 h-1.5 rounded-full bg-[#22D3EE]" style={{ boxShadow: "0 0 6px rgba(34,211,238,0.4)" }} />
+                <span className="flex items-center gap-1 text-[10px] text-ce-cyan px-2 py-0.5 rounded-full flex-shrink-0" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
+                  <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]" style={{ boxShadow: "0 0 6px rgba(var(--ce-role-edgestar-rgb),0.4)" }} />
                   Up next
                 </span>
               )}
@@ -376,19 +376,19 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
             <div className="flex items-center gap-3 flex-shrink-0">
               {/* Category tag */}
               <span className="text-[9px] px-2 py-0.5 rounded" style={{
-                background: "rgba(255,255,255,0.03)",
+                background: "rgba(var(--ce-glass-tint),0.03)",
                 color: CATEGORY_META[milestone.category].color,
                 fontFamily: "var(--font-body)",
               }}>
                 {milestone.category}
               </span>
-              <div className="flex items-center gap-1 text-[#374151]">
+              <div className="flex items-center gap-1 text-[var(--ce-text-quaternary)]">
                 <Clock className="w-3 h-3" />
                 <span className="text-[10px] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{milestone.time}</span>
               </div>
               {!checked && (
                 <button onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }} className="cursor-pointer">
-                  {expanded ? <ChevronUp className="w-3.5 h-3.5 text-[#374151]" /> : <ChevronDown className="w-3.5 h-3.5 text-[#374151]" />}
+                  {expanded ? <ChevronUp className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" /> : <ChevronDown className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />}
                 </button>
               )}
             </div>
@@ -408,9 +408,9 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
                   {/* Left: Sophia note + resources */}
                   <div>
                     {milestone.sophiaNote && (
-                      <div className="flex gap-2 px-3 py-2.5 rounded-lg mb-2" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
+                      <div className="flex gap-2 px-3 py-2.5 rounded-lg mb-2" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
                         <SophiaMark size={14} glowing={false} />
-                        <p className="text-[11px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                        <p className="text-[11px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                           {milestone.sophiaNote}
                         </p>
                       </div>
@@ -418,11 +418,11 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
                     {milestone.resources && (
                       <div className="flex flex-col gap-1.5">
                         {milestone.resources.map((r, i) => (
-                          <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-[rgba(255,255,255,0.02)] cursor-pointer transition-colors">
-                            <BookOpen className="w-3 h-3 text-[#374151]" />
-                            <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{r.label}</span>
-                            <span className="text-[9px] text-[#374151] px-1.5 py-0.5 rounded" style={{ background: "rgba(255,255,255,0.03)" }}>{r.type}</span>
-                            <ExternalLink className="w-2.5 h-2.5 text-[#374151] ml-auto" />
+                          <div key={i} className="flex items-center gap-2 px-3 py-1.5 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.02)] cursor-pointer transition-colors">
+                            <BookOpen className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
+                            <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{r.label}</span>
+                            <span className="text-[9px] text-[var(--ce-text-quaternary)] px-1.5 py-0.5 rounded" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>{r.type}</span>
+                            <ExternalLink className="w-2.5 h-2.5 text-[var(--ce-text-quaternary)] ml-auto" />
                           </div>
                         ))}
                       </div>
@@ -432,15 +432,15 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
                   <div className="flex flex-col justify-between">
                     {milestone.crossSurface && (
                       <div className="mb-2">
-                        <span className="text-[9px] text-[#374151] mb-1.5 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Connected surfaces</span>
+                        <span className="text-[9px] text-[var(--ce-text-quaternary)] mb-1.5 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Connected surfaces</span>
                         <div className="flex flex-col gap-1">
                           {milestone.crossSurface.map((cs, i) => {
                             const SIcon = SURFACE_ICONS[cs.icon] || FileText;
                             return (
-                              <div key={i} className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-[rgba(255,255,255,0.02)] cursor-pointer transition-colors">
-                                <SIcon className="w-3 h-3 text-[#22D3EE]" />
-                                <span className="text-[10px] text-[#6B7280] flex-1" style={{ fontFamily: "var(--font-body)" }}>{cs.surface}: {cs.note}</span>
-                                <ChevronRight className="w-2.5 h-2.5 text-[#374151]" />
+                              <div key={i} className="flex items-center gap-2 px-2.5 py-1.5 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.02)] cursor-pointer transition-colors">
+                                <SIcon className="w-3 h-3 text-ce-cyan" />
+                                <span className="text-[10px] text-ce-text-tertiary flex-1" style={{ fontFamily: "var(--font-body)" }}>{cs.surface}: {cs.note}</span>
+                                <ChevronRight className="w-2.5 h-2.5 text-[var(--ce-text-quaternary)]" />
                               </div>
                             );
                           })}
@@ -454,9 +454,9 @@ function MilestoneItem({ milestone, index }: { milestone: Milestone; index: numb
                             key={i}
                             className="text-[11px] px-4 py-2 rounded-lg cursor-pointer transition-colors"
                             style={{
-                              background: i === 0 ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)",
-                              border: `1px solid ${i === 0 ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)"}`,
-                              color: i === 0 ? "#22D3EE" : "#9CA3AF",
+                              background: i === 0 ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)",
+                              border: `1px solid ${i === 0 ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                              color: i === 0 ? "var(--ce-role-edgestar)" : "var(--ce-text-secondary)",
                               fontFamily: "var(--font-body)",
                             }}
                           >
@@ -484,7 +484,7 @@ function SophiaBottomBar() {
       className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-4 px-6 h-14"
       style={{
         background: "rgba(10,12,16,0.92)",
-        borderTop: "1px solid rgba(255,255,255,0.04)",
+        borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)",
         backdropFilter: "blur(16px)",
       }}
       initial={{ y: 56 }}
@@ -493,21 +493,21 @@ function SophiaBottomBar() {
     >
       <SophiaMark size={18} glowing={false} />
       <div className="flex-1 flex items-center gap-3">
-        <span className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[13px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           Phase 2 is 63% complete. 2 milestones this week.
         </span>
         <div className="flex gap-2">
-          <button className="text-[11px] text-[#9CA3AF] px-2.5 py-1 rounded-md cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+          <button className="text-[11px] text-ce-text-secondary px-2.5 py-1 rounded-md cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
             Quick wins
           </button>
-          <button className="text-[11px] text-[#9CA3AF] px-2.5 py-1 rounded-md cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+          <button className="text-[11px] text-ce-text-secondary px-2.5 py-1 rounded-md cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
             Compare paths
           </button>
         </div>
       </div>
-      <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(34,211,238,0.08)] transition-colors" style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)" }}>
-        <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" />
-        <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia</span>
+      <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] transition-colors" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
+        <Sparkles className="w-3.5 h-3.5 text-ce-cyan" />
+        <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia</span>
       </button>
     </motion.div>
   );
@@ -525,37 +525,37 @@ export function EdgePathOptionB() {
 
   if (viewMode === "map") {
     return (
-      <div className="h-screen w-full flex flex-col" style={{ backgroundColor: "#08090C" }}>
+      <div className="h-screen w-full flex flex-col" style={{ backgroundColor: "var(--ce-void)" }}>
         <SophiaForwardBackground />
         <TopNav />
         <motion.div
           className="mt-14 flex items-center justify-between px-6 py-3 z-10 flex-shrink-0"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+          style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.1, duration: 0.4, ease: EASE }}
         >
           <div className="flex items-center gap-3">
-            <h1 className="text-[16px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
-              {ROADMAP.title} <span className="text-[#374151] mx-1">→</span> {ROADMAP.target}
+            <h1 className="text-[16px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              {ROADMAP.title} <span className="text-[var(--ce-text-quaternary)] mx-1">→</span> {ROADMAP.target}
             </h1>
-            <Star className="w-3.5 h-3.5 text-[#B3FF3B] fill-[#B3FF3B]" />
+            <Star className="w-3.5 h-3.5 text-ce-lime fill-[var(--ce-lime)]" />
           </div>
           <div className="flex items-center gap-2">
-            <div className="flex items-center gap-0.5 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="flex items-center gap-0.5 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
               <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
-                style={{ background: "transparent", color: "#6B7280", fontFamily: "var(--font-body)" }}
+                style={{ background: "transparent", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
                 onClick={() => setViewMode("list")}
               >
                 <List className="w-3.5 h-3.5" /> List
               </button>
               <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
-                style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
                 <Map className="w-3.5 h-3.5" /> Map
               </button>
             </div>
-            <button className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-              <MoreHorizontal className="w-4 h-4 text-[#6B7280]" />
+            <button className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+              <MoreHorizontal className="w-4 h-4 text-ce-text-tertiary" />
             </button>
           </div>
         </motion.div>
@@ -565,7 +565,7 @@ export function EdgePathOptionB() {
   }
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
       <SophiaForwardBackground />
       <TopNav />
       <SophiaBottomBar />
@@ -581,33 +581,33 @@ export function EdgePathOptionB() {
           >
             <div>
               <div className="flex items-center gap-3 mb-1">
-                <h1 className="text-[20px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
-                  {ROADMAP.title} <span className="text-[#374151] mx-1">→</span> {ROADMAP.target}
+                <h1 className="text-[20px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                  {ROADMAP.title} <span className="text-[var(--ce-text-quaternary)] mx-1">→</span> {ROADMAP.target}
                 </h1>
-                <Star className="w-4 h-4 text-[#B3FF3B] fill-[#B3FF3B]" />
+                <Star className="w-4 h-4 text-ce-lime fill-[var(--ce-lime)]" />
               </div>
               <div className="flex items-center gap-3">
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
-                  Archetype: <span className="text-[#9CA3AF]">{ROADMAP.archetype}</span> · Assessment complete
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
+                  Archetype: <span className="text-ce-text-secondary">{ROADMAP.archetype}</span> · Assessment complete
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-2">
-              <div className="flex items-center gap-0.5 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-0.5 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
-                  style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+                  style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
                   <List className="w-3.5 h-3.5" /> List
                 </button>
                 <button className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
-                  style={{ background: "transparent", color: "#6B7280", fontFamily: "var(--font-body)" }}
+                  style={{ background: "transparent", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
                   onClick={() => setViewMode("map")}
                 >
                   <Map className="w-3.5 h-3.5" /> Map
                 </button>
               </div>
-              <button className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-                <MoreHorizontal className="w-4 h-4 text-[#6B7280]" />
+              <button className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <MoreHorizontal className="w-4 h-4 text-ce-text-tertiary" />
               </button>
             </div>
           </motion.div>
@@ -621,17 +621,17 @@ export function EdgePathOptionB() {
           <motion.div
             className="flex items-center gap-3 px-5 py-3 rounded-xl mb-5"
             style={{
-              background: "linear-gradient(135deg, rgba(34,211,238,0.04), rgba(255,255,255,0.015))",
-              border: "1px solid rgba(34,211,238,0.06)",
+              background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.015))",
+              border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)",
             }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4, duration: 0.4, ease: EASE }}
           >
             <SophiaMark size={16} glowing={false} />
-            <span className="text-[12px] text-[#9CA3AF] flex-1" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[12px] text-ce-text-secondary flex-1" style={{ fontFamily: "var(--font-body)" }}>
               Phase 2 is your skill-building phase. You're 63% through — on track for completion by April 28.
-              <span className="text-[#22D3EE] ml-1">Interaction design is your priority this week.</span>
+              <span className="text-ce-cyan ml-1">Interaction design is your priority this week.</span>
             </span>
           </motion.div>
 
@@ -644,11 +644,11 @@ export function EdgePathOptionB() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.45, duration: 0.3, ease: EASE }}
             >
-              <Check className="w-3.5 h-3.5 text-[#B3FF3B]" />
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <Check className="w-3.5 h-3.5 text-ce-lime" />
+              <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 Completed ({doneMilestones.length})
               </span>
-              <div className="flex-1 h-[1px]" style={{ background: "rgba(255,255,255,0.04)" }} />
+              <div className="flex-1 h-[1px]" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }} />
             </motion.div>
 
             {doneMilestones.map((m, i) => (
@@ -659,16 +659,16 @@ export function EdgePathOptionB() {
             <SophiaInlineCard delay={0.7}>
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[12px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-body)" }}>
+                  <p className="text-[12px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-body)" }}>
                     5 milestones down in Phase 2. You're building momentum.
                   </p>
-                  <p className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+                  <p className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                     At this pace, you'll finish Phase 2 a week early. Your Figma skills are already above the median for junior product designers.
                   </p>
                 </div>
                 <div className="flex-shrink-0 ml-4">
-                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "rgba(179,255,59,0.06)", border: "1.5px solid rgba(179,255,59,0.12)" }}>
-                    <span className="text-[16px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>63%</span>
+                  <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1.5px solid rgba(var(--ce-lime-rgb),0.12)" }}>
+                    <span className="text-[16px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>63%</span>
                   </div>
                 </div>
               </div>
@@ -681,11 +681,11 @@ export function EdgePathOptionB() {
               animate={{ opacity: 1 }}
               transition={{ delay: 0.75, duration: 0.3, ease: EASE }}
             >
-              <ArrowRight className="w-3.5 h-3.5 text-[#22D3EE]" />
-              <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <ArrowRight className="w-3.5 h-3.5 text-ce-cyan" />
+              <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 Remaining ({remainingMilestones.length})
               </span>
-              <div className="flex-1 h-[1px]" style={{ background: "rgba(255,255,255,0.04)" }} />
+              <div className="flex-1 h-[1px]" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }} />
             </motion.div>
 
             {remainingMilestones.map((m, i) => (
@@ -693,8 +693,8 @@ export function EdgePathOptionB() {
             ))}
 
             {/* SOPHIA INLINE CARD: Job matches */}
-            <SophiaInlineCard icon={<Briefcase className="w-4 h-4 text-[#B3FF3B]" />} delay={0.9}>
-              <p className="text-[12px] text-[#E8E8ED] mb-2" style={{ fontFamily: "var(--font-body)" }}>
+            <SophiaInlineCard icon={<Briefcase className="w-4 h-4 text-ce-lime" />} delay={0.9}>
+              <p className="text-[12px] text-ce-text-primary mb-2" style={{ fontFamily: "var(--font-body)" }}>
                 4 jobs match your Phase 2 skills — 2 posted this week
               </p>
               <div className="flex gap-3">
@@ -703,38 +703,38 @@ export function EdgePathOptionB() {
                   { title: "UX Designer", company: "Linear", match: 87 },
                   { title: "Design Lead", company: "Vercel", match: 84 },
                 ].map((job, i) => (
-                  <div key={i} className="flex-1 px-3 py-2 rounded-lg cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
-                    <span className="text-[11px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                  <div key={i} className="flex-1 px-3 py-2 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                    <span className="text-[11px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
                     <div className="flex items-center justify-between mt-0.5">
-                      <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
-                      <span className="text-[9px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.match}%</span>
+                      <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
+                      <span className="text-[9px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.match}%</span>
                     </div>
                   </div>
                 ))}
               </div>
-              <button className="text-[11px] text-[#22D3EE] mt-2 cursor-pointer hover:underline" style={{ fontFamily: "var(--font-body)" }}>
+              <button className="text-[11px] text-ce-cyan mt-2 cursor-pointer hover:underline" style={{ fontFamily: "var(--font-body)" }}>
                 View all in EdgeMatch →
               </button>
             </SophiaInlineCard>
 
             {/* SOPHIA INLINE CARD: Mentor + Pathway fork */}
-            <SophiaInlineCard icon={<Lightbulb className="w-4 h-4 text-[#22D3EE]" />} delay={1.0}>
-              <p className="text-[12px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-body)" }}>
+            <SophiaInlineCard icon={<Lightbulb className="w-4 h-4 text-ce-cyan" />} delay={1.0}>
+              <p className="text-[12px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-body)" }}>
                 I see two paths for your remaining milestones
               </p>
-              <p className="text-[11px] text-[#6B7280] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+              <p className="text-[11px] text-ce-text-tertiary mb-3" style={{ fontFamily: "var(--font-body)" }}>
                 Specializing in interaction design vs. going broader with design systems. Both match your target roles. Want to compare?
               </p>
               <div className="flex gap-2">
                 <button
                   className="text-[11px] px-3 py-1.5 rounded-lg cursor-pointer transition-colors"
-                  style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.12)", color: "#22D3EE", fontFamily: "var(--font-body)" }}
+                  style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}
                 >
                   Compare paths
                 </button>
                 <button
                   className="text-[11px] px-3 py-1.5 rounded-lg cursor-pointer transition-colors"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                 >
                   Ask Alice (EdgeGuide)
                 </button>
@@ -742,21 +742,21 @@ export function EdgePathOptionB() {
             </SophiaInlineCard>
 
             {/* SOPHIA INLINE CARD: Skills snapshot */}
-            <SophiaInlineCard icon={<TrendingUp className="w-4 h-4 text-[#22D3EE]" />} delay={1.1}>
-              <p className="text-[12px] text-[#E8E8ED] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+            <SophiaInlineCard icon={<TrendingUp className="w-4 h-4 text-ce-cyan" />} delay={1.1}>
+              <p className="text-[12px] text-ce-text-primary mb-3" style={{ fontFamily: "var(--font-body)" }}>
                 Your Phase 2 skill progress
               </p>
               <div className="grid grid-cols-4 gap-3">
                 {[
-                  { skill: "Figma", pct: 85, color: "#B3FF3B" },
-                  { skill: "UX Research", pct: 70, color: "#22D3EE" },
-                  { skill: "Interaction", pct: 15, color: "#22D3EE" },
-                  { skill: "Systems", pct: 45, color: "#9CA3AF" },
+                  { skill: "Figma", pct: 85, color: "var(--ce-lime)" },
+                  { skill: "UX Research", pct: 70, color: "var(--ce-role-edgestar)" },
+                  { skill: "Interaction", pct: 15, color: "var(--ce-role-edgestar)" },
+                  { skill: "Systems", pct: 45, color: "var(--ce-text-secondary)" },
                 ].map((s, i) => (
                   <div key={i} className="text-center">
                     <div className="relative w-12 h-12 mx-auto mb-1">
                       <svg width="48" height="48" viewBox="0 0 48 48">
-                        <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(255,255,255,0.04)" strokeWidth="3" />
+                        <circle cx="24" cy="24" r="20" fill="none" stroke="rgba(var(--ce-glass-tint),0.04)" strokeWidth="3" />
                         <motion.circle
                           cx="24" cy="24" r="20" fill="none"
                           stroke={s.color}
@@ -774,7 +774,7 @@ export function EdgePathOptionB() {
                         {s.pct}%
                       </span>
                     </div>
-                    <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{s.skill}</span>
+                    <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{s.skill}</span>
                   </div>
                 ))}
               </div>

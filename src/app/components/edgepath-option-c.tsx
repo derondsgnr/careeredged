@@ -217,7 +217,7 @@ function TopNav() {
       className="fixed top-0 left-0 right-0 h-14 z-40 flex items-center justify-between px-6"
       style={{
         background: "rgba(8,9,12,0.85)",
-        borderBottom: "1px solid rgba(255,255,255,0.04)",
+        borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
         backdropFilter: "blur(20px)",
       }}
       initial={{ y: -56 }}
@@ -225,13 +225,13 @@ function TopNav() {
       transition={{ duration: 0.5, ease: EASE }}
     >
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-          <Sparkles className="w-3.5 h-3.5 text-[#B3FF3B]" />
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+          <Sparkles className="w-3.5 h-3.5 text-ce-lime" />
         </div>
-        <span className="text-[14px] text-[#E8E8ED] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
+        <span className="text-[14px] text-ce-text-primary tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
       </div>
 
-      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         {NAV_PILLS.map((item) => {
           const Icon = item.icon;
           const isActive = item.id === "roadmap";
@@ -240,18 +240,18 @@ function TopNav() {
               {isActive && (
                 <motion.div
                   className="absolute inset-0 rounded-lg"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.06)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
                   layoutId="ep-nav-pill-c"
                   transition={{ type: "spring", stiffness: 400, damping: 30 }}
                 />
               )}
               <div className="relative z-10 flex items-center gap-2">
-                <Icon className="w-4 h-4" style={{ color: isActive ? "#E8E8ED" : "#6B7280" }} />
-                <span className={`text-[13px] ${isActive ? "text-[#E8E8ED]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+                <Icon className="w-4 h-4" style={{ color: isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)" }} />
+                <span className={`text-[13px] ${isActive ? "text-ce-text-primary" : "text-ce-text-tertiary"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
                 {item.badge && (
                   <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{
-                    background: isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)",
-                    color: isActive ? "#22D3EE" : "#6B7280",
+                    background: isActive ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)",
+                    color: isActive ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
                   }}>{item.badge}</span>
                 )}
               </div>
@@ -261,15 +261,15 @@ function TopNav() {
       </nav>
 
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.1)" }}>
-          <Zap className="w-3 h-3 text-[#B3FF3B]" />
-          <span className="text-[11px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>45</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+          <Zap className="w-3 h-3 text-ce-lime" />
+          <span className="text-[11px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>45</span>
         </div>
-        <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(255,255,255,0.03)" }}>
-          <Bell className="w-4 h-4 text-[#6B7280]" />
+        <button className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>
+          <Bell className="w-4 h-4 text-ce-text-tertiary" />
         </button>
-        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.15), rgba(179,255,59,0.1))", border: "1.5px solid rgba(255,255,255,0.08)" }}>
-          <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
+        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-lime-rgb),0.1))", border: "1.5px solid rgba(var(--ce-glass-tint),0.08)" }}>
+          <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
         </div>
       </div>
     </motion.header>
@@ -287,7 +287,7 @@ function TaskRoomPanel({
 }) {
   if (!milestone) return null;
 
-  const catColors = { skill: "#22D3EE", action: "#B3FF3B", resource: "#9CA3AF" };
+  const catColors = { skill: "var(--ce-role-edgestar)", action: "var(--ce-lime)", resource: "var(--ce-text-secondary)" };
   const catIcons = { skill: GraduationCap, action: Target, resource: BookOpen };
   const CatIcon = catIcons[milestone.category];
   const surfaceIcons: Record<string, any> = { file: FileText, briefcase: Briefcase, users: Users };
@@ -297,7 +297,7 @@ function TaskRoomPanel({
       className="fixed top-14 right-0 bottom-0 w-[380px] z-30 flex flex-col"
       style={{
         background: "rgba(12,14,18,0.95)",
-        borderLeft: "1px solid rgba(255,255,255,0.06)",
+        borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)",
         backdropFilter: "blur(20px)",
       }}
       initial={{ x: 380 }}
@@ -306,7 +306,7 @@ function TaskRoomPanel({
       transition={{ duration: 0.3, ease: EASE }}
     >
       {/* Header */}
-      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <div className="flex items-center gap-2">
           <CatIcon className="w-4 h-4" style={{ color: catColors[milestone.category] }} />
           <span className="text-[11px] px-2 py-0.5 rounded" style={{
@@ -317,35 +317,35 @@ function TaskRoomPanel({
             {milestone.category}
           </span>
         </div>
-        <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors">
-          <X className="w-4 h-4 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors">
+          <X className="w-4 h-4 text-ce-text-tertiary" />
         </button>
       </div>
 
       {/* Content */}
       <div className="flex-1 overflow-auto px-5 py-4">
-        <h3 className="text-[16px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <h3 className="text-[16px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           {milestone.label}
         </h3>
         <div className="flex items-center gap-3 mb-5">
-          <div className="flex items-center gap-1 text-[#374151]">
+          <div className="flex items-center gap-1 text-[var(--ce-text-quaternary)]">
             <Clock className="w-3 h-3" />
             <span className="text-[11px] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{milestone.time}</span>
           </div>
-          <span className={`text-[10px] px-2 py-0.5 rounded-full ${milestone.status === "done" ? "text-[#B3FF3B]" : milestone.status === "current" ? "text-[#22D3EE]" : "text-[#6B7280]"}`}
-            style={{ background: milestone.status === "done" ? "rgba(179,255,59,0.06)" : milestone.status === "current" ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)" }}>
+          <span className={`text-[10px] px-2 py-0.5 rounded-full ${milestone.status === "done" ? "text-ce-lime" : milestone.status === "current" ? "text-ce-cyan" : "text-ce-text-tertiary"}`}
+            style={{ background: milestone.status === "done" ? "rgba(var(--ce-lime-rgb),0.06)" : milestone.status === "current" ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)" }}>
             {milestone.status === "done" ? "Complete" : milestone.status === "current" ? "Up next" : "Upcoming"}
           </span>
         </div>
 
         {/* Sophia Note */}
         {milestone.sophiaNote && (
-          <div className="mb-5 px-4 py-3 rounded-xl" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
+          <div className="mb-5 px-4 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
             <div className="flex items-center gap-2 mb-2">
               <SophiaMark size={14} glowing={false} />
-              <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+              <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
             </div>
-            <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
               {milestone.sophiaNote}
             </p>
           </div>
@@ -354,16 +354,16 @@ function TaskRoomPanel({
         {/* Resources */}
         {milestone.resources && milestone.resources.length > 0 && (
           <div className="mb-5">
-            <span className="text-[11px] text-[#6B7280] mb-2 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Resources</span>
+            <span className="text-[11px] text-ce-text-tertiary mb-2 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Resources</span>
             <div className="flex flex-col gap-2">
               {milestone.resources.map((r, i) => (
-                <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[rgba(255,255,255,0.03)] transition-colors" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
-                  <BookOpen className="w-3.5 h-3.5 text-[#374151]" />
+                <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <BookOpen className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
                   <div className="flex-1 min-w-0">
-                    <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{r.label}</span>
-                    <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{r.type}</span>
+                    <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{r.label}</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{r.type}</span>
                   </div>
-                  <ExternalLink className="w-3 h-3 text-[#374151]" />
+                  <ExternalLink className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                 </div>
               ))}
             </div>
@@ -373,18 +373,18 @@ function TaskRoomPanel({
         {/* Cross-Surface Connections (Task Room embryo) */}
         {milestone.crossSurface && milestone.crossSurface.length > 0 && (
           <div className="mb-5">
-            <span className="text-[11px] text-[#6B7280] mb-2 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Connected Surfaces</span>
+            <span className="text-[11px] text-ce-text-tertiary mb-2 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Connected Surfaces</span>
             <div className="flex flex-col gap-2">
               {milestone.crossSurface.map((cs, i) => {
                 const SIcon = surfaceIcons[cs.icon] || FileText;
                 return (
-                  <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[rgba(255,255,255,0.03)] transition-colors" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
-                    <SIcon className="w-3.5 h-3.5 text-[#22D3EE]" />
+                  <div key={i} className="flex items-center gap-3 px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                    <SIcon className="w-3.5 h-3.5 text-ce-cyan" />
                     <div className="flex-1 min-w-0">
-                      <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{cs.surface}</span>
-                      <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{cs.note}</span>
+                      <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{cs.surface}</span>
+                      <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{cs.note}</span>
                     </div>
-                    <ChevronRight className="w-3 h-3 text-[#374151]" />
+                    <ChevronRight className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   </div>
                 );
               })}
@@ -396,8 +396,8 @@ function TaskRoomPanel({
         {milestone.status === "current" && (
           <div className="flex gap-2">
             <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[12px] hover:brightness-110 transition-all"
-              style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.1), rgba(179,255,59,0.05))", border: "1px solid rgba(34,211,238,0.12)", color: "#E8E8ED", fontFamily: "var(--font-display)", fontWeight: 500 }}>
-              <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" /> Start this milestone
+              style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.05))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <Sparkles className="w-3.5 h-3.5 text-ce-cyan" /> Start this milestone
             </button>
           </div>
         )}
@@ -422,7 +422,7 @@ function PathSelectionPanel({
       className="fixed top-14 right-0 bottom-0 w-[420px] z-30 flex flex-col"
       style={{
         background: "rgba(12,14,18,0.95)",
-        borderLeft: "1px solid rgba(255,255,255,0.06)",
+        borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)",
         backdropFilter: "blur(20px)",
       }}
       initial={{ x: 420 }}
@@ -430,21 +430,21 @@ function PathSelectionPanel({
       exit={{ x: 420 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
-      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <div className="flex items-center gap-2">
-          <GitBranch className="w-4 h-4 text-[#22D3EE]" />
-          <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <GitBranch className="w-4 h-4 text-ce-cyan" />
+          <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
             Phase {phase.id}: Choose Your Path
           </span>
         </div>
-        <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)]">
-          <X className="w-4 h-4 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)]">
+          <X className="w-4 h-4 text-ce-text-tertiary" />
         </button>
       </div>
 
       <div className="flex-1 overflow-auto px-5 py-4">
-        <p className="text-[12px] text-[#6B7280] mb-5" style={{ fontFamily: "var(--font-body)" }}>
-          {phase.paths.length} pathways available for <span className="text-[#E8E8ED]">{phase.title}</span>. Sophia recommends the highest-match option.
+        <p className="text-[12px] text-ce-text-tertiary mb-5" style={{ fontFamily: "var(--font-body)" }}>
+          {phase.paths.length} pathways available for <span className="text-ce-text-primary">{phase.title}</span>. Sophia recommends the highest-match option.
         </p>
 
         <div className="flex flex-col gap-4">
@@ -458,9 +458,9 @@ function PathSelectionPanel({
                   className="rounded-xl p-4 cursor-pointer transition-all duration-200"
                   style={{
                     background: isChosen
-                      ? "rgba(34,211,238,0.04)"
-                      : "rgba(255,255,255,0.02)",
-                    border: `1px solid ${isChosen ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.04)"}`,
+                      ? "rgba(var(--ce-role-edgestar-rgb),0.04)"
+                      : "rgba(var(--ce-glass-tint),0.02)",
+                    border: `1px solid ${isChosen ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)"}`,
                   }}
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -470,37 +470,37 @@ function PathSelectionPanel({
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">
                       {path.recommended && (
-                        <span className="text-[9px] px-2 py-0.5 rounded-full text-[#B3FF3B]" style={{ background: "rgba(179,255,59,0.08)", fontFamily: "var(--font-body)" }}>
+                        <span className="text-[9px] px-2 py-0.5 rounded-full text-ce-lime" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", fontFamily: "var(--font-body)" }}>
                           <Star className="w-2.5 h-2.5 inline mr-0.5" /> Recommended
                         </span>
                       )}
                       {isChosen && (
-                        <span className="text-[9px] px-2 py-0.5 rounded-full text-[#22D3EE]" style={{ background: "rgba(34,211,238,0.08)", fontFamily: "var(--font-body)" }}>
+                        <span className="text-[9px] px-2 py-0.5 rounded-full text-ce-cyan" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", fontFamily: "var(--font-body)" }}>
                           Active
                         </span>
                       )}
                     </div>
                     {path.matchPct > 0 && (
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.03)", border: `2px solid ${path.matchPct >= 90 ? "#B3FF3B" : path.matchPct >= 70 ? "#22D3EE" : "#6B7280"}` }}>
-                        <span className="text-[11px] tabular-nums" style={{ color: path.matchPct >= 90 ? "#B3FF3B" : path.matchPct >= 70 ? "#22D3EE" : "#6B7280", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: `2px solid ${path.matchPct >= 90 ? "var(--ce-lime)" : path.matchPct >= 70 ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)"}` }}>
+                        <span className="text-[11px] tabular-nums" style={{ color: path.matchPct >= 90 ? "var(--ce-lime)" : path.matchPct >= 70 ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                           {path.matchPct}%
                         </span>
                       </div>
                     )}
                   </div>
 
-                  <h4 className="text-[14px] text-[#E8E8ED] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{path.label}</h4>
+                  <h4 className="text-[14px] text-ce-text-primary mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{path.label}</h4>
 
                   {path.sophiaReason && (
                     <div className="flex gap-2 mb-3">
                       <SophiaMark size={12} glowing={false} />
-                      <p className="text-[11px] text-[#6B7280] leading-relaxed italic" style={{ fontFamily: "var(--font-body)" }}>
+                      <p className="text-[11px] text-ce-text-tertiary leading-relaxed italic" style={{ fontFamily: "var(--font-body)" }}>
                         {path.sophiaReason}
                       </p>
                     </div>
                   )}
 
-                  <div className="flex items-center gap-3 text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>
+                  <div className="flex items-center gap-3 text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
                     <span>{path.milestones.length} milestones</span>
                     <span>·</span>
                     <span>{path.milestones.filter((m) => m.status === "done").length} complete</span>
@@ -508,8 +508,8 @@ function PathSelectionPanel({
 
                   {!isChosen && (
                     <button
-                      className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.04)]"
-                      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+                      className="mt-3 w-full flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.04)]"
+                      style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                       onClick={(e) => { e.stopPropagation(); onChoosePath(phase.id, path.id); }}
                     >
                       <ArrowRight className="w-3 h-3" /> Choose This Path
@@ -600,7 +600,7 @@ function MindMapCanvas() {
             y1={phasePos.y}
             x2={nextPos.x - 24}
             y2={nextPos.y}
-            stroke={isComplete ? "#B3FF3B" : "rgba(255,255,255,0.06)"}
+            stroke={isComplete ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.06)"}
             strokeWidth={isComplete ? 2 : 1.5}
             strokeDasharray={isComplete ? undefined : "6 4"}
             initial={{ pathLength: 0 }}
@@ -624,7 +624,7 @@ function MindMapCanvas() {
               key={`branch-${phase.id}-${path.id}`}
               d={`M ${phasePos.x} ${phasePos.y + 24} C ${phasePos.x} ${phasePos.y + 50}, ${firstMilestonePos.x} ${firstMilestonePos.y - 20}, ${firstMilestonePos.x} ${firstMilestonePos.y}`}
               fill="none"
-              stroke={isChosen || isOnlyPath ? "#22D3EE" : "rgba(255,255,255,0.08)"}
+              stroke={isChosen || isOnlyPath ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.08)"}
               strokeWidth={isChosen || isOnlyPath ? 1.5 : 1}
               strokeDasharray={isChosen || isOnlyPath ? undefined : "4 3"}
               initial={{ pathLength: 0 }}
@@ -645,7 +645,7 @@ function MindMapCanvas() {
                   y1={pos.y}
                   x2={nextPos.x - 10}
                   y2={nextPos.y}
-                  stroke={m.status === "done" ? "rgba(179,255,59,0.2)" : isChosen || isOnlyPath ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.04)"}
+                  stroke={m.status === "done" ? "rgba(var(--ce-lime-rgb),0.2)" : isChosen || isOnlyPath ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)"}
                   strokeWidth={1}
                   initial={{ pathLength: 0 }}
                   animate={{ pathLength: 1 }}
@@ -691,53 +691,53 @@ function MindMapCanvas() {
             className="w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300"
             style={{
               background: isComplete
-                ? "rgba(179,255,59,0.1)"
+                ? "rgba(var(--ce-lime-rgb),0.1)"
                 : isActive
-                  ? "rgba(34,211,238,0.08)"
-                  : "rgba(255,255,255,0.03)",
+                  ? "rgba(var(--ce-role-edgestar-rgb),0.08)"
+                  : "rgba(var(--ce-glass-tint),0.03)",
               border: `2.5px solid ${isComplete
-                ? "#B3FF3B"
+                ? "var(--ce-lime)"
                 : isActive
-                  ? "#22D3EE"
+                  ? "var(--ce-role-edgestar)"
                   : isLocked
-                    ? "rgba(255,255,255,0.04)"
-                    : "rgba(255,255,255,0.08)"
+                    ? "rgba(var(--ce-glass-tint),0.04)"
+                    : "rgba(var(--ce-glass-tint),0.08)"
                 }`,
               boxShadow: isActive
-                ? "0 0 24px rgba(34,211,238,0.15), 0 0 48px rgba(34,211,238,0.05)"
+                ? "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.15), 0 0 48px rgba(var(--ce-role-edgestar-rgb),0.05)"
                 : isComplete
-                  ? "0 0 16px rgba(179,255,59,0.08)"
+                  ? "0 0 16px rgba(var(--ce-lime-rgb),0.08)"
                   : "none",
             }}
           >
             {isComplete ? (
-              <Check className="w-5 h-5 text-[#B3FF3B]" />
+              <Check className="w-5 h-5 text-ce-lime" />
             ) : isActive ? (
               <motion.div
-                className="w-3 h-3 rounded-full bg-[#22D3EE]"
+                className="w-3 h-3 rounded-full bg-[var(--ce-role-edgestar)]"
                 animate={{ scale: [1, 1.4, 1], opacity: [1, 0.5, 1] }}
                 transition={{ duration: 2.5, repeat: Infinity }}
               />
             ) : isLocked ? (
-              <Lock className="w-4 h-4 text-[#374151]" />
+              <Lock className="w-4 h-4 text-[var(--ce-text-quaternary)]" />
             ) : (
-              <span className="text-[14px] text-[#6B7280]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{phase.id}</span>
+              <span className="text-[14px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{phase.id}</span>
             )}
           </div>
 
           {/* Phase label below */}
           <div className="absolute top-[62px] left-1/2 -translate-x-1/2 text-center w-[140px]">
-            <span className={`text-[12px] block ${isActive ? "text-[#E8E8ED]" : isComplete ? "text-[#9CA3AF]" : "text-[#6B7280]"}`}
+            <span className={`text-[12px] block ${isActive ? "text-ce-text-primary" : isComplete ? "text-ce-text-secondary" : "text-ce-text-tertiary"}`}
               style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               {phase.title}
             </span>
-            <span className="text-[10px] text-[#374151] block" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)] block" style={{ fontFamily: "var(--font-body)" }}>
               {phase.weeks}
             </span>
             {hasPaths && (
               <button
-                className="mt-1 flex items-center gap-1 mx-auto text-[9px] px-2 py-0.5 rounded-full cursor-pointer hover:bg-[rgba(34,211,238,0.08)] transition-colors"
-                style={{ background: "rgba(34,211,238,0.04)", color: "#22D3EE", fontFamily: "var(--font-body)" }}
+                className="mt-1 flex items-center gap-1 mx-auto text-[9px] px-2 py-0.5 rounded-full cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] transition-colors"
+                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}
                 onClick={(e) => {
                   e.stopPropagation();
                   setSelectedPhaseForPaths(phase);
@@ -781,16 +781,16 @@ function MindMapCanvas() {
             >
               <div className="flex items-center gap-1.5">
                 <span className="text-[9px] px-2 py-0.5 rounded-full" style={{
-                  background: isChosen ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)",
-                  color: isChosen ? "#22D3EE" : "#6B7280",
-                  border: `1px solid ${isChosen ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.04)"}`,
+                  background: isChosen ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)",
+                  color: isChosen ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
+                  border: `1px solid ${isChosen ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)"}`,
                   fontFamily: "var(--font-body)",
                 }}>
                   {path.label}
                   {path.matchPct > 0 && ` · ${path.matchPct}%`}
                 </span>
                 {path.recommended && (
-                  <Star className="w-2.5 h-2.5 text-[#B3FF3B] fill-[#B3FF3B]" />
+                  <Star className="w-2.5 h-2.5 text-ce-lime fill-[var(--ce-lime)]" />
                 )}
               </div>
             </motion.div>
@@ -824,23 +824,23 @@ function MindMapCanvas() {
                   className="w-5 h-5 rounded-full flex items-center justify-center transition-all duration-200"
                   style={{
                     background: isDone
-                      ? "rgba(179,255,59,0.15)"
+                      ? "rgba(var(--ce-lime-rgb),0.15)"
                       : isCurrent
-                        ? "rgba(34,211,238,0.1)"
-                        : "rgba(255,255,255,0.03)",
+                        ? "rgba(var(--ce-role-edgestar-rgb),0.1)"
+                        : "rgba(var(--ce-glass-tint),0.03)",
                     border: `2px solid ${isDone
-                      ? "#B3FF3B"
+                      ? "var(--ce-lime)"
                       : isCurrent
-                        ? "#22D3EE"
-                        : "rgba(255,255,255,0.08)"
+                        ? "var(--ce-role-edgestar)"
+                        : "rgba(var(--ce-glass-tint),0.08)"
                       }`,
-                    boxShadow: isCurrent ? "0 0 12px rgba(34,211,238,0.2)" : "none",
+                    boxShadow: isCurrent ? "0 0 12px rgba(var(--ce-role-edgestar-rgb),0.2)" : "none",
                   }}
                 >
-                  {isDone && <Check className="w-2.5 h-2.5 text-[#B3FF3B]" />}
+                  {isDone && <Check className="w-2.5 h-2.5 text-ce-lime" />}
                   {isCurrent && (
                     <motion.div
-                      className="w-1.5 h-1.5 rounded-full bg-[#22D3EE]"
+                      className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]"
                       animate={{ scale: [1, 1.5, 1] }}
                       transition={{ duration: 1.5, repeat: Infinity }}
                     />
@@ -849,8 +849,8 @@ function MindMapCanvas() {
 
                 {/* Tooltip label */}
                 <div className="absolute left-1/2 -translate-x-1/2 top-6 w-[120px] text-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                  <div className="px-2.5 py-1.5 rounded-lg text-[10px] text-[#E8E8ED] whitespace-nowrap overflow-hidden text-ellipsis"
-                    style={{ background: "rgba(12,14,18,0.95)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)", backdropFilter: "blur(8px)" }}>
+                  <div className="px-2.5 py-1.5 rounded-lg text-[10px] text-ce-text-primary whitespace-nowrap overflow-hidden text-ellipsis"
+                    style={{ background: "rgba(12,14,18,0.95)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)", backdropFilter: "blur(8px)" }}>
                     {milestone.label}
                   </div>
                 </div>
@@ -869,7 +869,7 @@ function MindMapCanvas() {
     <div className="relative flex-1 overflow-hidden" style={{ cursor: isPanning ? "grabbing" : "grab" }}>
       {/* Dot grid background */}
       <div className="absolute inset-0 canvas-bg" style={{
-        backgroundImage: "radial-gradient(circle, rgba(255,255,255,0.02) 1px, transparent 1px)",
+        backgroundImage: "radial-gradient(circle, rgba(var(--ce-glass-tint),0.02) 1px, transparent 1px)",
         backgroundSize: "24px 24px",
       }} />
 
@@ -908,44 +908,44 @@ function MindMapCanvas() {
       </div>
 
       {/* Zoom controls */}
-      <div className="absolute bottom-6 left-6 flex items-center gap-1 p-1 rounded-xl z-20" style={{ background: "rgba(10,12,16,0.8)", border: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(12px)" }}>
+      <div className="absolute bottom-6 left-6 flex items-center gap-1 p-1 rounded-xl z-20" style={{ background: "rgba(10,12,16,0.8)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(12px)" }}>
         <button
-          className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+          className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
           onClick={() => setZoom((z) => Math.min(z + 0.15, 2))}
         >
-          <ZoomIn className="w-3.5 h-3.5 text-[#9CA3AF]" />
+          <ZoomIn className="w-3.5 h-3.5 text-ce-text-secondary" />
         </button>
-        <span className="text-[10px] text-[#6B7280] px-2 tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[10px] text-ce-text-tertiary px-2 tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
           {Math.round(zoom * 100)}%
         </span>
         <button
-          className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+          className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
           onClick={() => setZoom((z) => Math.max(z - 0.15, 0.4))}
         >
-          <ZoomOut className="w-3.5 h-3.5 text-[#9CA3AF]" />
+          <ZoomOut className="w-3.5 h-3.5 text-ce-text-secondary" />
         </button>
-        <div className="w-[1px] h-4 bg-[rgba(255,255,255,0.06)] mx-1" />
+        <div className="w-[1px] h-4 bg-[rgba(var(--ce-glass-tint),0.06)] mx-1" />
         <button
-          className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+          className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
           onClick={() => { setZoom(1); setPan({ x: 0, y: 0 }); }}
         >
-          <Maximize2 className="w-3.5 h-3.5 text-[#9CA3AF]" />
+          <Maximize2 className="w-3.5 h-3.5 text-ce-text-secondary" />
         </button>
       </div>
 
       {/* Legend */}
       <motion.div
         className="absolute top-4 left-6 flex items-center gap-4 px-4 py-2.5 rounded-xl z-20"
-        style={{ background: "rgba(10,12,16,0.8)", border: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(12px)" }}
+        style={{ background: "rgba(10,12,16,0.8)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(12px)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1, duration: 0.4 }}
       >
         {[
-          { color: "#B3FF3B", label: "Complete" },
-          { color: "#22D3EE", label: "Active" },
-          { color: "#6B7280", label: "Upcoming" },
-          { color: "#374151", label: "Locked" },
+          { color: "var(--ce-lime)", label: "Complete" },
+          { color: "var(--ce-role-edgestar)", label: "Active" },
+          { color: "var(--ce-text-tertiary)", label: "Upcoming" },
+          { color: "var(--ce-text-quaternary)", label: "Locked" },
         ].map((item) => (
           <div key={item.label} className="flex items-center gap-1.5">
             <div className="w-2 h-2 rounded-full" style={{ background: item.color }} />
@@ -984,7 +984,7 @@ function SophiaBottomBar() {
       className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-4 px-6 h-14"
       style={{
         background: "rgba(10,12,16,0.92)",
-        borderTop: "1px solid rgba(255,255,255,0.04)",
+        borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)",
         backdropFilter: "blur(16px)",
       }}
       initial={{ y: 56 }}
@@ -993,15 +993,15 @@ function SophiaBottomBar() {
     >
       <SophiaMark size={18} glowing={false} />
       <div className="flex-1 flex items-center gap-3">
-        <span className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[13px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           Click a phase to explore milestones. Click a milestone for details. Click
-          <GitBranch className="w-3 h-3 inline mx-1 text-[#22D3EE]" />
+          <GitBranch className="w-3 h-3 inline mx-1 text-ce-cyan" />
           to compare paths.
         </span>
       </div>
-      <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(34,211,238,0.08)] transition-colors" style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)" }}>
-        <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" />
-        <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia</span>
+      <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] transition-colors" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
+        <Sparkles className="w-3.5 h-3.5 text-ce-cyan" />
+        <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia</span>
       </button>
     </motion.div>
   );
@@ -1011,7 +1011,7 @@ function SophiaBottomBar() {
 
 export function EdgePathOptionC() {
   return (
-    <div className="h-screen w-full flex flex-col" style={{ backgroundColor: "#08090C" }}>
+    <div className="h-screen w-full flex flex-col" style={{ backgroundColor: "var(--ce-void)" }}>
       <SophiaForwardBackground />
       <TopNav />
       <SophiaBottomBar />
@@ -1019,26 +1019,26 @@ export function EdgePathOptionC() {
       {/* Roadmap Header bar */}
       <motion.div
         className="mt-14 flex items-center justify-between px-6 py-3 z-10 flex-shrink-0"
-        style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+        style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.1, duration: 0.4, ease: EASE }}
       >
         <div className="flex items-center gap-3">
-          <h1 className="text-[16px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
-            Revenue Ops Manager <span className="text-[#374151] mx-1">→</span> Product Designer
+          <h1 className="text-[16px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            Revenue Ops Manager <span className="text-[var(--ce-text-quaternary)] mx-1">→</span> Product Designer
           </h1>
-          <Star className="w-3.5 h-3.5 text-[#B3FF3B] fill-[#B3FF3B]" />
-          <span className="text-[10px] text-[#6B7280] ml-2" style={{ fontFamily: "var(--font-body)" }}>
+          <Star className="w-3.5 h-3.5 text-ce-lime fill-[var(--ce-lime)]" />
+          <span className="text-[10px] text-ce-text-tertiary ml-2" style={{ fontFamily: "var(--font-body)" }}>
             Innovator-Strategist · Phase 2 active
           </span>
         </div>
         <div className="flex items-center gap-2">
-          <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px]" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+          <div className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px]" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
             <Move className="w-3 h-3" /> Map View
           </div>
-          <button className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ border: "1px solid rgba(255,255,255,0.06)" }}>
-            <MoreHorizontal className="w-4 h-4 text-[#6B7280]" />
+          <button className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+            <MoreHorizontal className="w-4 h-4 text-ce-text-tertiary" />
           </button>
         </div>
       </motion.div>

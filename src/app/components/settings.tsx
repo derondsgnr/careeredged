@@ -1,3 +1,4 @@
+import { EASE, COLORS, FONT, TEXT, SURFACE, GLASS_TINT } from "./tokens";
 /**
  * Settings Panel — Reusable across all 8 roles
  * Contextual: each role sees relevant settings sections.
@@ -28,7 +29,6 @@ import {
   Briefcase, Settings as SettingsIcon,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 // ─── Role-specific settings config ───────────────────────────────────────────
 
@@ -44,14 +44,14 @@ const ROLE_LABELS: Record<RoleId, string> = {
 };
 
 const ROLE_COLORS: Record<RoleId, string> = {
-  edgestar: "#22D3EE",
-  edgepreneur: "#F59E0B",
-  parent: "#EC4899",
-  guide: "#8B5CF6",
-  employer: "#10B981",
-  edu: "#3B82F6",
-  ngo: "#F97316",
-  agency: "#6366F1",
+  edgestar: "var(--ce-role-edgestar)",
+  edgepreneur: "var(--ce-role-edgepreneur)",
+  parent: "var(--ce-role-parent)",
+  guide: "var(--ce-role-guide)",
+  employer: "var(--ce-role-employer)",
+  edu: "var(--ce-role-edu)",
+  ngo: "var(--ce-role-ngo)",
+  agency: "var(--ce-role-agency)",
 };
 
 const ROLE_ICONS: Record<RoleId, React.ReactNode> = {
@@ -80,16 +80,16 @@ const ALL_SECTIONS: { id: SettingsSection; label: string; icon: React.ReactNode 
 
 // ─── Toggle ───────────────────────────────────────────────────────────────────
 
-function Toggle({ value, onChange, accent = "#B3FF3B" }: { value: boolean; onChange: (v: boolean) => void; accent?: string }) {
+function Toggle({ value, onChange, accent = "var(--ce-lime)" }: { value: boolean; onChange: (v: boolean) => void; accent?: string }) {
   return (
     <button
       onClick={() => onChange(!value)}
       className="relative w-9 h-5 rounded-full transition-colors cursor-pointer flex-shrink-0"
-      style={{ background: value ? `${accent}30` : "rgba(255,255,255,0.06)", border: `1px solid ${value ? accent : "rgba(255,255,255,0.1)"}` }}
+      style={{ background: value ? `${accent}30` : `rgba(${GLASS_TINT},0.06)`, border: `1px solid ${value ? accent : `rgba(${GLASS_TINT},0.1)`}` }}
     >
       <motion.div
         className="absolute top-0.5 w-4 h-4 rounded-full"
-        style={{ background: value ? accent : "#374151" }}
+        style={{ background: value ? accent : TEXT.muted }}
         animate={{ left: value ? "calc(100% - 18px)" : "2px" }}
         transition={{ duration: 0.2, ease: EASE }}
       />
@@ -121,11 +121,11 @@ function SettingRow({
   onOptionChange?: (v: string) => void;
 }) {
   return (
-    <div className="flex items-start justify-between py-3.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+    <div className="flex items-start justify-between py-3.5" style={{ borderBottom: `1px solid rgba(${GLASS_TINT},0.04)` }}>
       <div className="flex-1 min-w-0 pr-4">
-        <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{label}</span>
+        <span className="text-[13px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{label}</span>
         {description && (
-          <span className="text-[11px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{description}</span>
+          <span className="text-[11px] text-[var(--ce-text-secondary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{description}</span>
         )}
       </div>
       {type === "toggle" && value !== undefined && onChange && (
@@ -136,7 +136,7 @@ function SettingRow({
           value={currentOption}
           onChange={(e) => onOptionChange(e.target.value)}
           className="text-[12px] px-2 py-1 rounded-lg cursor-pointer outline-none"
-          style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+          style={{ background: `rgba(${GLASS_TINT},0.06)`, border: `1px solid rgba(${GLASS_TINT},0.08)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}
         >
           {options.map(o => <option key={o} value={o}>{o}</option>)}
         </select>
@@ -161,20 +161,20 @@ function ProfileSection({ role, userName, userInitial, accent }: { role: RoleId;
   return (
     <div className="space-y-4">
       {/* Avatar */}
-      <div className="flex items-center gap-4 pb-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-center gap-4 pb-4" style={{ borderBottom: `1px solid rgba(${GLASS_TINT},0.06)` }}>
         <div
           className="w-16 h-16 rounded-2xl flex items-center justify-center text-[24px] flex-shrink-0"
-          style={{ background: `linear-gradient(135deg, ${accent}25, rgba(179,255,59,0.1))`, border: `1.5px solid ${accent}30`, color: accent, fontFamily: "var(--font-display)", fontWeight: 600 }}
+          style={{ background: `linear-gradient(135deg, ${accent}25, rgba(var(--ce-lime-rgb),0.1))`, border: `1.5px solid ${accent}30`, color: accent, fontFamily: "var(--font-display)", fontWeight: 600 }}
         >
           {userInitial}
         </div>
         <div className="flex-1">
-          <span className="text-[15px] text-[#E8E8ED] block mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{name}</span>
+          <span className="text-[15px] text-[var(--ce-text-primary)] block mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{name}</span>
           <div className="flex items-center gap-2">
             <div className="w-1.5 h-1.5 rounded-full" style={{ background: accent }} />
             <span className="text-[11px]" style={{ color: accent, fontFamily: "var(--font-body)" }}>{ROLE_LABELS[role]}</span>
           </div>
-          <button className="text-[11px] mt-1.5 cursor-pointer hover:underline" style={{ color: "#6B7280", fontFamily: "var(--font-body)" }}>
+          <button className="text-[11px] mt-1.5 cursor-pointer hover:underline" style={{ color: TEXT.secondary, fontFamily: "var(--font-body)" }}>
             Change photo
           </button>
         </div>
@@ -183,29 +183,29 @@ function ProfileSection({ role, userName, userInitial, accent }: { role: RoleId;
       {/* Fields */}
       <div className="space-y-3">
         <div>
-          <label className="text-[10px] text-[#374151] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DISPLAY NAME</label>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DISPLAY NAME</label>
           <input
             value={name}
             onChange={(e) => setName(e.target.value)}
-            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }}
+            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] outline-none"
+            style={{ background: `rgba(${GLASS_TINT},0.04)`, border: `1px solid rgba(${GLASS_TINT},0.08)`, fontFamily: "var(--font-body)" }}
           />
         </div>
         <div>
-          <label className="text-[10px] text-[#374151] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EMAIL</label>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EMAIL</label>
           <input
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             type="email"
-            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }}
+            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] outline-none"
+            style={{ background: `rgba(${GLASS_TINT},0.04)`, border: `1px solid rgba(${GLASS_TINT},0.08)`, fontFamily: "var(--font-body)" }}
           />
         </div>
         <div>
-          <label className="text-[10px] text-[#374151] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TIMEZONE</label>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TIMEZONE</label>
           <select
-            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none cursor-pointer"
-            style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }}
+            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] outline-none cursor-pointer"
+            style={{ background: `rgba(${GLASS_TINT},0.04)`, border: `1px solid rgba(${GLASS_TINT},0.08)`, fontFamily: "var(--font-body)" }}
           >
             <option>Pacific Time (PT)</option>
             <option>Eastern Time (ET)</option>
@@ -217,7 +217,7 @@ function ProfileSection({ role, userName, userInitial, accent }: { role: RoleId;
         <button
           onClick={handleSave}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-          style={{ background: saved ? "rgba(179,255,59,0.1)" : `${accent}12`, border: `1px solid ${saved ? "rgba(179,255,59,0.25)" : `${accent}25`}`, color: saved ? "#B3FF3B" : accent, fontFamily: "var(--font-display)", fontWeight: 500 }}
+          style={{ background: saved ? "rgba(var(--ce-lime-rgb),0.1)" : `${accent}12`, border: `1px solid ${saved ? "rgba(var(--ce-lime-rgb),0.25)" : `${accent}25`}`, color: saved ? "var(--ce-lime)" : accent, fontFamily: "var(--font-display)", fontWeight: 500 }}
         >
           {saved ? <><Check className="w-3.5 h-3.5" /> Saved</> : "Save changes"}
         </button>
@@ -256,7 +256,7 @@ function NotificationsSection({ role, accent }: { role: RoleId; accent: string }
         <SettingRow label="Sophia insights" description="Proactive AI recommendations" value={prefs.sophia} onChange={() => toggle("sophia")} accent={accent} />
       </div>
       <div className="mb-1">
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ROLE-SPECIFIC</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ROLE-SPECIFIC</span>
       </div>
       {roleSpecific[role].map(item => (
         <SettingRow key={item.key} label={item.label} description={item.desc}
@@ -283,11 +283,11 @@ function SophiaSection({ accent }: { accent: string }) {
 
   return (
     <div>
-      <div className="flex items-center gap-2 mb-4 px-3 py-3 rounded-xl" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.1)" }}>
+      <div className="flex items-center gap-2 mb-4 px-3 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
         <SophiaMark size={18} glowing={false} />
         <div>
-          <span className="text-[12px] text-[#22D3EE] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia AI</span>
-          <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Your AI career co-pilot — always learning, never storing sensitive data</span>
+          <span className="text-[12px] text-ce-cyan block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia AI</span>
+          <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Your AI career co-pilot — always learning, never storing sensitive data</span>
         </div>
       </div>
 
@@ -323,12 +323,12 @@ function PrivacySection({ accent }: { accent: string }) {
       <div className="mt-4 space-y-2">
         <button
           onClick={() => toast.info("Data export started", "You'll receive a download link within 24 hours")}
-          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+          style={{ background: `rgba(${GLASS_TINT},0.02)`, border: `1px solid rgba(${GLASS_TINT},0.07)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}
         >
           <Download className="w-3.5 h-3.5" /> Export my data
         </button>
-        <p className="text-[10px] text-[#374151] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+        <p className="text-[10px] text-[var(--ce-text-quaternary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
           CareerEdge does not sell your data. All AI processing is ephemeral — nothing is stored beyond your session unless you explicitly opt in.
         </p>
       </div>
@@ -345,9 +345,9 @@ function AppearanceSection({ accent }: { accent: string }) {
 
   return (
     <div>
-      <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl mb-4" style={{ background: "rgba(179,255,59,0.04)", border: "1px solid rgba(179,255,59,0.1)" }}>
-        <Moon className="w-3.5 h-3.5 text-[#B3FF3B]" />
-        <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Dark mode only — CareerEdge is built for the night shift</span>
+      <div className="flex items-center gap-2 px-3 py-2.5 rounded-xl mb-4" style={{ background: "rgba(var(--ce-lime-rgb),0.04)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+        <Moon className="w-3.5 h-3.5 text-ce-lime" />
+        <span className="text-[12px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>Dark mode only — CareerEdge is built for the night shift</span>
       </div>
       <SettingRow label="UI density" type="select" options={["Compact", "Comfortable", "Spacious"]}
         currentOption={density} onOptionChange={setDensity} accent={accent} />
@@ -434,13 +434,13 @@ function ConnectedSection({ accent }: { accent: string }) {
   return (
     <div className="space-y-2">
       {apps.map(app => (
-        <div key={app.id} className="flex items-center gap-3 px-3 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: `1px solid ${connected[app.id] ? `${accent}15` : "rgba(255,255,255,0.05)"}` }}>
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: connected[app.id] ? `${accent}12` : "rgba(255,255,255,0.04)", color: connected[app.id] ? accent : "#374151" }}>
+        <div key={app.id} className="flex items-center gap-3 px-3 py-3 rounded-xl" style={{ background: `rgba(${GLASS_TINT},0.02)`, border: `1px solid ${connected[app.id] ? `${accent}15` : `rgba(${GLASS_TINT},0.05)`}` }}>
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: connected[app.id] ? `${accent}12` : `rgba(${GLASS_TINT},0.04)`, color: connected[app.id] ? accent : TEXT.muted }}>
             {app.icon}
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{app.label}</span>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{app.desc}</span>
+            <span className="text-[13px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{app.label}</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{app.desc}</span>
           </div>
           <button
             onClick={() => {
@@ -448,7 +448,7 @@ function ConnectedSection({ accent }: { accent: string }) {
               toast.info(connected[app.id] ? `${app.label} disconnected` : `${app.label} connected`);
             }}
             className="text-[11px] px-2.5 py-1 rounded-lg cursor-pointer transition-colors flex-shrink-0"
-            style={{ background: connected[app.id] ? "rgba(239,68,68,0.08)" : `${accent}12`, border: `1px solid ${connected[app.id] ? "rgba(239,68,68,0.15)" : `${accent}25`}`, color: connected[app.id] ? "#EF4444" : accent, fontFamily: "var(--font-body)" }}
+            style={{ background: connected[app.id] ? "rgba(var(--ce-status-error-rgb),0.08)" : `${accent}12`, border: `1px solid ${connected[app.id] ? "rgba(var(--ce-status-error-rgb),0.15)" : `${accent}25`}`, color: connected[app.id] ? "var(--ce-status-error)" : accent, fontFamily: "var(--font-body)" }}
           >
             {connected[app.id] ? "Disconnect" : "Connect"}
           </button>
@@ -466,16 +466,16 @@ function DangerSection({ onSignOut }: { onSignOut: () => void }) {
   return (
     <div className="space-y-3">
       {/* Switch role */}
-      <div className="px-3 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <span className="text-[13px] text-[#E8E8ED] block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>Switch role</span>
-        <span className="text-[11px] text-[#6B7280] block mb-2.5" style={{ fontFamily: "var(--font-body)" }}>Change your CareerEdge role to see another perspective</span>
+      <div className="px-3 py-3 rounded-xl" style={{ background: `rgba(${GLASS_TINT},0.02)`, border: `1px solid rgba(${GLASS_TINT},0.06)` }}>
+        <span className="text-[13px] text-[var(--ce-text-primary)] block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>Switch role</span>
+        <span className="text-[11px] text-[var(--ce-text-secondary)] block mb-2.5" style={{ fontFamily: "var(--font-body)" }}>Change your CareerEdge role to see another perspective</span>
         <div className="flex flex-wrap gap-1.5">
           {(["edgestar", "edgepreneur", "parent", "guide", "employer", "edu", "ngo", "agency"] as RoleId[]).map(r => (
             <a
               key={r}
               href={`/${r}`}
               className="text-[10px] px-2 py-1 rounded-md cursor-pointer transition-colors"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+              style={{ background: `rgba(${GLASS_TINT},0.04)`, border: `1px solid rgba(${GLASS_TINT},0.07)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}
             >
               {ROLE_LABELS[r]}
             </a>
@@ -485,38 +485,38 @@ function DangerSection({ onSignOut }: { onSignOut: () => void }) {
 
       {/* Sign out */}
       {confirming === "signout" ? (
-        <motion.div className="px-3 py-3 rounded-xl" style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.2)" }}
+        <motion.div className="px-3 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.2)" }}
           initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-          <span className="text-[12px] text-[#E8E8ED] block mb-2" style={{ fontFamily: "var(--font-body)" }}>Sign out of CareerEdge?</span>
+          <span className="text-[12px] text-[var(--ce-text-primary)] block mb-2" style={{ fontFamily: "var(--font-body)" }}>Sign out of CareerEdge?</span>
           <div className="flex gap-2">
-            <button onClick={() => setConfirming(null)} className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>Cancel</button>
-            <button onClick={onSignOut} className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)", color: "#F59E0B", fontFamily: "var(--font-display)", fontWeight: 500 }}>Sign out</button>
+            <button onClick={() => setConfirming(null)} className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: `rgba(${GLASS_TINT},0.04)`, border: `1px solid rgba(${GLASS_TINT},0.08)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}>Cancel</button>
+            <button onClick={onSignOut} className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.2)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-display)", fontWeight: 500 }}>Sign out</button>
           </div>
         </motion.div>
       ) : (
         <button onClick={() => setConfirming("signout")}
-          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] cursor-pointer hover:bg-[rgba(245,158,11,0.06)] transition-colors"
-          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] cursor-pointer hover:bg-[rgba(var(--ce-role-edgepreneur-rgb),0.06)] transition-colors"
+          style={{ background: `rgba(${GLASS_TINT},0.02)`, border: `1px solid rgba(${GLASS_TINT},0.06)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}>
           <LogOut className="w-4 h-4" /> Sign out
         </button>
       )}
 
       {/* Delete */}
       {confirming === "delete" ? (
-        <motion.div className="px-3 py-3 rounded-xl" style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.2)" }}
+        <motion.div className="px-3 py-3 rounded-xl" style={{ background: "rgba(var(--ce-status-error-rgb),0.06)", border: "1px solid rgba(var(--ce-status-error-rgb),0.2)" }}
           initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }}>
-          <span className="text-[12px] text-[#E8E8ED] block mb-1" style={{ fontFamily: "var(--font-body)" }}>This will permanently delete your account and all data.</span>
-          <span className="text-[11px] text-[#EF4444] block mb-2" style={{ fontFamily: "var(--font-body)" }}>This action cannot be undone.</span>
+          <span className="text-[12px] text-[var(--ce-text-primary)] block mb-1" style={{ fontFamily: "var(--font-body)" }}>This will permanently delete your account and all data.</span>
+          <span className="text-[11px] text-[var(--ce-status-error)] block mb-2" style={{ fontFamily: "var(--font-body)" }}>This action cannot be undone.</span>
           <div className="flex gap-2">
-            <button onClick={() => setConfirming(null)} className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>Cancel</button>
+            <button onClick={() => setConfirming(null)} className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: `rgba(${GLASS_TINT},0.04)`, border: `1px solid rgba(${GLASS_TINT},0.08)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}>Cancel</button>
             <button onClick={() => { setConfirming(null); toast.error("Request submitted", "Your data will be deleted within 30 days per our privacy policy"); }}
-              className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#EF4444", fontFamily: "var(--font-display)", fontWeight: 500 }}>Delete account</button>
+              className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer" style={{ background: "rgba(var(--ce-status-error-rgb),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb),0.2)", color: "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>Delete account</button>
           </div>
         </motion.div>
       ) : (
         <button onClick={() => setConfirming("delete")}
-          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] cursor-pointer hover:bg-[rgba(239,68,68,0.04)] transition-colors"
-          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(239,68,68,0.12)", color: "#EF4444", fontFamily: "var(--font-body)" }}>
+          className="w-full flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] cursor-pointer hover:bg-[rgba(var(--ce-status-error-rgb),0.04)] transition-colors"
+          style={{ background: `rgba(${GLASS_TINT},0.02)`, border: "1px solid rgba(var(--ce-status-error-rgb),0.12)", color: "var(--ce-status-error)", fontFamily: "var(--font-body)" }}>
           <Trash2 className="w-4 h-4" /> Delete account
         </button>
       )}
@@ -574,39 +574,39 @@ export function SettingsPanel({
           {/* Backdrop */}
           <div
             className="absolute inset-0"
-            style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+            style={{ background: SURFACE.overlay, backdropFilter: "blur(4px)" }}
             onClick={onClose}
           />
 
           {/* Panel */}
           <motion.div
             className="relative w-[680px] h-full flex flex-col"
-            style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)" }}
+            style={{ background: SURFACE.modalBg, borderLeft: `1px solid rgba(${GLASS_TINT},0.06)` }}
             initial={{ x: 680 }}
             animate={{ x: 0 }}
             exit={{ x: 680 }}
             transition={{ duration: 0.4, ease: EASE }}
           >
             {/* Header */}
-            <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: `1px solid rgba(${GLASS_TINT},0.06)` }}>
               <div className="flex items-center gap-3">
                 <div className="w-8 h-8 rounded-xl flex items-center justify-center" style={{ background: `${accent}12`, border: `1px solid ${accent}20`, color: accent }}>
                   <SettingsIcon className="w-4 h-4" />
                 </div>
                 <div>
-                  <span className="text-[15px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Settings</span>
+                  <span className="text-[15px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Settings</span>
                   <span className="text-[11px]" style={{ color: accent, fontFamily: "var(--font-body)" }}>{ROLE_LABELS[role]}</span>
                 </div>
               </div>
-              <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors">
-                <X className="w-4 h-4 text-[#6B7280]" />
+              <button onClick={onClose} className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+                <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
               </button>
             </div>
 
             {/* Body — 2-col */}
             <div className="flex flex-1 overflow-hidden">
               {/* Sidebar nav */}
-              <div className="w-48 flex-shrink-0 py-4 px-3 flex flex-col gap-0.5" style={{ borderRight: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="w-48 flex-shrink-0 py-4 px-3 flex flex-col gap-0.5" style={{ borderRight: `1px solid rgba(${GLASS_TINT},0.05)` }}>
                 {ALL_SECTIONS.map(section => (
                   <button
                     key={section.id}
@@ -615,10 +615,10 @@ export function SettingsPanel({
                     style={{
                       background: activeSection === section.id ? `${accent}10` : "transparent",
                       border: `1px solid ${activeSection === section.id ? `${accent}20` : "transparent"}`,
-                      color: activeSection === section.id ? accent : "#6B7280",
+                      color: activeSection === section.id ? accent : TEXT.secondary,
                     }}
                   >
-                    <div style={{ color: activeSection === section.id ? accent : "#6B7280" }}>{section.icon}</div>
+                    <div style={{ color: activeSection === section.id ? accent : TEXT.secondary }}>{section.icon}</div>
                     <span className="text-[12px]" style={{ fontFamily: "var(--font-body)" }}>{section.label}</span>
                   </button>
                 ))}

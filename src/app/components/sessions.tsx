@@ -14,7 +14,9 @@ import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { SophiaMark } from "./sophia-mark";
-import { RoleShell, GlassCard, SophiaInsight, type RoleId, type NavigateFn } from "./role-shell";
+import { RoleShell, GlassCard, type RoleId, type NavigateFn } from "./role-shell";
+import { EASE } from "./tokens";
+import { SophiaInsight } from "./sophia-patterns";
 import {
   Calendar, Clock, Star, DollarSign, Users, Video,
   ChevronRight, ChevronLeft, Check, X, MessageSquare,
@@ -26,8 +28,6 @@ import {
   ChevronDown, ChevronUp, MoreHorizontal,
   Info, Bell, Download, BarChart3,
 } from "lucide-react";
-
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 // ─── Types ────────────────────────────────────────────────────────────────
 
@@ -131,7 +131,7 @@ const MENTORS: Mentor[] = [
     nextAvailable: "Tomorrow, 2:00 PM",
     matchReason: "Alice specializes in PM transitions — your target role. She's guided 23 people through this exact career shift.",
     matchConfidence: "high", sessionCount: 156,
-    initials: "AC", color: "#22D3EE", cancellationPolicy: "moderate",
+    initials: "AC", color: "var(--ce-role-edgestar)", cancellationPolicy: "moderate",
     languages: ["English", "Mandarin"],
     bio: "10 years in product at Stripe, Notion, and early-stage startups. I help career changers break into PM roles through structured roadmaps and interview prep.",
     earnings: 63.75, commission: 11.25,
@@ -145,7 +145,7 @@ const MENTORS: Mentor[] = [
     nextAvailable: "Today, 5:00 PM",
     matchReason: "Your UX skills gap — Marcus has guided 12 transitions like yours and knows exactly what portfolio reviewers look for.",
     matchConfidence: "high", sessionCount: 89,
-    initials: "MJ", color: "#B3FF3B", cancellationPolicy: "flexible",
+    initials: "MJ", color: "var(--ce-lime)", cancellationPolicy: "flexible",
     languages: ["English"],
     bio: "Design systems architect by day, volunteer mentor on CareerEdge. I love helping people build portfolios that actually land jobs at top-tier design shops.",
     earnings: 0, commission: 0,
@@ -159,7 +159,7 @@ const MENTORS: Mentor[] = [
     nextAvailable: "Thursday, 9:00 AM",
     matchReason: "Your international career goals align directly with Dr. Sharma's specialty. She's worked across 4 continents.",
     matchConfidence: "medium", sessionCount: 34,
-    initials: "PS", color: "#8B5CF6", cancellationPolicy: "strict",
+    initials: "PS", color: "var(--ce-role-guide)", cancellationPolicy: "strict",
     languages: ["English", "Hindi"],
     bio: "PhD in organizational psychology, worked across 4 continents. I help professionals navigate cross-border career opportunities with clarity and a concrete action plan.",
     earnings: 85, commission: 15,
@@ -173,7 +173,7 @@ const MENTORS: Mentor[] = [
     nextAvailable: "Wednesday, 11:00 AM",
     matchReason: "Your upcoming Google interview — James has coached 23 successful FAANG hires and knows the exact rubric they use.",
     matchConfidence: "high", sessionCount: 203,
-    initials: "JO", color: "#F59E0B", cancellationPolicy: "flexible",
+    initials: "JO", color: "var(--ce-role-edgepreneur)", cancellationPolicy: "flexible",
     languages: ["English"],
     bio: "EM at Stripe, previously Google. I volunteer because I know how hard technical interviews are — and how much better you can do with the right prep.",
     earnings: 0, commission: 0,
@@ -183,19 +183,19 @@ const MENTORS: Mentor[] = [
 const UPCOMING_SESSIONS: UpcomingSession[] = [
   {
     id: "s1", mentorId: "m1", mentorName: "Alice Chen", mentorInitials: "AC",
-    mentorColor: "#22D3EE", sessionType: "1:1 Mentoring",
+    mentorColor: "var(--ce-role-edgestar)", sessionType: "1:1 Mentoring",
     date: "Today", time: "2:00 PM", timezone: "EST", duration: 60,
     status: "in_2_hours", threadId: "t1", prepReady: true, price: 75,
   },
   {
     id: "s2", mentorId: "m2", mentorName: "Marcus Johnson", mentorInitials: "MJ",
-    mentorColor: "#B3FF3B", sessionType: "Mock Interview",
+    mentorColor: "var(--ce-lime)", sessionType: "Mock Interview",
     date: "Tomorrow", time: "5:00 PM", timezone: "PST", duration: 30,
     status: "upcoming", threadId: "t2", prepReady: false, price: 0,
   },
   {
     id: "s3", mentorId: "m4", mentorName: "James Okafor", mentorInitials: "JO",
-    mentorColor: "#F59E0B", sessionType: "Mock Interview",
+    mentorColor: "var(--ce-role-edgepreneur)", sessionType: "Mock Interview",
     date: "March 25", time: "11:00 AM", timezone: "WAT", duration: 60,
     status: "upcoming", threadId: "t3", prepReady: false, price: 0,
   },
@@ -203,7 +203,7 @@ const UPCOMING_SESSIONS: UpcomingSession[] = [
 
 const SESSION_HISTORY: SessionHistoryItem[] = [
   {
-    id: "h1", mentorName: "Alice Chen", mentorInitials: "AC", mentorColor: "#22D3EE",
+    id: "h1", mentorName: "Alice Chen", mentorInitials: "AC", mentorColor: "var(--ce-role-edgestar)",
     sessionType: "Career Coaching", date: "March 10, 2026", duration: 60,
     guideRating: 5, myRating: 5, price: 75,
     notes: "Focus on PM case study structure. Alice suggested breaking into PM with 3 strong case studies rather than applying broadly. Recommended targeting Series B–C startups first.",
@@ -211,7 +211,7 @@ const SESSION_HISTORY: SessionHistoryItem[] = [
     tasksAdded: true, awaitingRating: false,
   },
   {
-    id: "h2", mentorName: "Marcus Johnson", mentorInitials: "MJ", mentorColor: "#B3FF3B",
+    id: "h2", mentorName: "Marcus Johnson", mentorInitials: "MJ", mentorColor: "var(--ce-lime)",
     sessionType: "1:1 Mentoring", date: "March 5, 2026", duration: 60,
     guideRating: 5, myRating: 4, price: 0,
     notes: "Portfolio critique session. Marcus recommended adding interaction annotations to case studies. Motion work is strong — lead with it. Remove the early student work from page 1.",
@@ -219,7 +219,7 @@ const SESSION_HISTORY: SessionHistoryItem[] = [
     tasksAdded: true, awaitingRating: false,
   },
   {
-    id: "h3", mentorName: "Dr. Priya Sharma", mentorInitials: "PS", mentorColor: "#8B5CF6",
+    id: "h3", mentorName: "Dr. Priya Sharma", mentorInitials: "PS", mentorColor: "var(--ce-role-guide)",
     sessionType: "Career Coaching", date: "February 28, 2026", duration: 60,
     guideRating: 5, myRating: 5, price: 100,
     notes: "International career mobility strategy. Dr. Sharma outlined 3-step approach: skill documentation, regional certification mapping, and employer targeting by geography.",
@@ -227,7 +227,7 @@ const SESSION_HISTORY: SessionHistoryItem[] = [
     tasksAdded: true, awaitingRating: false,
   },
   {
-    id: "h4", mentorName: "James Okafor", mentorInitials: "JO", mentorColor: "#F59E0B",
+    id: "h4", mentorName: "James Okafor", mentorInitials: "JO", mentorColor: "var(--ce-role-edgepreneur)",
     sessionType: "Mock Interview", date: "February 20, 2026", duration: 30,
     guideRating: 4, myRating: 0, price: 0,
     notes: "Technical interview simulation. Strong on behavioral rounds, needs work on system design under time pressure. Time management during technical rounds is key.",
@@ -235,7 +235,7 @@ const SESSION_HISTORY: SessionHistoryItem[] = [
     tasksAdded: false, awaitingRating: true,
   },
   {
-    id: "h5", mentorName: "Alice Chen", mentorInitials: "AC", mentorColor: "#22D3EE",
+    id: "h5", mentorName: "Alice Chen", mentorInitials: "AC", mentorColor: "var(--ce-role-edgestar)",
     sessionType: "1:1 Mentoring", date: "February 10, 2026", duration: 30,
     guideRating: 5, myRating: 5, price: 75,
     notes: "First session. Covered PM fundamentals, Alice reviewed background and suggested 6-month roadmap. Focus on: outcome-based thinking, stakeholder management, and product analytics.",
@@ -246,21 +246,21 @@ const SESSION_HISTORY: SessionHistoryItem[] = [
 
 const GUIDE_UPCOMING: GuideSession[] = [
   {
-    id: "gu1", bookerName: "Sharon Lee", bookerInitials: "SL", bookerColor: "#22D3EE",
+    id: "gu1", bookerName: "Sharon Lee", bookerInitials: "SL", bookerColor: "var(--ce-role-edgestar)",
     sessionType: "1:1 Mentoring", date: "Today", time: "10:00 AM", duration: 60,
     status: "in_2_hours",
     sophiaContext: "Sharon is on Phase 2 of 4, Interaction Design focus. Completed 2 case study milestones this week. Resume score: 82. Has 2 applications in 'Interviewing' status at Google and Figma. She may want to discuss portfolio structure or interview prep.",
     price: 75, earnings: 63.75,
   },
   {
-    id: "gu2", bookerName: "Marcus Rivera", bookerInitials: "MR", bookerColor: "#B3FF3B",
+    id: "gu2", bookerName: "Marcus Rivera", bookerInitials: "MR", bookerColor: "var(--ce-lime)",
     sessionType: "Mock Interview", date: "Today", time: "2:00 PM", duration: 30,
     status: "upcoming",
     sophiaContext: "Marcus is preparing for a Google SWE interview next week. 60% through his Interview Prep module. Focus: system design and behavioral questions. He tends to over-explain — help him structure concise, STAR-format answers.",
     price: 0, earnings: 0,
   },
   {
-    id: "gu3", bookerName: "Alex Rivera", bookerInitials: "AR", bookerColor: "#8B5CF6",
+    id: "gu3", bookerName: "Alex Rivera", bookerInitials: "AR", bookerColor: "var(--ce-role-guide)",
     sessionType: "Career Coaching", date: "Tomorrow", time: "4:00 PM", duration: 60,
     status: "upcoming",
     sophiaContext: "Alex is transitioning from marketing to UX research. Phase 1 of 6, 25% complete. No previous UX experience — significant pivot. Motivated but overwhelmed. Start with a realistic 6-month view and celebrate the small wins.",
@@ -337,17 +337,17 @@ function StarRating({ value, max = 5, size = 14, interactive = false, onChange }
             onMouseEnter={() => setHovered(n)}
             onMouseLeave={() => setHovered(null)}
             className="cursor-pointer"
-            style={{ color: n <= display ? "#F59E0B" : "#374151", padding: 0, background: "none", border: "none" }}
+            style={{ color: n <= display ? "var(--ce-role-edgepreneur)" : "var(--ce-text-quaternary)", padding: 0, background: "none", border: "none" }}
           >
-            <Star style={{ width: size, height: size }} fill={n <= display ? "#F59E0B" : "none"} />
+            <Star style={{ width: size, height: size }} fill={n <= display ? "var(--ce-role-edgepreneur)" : "none"} />
           </button>
         ) : (
           <span
             key={n}
             aria-hidden="true"
-            style={{ color: n <= display ? "#F59E0B" : "#374151", display: "inline-flex" }}
+            style={{ color: n <= display ? "var(--ce-role-edgepreneur)" : "var(--ce-text-quaternary)", display: "inline-flex" }}
           >
-            <Star style={{ width: size, height: size }} fill={n <= display ? "#F59E0B" : "none"} />
+            <Star style={{ width: size, height: size }} fill={n <= display ? "var(--ce-role-edgepreneur)" : "none"} />
           </span>
         )
       )}
@@ -358,13 +358,13 @@ function StarRating({ value, max = 5, size = 14, interactive = false, onChange }
 function PriceBadge({ mentor }: { mentor: Mentor }) {
   if (mentor.priceModel === "free") {
     return (
-      <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(179,255,59,0.1)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}>
+      <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>
         Free
       </span>
     );
   }
   return (
-    <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(245,158,11,0.1)", color: "#F59E0B", fontFamily: "var(--font-body)" }}>
+    <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.1)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>
       ${mentor.price}/session
     </span>
   );
@@ -372,13 +372,13 @@ function PriceBadge({ mentor }: { mentor: Mentor }) {
 
 function SessionTypeBadge({ type }: { type: string }) {
   const colors: Record<string, string> = {
-    "1:1 Mentoring": "#22D3EE",
-    "Mock Interview": "#8B5CF6",
-    "Career Coaching": "#F59E0B",
-    "Group Workshop": "#EC4899",
-    "Office Hours": "#10B981",
+    "1:1 Mentoring": "var(--ce-role-edgestar)",
+    "Mock Interview": "var(--ce-role-guide)",
+    "Career Coaching": "var(--ce-role-edgepreneur)",
+    "Group Workshop": "var(--ce-role-parent)",
+    "Office Hours": "var(--ce-role-employer)",
   };
-  const color = colors[type] || "#9CA3AF";
+  const color = colors[type] || "var(--ce-text-secondary)";
   return (
     <span className="text-[10px] px-2 py-0.5 rounded-md whitespace-nowrap" style={{ background: `${color}12`, color, fontFamily: "var(--font-body)", border: `1px solid ${color}20` }}>
       {type}
@@ -396,8 +396,8 @@ function MentorCard({ mentor, onBook, compact = false }: {
   return (
     <motion.div
       className="rounded-2xl p-5 flex flex-col gap-4 cursor-pointer group"
-      style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)", transition: "border-color 0.2s" }}
-      whileHover={{ borderColor: "rgba(255,255,255,0.1)", y: -1 }}
+      style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)", transition: "border-color 0.2s" }}
+      whileHover={{ borderColor: "rgba(var(--ce-glass-tint),0.1)", y: -1 }}
       transition={{ duration: 0.15 }}
     >
       {/* Header */}
@@ -407,21 +407,21 @@ function MentorCard({ mentor, onBook, compact = false }: {
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2 flex-wrap">
-            <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{mentor.name}</span>
+            <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{mentor.name}</span>
             <PriceBadge mentor={mentor} />
           </div>
-          <span className="text-[11px] text-[#6B7280] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{mentor.title}</span>
+          <span className="text-[11px] text-ce-text-tertiary block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{mentor.title}</span>
           <div className="flex items-center gap-2 mt-1.5">
             <StarRating value={mentor.rating} size={11} />
-            <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{mentor.rating} · {mentor.reviewCount} reviews</span>
+            <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{mentor.rating} · {mentor.reviewCount} reviews</span>
           </div>
         </div>
       </div>
 
       {/* Sophia match reason */}
-      <div className="flex items-start gap-2 px-3 py-2 rounded-xl" style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)" }}>
+      <div className="flex items-start gap-2 px-3 py-2 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
         <SophiaMark size={14} glowing={false} />
-        <p className="text-[11px] text-[#22D3EE] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{mentor.matchReason}</p>
+        <p className="text-[11px] text-ce-cyan leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{mentor.matchReason}</p>
       </div>
 
       {/* Session types */}
@@ -433,7 +433,7 @@ function MentorCard({ mentor, onBook, compact = false }: {
       {!compact && (
         <div className="flex flex-wrap gap-1.5">
           {mentor.specialty.map((s) => (
-            <span key={s} className="text-[10px] text-[#9CA3AF] px-2 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+            <span key={s} className="text-[10px] text-ce-text-secondary px-2 py-0.5 rounded-md" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
               {s}
             </span>
           ))}
@@ -441,15 +441,15 @@ function MentorCard({ mentor, onBook, compact = false }: {
       )}
 
       {/* Footer */}
-      <div className="flex items-center justify-between mt-auto pt-1" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="flex items-center justify-between mt-auto pt-1" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <div className="flex items-center gap-1.5">
-          <Clock className="w-3 h-3 text-[#6B7280]" />
-          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Next: {mentor.nextAvailable}</span>
+          <Clock className="w-3 h-3 text-ce-text-tertiary" />
+          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Next: {mentor.nextAvailable}</span>
         </div>
         <button
           onClick={() => onBook(mentor)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-all"
-          style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}
+          style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
         >
           Book Session <ArrowRight className="w-3 h-3" />
         </button>
@@ -466,19 +466,19 @@ function SophiaPicksSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
       {/* Sophia timing nudge */}
       <motion.div
         className="flex items-start gap-3 px-4 py-3 rounded-xl mb-5"
-        style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.06), rgba(179,255,59,0.03))", border: "1px solid rgba(34,211,238,0.1)" }}
+        style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.06), rgba(var(--ce-lime-rgb),0.03))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}
         initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}
       >
         <SophiaMark size={16} glowing={false} />
         <div className="flex-1">
-          <p className="text-[13px] text-[#E8E8ED] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-            <span className="text-[#22D3EE]">Good pairing opportunity.</span> You just completed your Phase 2 milestone — a debrief session this week would help solidify your learnings and accelerate Phase 3.
+          <p className="text-[13px] text-ce-text-primary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-ce-cyan">Good pairing opportunity.</span> You just completed your Phase 2 milestone — a debrief session this week would help solidify your learnings and accelerate Phase 3.
           </p>
           <div className="flex gap-2 mt-2">
-            <button className="text-[11px] text-[#22D3EE] px-2.5 py-1 rounded-md cursor-pointer" style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.15)", fontFamily: "var(--font-body)" }}>
+            <button className="text-[11px] text-ce-cyan px-2.5 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", fontFamily: "var(--font-body)" }}>
               Find a debrief mentor →
             </button>
-            <button className="text-[11px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+            <button className="text-[11px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
               Not now
             </button>
           </div>
@@ -495,10 +495,10 @@ function SophiaPicksSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
       </div>
 
       <motion.button
-        className="w-full mt-4 py-3 rounded-xl text-[13px] text-[#9CA3AF] flex items-center justify-center gap-2 cursor-pointer"
-        style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)", fontFamily: "var(--font-body)" }}
+        className="w-full mt-4 py-3 rounded-xl text-[13px] text-ce-text-secondary flex items-center justify-center gap-2 cursor-pointer"
+        style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)", fontFamily: "var(--font-body)" }}
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.7 }}
-        whileHover={{ backgroundColor: "rgba(255,255,255,0.04)" }}
+        whileHover={{ backgroundColor: "rgba(var(--ce-glass-tint),0.04)" }}
       >
         Browse all mentors <ChevronRight className="w-4 h-4" />
       </motion.button>
@@ -543,13 +543,13 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
     <div>
       {/* Search + filters */}
       <div className="flex items-center gap-3 mb-5">
-        <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
-          <Search className="w-4 h-4 text-[#6B7280]" />
+        <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+          <Search className="w-4 h-4 text-ce-text-tertiary" />
           <input
             value={search}
             onChange={e => setSearch(e.target.value)}
             placeholder="Search mentors, specialties…"
-            className="flex-1 bg-transparent text-[13px] text-[#E8E8ED] outline-none placeholder:text-[#374151]"
+            className="flex-1 bg-transparent text-[13px] text-ce-text-primary outline-none placeholder:text-[var(--ce-text-quaternary)]"
             style={{ fontFamily: "var(--font-body)" }}
           />
         </div>
@@ -557,7 +557,7 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
           <button
             onClick={() => setOpenFilter(openFilter ? null : "all")}
             className="flex items-center gap-2 px-3 py-2 rounded-xl text-[12px] cursor-pointer"
-            style={{ background: totalFilters > 0 ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.03)", border: totalFilters > 0 ? "1px solid rgba(34,211,238,0.15)" : "1px solid rgba(255,255,255,0.06)", color: totalFilters > 0 ? "#22D3EE" : "#9CA3AF", fontFamily: "var(--font-body)" }}
+            style={{ background: totalFilters > 0 ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)", border: totalFilters > 0 ? "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: totalFilters > 0 ? "var(--ce-role-edgestar)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
           >
             <Filter className="w-3.5 h-3.5" /> Filters {totalFilters > 0 && `(${totalFilters})`}
           </button>
@@ -566,12 +566,12 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
             {openFilter && (
               <motion.div
                 className="absolute top-10 right-0 z-30 w-[320px] rounded-2xl p-4"
-                style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.08)", backdropFilter: "blur(20px)" }}
+                style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", backdropFilter: "blur(20px)" }}
                 initial={{ opacity: 0, y: -8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -8, scale: 0.97 }}
               >
                 {Object.entries(FILTER_OPTIONS).map(([cat, opts]) => (
                   <div key={cat} className="mb-4">
-                    <span className="text-[10px] text-[#6B7280] uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "0.08em" }}>
+                    <span className="text-[10px] text-ce-text-tertiary uppercase tracking-wider block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500, letterSpacing: "0.08em" }}>
                       {cat.replace(/([A-Z])/g, ' $1').trim()}
                     </span>
                     <div className="flex flex-wrap gap-1.5">
@@ -582,7 +582,7 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
                             key={opt}
                             onClick={() => toggleFilter(cat, opt)}
                             className="text-[11px] px-2.5 py-1 rounded-md cursor-pointer transition-colors"
-                            style={{ background: active ? "rgba(179,255,59,0.12)" : "rgba(255,255,255,0.04)", border: active ? "1px solid rgba(179,255,59,0.25)" : "1px solid rgba(255,255,255,0.06)", color: active ? "#B3FF3B" : "#9CA3AF", fontFamily: "var(--font-body)" }}
+                            style={{ background: active ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: active ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: active ? "var(--ce-lime)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                           >
                             {opt}
                           </button>
@@ -591,7 +591,7 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
                     </div>
                   </div>
                 ))}
-                <button onClick={() => { setActiveFilters({}); setOpenFilter(null); }} className="text-[11px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+                <button onClick={() => { setActiveFilters({}); setOpenFilter(null); }} className="text-[11px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
                   Clear all filters
                 </button>
               </motion.div>
@@ -601,7 +601,7 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
       </div>
 
       {/* Results */}
-      <div className="text-[11px] text-[#6B7280] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+      <div className="text-[11px] text-ce-text-tertiary mb-3" style={{ fontFamily: "var(--font-body)" }}>
         {filtered.length} mentors available
       </div>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
@@ -614,10 +614,10 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
       {filtered.length === 0 && (
         <div className="py-16 flex flex-col items-center gap-4">
           <SophiaMark size={32} glowing={false} />
-          <p className="text-[13px] text-[#9CA3AF] text-center max-w-[300px]" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[13px] text-ce-text-secondary text-center max-w-[300px]" style={{ fontFamily: "var(--font-body)" }}>
             No mentors match your current filters. I'll notify you when one becomes available. Try exploring other focus areas.
           </p>
-          <button onClick={() => setActiveFilters({})} className="text-[12px] text-[#22D3EE] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.12)", fontFamily: "var(--font-body)" }}>
+          <button onClick={() => setActiveFilters({})} className="text-[12px] text-ce-cyan px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", fontFamily: "var(--font-body)" }}>
             Clear filters
           </button>
         </div>
@@ -635,9 +635,9 @@ function UpcomingSessionsStrip({ sessions, onOpenThread }: {
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <Calendar className="w-4 h-4 text-[#B3FF3B]" />
-        <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming Sessions</span>
-        <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(179,255,59,0.1)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}>{sessions.length}</span>
+        <Calendar className="w-4 h-4 text-ce-lime" />
+        <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming Sessions</span>
+        <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>{sessions.length}</span>
       </div>
       <div className="flex gap-3 overflow-x-auto pb-2" style={{ scrollbarWidth: "none" }}>
         {sessions.map((s, i) => (
@@ -645,15 +645,15 @@ function UpcomingSessionsStrip({ sessions, onOpenThread }: {
             key={s.id}
             className="flex-shrink-0 w-[260px] rounded-2xl p-4"
             style={{
-              background: s.status === "in_2_hours" ? "linear-gradient(135deg, rgba(179,255,59,0.06), rgba(255,255,255,0.02))" : "rgba(255,255,255,0.025)",
-              border: s.status === "in_2_hours" ? "1px solid rgba(179,255,59,0.15)" : "1px solid rgba(255,255,255,0.05)",
+              background: s.status === "in_2_hours" ? "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.06), rgba(var(--ce-glass-tint),0.02))" : "rgba(var(--ce-glass-tint),0.025)",
+              border: s.status === "in_2_hours" ? "1px solid rgba(var(--ce-lime-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)",
             }}
             initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 + i * 0.07, duration: 0.35, ease: EASE }}
           >
             {s.status === "in_2_hours" && (
               <div className="flex items-center gap-1.5 mb-3">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#B3FF3B]" style={{ animation: "pulse 2s infinite" }} />
-                <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>Starting in 2 hours</span>
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)]" style={{ animation: "pulse 2s infinite" }} />
+                <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>Starting in 2 hours</span>
               </div>
             )}
             <div className="flex items-center gap-2 mb-2">
@@ -661,24 +661,24 @@ function UpcomingSessionsStrip({ sessions, onOpenThread }: {
                 <span className="text-[11px]" style={{ color: s.mentorColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.mentorInitials}</span>
               </div>
               <div>
-                <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{s.mentorName}</span>
-                <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{s.date} · {s.time} {s.timezone}</span>
+                <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{s.mentorName}</span>
+                <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{s.date} · {s.time} {s.timezone}</span>
               </div>
             </div>
             <div className="flex gap-1.5 mb-3">
               <SessionTypeBadge type={s.sessionType} />
-              <span className="text-[10px] text-[#6B7280] px-2 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)" }}>{s.duration} min</span>
+              <span className="text-[10px] text-ce-text-tertiary px-2 py-0.5 rounded-md" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)" }}>{s.duration} min</span>
               {s.price === 0 ? (
-                <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: "rgba(179,255,59,0.08)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}>Free</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>Free</span>
               ) : (
-                <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: "rgba(245,158,11,0.08)", color: "#F59E0B", fontFamily: "var(--font-body)" }}>${s.price}</span>
+                <span className="text-[10px] px-2 py-0.5 rounded-md" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.08)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>${s.price}</span>
               )}
             </div>
             <div className="flex gap-2">
-              <button onClick={() => onOpenThread?.(s.threadId)} className="flex-1 text-[11px] py-1.5 rounded-lg text-center cursor-pointer" style={{ background: "rgba(34,211,238,0.08)", color: "#22D3EE", border: "1px solid rgba(34,211,238,0.15)", fontFamily: "var(--font-body)" }}>
+              <button onClick={() => onOpenThread?.(s.threadId)} className="flex-1 text-[11px] py-1.5 rounded-lg text-center cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                 Open thread
               </button>
-              <button className="flex-1 text-[11px] py-1.5 rounded-lg text-center cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.05)", fontFamily: "var(--font-body)" }}>
+              <button className="flex-1 text-[11px] py-1.5 rounded-lg text-center cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.05)", fontFamily: "var(--font-body)" }}>
                 Reschedule
               </button>
             </div>
@@ -700,33 +700,33 @@ function PrepBriefCard({ session }: { session: UpcomingSession }) {
   return (
     <motion.div
       className="rounded-2xl p-5 mb-4"
-      style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.07), rgba(179,255,59,0.03))", border: "1px solid rgba(34,211,238,0.12)" }}
+      style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.07), rgba(var(--ce-lime-rgb),0.03))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)" }}
       initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.35, ease: EASE }}
     >
       <div className="flex items-center gap-2 mb-3">
         <SophiaMark size={16} glowing={false} />
-        <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Prep — {session.mentorName}</span>
-        <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{session.date} · {session.time} {session.timezone}</span>
+        <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Prep — {session.mentorName}</span>
+        <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{session.date} · {session.time} {session.timezone}</span>
       </div>
-      <p className="text-[12px] text-[#9CA3AF] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+      <p className="text-[12px] text-ce-text-secondary mb-3" style={{ fontFamily: "var(--font-body)" }}>
         Based on your roadmap progress, here's what might be most valuable to discuss:
       </p>
       <ul className="flex flex-col gap-2 mb-4">
         {topics.map((t, i) => (
           <li key={i} className="flex items-start gap-2">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#22D3EE] mt-1.5 flex-shrink-0" />
-            <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{t}</span>
+            <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)] mt-1.5 flex-shrink-0" />
+            <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{t}</span>
           </li>
         ))}
       </ul>
       <div className="flex gap-2">
-        <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
           <Video className="w-3 h-3" /> Join Call
         </button>
-        <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+        <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
           <MessageSquare className="w-3 h-3" /> Open thread
         </button>
-        <button className="px-3 py-1.5 text-[11px] text-[#6B7280] rounded-lg cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+        <button className="px-3 py-1.5 text-[11px] text-ce-text-tertiary rounded-lg cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
           Reschedule
         </button>
       </div>
@@ -747,7 +747,7 @@ function SessionHistoryList({ items, onRateSession }: {
         <motion.div
           key={item.id}
           className="rounded-2xl overflow-hidden"
-          style={{ background: "rgba(255,255,255,0.025)", border: item.awaitingRating ? "1px solid rgba(245,158,11,0.2)" : "1px solid rgba(255,255,255,0.05)" }}
+          style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: item.awaitingRating ? "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.06, duration: 0.35, ease: EASE }}
         >
           {/* Row */}
@@ -760,22 +760,22 @@ function SessionHistoryList({ items, onRateSession }: {
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{item.mentorName}</span>
+                <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{item.mentorName}</span>
                 <SessionTypeBadge type={item.sessionType} />
                 {item.awaitingRating && (
-                  <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(245,158,11,0.12)", color: "#F59E0B", fontFamily: "var(--font-body)" }}>
+                  <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.12)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>
                     Rate this session
                   </span>
                 )}
               </div>
               <div className="flex items-center gap-3 mt-0.5">
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{item.date} · {item.duration} min</span>
-                {item.price > 0 && <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>· ${item.price}</span>}
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{item.date} · {item.duration} min</span>
+                {item.price > 0 && <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>· ${item.price}</span>}
               </div>
             </div>
             <div className="flex items-center gap-3 flex-shrink-0">
               {item.myRating > 0 && <StarRating value={item.myRating} size={12} />}
-              {expanded === item.id ? <ChevronUp className="w-4 h-4 text-[#6B7280]" /> : <ChevronDown className="w-4 h-4 text-[#6B7280]" />}
+              {expanded === item.id ? <ChevronUp className="w-4 h-4 text-ce-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-ce-text-tertiary" />}
             </div>
           </button>
 
@@ -785,7 +785,7 @@ function SessionHistoryList({ items, onRateSession }: {
               <motion.div
                 initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.25, ease: [0.32, 0.72, 0, 1] }}
-                style={{ overflow: "hidden", borderTop: "1px solid rgba(255,255,255,0.05)" }}
+                style={{ overflow: "hidden", borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
               >
                 <div className="px-5 py-4 flex flex-col gap-4">
                   {/* Rating prompt */}
@@ -793,36 +793,36 @@ function SessionHistoryList({ items, onRateSession }: {
                     <button
                       onClick={() => onRateSession?.(item)}
                       className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer w-full text-left"
-                      style={{ background: "rgba(245,158,11,0.08)", border: "1px solid rgba(245,158,11,0.15)" }}
+                      style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.15)" }}
                     >
-                      <Star className="w-4 h-4 text-[#F59E0B]" />
-                      <span className="text-[12px] text-[#F59E0B]" style={{ fontFamily: "var(--font-body)" }}>Rate your session with James →</span>
+                      <Star className="w-4 h-4 text-[var(--ce-role-edgepreneur)]" />
+                      <span className="text-[12px] text-[var(--ce-role-edgepreneur)]" style={{ fontFamily: "var(--font-body)" }}>Rate your session with James →</span>
                     </button>
                   )}
 
                   {/* Notes */}
                   <div>
-                    <span className="text-[11px] text-[#6B7280] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Notes</span>
-                    <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{item.notes}</p>
+                    <span className="text-[11px] text-ce-text-tertiary block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Notes</span>
+                    <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{item.notes}</p>
                   </div>
 
                   {/* Sophia follow-up */}
-                  <div className="flex items-start gap-2 px-3 py-3 rounded-xl" style={{ background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.1)" }}>
+                  <div className="flex items-start gap-2 px-3 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.05)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
                     <SophiaMark size={14} glowing={false} />
                     <div className="flex-1">
-                      <p className="text-[11px] text-[#22D3EE] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{item.sophiaFollowUp}</p>
+                      <p className="text-[11px] text-ce-cyan leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{item.sophiaFollowUp}</p>
                       {!item.tasksAdded && (
                         <div className="flex gap-2 mt-2">
-                          <button className="text-[10px] text-[#B3FF3B] px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.15)", fontFamily: "var(--font-body)" }}>
+                          <button className="text-[10px] text-ce-lime px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                             Add to roadmap →
                           </button>
-                          <button className="text-[10px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Dismiss</button>
+                          <button className="text-[10px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Dismiss</button>
                         </div>
                       )}
                       {item.tasksAdded && (
                         <div className="flex items-center gap-1.5 mt-2">
-                          <Check className="w-3 h-3 text-[#B3FF3B]" />
-                          <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Added to roadmap</span>
+                          <Check className="w-3 h-3 text-ce-lime" />
+                          <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Added to roadmap</span>
                         </div>
                       )}
                     </div>
@@ -832,7 +832,7 @@ function SessionHistoryList({ items, onRateSession }: {
                   <button
                     onClick={() => toast.success("Booking flow opened")}
                     className="flex items-center justify-center gap-2 py-2 rounded-xl text-[12px] cursor-pointer"
-                    style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+                    style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                   >
                     <RefreshCw className="w-3.5 h-3.5" /> Book follow-up with {item.mentorName.split(" ")[0]}
                   </button>
@@ -857,12 +857,12 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
+      style={{ background: "rgba(var(--ce-shadow-tint),0.7)", backdropFilter: "blur(8px)" }}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
       <motion.div
         className="w-full max-w-[480px] rounded-2xl p-6 flex flex-col gap-5"
-        style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.08)" }}
+        style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
         initial={{ scale: 0.96, y: 16 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 16 }}
         transition={{ duration: 0.25, ease: EASE }}
       >
@@ -873,11 +873,11 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
               <span className="text-[11px]" style={{ color: item.mentorColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{item.mentorInitials}</span>
             </div>
             <div>
-              <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Complete</span>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>with {item.mentorName} · {item.sessionType}</span>
+              <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Complete</span>
+              <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>with {item.mentorName} · {item.sessionType}</span>
             </div>
           </div>
-          <button onClick={onClose} className="text-[#6B7280] cursor-pointer hover:text-[#9CA3AF]"><X className="w-5 h-5" /></button>
+          <button onClick={onClose} className="text-ce-text-tertiary cursor-pointer hover:text-ce-text-secondary"><X className="w-5 h-5" /></button>
         </div>
 
         {/* Step: Rating */}
@@ -885,18 +885,18 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
           <div className="flex flex-col gap-4">
             <div className="flex items-center gap-2">
               <SophiaMark size={16} glowing={false} />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>How was your session with {item.mentorName.split(" ")[0]}?</span>
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>How was your session with {item.mentorName.split(" ")[0]}?</span>
             </div>
-            <div className="flex flex-col items-center gap-4 py-6 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <div className="flex flex-col items-center gap-4 py-6 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
               <StarRating value={myRating} size={32} interactive onChange={setMyRating} />
-              <p className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+              <p className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                 {myRating === 0 ? "Tap to rate" : myRating === 5 ? "Excellent session!" : myRating === 4 ? "Great session" : myRating === 3 ? "Decent session" : "Could be better"}
               </p>
             </div>
             <button
               onClick={() => myRating > 0 && setStep("notes")}
               className="w-full py-3 rounded-xl text-[13px] cursor-pointer transition-colors"
-              style={{ background: myRating > 0 ? "#B3FF3B" : "rgba(255,255,255,0.04)", color: myRating > 0 ? "#0A0C10" : "#374151", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ background: myRating > 0 ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.04)", color: myRating > 0 ? "var(--ce-surface-0)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             >
               Continue
             </button>
@@ -906,19 +906,19 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
         {/* Step: Notes */}
         {step === "notes" && (
           <div className="flex flex-col gap-4">
-            <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session notes</span>
-            <p className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>These are shared with {item.mentorName.split(" ")[0]}. Add anything worth remembering.</p>
+            <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session notes</span>
+            <p className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>These are shared with {item.mentorName.split(" ")[0]}. Add anything worth remembering.</p>
             <textarea
               value={notes}
               onChange={e => setNotes(e.target.value)}
               rows={5}
-              className="w-full rounded-xl px-4 py-3 text-[13px] text-[#E8E8ED] resize-none outline-none"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }}
+              className="w-full rounded-xl px-4 py-3 text-[13px] text-ce-text-primary resize-none outline-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }}
             />
             <button
               onClick={() => setStep("followup")}
               className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
-              style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             >
               Save Notes & Continue
             </button>
@@ -928,36 +928,36 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
         {/* Step: Sophia Follow-up */}
         {step === "followup" && (
           <div className="flex flex-col gap-4">
-            <div className="flex items-start gap-2 px-4 py-4 rounded-xl" style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.12)" }}>
+            <div className="flex items-start gap-2 px-4 py-4 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)" }}>
               <SophiaMark size={16} glowing={false} />
               <div>
-                <p className="text-[13px] text-[#22D3EE] mb-2" style={{ fontFamily: "var(--font-body)" }}>Session complete. Here's what I picked up:</p>
+                <p className="text-[13px] text-ce-cyan mb-2" style={{ fontFamily: "var(--font-body)" }}>Session complete. Here's what I picked up:</p>
                 <ul className="flex flex-col gap-1.5 mb-3">
-                  <li className="flex items-start gap-2"><div className="w-1 h-1 rounded-full bg-[#22D3EE] mt-1.5 flex-shrink-0" /><span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Strong on behavioral, needs work on system design timing</span></li>
-                  <li className="flex items-start gap-2"><div className="w-1 h-1 rounded-full bg-[#22D3EE] mt-1.5 flex-shrink-0" /><span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>James suggested STAR format with 45-second limit per behavioral</span></li>
+                  <li className="flex items-start gap-2"><div className="w-1 h-1 rounded-full bg-[var(--ce-role-edgestar)] mt-1.5 flex-shrink-0" /><span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Strong on behavioral, needs work on system design timing</span></li>
+                  <li className="flex items-start gap-2"><div className="w-1 h-1 rounded-full bg-[var(--ce-role-edgestar)] mt-1.5 flex-shrink-0" /><span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>James suggested STAR format with 45-second limit per behavioral</span></li>
                 </ul>
-                <p className="text-[11px] text-[#9CA3AF] mb-3" style={{ fontFamily: "var(--font-body)" }}>
-                  I've drafted 2 new tasks for your roadmap: <span className="text-[#E8E8ED]">'Study distributed systems fundamentals'</span> and <span className="text-[#E8E8ED]">'Practice STAR format with 10 mock questions.'</span> Want me to add them?
+                <p className="text-[11px] text-ce-text-secondary mb-3" style={{ fontFamily: "var(--font-body)" }}>
+                  I've drafted 2 new tasks for your roadmap: <span className="text-ce-text-primary">'Study distributed systems fundamentals'</span> and <span className="text-ce-text-primary">'Practice STAR format with 10 mock questions.'</span> Want me to add them?
                 </p>
                 <div className="flex gap-2">
-                  <button onClick={() => { setAcceptedTasks(true); setStep("done"); }} className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(179,255,59,0.1)", color: "#B3FF3B", border: "1px solid rgba(179,255,59,0.2)", fontFamily: "var(--font-body)" }}>
+                  <button onClick={() => { setAcceptedTasks(true); setStep("done"); }} className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)", fontFamily: "var(--font-body)" }}>
                     <Check className="w-3 h-3" /> Yes, add them →
                   </button>
-                  <button onClick={() => setStep("done")} className="px-3 py-1.5 text-[11px] text-[#6B7280] rounded-lg cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Review first</button>
+                  <button onClick={() => setStep("done")} className="px-3 py-1.5 text-[11px] text-ce-text-tertiary rounded-lg cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Review first</button>
                 </div>
               </div>
             </div>
 
             {/* Next session */}
-            <div className="px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-              <p className="text-[12px] text-[#9CA3AF] mb-2" style={{ fontFamily: "var(--font-body)" }}>
-                <span className="text-[#22D3EE]">Sophia suggests:</span> James has availability next Thursday. A follow-up session focused on system design would help before your Google interview.
+            <div className="px-4 py-3 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+              <p className="text-[12px] text-ce-text-secondary mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                <span className="text-ce-cyan">Sophia suggests:</span> James has availability next Thursday. A follow-up session focused on system design would help before your Google interview.
               </p>
               <div className="flex gap-2">
-                <button className="text-[11px] text-[#B3FF3B] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.15)", fontFamily: "var(--font-body)" }}>
+                <button className="text-[11px] text-ce-lime px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                   Book follow-up →
                 </button>
-                <button onClick={() => setStep("done")} className="text-[11px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Not now</button>
+                <button onClick={() => setStep("done")} className="text-[11px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Not now</button>
               </div>
             </div>
           </div>
@@ -966,16 +966,16 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
         {/* Step: Done */}
         {step === "done" && (
           <div className="flex flex-col items-center gap-4 py-4">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(179,255,59,0.1)", border: "1px solid rgba(179,255,59,0.2)" }}>
-              <Check className="w-6 h-6 text-[#B3FF3B]" />
+            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)" }}>
+              <Check className="w-6 h-6 text-ce-lime" />
             </div>
             <div className="text-center">
-              <p className="text-[15px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>All done</p>
-              <p className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+              <p className="text-[15px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>All done</p>
+              <p className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                 {acceptedTasks ? "Tasks added to your roadmap." : "Notes saved."} Great session with James.
               </p>
             </div>
-            <button onClick={onClose} className="px-6 py-2 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+            <button onClick={onClose} className="px-6 py-2 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
               Close
             </button>
           </div>
@@ -1078,34 +1078,34 @@ function BookingModal({ mentor, onClose, onComplete }: {
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(10px)" }}
+      style={{ background: "rgba(var(--ce-shadow-tint),0.7)", backdropFilter: "blur(10px)" }}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
       <motion.div
         className="w-full max-w-[600px] rounded-2xl overflow-hidden flex flex-col"
-        style={{ background: "rgba(12,14,18,0.99)", border: "1px solid rgba(255,255,255,0.08)", maxHeight: "90vh" }}
+        style={{ background: "rgba(12,14,18,0.99)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", maxHeight: "90vh" }}
         initial={{ scale: 0.95, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 20 }}
         transition={{ duration: 0.25, ease: EASE }}
       >
         {/* Modal header */}
-        <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div className="flex items-center justify-between px-6 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: `${mentor.color}15`, border: `1.5px solid ${mentor.color}25` }}>
               <span className="text-[12px]" style={{ color: mentor.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{mentor.initials}</span>
             </div>
             <div>
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Book with {mentor.name}</span>
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Book with {mentor.name}</span>
               <div className="flex items-center gap-2 mt-0.5">
-                <Globe className="w-3 h-3 text-[#6B7280]" />
-                <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{mentor.timezoneDisplay}</span>
+                <Globe className="w-3 h-3 text-ce-text-tertiary" />
+                <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{mentor.timezoneDisplay}</span>
               </div>
             </div>
           </div>
-          <button onClick={onClose} className="text-[#6B7280] cursor-pointer hover:text-[#9CA3AF]"><X className="w-5 h-5" /></button>
+          <button onClick={onClose} className="text-ce-text-tertiary cursor-pointer hover:text-ce-text-secondary"><X className="w-5 h-5" /></button>
         </div>
 
         {/* Step indicator */}
-        <div className="flex items-center gap-2 px-6 py-3 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="flex items-center gap-2 px-6 py-3 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           {(["type", "time", isPaid ? "payment" : null, "confirm"] as (string | null)[]).filter(Boolean).map((s, i, arr) => {
             const isActive = step === s;
             const stepOrder = ["type", "time", "payment", "confirm"];
@@ -1114,14 +1114,14 @@ function BookingModal({ mentor, onClose, onComplete }: {
             return (
               <div key={s} className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style={{ background: isDone ? "#B3FF3B" : isActive ? "rgba(179,255,59,0.15)" : "rgba(255,255,255,0.04)", color: isDone ? "#0A0C10" : isActive ? "#B3FF3B" : "#6B7280", fontFamily: "var(--font-body)" }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style={{ background: isDone ? "var(--ce-lime)" : isActive ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)", color: isDone ? "var(--ce-surface-0)" : isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                     {isDone ? <Check className="w-3 h-3" /> : i + 1}
                   </div>
-                  <span className="text-[11px]" style={{ color: isActive ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+                  <span className="text-[11px]" style={{ color: isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                     {stepLabels[i]}
                   </span>
                 </div>
-                {i < arr.length - 1 && <div className="w-8 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />}
+                {i < arr.length - 1 && <div className="w-8 h-px" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }} />}
               </div>
             );
           })}
@@ -1133,7 +1133,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
           {/* Step 1: Session Type */}
           {step === "type" && (
             <div className="flex flex-col gap-3">
-              <p className="text-[12px] text-[#6B7280] mb-1" style={{ fontFamily: "var(--font-body)" }}>What kind of session do you need?</p>
+              <p className="text-[12px] text-ce-text-tertiary mb-1" style={{ fontFamily: "var(--font-body)" }}>What kind of session do you need?</p>
               {mentor.sessionTypes.map((type) => {
                 const detail = SESSION_TYPE_DETAILS[type];
                 const isSelected = selectedType === type;
@@ -1142,29 +1142,29 @@ function BookingModal({ mentor, onClose, onComplete }: {
                     key={type}
                     onClick={() => { setSelectedType(type); setSelectedDuration(detail.durations[0]); }}
                     className="w-full text-left rounded-xl p-4 cursor-pointer transition-all"
-                    style={{ background: isSelected ? "rgba(179,255,59,0.06)" : "rgba(255,255,255,0.025)", border: isSelected ? "1px solid rgba(179,255,59,0.2)" : "1px solid rgba(255,255,255,0.05)" }}
+                    style={{ background: isSelected ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.025)", border: isSelected ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: isSelected ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.04)", color: isSelected ? "#B3FF3B" : "#6B7280" }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: isSelected ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)", color: isSelected ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}>
                         {detail.icon}
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[13px]" style={{ color: isSelected ? "#E8E8ED" : "#9CA3AF", fontFamily: "var(--font-display)", fontWeight: 500 }}>{type}</span>
+                          <span className="text-[13px]" style={{ color: isSelected ? "var(--ce-text-primary)" : "var(--ce-text-secondary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{type}</span>
                           {type === "Career Coaching" && mentor.priceModel !== "free" && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(245,158,11,0.1)", color: "#F59E0B", fontFamily: "var(--font-body)" }}>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.1)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>
                               ${mentor.price}/session
                             </span>
                           )}
                           {(type !== "Career Coaching" || mentor.priceModel === "free") && (
-                            <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(179,255,59,0.08)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}>Free</span>
+                            <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>Free</span>
                           )}
                         </div>
-                        <p className="text-[11px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{detail.desc}</p>
+                        <p className="text-[11px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{detail.desc}</p>
                         {isSelected && (
                           <div className="flex items-start gap-1.5 mt-2">
                             <SophiaMark size={12} glowing={false} />
-                            <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>{detail.sophiaNote}</span>
+                            <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>{detail.sophiaNote}</span>
                           </div>
                         )}
                         {isSelected && detail.durations.length > 1 && (
@@ -1174,7 +1174,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                                 key={d}
                                 onClick={(e) => { e.stopPropagation(); setSelectedDuration(d); }}
                                 className="px-3 py-1 rounded-lg text-[11px] cursor-pointer"
-                                style={{ background: selectedDuration === d ? "rgba(179,255,59,0.12)" : "rgba(255,255,255,0.04)", border: selectedDuration === d ? "1px solid rgba(179,255,59,0.25)" : "1px solid rgba(255,255,255,0.06)", color: selectedDuration === d ? "#B3FF3B" : "#9CA3AF", fontFamily: "var(--font-body)" }}
+                                style={{ background: selectedDuration === d ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: selectedDuration === d ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: selectedDuration === d ? "var(--ce-lime)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                               >
                                 {d} min
                               </button>
@@ -1182,24 +1182,24 @@ function BookingModal({ mentor, onClose, onComplete }: {
                           </div>
                         )}
                       </div>
-                      {isSelected && <Check className="w-4 h-4 text-[#B3FF3B] flex-shrink-0 mt-0.5" />}
+                      {isSelected && <Check className="w-4 h-4 text-ce-lime flex-shrink-0 mt-0.5" />}
                     </div>
                   </button>
                 );
               })}
 
               {/* Cancellation policy */}
-              <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <Shield className="w-3.5 h-3.5 text-[#6B7280] flex-shrink-0 mt-0.5" />
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
-                  <span className="text-[#9CA3AF]">Cancellation policy:</span> {CANCELLATION_LABELS[mentor.cancellationPolicy]}
+              <div className="flex items-start gap-2 px-3 py-2.5 rounded-xl mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                <Shield className="w-3.5 h-3.5 text-ce-text-tertiary flex-shrink-0 mt-0.5" />
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
+                  <span className="text-ce-text-secondary">Cancellation policy:</span> {CANCELLATION_LABELS[mentor.cancellationPolicy]}
                 </span>
               </div>
 
               <button
                 onClick={() => selectedType && setStep("time")}
                 className="w-full py-3 rounded-xl text-[13px] mt-2 cursor-pointer transition-colors"
-                style={{ background: selectedType ? "#B3FF3B" : "rgba(255,255,255,0.04)", color: selectedType ? "#0A0C10" : "#374151", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                style={{ background: selectedType ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.04)", color: selectedType ? "var(--ce-surface-0)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
                 Continue →
               </button>
@@ -1210,20 +1210,20 @@ function BookingModal({ mentor, onClose, onComplete }: {
           {step === "time" && (
             <div className="flex flex-col gap-4">
               {/* View toggle */}
-              <div className="flex items-center gap-1 p-1 rounded-xl self-start" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-1 p-1 rounded-xl self-start" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 {(["calendar", "list"] as const).map((v) => (
                   <button
                     key={v}
                     onClick={() => setCalendarView(v)}
                     className="px-4 py-1.5 rounded-lg text-[12px] cursor-pointer transition-colors capitalize"
-                    style={{ background: calendarView === v ? "rgba(255,255,255,0.06)" : "transparent", color: calendarView === v ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}
+                    style={{ background: calendarView === v ? "rgba(var(--ce-glass-tint),0.06)" : "transparent", color: calendarView === v ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
                   >
                     {v === "calendar" ? "Calendar" : "Quick List"}
                   </button>
                 ))}
               </div>
 
-              <div className="flex items-center gap-2 text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+              <div className="flex items-center gap-2 text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                 <Globe className="w-3 h-3" />
                 Times shown in your timezone ({userTz.replace(/_/g, " ")})
               </div>
@@ -1234,13 +1234,13 @@ function BookingModal({ mentor, onClose, onComplete }: {
                   {/* Calendar grid */}
                   <div className="flex-1">
                     <div className="flex items-center justify-between mb-3">
-                      <button onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))} className="cursor-pointer text-[#6B7280] hover:text-[#E8E8ED] transition-colors">
+                      <button onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() - 1, 1))} className="cursor-pointer text-ce-text-tertiary hover:text-ce-text-primary transition-colors">
                         <ChevronLeft className="w-4 h-4" />
                       </button>
-                      <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                         {calendarMonth.toLocaleDateString("en-US", { month: "long", year: "numeric" })}
                       </span>
-                      <button onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))} className="cursor-pointer text-[#6B7280] hover:text-[#E8E8ED] transition-colors">
+                      <button onClick={() => setCalendarMonth(new Date(calendarMonth.getFullYear(), calendarMonth.getMonth() + 1, 1))} className="cursor-pointer text-ce-text-tertiary hover:text-ce-text-primary transition-colors">
                         <ChevronRight className="w-4 h-4" />
                       </button>
                     </div>
@@ -1248,7 +1248,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                     {/* Day headers */}
                     <div className="grid grid-cols-7 mb-1">
                       {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(d => (
-                        <div key={d} className="text-center text-[10px] text-[#6B7280] py-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{d}</div>
+                        <div key={d} className="text-center text-[10px] text-ce-text-tertiary py-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{d}</div>
                       ))}
                     </div>
 
@@ -1263,7 +1263,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                         const isPast = d < new Date(2026, 2, 19);
                         if (isPast) return (
                           <div key={day} className="aspect-square flex flex-col items-center justify-center">
-                            <span className="text-[12px] text-[#1F2937]" style={{ fontFamily: "var(--font-body)" }}>{day}</span>
+                            <span className="text-[12px] text-[var(--ce-text-ghost)]" style={{ fontFamily: "var(--font-body)" }}>{day}</span>
                           </div>
                         );
                         return (
@@ -1272,10 +1272,10 @@ function BookingModal({ mentor, onClose, onComplete }: {
                             onClick={() => hasSlots && setSelectedDate(d)}
                             disabled={!hasSlots}
                             className="aspect-square flex flex-col items-center justify-center rounded-lg transition-all relative cursor-pointer"
-                            style={{ background: isSelected ? "rgba(179,255,59,0.15)" : hasSlots ? "rgba(255,255,255,0.02)" : "transparent", border: isSelected ? "1px solid rgba(179,255,59,0.3)" : "1px solid transparent", cursor: hasSlots ? "pointer" : "default" }}
+                            style={{ background: isSelected ? "rgba(var(--ce-lime-rgb),0.15)" : hasSlots ? "rgba(var(--ce-glass-tint),0.02)" : "transparent", border: isSelected ? "1px solid rgba(var(--ce-lime-rgb),0.3)" : "1px solid transparent", cursor: hasSlots ? "pointer" : "default" }}
                           >
-                            <span className="text-[12px]" style={{ color: isSelected ? "#B3FF3B" : hasSlots ? "#E8E8ED" : "#374151", fontFamily: "var(--font-body)" }}>{day}</span>
-                            {hasSlots && !isSelected && <div className="w-1 h-1 rounded-full bg-[#B3FF3B] mt-0.5" />}
+                            <span className="text-[12px]" style={{ color: isSelected ? "var(--ce-lime)" : hasSlots ? "var(--ce-text-primary)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>{day}</span>
+                            {hasSlots && !isSelected && <div className="w-1 h-1 rounded-full bg-[var(--ce-lime)] mt-0.5" />}
                           </button>
                         );
                       })}
@@ -1285,11 +1285,11 @@ function BookingModal({ mentor, onClose, onComplete }: {
                   {/* Time slots for selected date */}
                   {selectedDate && (
                     <div className="w-[180px] flex-shrink-0">
-                      <span className="text-[11px] text-[#9CA3AF] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      <span className="text-[11px] text-ce-text-secondary block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                         {selectedDate.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" })}
                       </span>
                       <div className="flex flex-col gap-2">
-                        {slotsForDate.length === 0 && <p className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>No slots on this day</p>}
+                        {slotsForDate.length === 0 && <p className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>No slots on this day</p>}
                         {slotsForDate.map((slot) => {
                           const isExpanded = expandedSlot === slot.id;
                           return (
@@ -1297,7 +1297,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                               <button
                                 onClick={() => setExpandedSlot(isExpanded ? null : slot.id)}
                                 className="w-full px-3 py-2 rounded-xl text-[12px] text-left cursor-pointer transition-all"
-                                style={{ background: isExpanded ? "rgba(179,255,59,0.08)" : "rgba(255,255,255,0.03)", border: isExpanded ? "1px solid rgba(179,255,59,0.25)" : "1px solid rgba(255,255,255,0.06)", color: isExpanded ? "#B3FF3B" : "#E8E8ED", fontFamily: "var(--font-body)" }}
+                                style={{ background: isExpanded ? "rgba(var(--ce-lime-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)", border: isExpanded ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: isExpanded ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}
                               >
                                 {slot.time}
                               </button>
@@ -1309,11 +1309,11 @@ function BookingModal({ mentor, onClose, onComplete }: {
                                     className="overflow-hidden"
                                   >
                                     <div className="pt-2 pb-1 px-1 flex flex-col gap-1.5">
-                                      <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{slot.time}–{slot.endTime}</span>
+                                      <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{slot.time}–{slot.endTime}</span>
                                       <button
                                         onClick={() => { setSelectedSlot(slot); isPaid ? setStep("payment") : setStep("confirm"); }}
                                         className="w-full py-1.5 rounded-lg text-[11px] cursor-pointer"
-                                        style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                                        style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                                       >
                                         Confirm
                                       </button>
@@ -1333,7 +1333,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
               {/* List View */}
               {calendarView === "list" && (
                 <div className="flex flex-col gap-2">
-                  <p className="text-[11px] text-[#6B7280] mb-1" style={{ fontFamily: "var(--font-body)" }}>Next available times</p>
+                  <p className="text-[11px] text-ce-text-tertiary mb-1" style={{ fontFamily: "var(--font-body)" }}>Next available times</p>
                   {nextSlots.map((slot) => {
                     const isExpanded = expandedSlot === slot.id;
                     return (
@@ -1341,10 +1341,10 @@ function BookingModal({ mentor, onClose, onComplete }: {
                         <button
                           onClick={() => { setExpandedSlot(isExpanded ? null : slot.id); setSelectedSlot(slot); }}
                           className="w-full flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all text-left"
-                          style={{ background: isExpanded ? "rgba(179,255,59,0.06)" : "rgba(255,255,255,0.025)", border: isExpanded ? "1px solid rgba(179,255,59,0.2)" : "1px solid rgba(255,255,255,0.05)" }}
+                          style={{ background: isExpanded ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.025)", border: isExpanded ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                         >
-                          <span className="text-[12px]" style={{ color: isExpanded ? "#B3FF3B" : "#E8E8ED", fontFamily: "var(--font-body)" }}>{slot.displayDate}</span>
-                          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{slot.time}</span>
+                          <span className="text-[12px]" style={{ color: isExpanded ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>{slot.displayDate}</span>
+                          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{slot.time}</span>
                         </button>
                         <AnimatePresence>
                           {isExpanded && (
@@ -1353,15 +1353,15 @@ function BookingModal({ mentor, onClose, onComplete }: {
                               transition={{ duration: 0.25 }}
                               className="overflow-hidden"
                             >
-                              <div className="flex items-center justify-between px-4 py-3 rounded-b-xl" style={{ background: "rgba(255,255,255,0.02)", borderLeft: "1px solid rgba(179,255,59,0.2)", borderRight: "1px solid rgba(179,255,59,0.2)", borderBottom: "1px solid rgba(179,255,59,0.2)" }}>
+                              <div className="flex items-center justify-between px-4 py-3 rounded-b-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", borderLeft: "1px solid rgba(var(--ce-lime-rgb),0.2)", borderRight: "1px solid rgba(var(--ce-lime-rgb),0.2)", borderBottom: "1px solid rgba(var(--ce-lime-rgb),0.2)" }}>
                                 <div>
-                                  <span className="text-[11px] text-[#9CA3AF] block" style={{ fontFamily: "var(--font-body)" }}>{selectedType} · {selectedDuration} min</span>
-                                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{slot.time}–{slot.endTime} · {mentor.timezoneDisplay}</span>
+                                  <span className="text-[11px] text-ce-text-secondary block" style={{ fontFamily: "var(--font-body)" }}>{selectedType} · {selectedDuration} min</span>
+                                  <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{slot.time}–{slot.endTime} · {mentor.timezoneDisplay}</span>
                                 </div>
                                 <button
                                   onClick={() => isPaid ? setStep("payment") : setStep("confirm")}
                                   className="px-4 py-1.5 rounded-lg text-[12px] cursor-pointer"
-                                  style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                                  style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                                 >
                                   Confirm →
                                 </button>
@@ -1377,7 +1377,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
 
               <button
                 onClick={() => setStep("type")}
-                className="text-[12px] text-[#6B7280] cursor-pointer flex items-center gap-1"
+                className="text-[12px] text-ce-text-tertiary cursor-pointer flex items-center gap-1"
                 style={{ fontFamily: "var(--font-body)" }}
               >
                 <ChevronLeft className="w-3.5 h-3.5" /> Back
@@ -1389,8 +1389,8 @@ function BookingModal({ mentor, onClose, onComplete }: {
           {step === "payment" && (
             <div className="flex flex-col gap-4">
               {/* Session summary */}
-              <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                <span className="text-[11px] text-[#6B7280] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Summary</span>
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <span className="text-[11px] text-ce-text-tertiary block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Summary</span>
                 {[
                   ["Mentor", mentor.name],
                   ["Session Type", selectedType || ""],
@@ -1400,16 +1400,16 @@ function BookingModal({ mentor, onClose, onComplete }: {
                   [`${mentor.name.split(" ")[0]}'s timezone`, mentor.timezoneDisplay],
                 ].map(([label, value]) => (
                   <div key={label} className="flex justify-between mb-2">
-                    <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{label}</span>
-                    <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{value}</span>
+                    <span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{label}</span>
+                    <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{value}</span>
                   </div>
                 ))}
-                <div style={{ borderTop: "1px solid rgba(255,255,255,0.06)", paddingTop: "12px", marginTop: "8px" }}>
+                <div style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)", paddingTop: "12px", marginTop: "8px" }}>
                   <div className="flex justify-between mb-1">
-                    <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Total</span>
-                    <span className="text-[14px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${price}</span>
+                    <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Total</span>
+                    <span className="text-[14px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${price}</span>
                   </div>
-                  <p className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+                  <p className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                     {mentor.name.split(" ")[0]} earns ${mentor.earnings.toFixed(2)} · CareerEdge fee: ${mentor.commission.toFixed(2)}
                   </p>
                 </div>
@@ -1417,49 +1417,49 @@ function BookingModal({ mentor, onClose, onComplete }: {
 
               {/* Mock Stripe card form */}
               <div className="flex flex-col gap-3">
-                <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Payment Details</span>
-                <div className="rounded-xl p-4 flex flex-col gap-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                    <CreditCard className="w-4 h-4 text-[#6B7280]" />
-                    <input readOnly value="4242 4242 4242 4242" className="flex-1 text-[13px] bg-transparent outline-none" style={{ color: "#E8E8ED", fontFamily: "var(--font-body)" }} />
-                    <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>MOCK</span>
+                <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Payment Details</span>
+                <div className="rounded-xl p-4 flex flex-col gap-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                  <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                    <CreditCard className="w-4 h-4 text-ce-text-tertiary" />
+                    <input readOnly value="4242 4242 4242 4242" className="flex-1 text-[13px] bg-transparent outline-none" style={{ color: "var(--ce-text-primary)", fontFamily: "var(--font-body)" }} />
+                    <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>MOCK</span>
                   </div>
                   <div className="flex gap-3">
-                    <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <input readOnly value="03/28" className="flex-1 text-[13px] bg-transparent outline-none" style={{ color: "#E8E8ED", fontFamily: "var(--font-body)" }} />
+                    <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                      <input readOnly value="03/28" className="flex-1 text-[13px] bg-transparent outline-none" style={{ color: "var(--ce-text-primary)", fontFamily: "var(--font-body)" }} />
                     </div>
-                    <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
-                      <input readOnly value="123" className="flex-1 text-[13px] bg-transparent outline-none" style={{ color: "#E8E8ED", fontFamily: "var(--font-body)" }} />
+                    <div className="flex-1 flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                      <input readOnly value="123" className="flex-1 text-[13px] bg-transparent outline-none" style={{ color: "var(--ce-text-primary)", fontFamily: "var(--font-body)" }} />
                     </div>
                   </div>
                 </div>
                 <div className="flex items-center gap-2">
-                  <Shield className="w-3 h-3 text-[#6B7280]" />
-                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Payments handled by Stripe. CareerEdge never stores card details.</span>
+                  <Shield className="w-3 h-3 text-ce-text-tertiary" />
+                  <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Payments handled by Stripe. CareerEdge never stores card details.</span>
                 </div>
               </div>
 
               {/* Revenue model options */}
-              <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                <span className="text-[11px] text-[#6B7280] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Subscription Option</span>
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                <span className="text-[11px] text-ce-text-tertiary block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Subscription Option</span>
                 <div className="flex items-center justify-between mb-2">
                   <div>
-                    <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>Unlimited sessions with {mentor.name.split(" ")[0]}</span>
-                    <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Best value if booking 3+ sessions/month</span>
+                    <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>Unlimited sessions with {mentor.name.split(" ")[0]}</span>
+                    <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Best value if booking 3+ sessions/month</span>
                   </div>
-                  <span className="text-[13px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${mentor.subscriptionPrice}/mo</span>
+                  <span className="text-[13px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${mentor.subscriptionPrice}/mo</span>
                 </div>
-                <button className="text-[11px] text-[#22D3EE] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Switch to subscription →</button>
+                <button className="text-[11px] text-ce-cyan cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Switch to subscription →</button>
               </div>
 
               <button
                 onClick={() => setStep("confirm")}
                 className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
-                style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
                 Confirm & Pay ${price} →
               </button>
-              <button onClick={() => setStep("time")} className="text-[12px] text-[#6B7280] cursor-pointer flex items-center gap-1" style={{ fontFamily: "var(--font-body)" }}>
+              <button onClick={() => setStep("time")} className="text-[12px] text-ce-text-tertiary cursor-pointer flex items-center gap-1" style={{ fontFamily: "var(--font-body)" }}>
                 <ChevronLeft className="w-3.5 h-3.5" /> Back
               </button>
             </div>
@@ -1471,7 +1471,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
               {/* Glow pulse */}
               <motion.div
                 className="absolute inset-0 rounded-2xl pointer-events-none"
-                style={{ border: "1px solid rgba(179,255,59,0.3)", boxShadow: "0 0 40px rgba(179,255,59,0.1)" }}
+                style={{ border: "1px solid rgba(var(--ce-lime-rgb),0.3)", boxShadow: "0 0 40px rgba(var(--ce-lime-rgb),0.1)" }}
                 initial={{ opacity: 0 }} animate={{ opacity: [0, 1, 0] }}
                 transition={{ duration: 0.8, ease: "easeInOut", delay: 0.2 }}
               />
@@ -1480,37 +1480,37 @@ function BookingModal({ mentor, onClose, onComplete }: {
               <svg width="72" height="72" viewBox="0 0 72 72">
                 <motion.circle
                   cx="36" cy="36" r="34"
-                  fill="none" stroke="rgba(179,255,59,0.15)" strokeWidth="1.5"
+                  fill="none" stroke="rgba(var(--ce-lime-rgb),0.15)" strokeWidth="1.5"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 />
                 <motion.circle
                   cx="36" cy="36" r="34"
-                  fill="none" stroke="#B3FF3B" strokeWidth="1.5" strokeLinecap="round"
+                  fill="none" stroke="var(--ce-lime)" strokeWidth="1.5" strokeLinecap="round"
                   strokeDasharray="213" strokeDashoffset="213"
                   initial={{ strokeDashoffset: 213 }} animate={{ strokeDashoffset: 0 }}
                   transition={{ duration: 0.5, ease: "easeOut" }}
                 />
                 <motion.path
                   d="M22 36 L31 45 L50 27"
-                  fill="none" stroke="#B3FF3B" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
+                  fill="none" stroke="var(--ce-lime)" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"
                   initial={{ pathLength: 0 }} animate={{ pathLength: 1 }}
                   transition={{ delay: 0.4, duration: 0.4, ease: "easeOut" }}
                 />
               </svg>
 
               <motion.div className="text-center" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.3 }}>
-                <p className="text-[18px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session booked</p>
-                <p className="text-[13px] text-[#6B7280] mt-1" style={{ fontFamily: "var(--font-body)" }}>with {mentor.name}</p>
+                <p className="text-[18px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session booked</p>
+                <p className="text-[13px] text-ce-text-tertiary mt-1" style={{ fontFamily: "var(--font-body)" }}>with {mentor.name}</p>
               </motion.div>
 
               {/* Session details stagger */}
-              <div className="w-full rounded-xl p-4 flex flex-col gap-2.5" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="w-full rounded-xl p-4 flex flex-col gap-2.5" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
                 {[
-                  [<Calendar key="c" className="w-3.5 h-3.5 text-[#B3FF3B]" />, selectedSlot?.displayDate || "Scheduled"],
-                  [<Clock key="cl" className="w-3.5 h-3.5 text-[#B3FF3B]" />, `${selectedSlot?.time || "—"} (${userTz.replace(/_/g, " ")}) · ${selectedSlot?.time || "—"} (${mentor.timezoneDisplay})`],
-                  [<Video key="v" className="w-3.5 h-3.5 text-[#B3FF3B]" />, `${selectedType} · ${selectedDuration} min`],
-                  price > 0 ? [<DollarSign key="d" className="w-3.5 h-3.5 text-[#B3FF3B]" />, `$${price} charged`] : [<ThumbsUp key="t" className="w-3.5 h-3.5 text-[#B3FF3B]" />, "Free session"],
+                  [<Calendar key="c" className="w-3.5 h-3.5 text-ce-lime" />, selectedSlot?.displayDate || "Scheduled"],
+                  [<Clock key="cl" className="w-3.5 h-3.5 text-ce-lime" />, `${selectedSlot?.time || "—"} (${userTz.replace(/_/g, " ")}) · ${selectedSlot?.time || "—"} (${mentor.timezoneDisplay})`],
+                  [<Video key="v" className="w-3.5 h-3.5 text-ce-lime" />, `${selectedType} · ${selectedDuration} min`],
+                  price > 0 ? [<DollarSign key="d" className="w-3.5 h-3.5 text-ce-lime" />, `$${price} charged`] : [<ThumbsUp key="t" className="w-3.5 h-3.5 text-ce-lime" />, "Free session"],
                 ].map(([icon, label], i) => (
                   <motion.div
                     key={i}
@@ -1519,7 +1519,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                     transition={{ delay: 0.6 + i * 0.1, duration: 0.3 }}
                   >
                     {icon}
-                    <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{label as string}</span>
+                    <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{label as string}</span>
                   </motion.div>
                 ))}
               </div>
@@ -1527,11 +1527,11 @@ function BookingModal({ mentor, onClose, onComplete }: {
               {/* Sophia message */}
               <motion.div
                 className="w-full flex items-start gap-2 px-4 py-3 rounded-xl"
-                style={{ background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.1)" }}
+                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.05)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.1, duration: 0.35 }}
               >
                 <SophiaMark size={14} glowing={false} />
-                <p className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>
                   I'll send you a prep brief 2 hours before. A session thread has been created. See you there.
                 </p>
               </motion.div>
@@ -1541,7 +1541,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                 <button
                   onClick={() => setShowCalendarDropdown(!showCalendarDropdown)}
                   className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer"
-                  style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                 >
                   <Download className="w-3.5 h-3.5" /> Add to Calendar <ChevronDown className="w-3.5 h-3.5" />
                 </button>
@@ -1549,18 +1549,18 @@ function BookingModal({ mentor, onClose, onComplete }: {
                   {showCalendarDropdown && (
                     <motion.div
                       className="absolute bottom-10 left-0 right-0 rounded-xl overflow-hidden z-10"
-                      style={{ background: "rgba(18,20,26,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}
+                      style={{ background: "rgba(18,20,26,0.99)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
                       initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }}
                     >
                       {["Google Calendar", "Apple Calendar", "Outlook (.ics)"].map((cal) => (
                         <button
                           key={cal}
                           onClick={() => { setCalendarAdded(cal); setShowCalendarDropdown(false); toast.success(`Added to ${cal}`); }}
-                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left cursor-pointer hover:bg-[rgba(255,255,255,0.03)] transition-colors"
-                          style={{ borderBottom: cal !== "Outlook (.ics)" ? "1px solid rgba(255,255,255,0.04)" : "none" }}
+                          className="w-full flex items-center gap-3 px-4 py-2.5 text-left cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
+                          style={{ borderBottom: cal !== "Outlook (.ics)" ? "1px solid rgba(var(--ce-glass-tint),0.04)" : "none" }}
                         >
-                          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{cal}</span>
-                          {calendarAdded === cal && <Check className="w-3.5 h-3.5 text-[#B3FF3B] ml-auto" />}
+                          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{cal}</span>
+                          {calendarAdded === cal && <Check className="w-3.5 h-3.5 text-ce-lime ml-auto" />}
                         </button>
                       ))}
                     </motion.div>
@@ -1573,14 +1573,14 @@ function BookingModal({ mentor, onClose, onComplete }: {
                 <button
                   onClick={() => { onComplete(); toast.success("Session thread opened"); }}
                   className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer"
-                  style={{ background: "rgba(34,211,238,0.08)", color: "#22D3EE", border: "1px solid rgba(34,211,238,0.15)", fontFamily: "var(--font-body)" }}
+                  style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", fontFamily: "var(--font-body)" }}
                 >
                   <MessageSquare className="w-3.5 h-3.5 inline mr-1.5" /> Go to session thread
                 </button>
                 <button
                   onClick={onComplete}
                   className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer"
-                  style={{ background: "rgba(255,255,255,0.03)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.03)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}
                 >
                   Back to Sessions
                 </button>
@@ -1636,27 +1636,27 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
       <div className="max-w-[1100px] mx-auto">
         {/* Page header */}
         <motion.div className="pt-6 pb-4" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.35, ease: EASE }}>
-          <h1 className="text-[22px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <h1 className="text-[22px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
             Sessions
           </h1>
-          <p className="text-[13px] text-[#6B7280] mt-1" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[13px] text-ce-text-tertiary mt-1" style={{ fontFamily: "var(--font-body)" }}>
             {isPreneur ? "Connect with advisors who can accelerate your venture." : "Connect with mentors who've been where you're heading."}
           </p>
         </motion.div>
 
         {/* Tab nav */}
-        <div className="flex items-center gap-1 mb-6 p-1 rounded-xl self-start" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", width: "fit-content" }}>
+        <div className="flex items-center gap-1 mb-6 p-1 rounded-xl self-start" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", width: "fit-content" }}>
           {tabItems.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
               className="relative flex items-center gap-1.5 px-4 py-2 rounded-lg cursor-pointer transition-colors text-[12px]"
-              style={{ background: tab === t.id ? "rgba(255,255,255,0.06)" : "transparent", color: tab === t.id ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}
+              style={{ background: tab === t.id ? "rgba(var(--ce-glass-tint),0.06)" : "transparent", color: tab === t.id ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
             >
               {t.icon}
               {t.label}
               {t.badge && (
-                <span className="text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style={{ background: t.id === "history" ? "rgba(245,158,11,0.2)" : "rgba(34,211,238,0.12)", color: t.id === "history" ? "#F59E0B" : "#22D3EE", fontFamily: "var(--font-body)" }}>
+                <span className="text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style={{ background: t.id === "history" ? "rgba(var(--ce-role-edgepreneur-rgb),0.2)" : "rgba(var(--ce-role-edgestar-rgb),0.12)", color: t.id === "history" ? "var(--ce-role-edgepreneur)" : "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
                   {t.badge}
                 </span>
               )}
@@ -1670,13 +1670,13 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
           {tab === "find" && (
             <motion.div key="find" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}>
               {/* Picks / Browse toggle */}
-              <div className="flex items-center gap-1 mb-5 p-1 rounded-xl self-start" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", width: "fit-content" }}>
+              <div className="flex items-center gap-1 mb-5 p-1 rounded-xl self-start" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", width: "fit-content" }}>
                 {(["picks", "browse"] as const).map((v) => (
                   <button
                     key={v}
                     onClick={() => setFindView(v)}
                     className="px-4 py-1.5 rounded-lg text-[12px] cursor-pointer transition-colors"
-                    style={{ background: findView === v ? "rgba(255,255,255,0.06)" : "transparent", color: findView === v ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}
+                    style={{ background: findView === v ? "rgba(var(--ce-glass-tint),0.06)" : "transparent", color: findView === v ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
                   >
                     {v === "picks" ? "Sophia's Picks" : "Browse All"}
                   </button>
@@ -1696,14 +1696,14 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
                 {/* CTA if no sessions */}
                 <GlassCard delay={0.3}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.12)" }}>
-                      <Plus className="w-5 h-5 text-[#B3FF3B]" />
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)" }}>
+                      <Plus className="w-5 h-5 text-ce-lime" />
                     </div>
                     <div className="flex-1">
-                      <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Book another session</span>
-                      <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Sophia has 4 mentor recommendations based on your current roadmap phase</span>
+                      <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Book another session</span>
+                      <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Sophia has 4 mentor recommendations based on your current roadmap phase</span>
                     </div>
-                    <button onClick={() => { setTab("find"); setFindView("picks"); }} className="px-4 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                    <button onClick={() => { setTab("find"); setFindView("picks"); }} className="px-4 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                       Find mentors →
                     </button>
                   </div>
@@ -1716,10 +1716,10 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
           {tab === "history" && (
             <motion.div key="history" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}>
               {awaitingRating && (
-                <motion.div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 cursor-pointer" style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.15)" }}
+                <motion.div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 cursor-pointer" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.15)" }}
                   onClick={() => setPostSessionItem(awaitingRating)} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                  <Star className="w-4 h-4 text-[#F59E0B]" />
-                  <span className="text-[12px] text-[#F59E0B]" style={{ fontFamily: "var(--font-body)" }}>
+                  <Star className="w-4 h-4 text-[var(--ce-role-edgepreneur)]" />
+                  <span className="text-[12px] text-[var(--ce-role-edgepreneur)]" style={{ fontFamily: "var(--font-body)" }}>
                     Your session with James Okafor is waiting for a rating →
                   </span>
                 </motion.div>
@@ -1734,7 +1734,7 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
               <div className="flex flex-col gap-4">
                 {prepSession ? (
                   <>
-                    <p className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Active prep briefs for your upcoming sessions</p>
+                    <p className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Active prep briefs for your upcoming sessions</p>
                     <PrepBriefCard session={prepSession} />
                   </>
                 ) : (
@@ -1749,16 +1749,16 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
                 {/* Pending Sophia actions */}
                 {SESSION_HISTORY.filter(h => !h.tasksAdded && !h.awaitingRating).length > 0 && (
                   <div>
-                    <span className="text-[11px] text-[#6B7280] mb-3 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia follow-ups</span>
+                    <span className="text-[11px] text-ce-text-tertiary mb-3 block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia follow-ups</span>
                     <div className="flex flex-col gap-2">
                       {SESSION_HISTORY.filter(h => !h.tasksAdded).map((h) => (
-                        <div key={h.id} className="flex items-start gap-2 px-4 py-3 rounded-xl" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.08)" }}>
+                        <div key={h.id} className="flex items-start gap-2 px-4 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
                           <SophiaMark size={14} glowing={false} />
                           <div>
-                            <p className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>{h.sophiaFollowUp}</p>
+                            <p className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>{h.sophiaFollowUp}</p>
                             <div className="flex gap-2 mt-2">
-                              <button className="text-[10px] text-[#B3FF3B] px-2.5 py-1 rounded-md cursor-pointer" style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.15)", fontFamily: "var(--font-body)" }}>Add to roadmap →</button>
-                              <button className="text-[10px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Dismiss</button>
+                              <button className="text-[10px] text-ce-lime px-2.5 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", fontFamily: "var(--font-body)" }}>Add to roadmap →</button>
+                              <button className="text-[10px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Dismiss</button>
                             </div>
                           </div>
                         </div>
@@ -1802,15 +1802,15 @@ function EarningsCard() {
       {/* KPI row */}
       <div className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {[
-          { label: "This Month", value: "$1,240", trend: "+18% vs last month", color: "#B3FF3B" },
-          { label: "All Time", value: "$8,920", trend: "156 sessions", color: "#22D3EE" },
-          { label: "Avg. Per Session", value: "$63.75", trend: "after 15% fee", color: "#8B5CF6" },
-          { label: "Avg. Rating", value: "4.9", trend: "23 reviews", color: "#F59E0B" },
+          { label: "This Month", value: "$1,240", trend: "+18% vs last month", color: "var(--ce-lime)" },
+          { label: "All Time", value: "$8,920", trend: "156 sessions", color: "var(--ce-role-edgestar)" },
+          { label: "Avg. Per Session", value: "$63.75", trend: "after 15% fee", color: "var(--ce-role-guide)" },
+          { label: "Avg. Rating", value: "4.9", trend: "23 reviews", color: "var(--ce-role-edgepreneur)" },
         ].map((kpi, i) => (
-          <motion.div key={kpi.label} className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+          <motion.div key={kpi.label} className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
             initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.07, duration: 0.35, ease: EASE }}>
             <div className="text-[24px] tabular-nums" style={{ color: kpi.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{kpi.value}</div>
-            <div className="text-[11px] text-[#6B7280] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</div>
+            <div className="text-[11px] text-ce-text-tertiary mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</div>
             <div className="text-[10px] mt-1" style={{ color: kpi.color, fontFamily: "var(--font-body)" }}>{kpi.trend}</div>
           </motion.div>
         ))}
@@ -1820,17 +1820,17 @@ function EarningsCard() {
       <GlassCard delay={0.4}>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-              <Zap className="w-4 h-4 text-[#B3FF3B]" />
+            <div className="w-9 h-9 rounded-xl flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+              <Zap className="w-4 h-4 text-ce-lime" />
             </div>
             <div>
-              <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Next payout: March 31</span>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>$620 pending · Stripe connected</span>
+              <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Next payout: March 31</span>
+              <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>$620 pending · Stripe connected</span>
             </div>
           </div>
           <div className="flex items-center gap-2">
-            <div className="w-2 h-2 rounded-full bg-[#B3FF3B]" />
-            <span className="text-[11px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>Active</span>
+            <div className="w-2 h-2 rounded-full bg-[var(--ce-lime)]" />
+            <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>Active</span>
           </div>
         </div>
       </GlassCard>
@@ -1838,11 +1838,11 @@ function EarningsCard() {
       {/* Revenue model tabs */}
       <GlassCard delay={0.5}>
         <div className="flex items-center gap-2 mb-4">
-          <TrendingUp className="w-4 h-4 text-[#8B5CF6]" />
-          <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Revenue Model</span>
-          <span className="text-[10px] px-2 py-0.5 rounded-full text-[#9CA3AF]" style={{ background: "rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>Choose your model</span>
+          <TrendingUp className="w-4 h-4 text-[var(--ce-role-guide)]" />
+          <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Revenue Model</span>
+          <span className="text-[10px] px-2 py-0.5 rounded-full text-ce-text-secondary" style={{ background: "rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>Choose your model</span>
         </div>
-        <div className="flex gap-1 mb-4 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="flex gap-1 mb-4 p-1 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           {[
             { id: "per_session" as const, label: "Per Session" },
             { id: "subscription" as const, label: "Subscription" },
@@ -1850,7 +1850,7 @@ function EarningsCard() {
           ].map((t) => (
             <button key={t.id} onClick={() => setRevenueTab(t.id)}
               className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
-              style={{ background: revenueTab === t.id ? "rgba(255,255,255,0.06)" : "transparent", color: revenueTab === t.id ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+              style={{ background: revenueTab === t.id ? "rgba(var(--ce-glass-tint),0.06)" : "transparent", color: revenueTab === t.id ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
               {t.label}
             </button>
           ))}
@@ -1858,58 +1858,58 @@ function EarningsCard() {
 
         {revenueTab === "per_session" && (
           <div className="flex flex-col gap-3">
-            <p className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Clients pay a fixed rate per session. You set the price; CareerEdge takes a 15% platform fee.</p>
-            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Session price (you set)</span>
-              <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$75</span>
+            <p className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Clients pay a fixed rate per session. You set the price; CareerEdge takes a 15% platform fee.</p>
+            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Session price (you set)</span>
+              <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$75</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>CareerEdge fee (15%)</span>
-              <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>−$11.25</span>
+              <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>CareerEdge fee (15%)</span>
+              <span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>−$11.25</span>
             </div>
-            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-              <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>You earn</span>
-              <span className="text-[14px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$63.75</span>
+            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>You earn</span>
+              <span className="text-[14px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$63.75</span>
             </div>
           </div>
         )}
 
         {revenueTab === "subscription" && (
           <div className="flex flex-col gap-3">
-            <p className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Clients subscribe for unlimited sessions with you per month. Predictable recurring revenue.</p>
-            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Monthly subscription price</span>
-              <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$199/mo</span>
+            <p className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Clients subscribe for unlimited sessions with you per month. Predictable recurring revenue.</p>
+            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Monthly subscription price</span>
+              <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$199/mo</span>
             </div>
             <div className="flex items-center justify-between">
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>CareerEdge fee (12%)</span>
-              <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>−$23.88</span>
+              <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>CareerEdge fee (12%)</span>
+              <span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>−$23.88</span>
             </div>
-            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-              <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>You earn</span>
-              <span className="text-[14px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$175.12/mo per client</span>
+            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>You earn</span>
+              <span className="text-[14px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$175.12/mo per client</span>
             </div>
             <div className="flex items-center gap-2 mt-1">
-              <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(34,211,238,0.08)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>Active subscribers: 3</span>
-              <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>= $525.36/mo guaranteed</span>
+              <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>Active subscribers: 3</span>
+              <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>= $525.36/mo guaranteed</span>
             </div>
           </div>
         )}
 
         {revenueTab === "commission" && (
           <div className="flex flex-col gap-3">
-            <p className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Earn a commission when your mentees land jobs at target companies. Aligned incentives — you win when they win.</p>
-            <div className="rounded-xl p-3" style={{ background: "rgba(179,255,59,0.04)", border: "1px solid rgba(179,255,59,0.1)" }}>
-              <span className="text-[11px] text-[#B3FF3B] block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>How it works</span>
+            <p className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Earn a commission when your mentees land jobs at target companies. Aligned incentives — you win when they win.</p>
+            <div className="rounded-xl p-3" style={{ background: "rgba(var(--ce-lime-rgb),0.04)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+              <span className="text-[11px] text-ce-lime block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>How it works</span>
               <ul className="flex flex-col gap-1">
                 {["Mentee lands job at a partner employer", "CareerEdge shares placement data", "Guide earns 2% of first-year salary (avg. $2,800)"].map((s, i) => (
-                  <li key={i} className="flex items-start gap-2"><div className="w-1 h-1 rounded-full bg-[#B3FF3B] mt-1.5 flex-shrink-0" /><span className="text-[10px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{s}</span></li>
+                  <li key={i} className="flex items-start gap-2"><div className="w-1 h-1 rounded-full bg-[var(--ce-lime)] mt-1.5 flex-shrink-0" /><span className="text-[10px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{s}</span></li>
                 ))}
               </ul>
             </div>
-            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>Active mentees on commission track</span>
-              <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>4</span>
+            <div className="flex items-center justify-between py-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>Active mentees on commission track</span>
+              <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>4</span>
             </div>
           </div>
         )}
@@ -1917,23 +1917,23 @@ function EarningsCard() {
 
       {/* Session earnings breakdown */}
       <GlassCard delay={0.6}>
-        <span className="text-[12px] text-[#9CA3AF] block mb-4" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Recent Earnings</span>
+        <span className="text-[12px] text-ce-text-secondary block mb-4" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Recent Earnings</span>
         <div className="flex flex-col gap-2">
           {GUIDE_UPCOMING.map((s, i) => (
-            <div key={s.id} className="flex items-center justify-between py-2" style={{ borderBottom: i < GUIDE_UPCOMING.length - 1 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
+            <div key={s.id} className="flex items-center justify-between py-2" style={{ borderBottom: i < GUIDE_UPCOMING.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.04)" : "none" }}>
               <div className="flex items-center gap-3">
                 <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: `${s.bookerColor}12` }}>
                   <span className="text-[10px]" style={{ color: s.bookerColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.bookerInitials}</span>
                 </div>
                 <div>
-                  <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{s.bookerName}</span>
-                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{s.sessionType} · {s.date}</span>
+                  <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{s.bookerName}</span>
+                  <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{s.sessionType} · {s.date}</span>
                 </div>
               </div>
               {s.earnings > 0 ? (
-                <span className="text-[13px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>+${s.earnings.toFixed(2)}</span>
+                <span className="text-[13px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>+${s.earnings.toFixed(2)}</span>
               ) : (
-                <span className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Volunteer</span>
+                <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Volunteer</span>
               )}
             </div>
           ))}
@@ -1969,13 +1969,13 @@ function WeekCalendar({ onEdit }: { onEdit: () => void }) {
   return (
     <div>
       <div className="flex items-center justify-between mb-4">
-        <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Week of March 18, 2026</span>
+        <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Week of March 18, 2026</span>
         <div className="flex items-center gap-3">
-          <div className="flex items-center gap-3 text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
-            <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(179,255,59,0.25)" }} /> Available</div>
-            <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(139,92,246,0.3)" }} /> Booked</div>
+          <div className="flex items-center gap-3 text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
+            <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(var(--ce-lime-rgb),0.25)" }} /> Available</div>
+            <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(var(--ce-role-guide-rgb),0.3)" }} /> Booked</div>
           </div>
-          <button onClick={onEdit} className="text-[11px] text-[#22D3EE] px-2.5 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.12)", fontFamily: "var(--font-body)" }}>
+          <button onClick={onEdit} className="text-[11px] text-ce-cyan px-2.5 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", fontFamily: "var(--font-body)" }}>
             Edit Availability
           </button>
         </div>
@@ -1988,17 +1988,17 @@ function WeekCalendar({ onEdit }: { onEdit: () => void }) {
             <div />
             {DAYS.map((d, i) => (
               <div key={d} className="text-center py-2">
-                <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{d}</span>
-                <div className="text-[13px] text-[#E8E8ED] mt-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{18 + i}</div>
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{d}</span>
+                <div className="text-[13px] text-ce-text-primary mt-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{18 + i}</div>
               </div>
             ))}
           </div>
 
           {/* Time grid */}
-          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
             {HOURS.map((hour) => (
               <div key={hour} className="grid gap-px" style={{ gridTemplateColumns: "52px repeat(7, 1fr)" }}>
-                <div className="flex items-center justify-end pr-2 text-[9px] text-[#374151] py-2" style={{ fontFamily: "var(--font-body)" }}>
+                <div className="flex items-center justify-end pr-2 text-[9px] text-[var(--ce-text-quaternary)] py-2" style={{ fontFamily: "var(--font-body)" }}>
                   {hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
                 </div>
                 {DAYS.map((_, dayIdx) => {
@@ -2008,14 +2008,14 @@ function WeekCalendar({ onEdit }: { onEdit: () => void }) {
                       key={dayIdx}
                       className="h-8 relative transition-colors cursor-pointer"
                       style={{
-                        background: block?.type === "booked" ? "rgba(139,92,246,0.25)" : block?.type === "available" ? "rgba(179,255,59,0.12)" : "rgba(255,255,255,0.01)",
-                        borderTop: "1px solid rgba(255,255,255,0.03)",
-                        borderLeft: "1px solid rgba(255,255,255,0.03)",
+                        background: block?.type === "booked" ? "rgba(var(--ce-role-guide-rgb),0.25)" : block?.type === "available" ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.01)",
+                        borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)",
+                        borderLeft: "1px solid rgba(var(--ce-glass-tint),0.03)",
                       }}
                       onClick={() => block && setEditingBlock(block)}
                     >
                       {block?.client && (
-                        <span className="absolute inset-0 flex items-center justify-center text-[9px] text-[#8B5CF6]" style={{ fontFamily: "var(--font-body)" }}>
+                        <span className="absolute inset-0 flex items-center justify-center text-[9px] text-[var(--ce-role-guide)]" style={{ fontFamily: "var(--font-body)" }}>
                           {block.client}
                         </span>
                       )}
@@ -2033,27 +2033,27 @@ function WeekCalendar({ onEdit }: { onEdit: () => void }) {
         {editingBlock && (
           <motion.div
             className="mt-4 rounded-xl p-4"
-            style={{ background: "rgba(255,255,255,0.02)", border: editingBlock.type === "booked" ? "1px solid rgba(139,92,246,0.2)" : "1px solid rgba(179,255,59,0.15)" }}
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: editingBlock.type === "booked" ? "1px solid rgba(var(--ce-role-guide-rgb),0.2)" : "1px solid rgba(var(--ce-lime-rgb),0.15)" }}
             initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: 4 }}
           >
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 {DAYS[editingBlock.day]}, {editingBlock.start > 12 ? editingBlock.start - 12 : editingBlock.start}{editingBlock.start >= 12 ? "PM" : "AM"} – {editingBlock.end > 12 ? editingBlock.end - 12 : editingBlock.end}{editingBlock.end >= 12 ? "PM" : "AM"}
               </span>
-              <button onClick={() => setEditingBlock(null)} className="text-[#6B7280] cursor-pointer"><X className="w-4 h-4" /></button>
+              <button onClick={() => setEditingBlock(null)} className="text-ce-text-tertiary cursor-pointer"><X className="w-4 h-4" /></button>
             </div>
             {editingBlock.type === "booked" ? (
               <div>
-                <span className="text-[12px] text-[#8B5CF6] block mb-2" style={{ fontFamily: "var(--font-body)" }}>Booked — {editingBlock.client}</span>
+                <span className="text-[12px] text-[var(--ce-role-guide)] block mb-2" style={{ fontFamily: "var(--font-body)" }}>Booked — {editingBlock.client}</span>
                 <div className="flex gap-2">
-                  <button className="text-[11px] text-[#9CA3AF] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>View session thread</button>
-                  <button className="text-[11px] text-[#EF4444] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.12)", fontFamily: "var(--font-body)" }}>Cancel</button>
+                  <button className="text-[11px] text-ce-text-secondary px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>View session thread</button>
+                  <button className="text-[11px] text-[var(--ce-status-error)] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-status-error-rgb),0.06)", border: "1px solid rgba(var(--ce-status-error-rgb),0.12)", fontFamily: "var(--font-body)" }}>Cancel</button>
                 </div>
               </div>
             ) : (
               <div className="flex gap-2">
-                <button onClick={() => setBlocks(prev => prev.filter(b => b !== editingBlock))} className="text-[11px] text-[#EF4444] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(239,68,68,0.06)", border: "1px solid rgba(239,68,68,0.12)", fontFamily: "var(--font-body)" }}>Remove block</button>
-                <button onClick={() => setEditingBlock(null)} className="text-[11px] text-[#9CA3AF] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>Done</button>
+                <button onClick={() => setBlocks(prev => prev.filter(b => b !== editingBlock))} className="text-[11px] text-[var(--ce-status-error)] px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-status-error-rgb),0.06)", border: "1px solid rgba(var(--ce-status-error-rgb),0.12)", fontFamily: "var(--font-body)" }}>Remove block</button>
+                <button onClick={() => setEditingBlock(null)} className="text-[11px] text-ce-text-secondary px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>Done</button>
               </div>
             )}
           </motion.div>
@@ -2081,48 +2081,48 @@ function AvailabilityEditor({ onClose }: { onClose: () => void }) {
   return (
     <motion.div
       className="fixed inset-0 z-50 flex items-end md:items-center justify-center p-4"
-      style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(8px)" }}
+      style={{ background: "rgba(var(--ce-shadow-tint),0.6)", backdropFilter: "blur(8px)" }}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
     >
       <motion.div
         className="w-full max-w-[560px] rounded-2xl overflow-hidden"
-        style={{ background: "rgba(12,14,18,0.99)", border: "1px solid rgba(255,255,255,0.08)", maxHeight: "85vh", overflowY: "auto" }}
+        style={{ background: "rgba(12,14,18,0.99)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", maxHeight: "85vh", overflowY: "auto" }}
         initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
         transition={{ duration: 0.25, ease: EASE }}
       >
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
-          <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Availability Settings</span>
-          <button onClick={onClose} className="text-[#6B7280] cursor-pointer"><X className="w-5 h-5" /></button>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+          <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Availability Settings</span>
+          <button onClick={onClose} className="text-ce-text-tertiary cursor-pointer"><X className="w-5 h-5" /></button>
         </div>
 
         <div className="p-6 flex flex-col gap-6">
           {/* Session types & pricing */}
           <div>
-            <span className="text-[12px] text-[#9CA3AF] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Types You Offer</span>
+            <span className="text-[12px] text-ce-text-secondary block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Types You Offer</span>
             <div className="flex flex-col gap-2">
               {allTypes.map((type) => {
                 const enabled = enabledTypes.includes(type);
                 return (
-                  <div key={type} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: enabled ? "rgba(179,255,59,0.04)" : "rgba(255,255,255,0.02)", border: enabled ? "1px solid rgba(179,255,59,0.12)" : "1px solid rgba(255,255,255,0.05)" }}>
-                    <button onClick={() => toggleType(type)} className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 cursor-pointer" style={{ background: enabled ? "#B3FF3B" : "rgba(255,255,255,0.06)", border: enabled ? "none" : "1px solid rgba(255,255,255,0.1)" }}>
-                      {enabled && <Check className="w-3 h-3 text-[#0A0C10]" />}
+                  <div key={type} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: enabled ? "rgba(var(--ce-lime-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)", border: enabled ? "1px solid rgba(var(--ce-lime-rgb),0.12)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                    <button onClick={() => toggleType(type)} className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 cursor-pointer" style={{ background: enabled ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.06)", border: enabled ? "none" : "1px solid rgba(var(--ce-glass-tint),0.1)" }}>
+                      {enabled && <Check className="w-3 h-3 text-[var(--ce-surface-0)]" />}
                     </button>
-                    <span className="flex-1 text-[12px]" style={{ color: enabled ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>{type}</span>
+                    <span className="flex-1 text-[12px]" style={{ color: enabled ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>{type}</span>
                     {enabled && type !== "Office Hours" && (
                       <div className="flex items-center gap-1">
-                        <DollarSign className="w-3 h-3 text-[#6B7280]" />
+                        <DollarSign className="w-3 h-3 text-ce-text-tertiary" />
                         <input
                           type="number"
                           value={prices[type] || 0}
                           onChange={e => setPrices(p => ({ ...p, [type]: Number(e.target.value) }))}
                           className="w-16 text-[12px] text-right bg-transparent outline-none"
-                          style={{ color: "#E8E8ED", fontFamily: "var(--font-body)", border: "none" }}
+                          style={{ color: "var(--ce-text-primary)", fontFamily: "var(--font-body)", border: "none" }}
                         />
-                        <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>/session</span>
+                        <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>/session</span>
                       </div>
                     )}
                     {enabled && type === "Office Hours" && (
-                      <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>Free / Drop-in</span>
+                      <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>Free / Drop-in</span>
                     )}
                   </div>
                 );
@@ -2132,14 +2132,14 @@ function AvailabilityEditor({ onClose }: { onClose: () => void }) {
 
           {/* Max sessions per day */}
           <div>
-            <span className="text-[12px] text-[#9CA3AF] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Max sessions per day</span>
+            <span className="text-[12px] text-ce-text-secondary block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Max sessions per day</span>
             <div className="flex items-center gap-3">
-              <button onClick={() => setMaxPerDay(Math.max(1, maxPerDay - 1))} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <span className="text-[#E8E8ED]">−</span>
+              <button onClick={() => setMaxPerDay(Math.max(1, maxPerDay - 1))} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                <span className="text-ce-text-primary">−</span>
               </button>
-              <span className="text-[20px] text-[#E8E8ED] tabular-nums w-8 text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{maxPerDay}</span>
-              <button onClick={() => setMaxPerDay(Math.min(10, maxPerDay + 1))} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <span className="text-[#E8E8ED]">+</span>
+              <span className="text-[20px] text-ce-text-primary tabular-nums w-8 text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{maxPerDay}</span>
+              <button onClick={() => setMaxPerDay(Math.min(10, maxPerDay + 1))} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                <span className="text-ce-text-primary">+</span>
               </button>
             </div>
           </div>
@@ -2147,13 +2147,13 @@ function AvailabilityEditor({ onClose }: { onClose: () => void }) {
           {/* Repeat weekly */}
           <div className="flex items-center justify-between">
             <div>
-              <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Repeat weekly</span>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Your availability blocks repeat every week automatically</span>
+              <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Repeat weekly</span>
+              <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Your availability blocks repeat every week automatically</span>
             </div>
             <button
               onClick={() => setRepeatWeekly(!repeatWeekly)}
               className="w-12 h-6 rounded-full relative transition-colors cursor-pointer"
-              style={{ background: repeatWeekly ? "#B3FF3B" : "rgba(255,255,255,0.1)" }}
+              style={{ background: repeatWeekly ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.1)" }}
             >
               <div className="w-5 h-5 rounded-full bg-white absolute top-0.5 transition-all" style={{ left: repeatWeekly ? "calc(100% - 22px)" : "2px" }} />
             </button>
@@ -2161,21 +2161,21 @@ function AvailabilityEditor({ onClose }: { onClose: () => void }) {
 
           {/* Cancellation policy */}
           <div>
-            <span className="text-[12px] text-[#9CA3AF] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Cancellation Policy</span>
+            <span className="text-[12px] text-ce-text-secondary block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Cancellation Policy</span>
             <div className="flex flex-col gap-2">
               {(["flexible", "moderate", "strict"] as CancellationPolicy[]).map((p) => (
                 <button
                   key={p}
                   onClick={() => setPolicy(p)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-left"
-                  style={{ background: policy === p ? "rgba(179,255,59,0.05)" : "rgba(255,255,255,0.02)", border: policy === p ? "1px solid rgba(179,255,59,0.15)" : "1px solid rgba(255,255,255,0.05)" }}
+                  style={{ background: policy === p ? "rgba(var(--ce-lime-rgb),0.05)" : "rgba(var(--ce-glass-tint),0.02)", border: policy === p ? "1px solid rgba(var(--ce-lime-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                 >
-                  <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: policy === p ? "#B3FF3B" : "rgba(255,255,255,0.2)" }}>
-                    {policy === p && <div className="w-2 h-2 rounded-full bg-[#B3FF3B]" />}
+                  <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: policy === p ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.2)" }}>
+                    {policy === p && <div className="w-2 h-2 rounded-full bg-[var(--ce-lime)]" />}
                   </div>
                   <div>
-                    <span className="text-[12px] capitalize" style={{ color: policy === p ? "#E8E8ED" : "#9CA3AF", fontFamily: "var(--font-display)", fontWeight: 500 }}>{p}</span>
-                    <span className="text-[10px] text-[#6B7280] block" style={{ fontFamily: "var(--font-body)" }}>{CANCELLATION_LABELS[p]}</span>
+                    <span className="text-[12px] capitalize" style={{ color: policy === p ? "var(--ce-text-primary)" : "var(--ce-text-secondary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{p}</span>
+                    <span className="text-[10px] text-ce-text-tertiary block" style={{ fontFamily: "var(--font-body)" }}>{CANCELLATION_LABELS[p]}</span>
                   </div>
                 </button>
               ))}
@@ -2185,7 +2185,7 @@ function AvailabilityEditor({ onClose }: { onClose: () => void }) {
           <button
             onClick={() => { onClose(); toast.success("Availability settings saved"); }}
             className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
-            style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}
+            style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
           >
             Save Settings
           </button>
@@ -2202,7 +2202,7 @@ function GuideUpcomingList() {
   return (
     <div className="flex flex-col gap-3">
       {GUIDE_UPCOMING.map((s, i) => (
-        <motion.div key={s.id} className="rounded-2xl overflow-hidden" style={{ background: s.status === "in_2_hours" ? "rgba(179,255,59,0.04)" : "rgba(255,255,255,0.025)", border: s.status === "in_2_hours" ? "1px solid rgba(179,255,59,0.12)" : "1px solid rgba(255,255,255,0.05)" }}
+        <motion.div key={s.id} className="rounded-2xl overflow-hidden" style={{ background: s.status === "in_2_hours" ? "rgba(var(--ce-lime-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.025)", border: s.status === "in_2_hours" ? "1px solid rgba(var(--ce-lime-rgb),0.12)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.07, duration: 0.35, ease: EASE }}>
           <button onClick={() => setExpanded(expanded === s.id ? null : s.id)} className="w-full flex items-center gap-4 px-5 py-4 cursor-pointer text-left">
             <div className="w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: `${s.bookerColor}15`, border: `1px solid ${s.bookerColor}25` }}>
@@ -2210,37 +2210,37 @@ function GuideUpcomingList() {
             </div>
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{s.bookerName}</span>
+                <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{s.bookerName}</span>
                 <SessionTypeBadge type={s.sessionType} />
                 {s.status === "in_2_hours" && (
-                  <span className="text-[10px] text-[#B3FF3B] flex items-center gap-1" style={{ fontFamily: "var(--font-body)" }}>
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#B3FF3B]" /> Starting in 2h
+                  <span className="text-[10px] text-ce-lime flex items-center gap-1" style={{ fontFamily: "var(--font-body)" }}>
+                    <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)]" /> Starting in 2h
                   </span>
                 )}
               </div>
-              <span className="text-[11px] text-[#6B7280] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{s.date} · {s.time} · {s.duration} min {s.earnings > 0 && `· +$${s.earnings.toFixed(2)}`}</span>
+              <span className="text-[11px] text-ce-text-tertiary mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{s.date} · {s.time} · {s.duration} min {s.earnings > 0 && `· +$${s.earnings.toFixed(2)}`}</span>
             </div>
-            {expanded === s.id ? <ChevronUp className="w-4 h-4 text-[#6B7280]" /> : <ChevronDown className="w-4 h-4 text-[#6B7280]" />}
+            {expanded === s.id ? <ChevronUp className="w-4 h-4 text-ce-text-tertiary" /> : <ChevronDown className="w-4 h-4 text-ce-text-tertiary" />}
           </button>
 
           <AnimatePresence>
             {expanded === s.id && (
               <motion.div initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} transition={{ duration: 0.25 }}
-                style={{ overflow: "hidden", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
+                style={{ overflow: "hidden", borderTop: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
                 <div className="px-5 py-4 flex flex-col gap-4">
-                  <div className="flex items-start gap-2 px-4 py-3 rounded-xl" style={{ background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.1)" }}>
+                  <div className="flex items-start gap-2 px-4 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.05)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
                     <SophiaMark size={14} glowing={false} />
-                    <p className="text-[11px] text-[#22D3EE] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{s.sophiaContext}</p>
+                    <p className="text-[11px] text-ce-cyan leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{s.sophiaContext}</p>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                    <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                       <Video className="w-3 h-3" /> Join Call
                     </button>
-                    <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "rgba(34,211,238,0.08)", color: "#22D3EE", border: "1px solid rgba(34,211,238,0.15)", fontFamily: "var(--font-body)" }}>
+                    <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                       <MessageSquare className="w-3 h-3" /> Open thread
                     </button>
-                    <button className="px-3 py-2 rounded-lg text-[12px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Reschedule</button>
-                    <button className="px-3 py-2 rounded-lg text-[12px] text-[#6B7280] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Cancel</button>
+                    <button className="px-3 py-2 rounded-lg text-[12px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Reschedule</button>
+                    <button className="px-3 py-2 rounded-lg text-[12px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Cancel</button>
                   </div>
                 </div>
               </motion.div>
@@ -2278,19 +2278,19 @@ function EdgeGuideView({ onNavigate }: { onNavigate?: NavigateFn }) {
       <div className="max-w-[1100px] mx-auto">
         {/* Header */}
         <motion.div className="pt-6 pb-4" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.35, ease: EASE }}>
-          <h1 className="text-[22px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sessions</h1>
-          <p className="text-[13px] text-[#6B7280] mt-1" style={{ fontFamily: "var(--font-body)" }}>3 sessions today · 2 task reviews pending</p>
+          <h1 className="text-[22px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sessions</h1>
+          <p className="text-[13px] text-ce-text-tertiary mt-1" style={{ fontFamily: "var(--font-body)" }}>3 sessions today · 2 task reviews pending</p>
         </motion.div>
 
         {/* Tabs */}
-        <div className="flex items-center gap-1 mb-6 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", width: "fit-content" }}>
+        <div className="flex items-center gap-1 mb-6 p-1 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", width: "fit-content" }}>
           {tabItems.map((t) => (
             <button key={t.id} onClick={() => setTab(t.id)}
               className="relative flex items-center gap-1.5 px-4 py-2 rounded-lg cursor-pointer text-[12px]"
-              style={{ background: tab === t.id ? "rgba(255,255,255,0.06)" : "transparent", color: tab === t.id ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+              style={{ background: tab === t.id ? "rgba(var(--ce-glass-tint),0.06)" : "transparent", color: tab === t.id ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
               {t.icon} {t.label}
               {t.badge ? (
-                <span className="text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "rgba(139,92,246,0.2)", color: "#8B5CF6", fontFamily: "var(--font-body)" }}>
+                <span className="text-[9px] w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-guide-rgb),0.2)", color: "var(--ce-role-guide)", fontFamily: "var(--font-body)" }}>
                   {t.badge}
                 </span>
               ) : null}
@@ -2320,15 +2320,15 @@ function EdgeGuideView({ onNavigate }: { onNavigate?: NavigateFn }) {
               {hasAvailability && (
                 <GlassCard delay={0.4} className="mt-4">
                   <div className="flex items-center justify-between mb-4">
-                    <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Configuration</span>
-                    <button onClick={() => setAvailEditorOpen(true)} className="text-[11px] text-[#22D3EE] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Edit →</button>
+                    <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Session Configuration</span>
+                    <button onClick={() => setAvailEditorOpen(true)} className="text-[11px] text-ce-cyan cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Edit →</button>
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {["1:1 Mentoring — $75", "Career Coaching — $100", "Mock Interview — Free"].map((t) => (
-                      <span key={t} className="text-[11px] px-3 py-1.5 rounded-lg" style={{ background: "rgba(179,255,59,0.06)", color: "#B3FF3B", border: "1px solid rgba(179,255,59,0.1)", fontFamily: "var(--font-body)" }}>{t}</span>
+                      <span key={t} className="text-[11px] px-3 py-1.5 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", color: "var(--ce-lime)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", fontFamily: "var(--font-body)" }}>{t}</span>
                     ))}
                   </div>
-                  <div className="flex items-center gap-6 text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+                  <div className="flex items-center gap-6 text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
                     <div className="flex items-center gap-1.5"><Shield className="w-3 h-3" /> Moderate cancellation policy</div>
                     <div className="flex items-center gap-1.5"><RefreshCw className="w-3 h-3" /> Repeats weekly</div>
                     <div className="flex items-center gap-1.5"><Users className="w-3 h-3" /> Max 4 sessions/day</div>
@@ -2348,24 +2348,24 @@ function EdgeGuideView({ onNavigate }: { onNavigate?: NavigateFn }) {
           {/* History */}
           {tab === "history" && (
             <motion.div key="history" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}>
-              <motion.div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 cursor-pointer" style={{ background: "rgba(245,158,11,0.05)", border: "1px solid rgba(245,158,11,0.15)" }}
+              <motion.div className="flex items-center gap-3 px-4 py-3 rounded-xl mb-4 cursor-pointer" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.05)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.15)" }}
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                <Bell className="w-4 h-4 text-[#F59E0B]" />
-                <span className="text-[12px] text-[#F59E0B]" style={{ fontFamily: "var(--font-body)" }}>2 sessions need your feedback — Sharon and Marcus are waiting for your notes.</span>
+                <Bell className="w-4 h-4 text-[var(--ce-role-edgepreneur)]" />
+                <span className="text-[12px] text-[var(--ce-role-edgepreneur)]" style={{ fontFamily: "var(--font-body)" }}>2 sessions need your feedback — Sharon and Marcus are waiting for your notes.</span>
                 <div className="ml-auto flex items-center gap-1.5">
                   <SophiaMark size={12} glowing={false} />
-                  <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Sophia: "Want to knock those out?"</span>
+                  <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Sophia: "Want to knock those out?"</span>
                 </div>
               </motion.div>
 
               {/* Completed sessions for guide */}
               <div className="flex flex-col gap-3">
                 {[
-                  { name: "Priya Sharma", initials: "PS", color: "#8B5CF6", type: "Career Coaching" as SessionType, date: "March 10", duration: 60, rating: 5, earnings: 85, notes: "Covered international opportunity mapping. Client made excellent progress on Phase 2 milestone." },
-                  { name: "Marcus Rivera", initials: "MR", color: "#B3FF3B", type: "Mock Interview" as SessionType, date: "March 5", duration: 30, rating: 4, earnings: 0, notes: "", awaitingFeedback: true },
-                  { name: "Sharon Lee", initials: "SL", color: "#22D3EE", type: "1:1 Mentoring" as SessionType, date: "March 1", duration: 60, rating: 5, earnings: 63.75, notes: "Portfolio review. Sharon is on track for Phase 3 transition by end of month.", awaitingFeedback: true },
+                  { name: "Priya Sharma", initials: "PS", color: "var(--ce-role-guide)", type: "Career Coaching" as SessionType, date: "March 10", duration: 60, rating: 5, earnings: 85, notes: "Covered international opportunity mapping. Client made excellent progress on Phase 2 milestone." },
+                  { name: "Marcus Rivera", initials: "MR", color: "var(--ce-lime)", type: "Mock Interview" as SessionType, date: "March 5", duration: 30, rating: 4, earnings: 0, notes: "", awaitingFeedback: true },
+                  { name: "Sharon Lee", initials: "SL", color: "var(--ce-role-edgestar)", type: "1:1 Mentoring" as SessionType, date: "March 1", duration: 60, rating: 5, earnings: 63.75, notes: "Portfolio review. Sharon is on track for Phase 3 transition by end of month.", awaitingFeedback: true },
                 ].map((s, i) => (
-                  <motion.div key={i} className="rounded-2xl p-5" style={{ background: "rgba(255,255,255,0.025)", border: s.awaitingFeedback ? "1px solid rgba(245,158,11,0.15)" : "1px solid rgba(255,255,255,0.05)" }}
+                  <motion.div key={i} className="rounded-2xl p-5" style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: s.awaitingFeedback ? "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                     initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 + i * 0.06, duration: 0.35, ease: EASE }}>
                     <div className="flex items-center gap-3 mb-3">
                       <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: `${s.color}15` }}>
@@ -2373,21 +2373,21 @@ function EdgeGuideView({ onNavigate }: { onNavigate?: NavigateFn }) {
                       </div>
                       <div className="flex-1">
                         <div className="flex items-center gap-2">
-                          <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{s.name}</span>
+                          <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{s.name}</span>
                           <SessionTypeBadge type={s.type} />
-                          {s.awaitingFeedback && <span className="text-[10px] text-[#F59E0B] px-2 py-0.5 rounded-full" style={{ background: "rgba(245,158,11,0.1)", fontFamily: "var(--font-body)" }}>Needs notes</span>}
+                          {s.awaitingFeedback && <span className="text-[10px] text-[var(--ce-role-edgepreneur)] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.1)", fontFamily: "var(--font-body)" }}>Needs notes</span>}
                         </div>
                         <div className="flex items-center gap-2 mt-0.5">
-                          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{s.date} · {s.duration} min</span>
-                          {s.earnings > 0 && <span className="text-[11px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>· +${s.earnings.toFixed(2)}</span>}
+                          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{s.date} · {s.duration} min</span>
+                          {s.earnings > 0 && <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>· +${s.earnings.toFixed(2)}</span>}
                         </div>
                       </div>
                       <StarRating value={s.rating} size={12} />
                     </div>
                     {s.notes ? (
-                      <p className="text-[11px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{s.notes}</p>
+                      <p className="text-[11px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{s.notes}</p>
                     ) : (
-                      <button className="w-full py-2 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.12)", color: "#F59E0B", fontFamily: "var(--font-body)" }}>
+                      <button className="w-full py-2 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.12)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>
                         Add session notes →
                       </button>
                     )}
@@ -2449,37 +2449,37 @@ function OtherRolesView({ role, onNavigate }: { role: RoleId; onNavigate?: Navig
     <RoleShell role={role} userName="Alex M." userInitial="AM" edgeGas={35} onNavigate={onNavigate}>
       <div className="max-w-[900px] mx-auto">
         <motion.div className="pt-6 pb-5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.35, ease: EASE }}>
-          <h1 className="text-[22px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{config.title}</h1>
-          <p className="text-[13px] text-[#6B7280] mt-1" style={{ fontFamily: "var(--font-body)" }}>{config.subtitle}</p>
+          <h1 className="text-[22px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{config.title}</h1>
+          <p className="text-[13px] text-ce-text-tertiary mt-1" style={{ fontFamily: "var(--font-body)" }}>{config.subtitle}</p>
         </motion.div>
 
         <div className="flex flex-col gap-4">
           <GlassCard delay={0.2} gradient>
             <div className="flex items-center gap-2 mb-4">
               <SophiaMark size={16} glowing={false} />
-              <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+              <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
             </div>
-            <p className="text-[13px] text-[#9CA3AF] mb-4" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] text-ce-text-secondary mb-4" style={{ fontFamily: "var(--font-body)" }}>
               You have 3 sessions scheduled this week. No conflicts detected. One session starts in 4 hours.
             </p>
-            <button onClick={() => toast.success("Creating new session…")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <button onClick={() => toast.success("Creating new session…")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
               <Plus className="w-4 h-4" /> {config.cta}
             </button>
           </GlassCard>
 
           <GlassCard delay={0.35}>
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="w-4 h-4 text-[#B3FF3B]" />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming</span>
+              <Calendar className="w-4 h-4 text-ce-lime" />
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming</span>
             </div>
             <div className="flex flex-col gap-2">
               {config.sessions.map((s, i) => (
-                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: i === 0 ? "#B3FF3B" : "#6B7280" }} />
-                  <span className="text-[12px] text-[#9CA3AF] flex-1" style={{ fontFamily: "var(--font-body)" }}>{s}</span>
+                <div key={i} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                  <div className="w-2 h-2 rounded-full flex-shrink-0" style={{ background: i === 0 ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }} />
+                  <span className="text-[12px] text-ce-text-secondary flex-1" style={{ fontFamily: "var(--font-body)" }}>{s}</span>
                   <div className="flex gap-2">
-                    <button className="text-[10px] text-[#22D3EE] px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(34,211,238,0.06)", fontFamily: "var(--font-body)" }}>Details</button>
-                    <button className="text-[10px] text-[#6B7280] px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)" }}>Reschedule</button>
+                    <button className="text-[10px] text-ce-cyan px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", fontFamily: "var(--font-body)" }}>Details</button>
+                    <button className="text-[10px] text-ce-text-tertiary px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)" }}>Reschedule</button>
                   </div>
                 </div>
               ))}

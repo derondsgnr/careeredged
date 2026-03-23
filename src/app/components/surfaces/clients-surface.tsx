@@ -1,3 +1,4 @@
+import { EASE } from "../tokens";
 /**
  * Clients Surface — EdgeGuide
  *
@@ -16,7 +17,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { RoleShell, GlassCard, SophiaInsight } from "../role-shell";
+import { RoleShell, GlassCard } from "../role-shell";
+import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
 import { useSophia } from "../sophia-context";
 import {
@@ -26,8 +28,7 @@ import {
   BookOpen, Search, Filter,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
-const GUIDE_PURPLE = "#8B5CF6";
+const GUIDE_PURPLE = "var(--ce-role-guide)";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -202,10 +203,10 @@ const CLIENTS: Client[] = [
 // ─── Health config ────────────────────────────────────────────────────────────
 
 const HEALTH_CONFIG: Record<ClientHealth, { label: string; color: string; dot: string }> = {
-  thriving: { label: "Thriving",  color: "#B3FF3B", dot: "#B3FF3B" },
-  on_track: { label: "On track",  color: "#22D3EE", dot: "#22D3EE" },
-  at_risk:  { label: "At risk",   color: "#F59E0B", dot: "#F59E0B" },
-  inactive: { label: "Inactive",  color: "#EF4444", dot: "#EF4444" },
+  thriving: { label: "Thriving",  color: "var(--ce-lime)", dot: "var(--ce-lime)" },
+  on_track: { label: "On track",  color: "var(--ce-role-edgestar)", dot: "var(--ce-role-edgestar)" },
+  at_risk:  { label: "At risk",   color: "var(--ce-role-edgepreneur)", dot: "var(--ce-role-edgepreneur)" },
+  inactive: { label: "Inactive",  color: "var(--ce-status-error)", dot: "var(--ce-status-error)" },
 };
 
 // ─── Client Detail Drawer ────────────────────────────────────────────────────
@@ -226,37 +227,37 @@ function ClientDrawer({
   return (
     <motion.div
       className="fixed top-0 right-0 bottom-0 w-[440px] z-50 flex flex-col"
-      style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
       initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }}
       transition={{ duration: 0.35, ease: EASE }}
     >
       {/* Header */}
-      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <div className="flex items-center gap-3">
           <div className="w-11 h-11 rounded-xl flex items-center justify-center text-[17px]"
-            style={{ background: "rgba(139,92,246,0.12)", border: "1.5px solid rgba(139,92,246,0.25)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 600 }}>
+            style={{ background: "rgba(var(--ce-role-guide-rgb),0.12)", border: "1.5px solid rgba(var(--ce-role-guide-rgb),0.25)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 600 }}>
             {client.initial}
           </div>
           <div>
-            <span className="text-[15px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{client.name}</span>
+            <span className="text-[15px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{client.name}</span>
             <div className="flex items-center gap-2">
               <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: healthCfg.dot }} />
               <span className="text-[11px]" style={{ color: healthCfg.color, fontFamily: "var(--font-body)" }}>{healthCfg.label}</span>
-              <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Phase {client.phase}</span>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Phase {client.phase}</span>
             </div>
           </div>
         </div>
-        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors">
-          <X className="w-4 h-4 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
         </button>
       </div>
 
       {/* Tab bar */}
-      <div className="flex items-center gap-1 px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-center gap-1 px-5 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         {(["overview", "sessions"] as const).map((t) => (
           <button key={t} onClick={() => setTab(t)}
             className="px-3 py-1.5 rounded-lg text-[11px] cursor-pointer capitalize transition-colors"
-            style={{ background: tab === t ? "rgba(139,92,246,0.1)" : "transparent", color: tab === t ? GUIDE_PURPLE : "#6B7280", border: tab === t ? "1px solid rgba(139,92,246,0.2)" : "1px solid transparent", fontFamily: "var(--font-body)" }}>
+            style={{ background: tab === t ? "rgba(var(--ce-role-guide-rgb),0.1)" : "transparent", color: tab === t ? GUIDE_PURPLE : "var(--ce-text-secondary)", border: tab === t ? "1px solid rgba(var(--ce-role-guide-rgb),0.2)" : "1px solid transparent", fontFamily: "var(--font-body)" }}>
             {t}
           </button>
         ))}
@@ -268,12 +269,12 @@ function ClientDrawer({
           {tab === "overview" && (
             <motion.div key="overview" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               {/* Progress */}
-              <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Phase {client.phase}: {client.phaseLabel}</span>
+                  <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Phase {client.phase}: {client.phaseLabel}</span>
                   <span className="text-[12px] tabular-nums" style={{ color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>{client.progress}%</span>
                 </div>
-                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
                   <motion.div className="h-full rounded-full" style={{ background: GUIDE_PURPLE }}
                     initial={{ width: 0 }} animate={{ width: `${client.progress}%` }} transition={{ delay: 0.3, duration: 0.6, ease: EASE }} />
                 </div>
@@ -285,31 +286,31 @@ function ClientDrawer({
                     { label: "Earned",     value: `$${client.earnings}` },
                   ].map((s) => (
                     <div key={s.label}>
-                      <div className="text-[16px] tabular-nums text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.value}</div>
-                      <div className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{s.label}</div>
+                      <div className="text-[16px] tabular-nums text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{s.value}</div>
+                      <div className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{s.label}</div>
                     </div>
                   ))}
                 </div>
               </div>
 
               {/* Sophia note */}
-              <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <div className="flex items-center gap-1.5 mb-2">
                   <SophiaMark size={12} glowing={false} />
-                  <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
+                  <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
                 </div>
-                <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{client.sophiaNote}</p>
+                <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{client.sophiaNote}</p>
               </div>
 
               {/* Goal & upcoming */}
-              <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <div className="mb-3">
-                  <span className="text-[10px] text-[#374151] block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>GOAL</span>
-                  <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{client.goal}</span>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>GOAL</span>
+                  <span className="text-[12px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{client.goal}</span>
                 </div>
                 <div>
-                  <span className="text-[10px] text-[#374151] block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NEXT MILESTONE</span>
-                  <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{client.upcomingMilestone}</span>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NEXT MILESTONE</span>
+                  <span className="text-[12px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{client.upcomingMilestone}</span>
                 </div>
               </div>
 
@@ -320,9 +321,9 @@ function ClientDrawer({
                   { label: "Next session",  value: client.nextSession ?? "Not scheduled" },
                   { label: "Last active",   value: client.lastActive },
                 ].map((row, i) => (
-                  <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                    <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
-                    <span className="text-[11px]" style={{ color: !client.nextSession && row.label === "Next session" ? "#EF4444" : "#9CA3AF", fontFamily: "var(--font-body)" }}>{row.value}</span>
+                  <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                    <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
+                    <span className="text-[11px]" style={{ color: !client.nextSession && row.label === "Next session" ? "var(--ce-status-error)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>{row.value}</span>
                   </div>
                 ))}
               </div>
@@ -331,20 +332,20 @@ function ClientDrawer({
 
           {tab === "sessions" && (
             <motion.div key="sessions" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} className="px-5 py-4">
-              <span className="text-[10px] text-[#374151] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SESSION HISTORY ({client.recentSessions.length} shown)</span>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SESSION HISTORY ({client.recentSessions.length} shown)</span>
               <div className="flex flex-col gap-3">
                 {client.recentSessions.map((session) => (
-                  <div key={session.id} className="rounded-xl p-3.5" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}>
+                  <div key={session.id} className="rounded-xl p-3.5" style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
                     <div className="flex items-center justify-between mb-1.5">
-                      <span className="text-[11px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{session.topic}</span>
-                      <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{session.date} · {session.duration}</span>
+                      <span className="text-[11px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{session.topic}</span>
+                      <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{session.date} · {session.duration}</span>
                     </div>
-                    <p className="text-[11px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{session.outcome}</p>
+                    <p className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{session.outcome}</p>
                   </div>
                 ))}
                 {client.recentSessions.length === 0 && (
                   <div className="text-center py-6">
-                    <span className="text-[12px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>No sessions yet</span>
+                    <span className="text-[12px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>No sessions yet</span>
                   </div>
                 )}
               </div>
@@ -354,21 +355,21 @@ function ClientDrawer({
       </div>
 
       {/* Actions */}
-      <div className="px-5 py-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-5 py-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <button
           onClick={() => onNavigate("sessions")}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-          style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
           <Calendar className="w-3.5 h-3.5" /> Book session
         </button>
         <div className="flex gap-2">
-          <button onClick={() => onNavigate("messages")} className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(34,211,238,0.06)] transition-colors" style={{ background: "rgba(34,211,238,0.03)", border: "1px solid rgba(34,211,238,0.08)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+          <button onClick={() => onNavigate("messages")} className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] transition-colors" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
             <MessageSquare className="w-3 h-3" /> Message
           </button>
           <button
             onClick={() => openSophia(`Show me ${client.name}'s full career roadmap — all phases, completed milestones, and what's coming next. Phase ${client.phase}: ${client.phaseLabel}, ${client.progress}% complete. Next milestone: ${client.upcomingMilestone}.`)}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
             <Target className="w-3 h-3" /> View roadmap
           </button>
         </div>
@@ -383,41 +384,41 @@ function ClientRow({ client, onSelect }: { client: Client; onSelect: (c: Client)
   const healthCfg = HEALTH_CONFIG[client.health];
   return (
     <motion.div
-      className="flex items-center gap-4 px-4 py-3.5 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors group"
-      style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}
+      className="flex items-center gap-4 px-4 py-3.5 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] transition-colors group"
+      style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
       onClick={() => onSelect(client)}
       whileHover={{ x: 2 }}
       transition={{ duration: 0.1 }}
     >
       {/* Avatar */}
       <div className="w-9 h-9 rounded-xl flex items-center justify-center text-[13px] flex-shrink-0"
-        style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 600 }}>
+        style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 600 }}>
         {client.initial}
       </div>
 
       {/* Name + status */}
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-0.5">
-          <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{client.name}</span>
+          <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{client.name}</span>
           <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: healthCfg.dot, boxShadow: `0 0 4px ${healthCfg.dot}60` }} />
           <span className="text-[10px]" style={{ color: healthCfg.color, fontFamily: "var(--font-body)" }}>{healthCfg.label}</span>
         </div>
-        <span className="text-[11px] text-[#6B7280] truncate block" style={{ fontFamily: "var(--font-body)" }}>{client.goal}</span>
+        <span className="text-[11px] text-[var(--ce-text-secondary)] truncate block" style={{ fontFamily: "var(--font-body)" }}>{client.goal}</span>
       </div>
 
       {/* Phase */}
       <div className="text-center w-20 flex-shrink-0">
-        <div className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Ph.{client.phase}</div>
-        <div className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{client.progress}%</div>
+        <div className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Ph.{client.phase}</div>
+        <div className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{client.progress}%</div>
       </div>
 
       {/* Progress bar */}
       <div className="w-24 flex-shrink-0">
-        <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+        <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
           <motion.div className="h-full rounded-full" style={{ background: healthCfg.color }}
             initial={{ width: 0 }} animate={{ width: `${client.progress}%` }} transition={{ delay: 0.3, duration: 0.5, ease: EASE }} />
         </div>
-        <span className="text-[9px] text-[#374151] mt-0.5 block" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[9px] text-[var(--ce-text-quaternary)] mt-0.5 block" style={{ fontFamily: "var(--font-body)" }}>
           {client.milestonesDone}/{client.totalMilestones} milestones
         </span>
       </div>
@@ -425,14 +426,14 @@ function ClientRow({ client, onSelect }: { client: Client; onSelect: (c: Client)
       {/* Next session */}
       <div className="w-32 flex-shrink-0 text-right">
         {client.nextSession ? (
-          <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{client.nextSession}</span>
+          <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{client.nextSession}</span>
         ) : (
-          <span className="text-[11px] text-[#EF4444]" style={{ fontFamily: "var(--font-body)" }}>Not booked</span>
+          <span className="text-[11px] text-[var(--ce-status-error)]" style={{ fontFamily: "var(--font-body)" }}>Not booked</span>
         )}
-        <span className="text-[10px] text-[#374151] block" style={{ fontFamily: "var(--font-body)" }}>Last: {client.lastSession}</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)] block" style={{ fontFamily: "var(--font-body)" }}>Last: {client.lastSession}</span>
       </div>
 
-      <ChevronRight className="w-4 h-4 text-[#374151] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+      <ChevronRight className="w-4 h-4 text-[var(--ce-text-quaternary)] opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
     </motion.div>
   );
 }
@@ -490,13 +491,13 @@ export function ClientsSurface() {
         <motion.div className="pt-8 pb-5 flex items-center justify-between"
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>My Clients</h1>
-            <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <h1 className="text-[22px] text-[var(--ce-text-primary)] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>My Clients</h1>
+            <p className="text-[13px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               {clients.length} active clients · {atRisk.length} need attention
             </p>
           </div>
           <button onClick={() => handleNavigate("sessions")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all"
-            style={{ background: "rgba(139,92,246,0.1)", border: "1px solid rgba(139,92,246,0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <Calendar className="w-3.5 h-3.5" /> Manage sessions
           </button>
         </motion.div>
@@ -506,13 +507,13 @@ export function ClientsSurface() {
           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}>
           {[
             { label: "Active clients",   value: clients.length,                  color: GUIDE_PURPLE },
-            { label: "Monthly earnings", value: `$${monthlyEarnings.toLocaleString()}`, color: "#B3FF3B" },
-            { label: "Sessions this mo", value: "12",                             color: "#22D3EE"   },
-            { label: "Need attention",   value: atRisk.length,                   color: atRisk.length > 0 ? "#F59E0B" : "#B3FF3B" },
+            { label: "Monthly earnings", value: `$${monthlyEarnings.toLocaleString()}`, color: "var(--ce-lime)" },
+            { label: "Sessions this mo", value: "12",                             color: "var(--ce-role-edgestar)"   },
+            { label: "Need attention",   value: atRisk.length,                   color: atRisk.length > 0 ? "var(--ce-role-edgepreneur)" : "var(--ce-lime)" },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
               <div className="text-[22px] tabular-nums mb-0.5" style={{ color: stat.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{stat.value}</div>
-              <div className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</div>
+              <div className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -522,32 +523,32 @@ export function ClientsSurface() {
           <div>
             {/* Toolbar */}
             <div className="flex items-center gap-3 mb-3">
-              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                <Search className="w-3.5 h-3.5 text-[#374151]" />
+              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)" }}>
+                <Search className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
                 <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search clients..."
-                  className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none" style={{ fontFamily: "var(--font-body)" }} />
-                {search && <button onClick={() => setSearch("")} className="cursor-pointer"><X className="w-3 h-3 text-[#374151]" /></button>}
+                  className="flex-1 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none" style={{ fontFamily: "var(--font-body)" }} />
+                {search && <button onClick={() => setSearch("")} className="cursor-pointer"><X className="w-3 h-3 text-[var(--ce-text-quaternary)]" /></button>}
               </div>
-              <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 {(["all", "thriving", "on_track", "at_risk", "inactive"] as const).map((f) => (
                   <button key={f} onClick={() => setFilter(f)}
                     className="px-2.5 py-1.5 rounded-md text-[10px] cursor-pointer capitalize transition-all"
-                    style={{ background: filter === f ? "rgba(255,255,255,0.08)" : "transparent", color: filter === f ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+                    style={{ background: filter === f ? "rgba(var(--ce-glass-tint),0.08)" : "transparent", color: filter === f ? "var(--ce-text-primary)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
                     {f === "on_track" ? "On track" : f === "at_risk" ? "At risk" : f}
                   </button>
                 ))}
               </div>
             </div>
 
-            <motion.div className="rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)" }}
+            <motion.div className="rounded-xl overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
               initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3, duration: 0.4, ease: EASE }}>
               {/* Table header */}
-              <div className="flex items-center gap-4 px-4 py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+              <div className="flex items-center gap-4 px-4 py-2.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
                 <div className="w-9 flex-shrink-0" />
-                <span className="flex-1 text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CLIENT</span>
-                <span className="w-20 text-center text-[10px] text-[#374151] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PHASE</span>
-                <span className="w-24 text-[10px] text-[#374151] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRESS</span>
-                <span className="w-32 text-right text-[10px] text-[#374151] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NEXT SESSION</span>
+                <span className="flex-1 text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CLIENT</span>
+                <span className="w-20 text-center text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PHASE</span>
+                <span className="w-24 text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRESS</span>
+                <span className="w-32 text-right text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NEXT SESSION</span>
                 <div className="w-4" />
               </div>
               <AnimatePresence>
@@ -559,8 +560,8 @@ export function ClientsSurface() {
               </AnimatePresence>
               {filtered.length === 0 && (
                 <div className="py-12 flex flex-col items-center gap-2">
-                  <Users className="w-6 h-6 text-[#374151]" />
-                  <span className="text-[12px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>No clients match this filter</span>
+                  <Users className="w-6 h-6 text-[var(--ce-text-quaternary)]" />
+                  <span className="text-[12px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>No clients match this filter</span>
                 </div>
               )}
             </motion.div>
@@ -579,19 +580,19 @@ export function ClientsSurface() {
             {atRisk.length > 0 && (
               <GlassCard delay={0.5}>
                 <div className="flex items-center gap-2 mb-3">
-                  <AlertCircle className="w-3.5 h-3.5 text-[#F59E0B]" />
-                  <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Needs attention</span>
+                  <AlertCircle className="w-3.5 h-3.5 text-[var(--ce-role-edgepreneur)]" />
+                  <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Needs attention</span>
                 </div>
                 {atRisk.map((c, i) => (
                   <button key={c.id} onClick={() => setSelectedClient(c)}
-                    className="w-full flex items-center gap-2.5 py-2 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] rounded-lg transition-colors text-left px-1"
-                    style={{ borderBottom: i < atRisk.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+                    className="w-full flex items-center gap-2.5 py-2 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] rounded-lg transition-colors text-left px-1"
+                    style={{ borderBottom: i < atRisk.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                     <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: HEALTH_CONFIG[c.health].dot }} />
                     <div className="flex-1 min-w-0">
-                      <span className="text-[11px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
-                      <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{c.lastActive}</span>
+                      <span className="text-[11px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
+                      <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{c.lastActive}</span>
                     </div>
-                    <ChevronRight className="w-3 h-3 text-[#374151]" />
+                    <ChevronRight className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   </button>
                 ))}
               </GlassCard>
@@ -600,15 +601,15 @@ export function ClientsSurface() {
             <GlassCard delay={0.6}>
               <div className="flex items-center gap-2 mb-3">
                 <Calendar className="w-3.5 h-3.5" style={{ color: GUIDE_PURPLE }} />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming sessions</span>
+                <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming sessions</span>
               </div>
               {clients.filter(c => c.nextSession).slice(0, 3).map((c, i) => (
-                <div key={c.id} className="flex items-center justify-between py-2" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+                <div key={c.id} className="flex items-center justify-between py-2" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                   <div className="flex items-center gap-2">
                     <div className="w-1.5 h-1.5 rounded-full" style={{ background: GUIDE_PURPLE }} />
-                    <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
+                    <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span>
                   </div>
-                  <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{c.nextSession}</span>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{c.nextSession}</span>
                 </div>
               ))}
             </GlassCard>
@@ -620,7 +621,7 @@ export function ClientsSurface() {
       <AnimatePresence>
         {selectedClient && (
           <>
-            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(0,0,0,0.4)" }}
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setSelectedClient(null)} />
             <ClientDrawer client={selectedClient} onClose={() => setSelectedClient(null)} onNavigate={handleNavigate} />

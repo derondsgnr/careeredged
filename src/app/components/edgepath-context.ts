@@ -4,6 +4,18 @@
  * Adapts EdgePath content to each user type's JBTD
  */
 
+export interface EdgePathSophiaPanelData {
+  sophiaInsight: { message: string; actionLabel: string; actionQuery: string };
+  skillProgress?: { skill: string; pct: number; color: string }[];
+  quickWins: { label: string; time: string }[];
+  /** When true, renders job matches card. Supply jobs[] with the data. */
+  showJobMatches: boolean;
+  jobs?: { title: string; company: string; match: number }[];
+  /** When true, renders mentor connection card. Supply mentor{} with the data. */
+  showMentor: boolean;
+  mentor?: { name: string; initial: string; role: string; nextSession: string; quote: string };
+}
+
 export interface EdgePathRoleContext {
   pathLabel: string;
   pathNoun: string; // "roadmap", "plan", "journey"
@@ -12,6 +24,8 @@ export interface EdgePathRoleContext {
   emptyStateSubtitle: string;
   sophiaEmptyPrompt: string;
   sophiaActiveDefault: string;
+  /** When provided, SophiaPanel renders this instead of the EdgeStar-specific defaults */
+  sophiaPanel?: EdgePathSophiaPanelData;
 }
 
 export function getRoleContext(role: string): EdgePathRoleContext {
@@ -45,6 +59,60 @@ export function getRoleContext(role: string): EdgePathRoleContext {
         emptyStateSubtitle: "View the personalized plan Sophia created for Alex's career goals",
         sophiaEmptyPrompt: "What career goals does Alex have?",
         sophiaActiveDefault: "Alex completed 2 milestones this week. Currently working on portfolio building.",
+      };
+    case "parent-career":
+      return {
+        pathLabel: "My Career",
+        pathNoun: "roadmap",
+        milestoneNoun: "milestone",
+        emptyStateTitle: "Build your career roadmap",
+        emptyStateSubtitle: "Sophia will help you create a step-by-step plan for your professional growth",
+        sophiaEmptyPrompt: "Tell me about your current role and where you want to go",
+        sophiaActiveDefault: "You're on track with your career transition. Upskilling phase is 60% complete.",
+        sophiaPanel: {
+          sophiaInsight: {
+            message: "Your Strategic Leadership course is your highest-leverage milestone right now. Completing it unlocks your Q2 stretch assignment — the single biggest move toward Director-level scope.",
+            actionLabel: "Continue course",
+            actionQuery: "Help me make progress on my Strategic Leadership course",
+          },
+          skillProgress: [
+            { skill: "Leadership", pct: 40, color: "#EC4899" },
+            { skill: "Communication", pct: 65, color: "#22D3EE" },
+            { skill: "Project Management", pct: 70, color: "#B3FF3B" },
+            { skill: "Strategic Thinking", pct: 15, color: "#9CA3AF" },
+          ],
+          quickWins: [
+            { label: "Ask manager about Q2 stretch opportunity", time: "10 min" },
+            { label: "Add recent project outcome to LinkedIn", time: "5 min" },
+            { label: "Connect with a Director-level peer", time: "15 min" },
+          ],
+          showJobMatches: false,
+          showMentor: false,
+        },
+      };
+    case "parent-support":
+      return {
+        pathLabel: "Support Journey",
+        pathNoun: "journey",
+        milestoneNoun: "step",
+        emptyStateTitle: "Map your child support journey",
+        emptyStateSubtitle: "Sophia will help you track how you're supporting Alex's career goals",
+        sophiaEmptyPrompt: "How are you currently supporting Alex's career development?",
+        sophiaActiveDefault: "Alex is on track. You've completed the Connect phase and are actively supporting.",
+        sophiaPanel: {
+          sophiaInsight: {
+            message: "Alex is progressing well in the Connect phase. Your most impactful next step is setting your involvement level — it shapes how Alex receives your support and how often you'll be notified.",
+            actionLabel: "Set involvement level",
+            actionQuery: "Help me understand the involvement levels for supporting Alex",
+          },
+          quickWins: [
+            { label: "Send Alex an encouragement note", time: "5 min" },
+            { label: "Schedule a 15-min check-in this week", time: "2 min" },
+            { label: "Ask one open-ended career question today", time: "Moment" },
+          ],
+          showJobMatches: false,
+          showMentor: false,
+        },
       };
     case "guide":
       return {

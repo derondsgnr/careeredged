@@ -13,7 +13,7 @@
   --secondary: rgba(255, 255, 255, 0.06);
   --secondary-foreground: #E8E8ED;
   --muted: rgba(255, 255, 255, 0.06);
-  --muted-foreground: #6B6F7B;
+  --muted-foreground: #8B8FA0;
   --accent: #22D3EE;
   --accent-foreground: #0A0C10;
   --destructive: #EF4444;
@@ -24,7 +24,7 @@
   --switch-background: rgba(255, 255, 255, 0.12);
   --font-weight-medium: 500;
   --font-weight-normal: 400;
-  --ring: rgba(178, 255, 59, 0.3);
+  --ring: rgba(178, 255, 59, 0.5);
   --chart-1: #22D3EE;
   --chart-2: #B3FF3B;
   --chart-3: #F59E0B;
@@ -53,15 +53,190 @@
   --ce-forest: #042C01;
   --ce-text-primary: #E8E8ED;
   --ce-text-secondary: #9CA3AF;
-  --ce-text-tertiary: #6B7280;
-  --ce-text-quaternary: #374151;
-  --ce-text-ghost: #1F2937;
+  --ce-text-tertiary: #8B90A0;
+  --ce-text-quaternary: #5C6370;
+  --ce-text-ghost: #2A3040;
   --ce-glass-high: rgba(255, 255, 255, 0.06);
   --ce-glass-mid: rgba(255, 255, 255, 0.04);
   --ce-glass-low: rgba(255, 255, 255, 0.02);
   --ce-border-subtle: rgba(255, 255, 255, 0.06);
   --ce-border-medium: rgba(255, 255, 255, 0.1);
   --ce-border-strong: #2A2D38;
+
+  /* Glass tint channel — RGB triplet for rgba() composition */
+  --ce-glass-tint: 255, 255, 255;
+  --ce-shadow-tint: 0, 0, 0;
+
+  /* Surface tokens for inline styles */
+  --ce-surface-bg: #08090C;
+  --ce-surface-card: rgba(255, 255, 255, 0.025);
+  --ce-surface-card-border: rgba(255, 255, 255, 0.05);
+  --ce-surface-hover: rgba(255, 255, 255, 0.04);
+  --ce-surface-active-nav: rgba(255, 255, 255, 0.06);
+  --ce-surface-active-nav-border: rgba(255, 255, 255, 0.08);
+  --ce-surface-divider: rgba(255, 255, 255, 0.03);
+  --ce-surface-overlay: rgba(10, 12, 16, 0.92);
+  --ce-surface-modal-bg: rgba(14, 16, 20, 0.98);
+
+  /* Gauge track */
+  --ce-gauge-track: rgba(255, 255, 255, 0.06);
+
+  /* Role accent colors — dark mode */
+  --ce-role-edgestar: #22D3EE;
+  --ce-role-edgestar-rgb: 34, 211, 238;
+  --ce-role-edgepreneur: #F59E0B;
+  --ce-role-edgepreneur-rgb: 245, 158, 11;
+  --ce-role-parent: #EC4899;
+  --ce-role-parent-rgb: 236, 72, 153;
+  --ce-role-guide: #8B5CF6;
+  --ce-role-guide-rgb: 139, 92, 246;
+  --ce-role-employer: #10B981;
+  --ce-role-employer-rgb: 16, 185, 129;
+  --ce-role-edu: #3B82F6;
+  --ce-role-edu-rgb: 59, 130, 246;
+  --ce-role-ngo: #F97316;
+  --ce-role-ngo-rgb: 249, 115, 22;
+  --ce-role-agency: #6366F1;
+  --ce-role-agency-rgb: 99, 102, 241;
+
+  /* Status colors — dark mode */
+  --ce-status-success: #10B981;
+  --ce-status-success-rgb: 16, 185, 129;
+  --ce-status-success-muted: rgba(16, 185, 129, 0.12);
+  --ce-status-warning: #F59E0B;
+  --ce-status-warning-rgb: 245, 158, 11;
+  --ce-status-warning-muted: rgba(245, 158, 11, 0.12);
+  --ce-status-error: #EF4444;
+  --ce-status-error-rgb: 239, 68, 68;
+  --ce-status-error-muted: rgba(239, 68, 68, 0.12);
+  --ce-status-info: #3B82F6;
+  --ce-status-info-rgb: 59, 130, 246;
+  --ce-status-info-muted: rgba(59, 130, 246, 0.12);
+
+  /* Lime/Cyan RGB triplets for rgba() composition */
+  --ce-lime-rgb: 179, 255, 59;
+  --ce-cyan-rgb: 34, 211, 238;
+
+  /* Dark mode shadows — subtle */
+  --ce-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2);
+  --ce-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --ce-shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.5);
+}
+
+/* ─── Light Mode ──────────────────────────────────────────────────────────── */
+
+:root.light {
+  --background: #F8F9FC;
+  --foreground: #1A1D24;
+  --card: rgba(0, 0, 0, 0.03);
+  --card-foreground: #1A1D24;
+  --popover: #FFFFFF;
+  --popover-foreground: #1A1D24;
+  --primary: #16A34A;
+  --primary-foreground: #FFFFFF;
+  --secondary: rgba(0, 0, 0, 0.04);
+  --secondary-foreground: #1A1D24;
+  --muted: rgba(0, 0, 0, 0.04);
+  --muted-foreground: #6B7280;
+  --accent: #0891B2;
+  --accent-foreground: #FFFFFF;
+  --destructive: #DC2626;
+  --destructive-foreground: #FFFFFF;
+  --border: rgba(0, 0, 0, 0.08);
+  --input: transparent;
+  --input-background: rgba(0, 0, 0, 0.03);
+  --switch-background: rgba(0, 0, 0, 0.1);
+  --ring: rgba(16, 163, 74, 0.25);
+  --sidebar: #F1F3F8;
+  --sidebar-foreground: #1A1D24;
+  --sidebar-primary: #16A34A;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: rgba(0, 0, 0, 0.04);
+  --sidebar-accent-foreground: #1A1D24;
+  --sidebar-border: rgba(0, 0, 0, 0.06);
+  --sidebar-ring: rgba(16, 163, 74, 0.25);
+
+  /* CareerEdge semantic tokens — light */
+  --ce-void: #F8F9FC;
+  --ce-surface-0: #F8F9FC;
+  --ce-surface-1: #FFFFFF;
+  --ce-surface-2: #F1F3F8;
+  --ce-surface-3: #E8EBF0;
+  --ce-lime: #16A34A;
+  --ce-lime-muted: rgba(22, 163, 74, 0.1);
+  --ce-cyan: #0891B2;
+  --ce-cyan-muted: rgba(8, 145, 178, 0.08);
+  --ce-forest: #DCFCE7;
+  --ce-text-primary: #1A1D24;
+  --ce-text-secondary: #4B5563;
+  --ce-text-tertiary: #6B7280;
+  --ce-text-quaternary: #6B7280;
+  --ce-text-ghost: #D1D5DB;
+  --ce-glass-high: rgba(0, 0, 0, 0.05);
+  --ce-glass-mid: rgba(0, 0, 0, 0.03);
+  --ce-glass-low: rgba(0, 0, 0, 0.015);
+  --ce-border-subtle: rgba(0, 0, 0, 0.06);
+  --ce-border-medium: rgba(0, 0, 0, 0.1);
+  --ce-border-strong: #D1D5DB;
+
+  /* Glass tint — inverted for light mode */
+  --ce-glass-tint: 0, 0, 0;
+  --ce-shadow-tint: 0, 0, 0;
+
+  /* Surface tokens — light */
+  --ce-surface-bg: #F8F9FC;
+  --ce-surface-card: rgba(255, 255, 255, 0.8);
+  --ce-surface-card-border: rgba(0, 0, 0, 0.06);
+  --ce-surface-hover: rgba(0, 0, 0, 0.03);
+  --ce-surface-active-nav: rgba(0, 0, 0, 0.04);
+  --ce-surface-active-nav-border: rgba(0, 0, 0, 0.08);
+  --ce-surface-divider: rgba(0, 0, 0, 0.05);
+  --ce-surface-overlay: rgba(255, 255, 255, 0.92);
+  --ce-surface-modal-bg: rgba(255, 255, 255, 0.98);
+
+  /* Gauge track */
+  --ce-gauge-track: rgba(0, 0, 0, 0.06);
+
+  /* Role accent colors — light mode */
+  --ce-role-edgestar: #0891B2;
+  --ce-role-edgestar-rgb: 8, 145, 178;
+  --ce-role-edgepreneur: #D97706;
+  --ce-role-edgepreneur-rgb: 217, 119, 6;
+  --ce-role-parent: #DB2777;
+  --ce-role-parent-rgb: 219, 39, 119;
+  --ce-role-guide: #7C3AED;
+  --ce-role-guide-rgb: 124, 58, 237;
+  --ce-role-employer: #059669;
+  --ce-role-employer-rgb: 5, 150, 105;
+  --ce-role-edu: #2563EB;
+  --ce-role-edu-rgb: 37, 99, 235;
+  --ce-role-ngo: #EA580C;
+  --ce-role-ngo-rgb: 234, 88, 12;
+  --ce-role-agency: #4F46E5;
+  --ce-role-agency-rgb: 79, 70, 229;
+
+  /* Status colors — light mode */
+  --ce-status-success: #059669;
+  --ce-status-success-rgb: 5, 150, 105;
+  --ce-status-success-muted: rgba(5, 150, 105, 0.08);
+  --ce-status-warning: #D97706;
+  --ce-status-warning-rgb: 217, 119, 6;
+  --ce-status-warning-muted: rgba(217, 119, 6, 0.08);
+  --ce-status-error: #DC2626;
+  --ce-status-error-rgb: 220, 38, 38;
+  --ce-status-error-muted: rgba(220, 38, 38, 0.08);
+  --ce-status-info: #2563EB;
+  --ce-status-info-rgb: 37, 99, 235;
+  --ce-status-info-muted: rgba(37, 99, 235, 0.08);
+
+  /* Lime/Cyan RGB triplets — light mode */
+  --ce-lime-rgb: 22, 163, 74;
+  --ce-cyan-rgb: 8, 145, 178;
+
+  /* Light mode shadows for depth */
+  --ce-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);
+  --ce-shadow-elevated: 0 4px 12px rgba(0, 0, 0, 0.06), 0 2px 4px rgba(0, 0, 0, 0.04);
+  --ce-shadow-modal: 0 16px 48px rgba(0, 0, 0, 0.12), 0 4px 16px rgba(0, 0, 0, 0.08);
 }
 
 @theme inline {
@@ -104,13 +279,42 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
+  /* CareerEdge semantic tokens for Tailwind */
+  --color-ce-void: var(--ce-void);
+  --color-ce-surface-0: var(--ce-surface-0);
+  --color-ce-surface-1: var(--ce-surface-1);
+  --color-ce-surface-2: var(--ce-surface-2);
+  --color-ce-surface-3: var(--ce-surface-3);
+  --color-ce-lime: var(--ce-lime);
+  --color-ce-cyan: var(--ce-cyan);
+  --color-ce-text-primary: var(--ce-text-primary);
+  --color-ce-text-secondary: var(--ce-text-secondary);
+  --color-ce-text-tertiary: var(--ce-text-tertiary);
+  --color-ce-text-quaternary: var(--ce-text-quaternary);
+
+  /* Role accents */
+  --color-role-edgestar: var(--ce-role-edgestar);
+  --color-role-edgepreneur: var(--ce-role-edgepreneur);
+  --color-role-parent: var(--ce-role-parent);
+  --color-role-guide: var(--ce-role-guide);
+  --color-role-employer: var(--ce-role-employer);
+  --color-role-edu: var(--ce-role-edu);
+  --color-role-ngo: var(--ce-role-ngo);
+  --color-role-agency: var(--ce-role-agency);
+
+  /* Status */
+  --color-ce-success: var(--ce-status-success);
+  --color-ce-warning: var(--ce-status-warning);
+  --color-ce-error: var(--ce-status-error);
+  --color-ce-info: var(--ce-status-info);
+
   --font-display: 'Urbanist', system-ui, sans-serif;
   --font-body: 'Satoshi', system-ui, sans-serif;
 }
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-ring;
   }
 
   body {

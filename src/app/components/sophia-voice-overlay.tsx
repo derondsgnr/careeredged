@@ -24,8 +24,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SophiaMark } from "./sophia-mark";
 import { X, Mic, ChevronRight } from "lucide-react";
-
-const EASE = [0.32, 0.72, 0, 1] as const;
+import { EASE } from "./tokens";
 
 type VoiceState = "idle" | "listening" | "processing" | "speaking" | "complete";
 
@@ -189,14 +188,14 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
 
   // State-based colors
   const markColor = voiceState === "listening"
-    ? "#22D3EE"
+    ? "var(--ce-role-edgestar)"
     : voiceState === "processing"
-    ? "#F59E0B"
+    ? "var(--ce-role-edgepreneur)"
     : voiceState === "speaking"
-    ? "#B3FF3B"
+    ? "var(--ce-lime)"
     : voiceState === "complete"
-    ? "#22D3EE"
-    : "#22D3EE";
+    ? "var(--ce-role-edgestar)"
+    : "var(--ce-role-edgestar)";
 
   const stateLabel = {
     idle:       "Tap to speak",
@@ -219,7 +218,7 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
           {/* Background bloom */}
           <motion.div
             className="absolute inset-0"
-            style={{ background: "rgba(8,9,12,0.92)", backdropFilter: "blur(24px)" }}
+            style={{ background: "var(--ce-surface-bg)", backdropFilter: "blur(24px)" }}
             onClick={handleBackground}
           />
 
@@ -250,7 +249,7 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
                       className="rounded-full flex-shrink-0"
                       style={{
                         width: 3,
-                        background: voiceState === "listening" ? "rgba(34,211,238,0.35)" : "rgba(179,255,59,0.35)",
+                        background: voiceState === "listening" ? "rgba(var(--ce-role-edgestar-rgb),0.35)" : "rgba(var(--ce-lime-rgb),0.35)",
                       }}
                       initial={{ height: 4, opacity: 0 }}
                       animate={{
@@ -299,7 +298,7 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
               {voiceState === "listening" && (
                 <motion.div
                   className="w-2 h-2 rounded-full"
-                  style={{ background: "#22D3EE" }}
+                  style={{ background: "var(--ce-role-edgestar)" }}
                   animate={{ opacity: [1, 0.3, 1] }}
                   transition={{ duration: 0.8, repeat: Infinity }}
                 />
@@ -323,14 +322,14 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
                   transition={{ duration: 0.25 }}
                 >
                   <span
-                    className="text-[18px] text-[#E8E8ED]"
+                    className="text-[18px] text-[var(--ce-text-primary)]"
                     style={{ fontFamily: "var(--font-display)", fontWeight: 500, lineHeight: 1.4 }}
                   >
                     &ldquo;{transcript}
                     {voiceState === "listening" && (
                       <motion.span
                         className="inline-block w-0.5 h-5 rounded-full ml-0.5 -mb-0.5"
-                        style={{ background: "#22D3EE" }}
+                        style={{ background: "var(--ce-role-edgestar)" }}
                         animate={{ opacity: [1, 0, 1] }}
                         transition={{ duration: 0.6, repeat: Infinity }}
                       />
@@ -353,19 +352,19 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
                 >
                   <div className="flex items-center justify-center gap-1.5 mb-2">
                     <SophiaMark size={12} glowing={false} />
-                    <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                    <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                       Sophia
                     </span>
                   </div>
                   <p
-                    className="text-[14px] text-[#9CA3AF] leading-relaxed"
+                    className="text-[14px] text-[var(--ce-text-tertiary)] leading-relaxed"
                     style={{ fontFamily: "var(--font-body)" }}
                   >
                     {sophiaReply}
                     {voiceState === "speaking" && (
                       <motion.span
                         className="inline-block w-0.5 h-3.5 rounded-full ml-0.5 -mb-0.5"
-                        style={{ background: "#B3FF3B" }}
+                        style={{ background: "var(--ce-lime)" }}
                         animate={{ opacity: [1, 0, 1] }}
                         transition={{ duration: 0.5, repeat: Infinity }}
                       />
@@ -388,8 +387,8 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
                 >
                   <button
                     onClick={handleTryAnother}
-                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-                    style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)", color: "#6B7280", fontFamily: "var(--font-body)" }}
+                    className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                   >
                     <Mic className="w-3.5 h-3.5" />
                     Try again
@@ -397,7 +396,7 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
                   <button
                     onClick={handleOpenFull}
                     className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.97]"
-                    style={{ background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)", color: "#22D3EE", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                    style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                   >
                     Open full response
                     <ChevronRight className="w-3.5 h-3.5" />
@@ -409,19 +408,19 @@ export function SophiaVoiceOverlay({ isOpen, onClose, onOpenPanel }: SophiaVoice
 
           {/* Dismiss button — top right */}
           <motion.button
-            className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+            className="absolute top-6 right-6 z-10 w-9 h-9 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
             onClick={onClose}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.4 }}
           >
-            <X className="w-4 h-4 text-[#6B7280]" />
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
           </motion.button>
 
           {/* Hint text — bottom */}
           <motion.p
-            className="absolute bottom-24 text-[11px] text-[#374151] text-center"
+            className="absolute bottom-24 text-[11px] text-[var(--ce-text-quaternary)] text-center"
             style={{ fontFamily: "var(--font-body)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: voiceState === "idle" || voiceState === "listening" ? 0.7 : 0 }}

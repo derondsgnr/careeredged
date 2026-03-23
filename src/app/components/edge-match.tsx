@@ -1,3 +1,4 @@
+import { EASE } from "./tokens";
 /**
  * EdgeMatch — Job matching surface
  * Three-panel: filters left, card grid center, detail panel right (on selection).
@@ -18,7 +19,6 @@ import {
 } from "lucide-react";
 import { RoleShell, type RoleId, type SophiaContext } from "./role-shell";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 type NavigateFn = (target: string) => void;
 
@@ -122,7 +122,7 @@ const JOBS: Job[] = [
 ];
 
 const MATCH_COLOR = (match: number) =>
-  match >= 85 ? "#B3FF3B" : match >= 70 ? "#22D3EE" : match >= 50 ? "#F59E0B" : "#6B7280";
+  match >= 85 ? "var(--ce-lime)" : match >= 70 ? "var(--ce-role-edgestar)" : match >= 50 ? "var(--ce-role-edgepreneur)" : "var(--ce-text-tertiary)";
 
 // ─── Filter Sidebar ─────────────────────────────────────────────────────────
 
@@ -138,13 +138,13 @@ function FilterSidebar({ filters, onFilterChange }: {
       transition={{ delay: 0.2, duration: 0.4, ease: EASE }}
     >
       <div className="flex items-center gap-2 mb-1">
-        <Filter className="w-4 h-4 text-[#6B7280]" />
-        <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Filters</span>
+        <Filter className="w-4 h-4 text-ce-text-tertiary" />
+        <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Filters</span>
       </div>
 
       {/* Quick filters */}
       <div className="flex flex-col gap-1.5">
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>QUICK FILTERS</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>QUICK FILTERS</span>
         {[
           { key: "saved", label: "Saved", active: filters.saved },
           { key: "applied", label: "Applied", active: filters.applied },
@@ -154,9 +154,9 @@ function FilterSidebar({ filters, onFilterChange }: {
             key={f.key}
             className="flex items-center gap-2 px-3 py-2 rounded-lg text-[12px] cursor-pointer transition-colors text-left"
             style={{
-              background: f.active ? "rgba(34,211,238,0.04)" : "rgba(255,255,255,0.015)",
-              border: `1px solid ${f.active ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.04)"}`,
-              color: f.active ? "#22D3EE" : "#9CA3AF",
+              background: f.active ? "rgba(var(--ce-role-edgestar-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.015)",
+              border: `1px solid ${f.active ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}`,
+              color: f.active ? "var(--ce-role-edgestar)" : "var(--ce-text-secondary)",
               fontFamily: "var(--font-body)",
             }}
             onClick={() => onFilterChange(f.key, !f.active)}
@@ -169,16 +169,16 @@ function FilterSidebar({ filters, onFilterChange }: {
 
       {/* Match threshold */}
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MIN MATCH %</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MIN MATCH %</span>
         <div className="flex gap-1">
           {[50, 70, 80, 90].map((v) => (
             <button
               key={v}
               className="flex-1 px-2 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors text-center tabular-nums"
               style={{
-                background: filters.minMatch === v ? "rgba(34,211,238,0.06)" : "rgba(255,255,255,0.02)",
-                border: `1px solid ${filters.minMatch === v ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.04)"}`,
-                color: filters.minMatch === v ? "#22D3EE" : "#6B7280",
+                background: filters.minMatch === v ? "rgba(var(--ce-role-edgestar-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.02)",
+                border: `1px solid ${filters.minMatch === v ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}`,
+                color: filters.minMatch === v ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
                 fontFamily: "var(--font-body)",
               }}
               onClick={() => onFilterChange("minMatch", v)}
@@ -191,23 +191,23 @@ function FilterSidebar({ filters, onFilterChange }: {
 
       {/* Target role */}
       <div className="flex flex-col gap-2">
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TARGET ROLE</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TARGET ROLE</span>
         <div className="px-3 py-2 rounded-lg text-[12px]"
-          style={{ background: "rgba(34,211,238,0.03)", border: "1px solid rgba(34,211,238,0.06)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+          style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
           <Compass className="w-3 h-3 inline mr-1.5 -mt-0.5" />
           Product Designer
-          <span className="text-[10px] text-[#6B7280] block mt-0.5">From EdgePath</span>
+          <span className="text-[10px] text-ce-text-tertiary block mt-0.5">From EdgePath</span>
         </div>
       </div>
 
       {/* Stats */}
-      <div className="pt-3 flex flex-col gap-1" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MARKET INTEL</span>
-        <div className="text-[11px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-          <span className="text-[#B3FF3B]">↑ 15%</span> more Product Designer roles this month vs last.
+      <div className="pt-3 flex flex-col gap-1" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MARKET INTEL</span>
+        <div className="text-[11px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+          <span className="text-ce-lime">↑ 15%</span> more Product Designer roles this month vs last.
         </div>
-        <div className="text-[11px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-          Average salary: <span className="text-[#E8E8ED]">$152K</span>
+        <div className="text-[11px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+          Average salary: <span className="text-ce-text-primary">$152K</span>
         </div>
       </div>
     </motion.div>
@@ -228,8 +228,8 @@ function JobCard({ job, isSelected, onClick, onToggleSave }: {
     <motion.div
       className="rounded-xl p-4 cursor-pointer transition-all"
       style={{
-        background: isSelected ? "rgba(34,211,238,0.03)" : "rgba(255,255,255,0.02)",
-        border: `1px solid ${isSelected ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.04)"}`,
+        background: isSelected ? "rgba(var(--ce-role-edgestar-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.02)",
+        border: `1px solid ${isSelected ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}`,
       }}
       onClick={onClick}
       whileHover={{ scale: 1.005 }}
@@ -239,12 +239,12 @@ function JobCard({ job, isSelected, onClick, onToggleSave }: {
     >
       <div className="flex items-start justify-between mb-2">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.04)" }}>
-            <Building2 className="w-4 h-4 text-[#6B7280]" />
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
+            <Building2 className="w-4 h-4 text-ce-text-tertiary" />
           </div>
           <div>
-            <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
+            <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
           </div>
         </div>
 
@@ -256,15 +256,15 @@ function JobCard({ job, isSelected, onClick, onToggleSave }: {
 
       {/* Meta */}
       <div className="flex items-center gap-3 mb-2.5 ml-[42px]">
-        <span className="flex items-center gap-1 text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="flex items-center gap-1 text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           <MapPin className="w-3 h-3" /> {job.location}
         </span>
         {job.remote && (
-          <span className="flex items-center gap-1 text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>
+          <span className="flex items-center gap-1 text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>
             <Globe className="w-3 h-3" /> Remote
           </span>
         )}
-        <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{job.posted}</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{job.posted}</span>
       </div>
 
       {/* Skills */}
@@ -274,9 +274,9 @@ function JobCard({ job, isSelected, onClick, onToggleSave }: {
             key={s.name}
             className="text-[10px] px-2 py-0.5 rounded-full"
             style={{
-              background: s.matched ? "rgba(179,255,59,0.06)" : "rgba(255,255,255,0.03)",
-              color: s.matched ? "#B3FF3B" : "#6B7280",
-              border: `1px solid ${s.matched ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.04)"}`,
+              background: s.matched ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
+              color: s.matched ? "var(--ce-lime)" : "var(--ce-text-tertiary)",
+              border: `1px solid ${s.matched ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}`,
               fontFamily: "var(--font-body)",
             }}
           >
@@ -287,25 +287,25 @@ function JobCard({ job, isSelected, onClick, onToggleSave }: {
 
       {/* Salary + actions */}
       <div className="flex items-center justify-between ml-[42px]">
-        <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{job.salary}</span>
+        <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{job.salary}</span>
         <div className="flex items-center gap-2">
           {job.applied && job.status && (
             <span className="text-[10px] px-2 py-0.5 rounded-full" style={{
-              background: job.status === "viewed" ? "rgba(34,211,238,0.06)" : "rgba(255,255,255,0.03)",
-              color: job.status === "viewed" ? "#22D3EE" : "#6B7280",
+              background: job.status === "viewed" ? "rgba(var(--ce-role-edgestar-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
+              color: job.status === "viewed" ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
               fontFamily: "var(--font-body)",
             }}>
               {job.status === "applied" ? "Applied" : job.status === "viewed" ? "Viewed" : job.status}
             </span>
           )}
           <button
-            className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] transition-colors"
+            className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
             onClick={(e) => { e.stopPropagation(); onToggleSave(job.id); toast(job.saved ? "Removed from saved" : `Saved ${job.title} at ${job.company}`); }}
           >
             {job.saved ? (
-              <BookmarkCheck className="w-4 h-4 text-[#B3FF3B]" />
+              <BookmarkCheck className="w-4 h-4 text-ce-lime" />
             ) : (
-              <Bookmark className="w-4 h-4 text-[#374151]" />
+              <Bookmark className="w-4 h-4 text-[var(--ce-text-quaternary)]" />
             )}
           </button>
         </div>
@@ -320,69 +320,69 @@ function NativeApplyModal({ job, onClose, onSubmit }: { job: Job; onClose: () =>
   const [step, setStep] = useState<"form" | "done">("form");
   const [coverLetter, setCoverLetter] = useState(`Dear ${job.company} Hiring Team,\n\nI'm excited to apply for the ${job.title} role. My background in design systems and Figma perfectly aligns with your requirements...`);
   return (
-    <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(8px)" }}
+    <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-4" style={{ background: "rgba(var(--ce-shadow-tint),0.7)", backdropFilter: "blur(8px)" }}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-      <motion.div className="w-full max-w-[520px] rounded-2xl overflow-hidden" style={{ background: "rgba(12,14,18,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}
+      <motion.div className="w-full max-w-[520px] rounded-2xl overflow-hidden" style={{ background: "rgba(12,14,18,0.99)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
         initial={{ scale: 0.96, y: 12 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 12 }} transition={{ duration: 0.22 }}>
-        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}>
+        <div className="flex items-center justify-between px-6 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
           <div>
-            <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Apply to {job.company}</span>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+            <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Apply to {job.company}</span>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
           </div>
-          <button onClick={onClose} className="text-[#6B7280] cursor-pointer"><X className="w-5 h-5" /></button>
+          <button onClick={onClose} className="text-ce-text-tertiary cursor-pointer"><X className="w-5 h-5" /></button>
         </div>
         {step === "form" ? (
           <div className="p-6 flex flex-col gap-4">
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(179,255,59,0.05)", border: "1px solid rgba(179,255,59,0.1)" }}>
-              <Check className="w-3 h-3 text-[#B3FF3B]" />
-              <span className="text-[11px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>Resume v3 attached · ATS score 87</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.05)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+              <Check className="w-3 h-3 text-ce-lime" />
+              <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>Resume v3 attached · ATS score 87</span>
             </div>
             <div>
-              <label className="text-[10px] text-[#6B7280] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>COVER LETTER</label>
+              <label className="text-[10px] text-ce-text-tertiary block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>COVER LETTER</label>
               <textarea value={coverLetter} onChange={e => setCoverLetter(e.target.value)} rows={6}
-                className="w-full rounded-xl px-4 py-3 text-[12px] text-[#E8E8ED] resize-none outline-none"
-                style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", fontFamily: "var(--font-body)" }} />
+                className="w-full rounded-xl px-4 py-3 text-[12px] text-ce-text-primary resize-none outline-none"
+                style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", fontFamily: "var(--font-body)" }} />
               <div className="flex items-center gap-1.5 mt-1">
                 <SophiaMark size={12} glowing={false} />
-                <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Sophia pre-drafted this based on the JD. Edit as needed.</span>
+                <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Sophia pre-drafted this based on the JD. Edit as needed.</span>
               </div>
             </div>
             <div>
-              <label className="text-[10px] text-[#6B7280] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SCREENING QUESTIONS</label>
+              <label className="text-[10px] text-ce-text-tertiary block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SCREENING QUESTIONS</label>
               {[
                 { q: "Years of experience with Figma?", a: "4 years" },
                 { q: "Have you built a design system used by 10+ engineers?", a: "Yes — at TechCorp, serving 35 engineers" },
               ].map((sq, i) => (
                 <div key={i} className="mb-2">
-                  <span className="text-[11px] text-[#9CA3AF] block mb-1" style={{ fontFamily: "var(--font-body)" }}>{sq.q}</span>
-                  <input defaultValue={sq.a} className="w-full px-3 py-2 rounded-lg text-[12px] text-[#E8E8ED] outline-none"
-                    style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+                  <span className="text-[11px] text-ce-text-secondary block mb-1" style={{ fontFamily: "var(--font-body)" }}>{sq.q}</span>
+                  <input defaultValue={sq.a} className="w-full px-3 py-2 rounded-lg text-[12px] text-ce-text-primary outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
                 </div>
               ))}
             </div>
             <div className="flex gap-2">
               <button onClick={() => { setStep("done"); onSubmit(); }}
                 className="flex-1 py-3 rounded-xl text-[13px] cursor-pointer"
-                style={{ background: "#B3FF3B", color: "#0A0C10", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 Submit Application →
               </button>
               <button onClick={onClose}
                 className="px-4 py-3 rounded-xl text-[12px] cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.03)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+                style={{ background: "rgba(var(--ce-glass-tint),0.03)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
                 Cancel
               </button>
             </div>
           </div>
         ) : (
           <div className="p-6 flex flex-col items-center gap-4 py-10">
-            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(179,255,59,0.1)", border: "1px solid rgba(179,255,59,0.2)" }}>
-              <Check className="w-6 h-6 text-[#B3FF3B]" />
+            <div className="w-14 h-14 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)" }}>
+              <Check className="w-6 h-6 text-ce-lime" />
             </div>
             <div className="text-center">
-              <p className="text-[15px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Application submitted</p>
-              <p className="text-[12px] text-[#6B7280] mt-1" style={{ fontFamily: "var(--font-body)" }}>Sophia will track this and notify you of updates.</p>
+              <p className="text-[15px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Application submitted</p>
+              <p className="text-[12px] text-ce-text-tertiary mt-1" style={{ fontFamily: "var(--font-body)" }}>Sophia will track this and notify you of updates.</p>
             </div>
-            <button onClick={onClose} className="px-6 py-2 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(255,255,255,0.04)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}>
+            <button onClick={onClose} className="px-6 py-2 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
               Done
             </button>
           </div>
@@ -415,21 +415,21 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
   return (
     <motion.div
       className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-12rem)]"
-      style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+      style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
       initial={{ opacity: 0, x: 16 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: 16 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
       {/* Header */}
-      <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <div className="flex items-start justify-between mb-3">
           <div>
-            <h3 className="text-[16px] text-[#E8E8ED] mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.title}</h3>
-            <span className="text-[13px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
+            <h3 className="text-[16px] text-ce-text-primary mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.title}</h3>
+            <span className="text-[13px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
           </div>
-          <button onClick={onClose} className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer transition-colors">
-            <X className="w-4 h-4 text-[#6B7280]" />
+          <button onClick={onClose} className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer transition-colors">
+            <X className="w-4 h-4 text-ce-text-tertiary" />
           </button>
         </div>
 
@@ -439,14 +439,14 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
             <Target className="w-3.5 h-3.5" style={{ color: matchColor }} />
             <span className="text-[14px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.match}% match</span>
           </div>
-          <span className="flex items-center gap-1 text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+          <span className="flex items-center gap-1 text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
             <MapPin className="w-3 h-3" /> {job.location} {job.remote && "· Remote"}
           </span>
         </div>
-        <span className="text-[10px] text-[#374151] mb-3 block" style={{ fontFamily: "var(--font-body)" }}>Match updated 2 hours ago · refreshes when your profile changes</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)] mb-3 block" style={{ fontFamily: "var(--font-body)" }}>Match updated 2 hours ago · refreshes when your profile changes</span>
 
         {/* Meta row */}
-        <div className="flex items-center gap-4 text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+        <div className="flex items-center gap-4 text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           <span className="flex items-center gap-1"><DollarSign className="w-3 h-3" /> {job.salary}</span>
           <span className="flex items-center gap-1"><Clock className="w-3 h-3" /> {job.posted}</span>
           <span>{job.type}</span>
@@ -457,14 +457,14 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
       <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
         {/* Skills match */}
         <div>
-          <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS MATCH</span>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS MATCH</span>
           <div className="flex flex-wrap gap-1.5">
             {job.skills.map((s) => (
               <span key={s.name} className="text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1"
                 style={{
-                  background: s.matched ? "rgba(179,255,59,0.06)" : "rgba(239,68,68,0.04)",
-                  color: s.matched ? "#B3FF3B" : "#EF4444",
-                  border: `1px solid ${s.matched ? "rgba(179,255,59,0.1)" : "rgba(239,68,68,0.06)"}`,
+                  background: s.matched ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-status-error-rgb),0.04)",
+                  color: s.matched ? "var(--ce-lime)" : "var(--ce-status-error)",
+                  border: `1px solid ${s.matched ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-status-error-rgb),0.06)"}`,
                   fontFamily: "var(--font-body)",
                 }}
               >
@@ -476,12 +476,12 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
         </div>
 
         {/* Why you match — expandable on-demand */}
-        <div className="rounded-xl overflow-hidden" style={{ background: "rgba(34,211,238,0.02)", border: "1px solid rgba(34,211,238,0.05)" }}>
+        <div className="rounded-xl overflow-hidden" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.02)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.05)" }}>
           <button onClick={handleExpandWhy} className="w-full flex items-center justify-between px-3.5 py-2.5 cursor-pointer text-left">
-            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>WHY YOU MATCH</span>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>WHY YOU MATCH</span>
             <div className="flex items-center gap-1.5">
-              {loadingWhy && <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Analysing...</span>}
-              <ChevronDown className="w-3 h-3 text-[#374151]" style={{ transform: whyExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
+              {loadingWhy && <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Analysing...</span>}
+              <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" style={{ transform: whyExpanded ? "rotate(180deg)" : "none", transition: "transform 0.2s" }} />
             </div>
           </button>
           <AnimatePresence>
@@ -489,7 +489,7 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
               <motion.div className="px-3.5 pb-3" initial={{ height: 0 }} animate={{ height: "auto" }} exit={{ height: 0 }} style={{ overflow: "hidden" }}>
                 <div className="flex flex-col gap-1.5">
                   {[80, 60, 90].map((w, i) => (
-                    <motion.div key={i} className="h-2 rounded-full" style={{ width: `${w}%`, background: "rgba(34,211,238,0.08)" }}
+                    <motion.div key={i} className="h-2 rounded-full" style={{ width: `${w}%`, background: "rgba(var(--ce-role-edgestar-rgb),0.08)" }}
                       animate={{ opacity: [0.4, 1, 0.4] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }} />
                   ))}
                 </div>
@@ -497,7 +497,7 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
             )}
             {whyExpanded && !loadingWhy && (
               <motion.div className="px-3.5 pb-3.5" initial={{ height: 0, opacity: 0 }} animate={{ height: "auto", opacity: 1 }} exit={{ height: 0, opacity: 0 }} style={{ overflow: "hidden" }}>
-                <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{job.whyMatch}</p>
+                <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{job.whyMatch}</p>
               </motion.div>
             )}
           </AnimatePresence>
@@ -505,50 +505,50 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
 
         {/* Sophia's take */}
         <div className="rounded-xl p-3.5" style={{
-          background: "linear-gradient(145deg, rgba(34,211,238,0.03), rgba(179,255,59,0.015))",
-          border: "1px solid rgba(34,211,238,0.06)",
+          background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))",
+          border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)",
         }}>
           <div className="flex items-center gap-1.5 mb-1.5">
             <SophiaMark size={14} glowing={false} />
-            <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S TAKE</span>
+            <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S TAKE</span>
           </div>
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{job.sophiaTake}</p>
+          <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{job.sophiaTake}</p>
         </div>
 
         {/* EdgePath connection */}
         {job.edgePathConnection && (
           <button
-            className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(34,211,238,0.04)] transition-colors text-left w-full"
-            style={{ background: "rgba(34,211,238,0.02)", border: "1px solid rgba(34,211,238,0.05)", fontFamily: "var(--font-body)" }}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.04)] transition-colors text-left w-full"
+            style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.02)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.05)", fontFamily: "var(--font-body)" }}
             onClick={() => onNavigate("edgepath")}
           >
-            <Compass className="w-4 h-4 text-[#22D3EE] flex-shrink-0" />
-            <span className="text-[#9CA3AF] flex-1">{job.edgePathConnection}</span>
-            <ArrowRight className="w-3.5 h-3.5 text-[#22D3EE] flex-shrink-0" />
+            <Compass className="w-4 h-4 text-ce-cyan flex-shrink-0" />
+            <span className="text-ce-text-secondary flex-1">{job.edgePathConnection}</span>
+            <ArrowRight className="w-3.5 h-3.5 text-ce-cyan flex-shrink-0" />
           </button>
         )}
 
         {/* Description */}
         <div>
-          <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DESCRIPTION</span>
-          <p className="text-[12px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{job.description}</p>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DESCRIPTION</span>
+          <p className="text-[12px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{job.description}</p>
         </div>
       </div>
 
       {/* Action bar */}
-      <div className="p-4 flex-shrink-0 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="p-4 flex-shrink-0 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         {!job.applied ? (
           <div className="flex gap-2">
             <button
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
-              style={{ background: "rgba(179,255,59,0.1)", border: "1px solid rgba(179,255,59,0.2)", color: "#E8E8ED", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ background: "rgba(var(--ce-lime-rgb),0.1)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               onClick={() => setShowNativeApply(true)}
             >
-              <Send className="w-3.5 h-3.5 text-[#B3FF3B]" /> Apply natively
+              <Send className="w-3.5 h-3.5 text-ce-lime" /> Apply natively
             </button>
             <button
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+              style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
               onClick={() => { onApply(job.id); toast.success(`Redirecting to ${job.company}`); }}
             >
               <ExternalLink className="w-3.5 h-3.5" /> Apply on {job.company}
@@ -557,14 +557,14 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
         ) : (
           <div className="flex gap-2">
             <div className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px]"
-              style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#6B7280", fontFamily: "var(--font-body)" }}>
-              <Check className="w-3.5 h-3.5 text-[#B3FF3B]" />
+              style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
+              <Check className="w-3.5 h-3.5 text-ce-lime" />
               {job.status === "withdrawn" ? "Withdrawn" : "Applied"}
             </div>
             {job.status !== "withdrawn" && (
               <button onClick={() => { onWithdraw?.(job.id); toast("Application withdrawn"); }}
                 className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#6B7280", fontFamily: "var(--font-body)" }}>
+                style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                 Withdraw
               </button>
             )}
@@ -572,21 +572,21 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
         )}
         <div className="flex gap-2">
           <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer"
-            style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+            style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
             onClick={() => onNavigate("resume")}>
-            <FileText className="w-3.5 h-3.5 text-[#22D3EE]" /> Optimize Resume
+            <FileText className="w-3.5 h-3.5 text-ce-cyan" /> Optimize Resume
           </button>
           {job.applied && (
             <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer"
-              style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+              style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
               onClick={() => onNavigate("messages")}>
-              <MessageSquare className="w-3.5 h-3.5 text-[#8B5CF6]" /> Message Employer
+              <MessageSquare className="w-3.5 h-3.5 text-[var(--ce-role-guide)]" /> Message Employer
             </button>
           )}
           <button className="px-3 py-2 rounded-xl cursor-pointer"
-            style={{ background: job.saved ? "rgba(179,255,59,0.04)" : "rgba(255,255,255,0.02)", border: `1px solid ${job.saved ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.06)"}` }}
+            style={{ background: job.saved ? "rgba(var(--ce-lime-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${job.saved ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.06)"}` }}
             onClick={() => { onToggleSave(job.id); toast(job.saved ? "Removed" : `Saved ${job.title}`); }}>
-            {job.saved ? <BookmarkCheck className="w-4 h-4 text-[#B3FF3B]" /> : <Bookmark className="w-4 h-4 text-[#6B7280]" />}
+            {job.saved ? <BookmarkCheck className="w-4 h-4 text-ce-lime" /> : <Bookmark className="w-4 h-4 text-ce-text-tertiary" />}
           </button>
         </div>
       </div>
@@ -648,7 +648,7 @@ export function EdgeMatch({ onNavigate }: { onNavigate: NavigateFn }) {
   const selectedJob = selectedJobId ? jobs.find((j) => j.id === selectedJobId) : null;
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
       <SophiaForwardBackground />
     <div className="px-6 pb-20">
       <div className="max-w-[1400px] mx-auto">
@@ -660,20 +660,20 @@ export function EdgeMatch({ onNavigate }: { onNavigate: NavigateFn }) {
           transition={{ delay: 0.1, duration: 0.4, ease: EASE }}
         >
           <div>
-            <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               EdgeMatch
             </h1>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
               {filteredJobs.length} roles match your profile · Sorted by match strength
             </span>
           </div>
           {/* Panel mode toggle */}
           <div className="flex items-center gap-2">
-            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Panel mode:</span>
-            <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Panel mode:</span>
+            <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
               {(["overlay", "push"] as const).map(m => (
                 <button key={m} onClick={() => setPanelMode(m)} className="px-2.5 py-1 rounded-md text-[10px] cursor-pointer capitalize"
-                  style={{ background: panelMode === m ? "rgba(255,255,255,0.06)" : "transparent", color: panelMode === m ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+                  style={{ background: panelMode === m ? "rgba(var(--ce-glass-tint),0.06)" : "transparent", color: panelMode === m ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                   {m}
                 </button>
               ))}
@@ -682,16 +682,16 @@ export function EdgeMatch({ onNavigate }: { onNavigate: NavigateFn }) {
 
           {/* Search */}
           <div className="relative w-[280px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#374151]" />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--ce-text-quaternary)]" />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder="Search roles or companies..."
-              className="w-full pl-9 pr-3 py-2 rounded-xl text-[12px] text-[#E8E8ED] placeholder:text-[#374151] outline-none"
+              className="w-full pl-9 pr-3 py-2 rounded-xl text-[12px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none"
               style={{
-                background: "rgba(255,255,255,0.02)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "rgba(var(--ce-glass-tint),0.02)",
+                border: "1px solid rgba(var(--ce-glass-tint),0.06)",
                 fontFamily: "var(--font-body)",
               }}
             />
@@ -707,21 +707,21 @@ export function EdgeMatch({ onNavigate }: { onNavigate: NavigateFn }) {
           >
             {filters.remote && (
               <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                style={{ background: "rgba(34,211,238,0.06)", color: "#22D3EE", border: "1px solid rgba(34,211,238,0.1)", fontFamily: "var(--font-body)" }}
+                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", fontFamily: "var(--font-body)" }}
                 onClick={() => handleFilterChange("remote", false)}>
                 Remote <X className="w-2.5 h-2.5" />
               </span>
             )}
             {filters.saved && (
               <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                style={{ background: "rgba(179,255,59,0.06)", color: "#B3FF3B", border: "1px solid rgba(179,255,59,0.1)", fontFamily: "var(--font-body)" }}
+                style={{ background: "rgba(var(--ce-lime-rgb),0.06)", color: "var(--ce-lime)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", fontFamily: "var(--font-body)" }}
                 onClick={() => handleFilterChange("saved", false)}>
                 Saved <X className="w-2.5 h-2.5" />
               </span>
             )}
             {filters.minMatch > 50 && (
               <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer"
-                style={{ background: "rgba(255,255,255,0.03)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}
+                style={{ background: "rgba(var(--ce-glass-tint),0.03)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}
                 onClick={() => handleFilterChange("minMatch", 50)}>
                 {filters.minMatch}%+ <X className="w-2.5 h-2.5" />
               </span>
@@ -738,10 +738,10 @@ export function EdgeMatch({ onNavigate }: { onNavigate: NavigateFn }) {
           <div className="flex flex-col gap-3 relative">
             {filteredJobs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16">
-                <Search className="w-8 h-8 text-[#374151] mb-3" />
-                <p className="text-[14px] text-[#6B7280] mb-1" style={{ fontFamily: "var(--font-body)" }}>No jobs match your current filters.</p>
+                <Search className="w-8 h-8 text-[var(--ce-text-quaternary)] mb-3" />
+                <p className="text-[14px] text-ce-text-tertiary mb-1" style={{ fontFamily: "var(--font-body)" }}>No jobs match your current filters.</p>
                 <button
-                  className="text-[12px] text-[#22D3EE] cursor-pointer"
+                  className="text-[12px] text-ce-cyan cursor-pointer"
                   style={{ fontFamily: "var(--font-body)" }}
                   onClick={() => setFilters({ remote: false, saved: false, applied: false, minMatch: 50 })}
                 >
@@ -768,7 +768,7 @@ export function EdgeMatch({ onNavigate }: { onNavigate: NavigateFn }) {
               <motion.div className="fixed top-14 right-0 bottom-0 w-[440px] z-30"
                 initial={{ x: 440, opacity: 0 }} animate={{ x: 0, opacity: 1 }} exit={{ x: 440, opacity: 0 }}
                 transition={{ duration: 0.3, ease: EASE }}>
-                <div className="h-full overflow-y-auto" style={{ background: "rgba(8,9,12,0.95)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}>
+                <div className="h-full overflow-y-auto" style={{ background: "rgba(8,9,12,0.95)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}>
                   <JobDetailPanel job={selectedJob} onClose={() => setSelectedJobId(null)} onToggleSave={handleToggleSave} onApply={handleApply} onNavigate={onNavigate} onWithdraw={handleWithdraw} />
                 </div>
               </motion.div>
@@ -848,7 +848,7 @@ const APPLICANTS: Applicant[] = [
   { id: "a5", name: "Elena Voss", initial: "E", match: 82, role: "Product Designer", skills: [{ name: "Figma", matched: true }, { name: "Brand Design", matched: false }, { name: "Prototyping", matched: true }, { name: "User Research", matched: false }], experience: "3 years", location: "Remote", stage: "rejected", appliedDate: "Mar 1", resumeSummary: "Designer at a brand agency. Transitioning from brand to product design. Strong visual skills but limited product experience.", sophiaTake: "Talented visual designer but not yet product-ready for this role. Recommend reaching out again in 6-12 months after she builds more product experience." },
 ];
 
-const STAGE_COLORS: Record<string, string> = { applied: "#6B7280", screened: "#22D3EE", interview: "#B3FF3B", offer: "#10B981", rejected: "#EF4444" };
+const STAGE_COLORS: Record<string, string> = { applied: "var(--ce-text-tertiary)", screened: "var(--ce-role-edgestar)", interview: "var(--ce-lime)", offer: "var(--ce-role-employer)", rejected: "var(--ce-status-error)" };
 const STAGE_LABELS: Record<string, string> = { applied: "Applied", screened: "Screened", interview: "Interviewing", offer: "Offer", rejected: "Passed" };
 
 function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; roleId: RoleId }) {
@@ -877,14 +877,14 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
         <div className="max-w-[1400px] mx-auto">
           <motion.div className="pt-4 pb-5 flex items-center justify-between" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
             <div className="flex items-center gap-3">
-              <button onClick={() => { setViewMode("listings"); setSelectedApplicant(null); }} className="flex items-center gap-1.5 text-[12px] text-[#6B7280] cursor-pointer hover:text-[#9CA3AF] transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+              <button onClick={() => { setViewMode("listings"); setSelectedApplicant(null); }} className="flex items-center gap-1.5 text-[12px] text-ce-text-tertiary cursor-pointer hover:text-ce-text-secondary transition-colors" style={{ fontFamily: "var(--font-body)" }}>
                 <ArrowRight className="w-3.5 h-3.5 rotate-180" /> Back to Listings
               </button>
             </div>
           </motion.div>
           <motion.div className="mb-5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: EASE }}>
-            <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selected.title} — Applicants</h1>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{applicants.length} candidates · Sorted by match strength</span>
+            <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selected.title} — Applicants</h1>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{applicants.length} candidates · Sorted by match strength</span>
           </motion.div>
 
           {/* Pipeline summary */}
@@ -892,10 +892,10 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
             {(["applied", "screened", "interview", "offer", "rejected"] as const).map((stage) => {
               const count = applicants.filter(a => a.stage === stage).length;
               return (
-                <div key={stage} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+                <div key={stage} className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                   <div className="w-2 h-2 rounded-full" style={{ background: STAGE_COLORS[stage] }} />
-                  <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{STAGE_LABELS[stage]}</span>
-                  <span className="text-[11px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{count}</span>
+                  <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{STAGE_LABELS[stage]}</span>
+                  <span className="text-[11px] text-ce-text-primary tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{count}</span>
                 </div>
               );
             })}
@@ -907,7 +907,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
               {applicants.sort((a, b) => b.match - a.match).map((a, i) => {
                 const mc = MATCH_COLOR(a.match);
                 return (
-                  <motion.div key={a.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedApplicant === a.id ? "rgba(34,211,238,0.03)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedApplicant === a.id ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.04)"}` }}
+                  <motion.div key={a.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedApplicant === a.id ? "rgba(var(--ce-role-edgestar-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${selectedApplicant === a.id ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}` }}
                     onClick={() => setSelectedApplicant(selectedApplicant === a.id ? null : a.id)} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + i * 0.04, duration: 0.4, ease: EASE }}>
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -915,8 +915,8 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                           <span className="text-[12px]" style={{ color: mc, fontFamily: "var(--font-display)", fontWeight: 500 }}>{a.initial}</span>
                         </div>
                         <div>
-                          <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{a.name}</span>
-                          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{a.experience} · {a.location} · Applied {a.appliedDate}</span>
+                          <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{a.name}</span>
+                          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{a.experience} · {a.location} · Applied {a.appliedDate}</span>
                         </div>
                       </div>
                       <div className="flex items-center gap-3">
@@ -928,7 +928,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                     </div>
                     <div className="flex flex-wrap gap-1.5 ml-[48px] mt-2">
                       {a.skills.map(s => (
-                        <span key={s.name} className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: s.matched ? "rgba(179,255,59,0.06)" : "rgba(255,255,255,0.03)", color: s.matched ? "#B3FF3B" : "#6B7280", border: `1px solid ${s.matched ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.04)"}`, fontFamily: "var(--font-body)" }}>{s.name}</span>
+                        <span key={s.name} className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: s.matched ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)", color: s.matched ? "var(--ce-lime)" : "var(--ce-text-tertiary)", border: `1px solid ${s.matched ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}`, fontFamily: "var(--font-body)" }}>{s.name}</span>
                       ))}
                     </div>
                   </motion.div>
@@ -939,20 +939,20 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
             {/* Applicant detail panel */}
             <AnimatePresence>
               {selApplicant && (
-                <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-14rem)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+                <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-14rem)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                   initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.3, ease: EASE }}>
-                  <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                  <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: `${MATCH_COLOR(selApplicant.match)}12` }}>
                           <span className="text-[14px]" style={{ color: MATCH_COLOR(selApplicant.match), fontFamily: "var(--font-display)", fontWeight: 500 }}>{selApplicant.initial}</span>
                         </div>
                         <div>
-                          <h3 className="text-[16px] text-[#E8E8ED] mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selApplicant.name}</h3>
-                          <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.experience} · {selApplicant.location}</span>
+                          <h3 className="text-[16px] text-ce-text-primary mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selApplicant.name}</h3>
+                          <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.experience} · {selApplicant.location}</span>
                         </div>
                       </div>
-                      <button onClick={() => setSelectedApplicant(null)} className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer"><X className="w-4 h-4 text-[#6B7280]" /></button>
+                      <button onClick={() => setSelectedApplicant(null)} className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer"><X className="w-4 h-4 text-ce-text-tertiary" /></button>
                     </div>
                     <div className="flex items-center gap-3">
                       <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: `${MATCH_COLOR(selApplicant.match)}10`, border: `1px solid ${MATCH_COLOR(selApplicant.match)}20` }}>
@@ -965,28 +965,28 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                   <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
                     {/* Skills */}
                     <div>
-                      <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS MATCH</span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS MATCH</span>
                       <div className="flex flex-wrap gap-1.5">
                         {selApplicant.skills.map(s => (
-                          <span key={s.name} className="text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1" style={{ background: s.matched ? "rgba(179,255,59,0.06)" : "rgba(239,68,68,0.04)", color: s.matched ? "#B3FF3B" : "#EF4444", border: `1px solid ${s.matched ? "rgba(179,255,59,0.1)" : "rgba(239,68,68,0.06)"}`, fontFamily: "var(--font-body)" }}>
+                          <span key={s.name} className="text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1" style={{ background: s.matched ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-status-error-rgb),0.04)", color: s.matched ? "var(--ce-lime)" : "var(--ce-status-error)", border: `1px solid ${s.matched ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-status-error-rgb),0.06)"}`, fontFamily: "var(--font-body)" }}>
                             {s.matched ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}{s.name}
                           </span>
                         ))}
                       </div>
                     </div>
                     {/* Resume summary */}
-                    <div className="rounded-xl p-3.5" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.04)" }}>
-                      <span className="text-[10px] text-[#374151] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>RESUME SUMMARY</span>
-                      <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.resumeSummary}</p>
+                    <div className="rounded-xl p-3.5" style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>RESUME SUMMARY</span>
+                      <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.resumeSummary}</p>
                     </div>
                     {/* Sophia take */}
-                    <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(34,211,238,0.03), rgba(179,255,59,0.015))", border: "1px solid rgba(34,211,238,0.06)" }}>
-                      <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S ASSESSMENT</span></div>
-                      <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.sophiaTake}</p>
+                    <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                      <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S ASSESSMENT</span></div>
+                      <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.sophiaTake}</p>
                     </div>
                     {/* Move to stage */}
                     <div>
-                      <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MOVE TO STAGE</span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MOVE TO STAGE</span>
                       <div className="flex flex-wrap gap-2">
                         {(["applied", "screened", "interview", "offer", "rejected"] as const).filter(s => s !== selApplicant.stage).map(stage => (
                           <button key={stage} onClick={() => handleStageChange(selApplicant.id, stage)} className="text-[11px] px-3 py-1.5 rounded-lg cursor-pointer transition-colors" style={{ background: `${STAGE_COLORS[stage]}08`, border: `1px solid ${STAGE_COLORS[stage]}18`, color: STAGE_COLORS[stage], fontFamily: "var(--font-body)" }}>
@@ -996,9 +996,9 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                       </div>
                     </div>
                   </div>
-                  <div className="p-4 flex-shrink-0 flex gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-                    <button onClick={() => toast.success(`Message sent to ${selApplicant.name}`)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#E8E8ED", fontFamily: "var(--font-display)", fontWeight: 500 }}><MessageSquare className="w-4 h-4 text-[#22D3EE]" /> Message</button>
-                    <button onClick={() => toast(`Downloading ${selApplicant.name}'s resume`)} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}><FileText className="w-3.5 h-3.5" /> Resume</button>
+                  <div className="p-4 flex-shrink-0 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                    <button onClick={() => toast.success(`Message sent to ${selApplicant.name}`)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}><MessageSquare className="w-4 h-4 text-ce-cyan" /> Message</button>
+                    <button onClick={() => toast(`Downloading ${selApplicant.name}'s resume`)} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}><FileText className="w-3.5 h-3.5" /> Resume</button>
                   </div>
                 </motion.div>
               )}
@@ -1015,52 +1015,52 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
       <div className="pt-4 pb-4">
         <div className="max-w-[680px] mx-auto">
           <motion.div className="pt-4 pb-5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
-            <button onClick={() => setViewMode("listings")} className="flex items-center gap-1.5 text-[12px] text-[#6B7280] cursor-pointer hover:text-[#9CA3AF] transition-colors mb-4" style={{ fontFamily: "var(--font-body)" }}>
+            <button onClick={() => setViewMode("listings")} className="flex items-center gap-1.5 text-[12px] text-ce-text-tertiary cursor-pointer hover:text-ce-text-secondary transition-colors mb-4" style={{ fontFamily: "var(--font-body)" }}>
               <ArrowRight className="w-3.5 h-3.5 rotate-180" /> Back to Listings
             </button>
-            <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Edit Listing</h1>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{selected.title} · Posted {selected.posted}</span>
+            <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Edit Listing</h1>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{selected.title} · Posted {selected.posted}</span>
           </motion.div>
-          <motion.div className="rounded-xl p-6 flex flex-col gap-5" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+          <motion.div className="rounded-xl p-6 flex flex-col gap-5" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4, ease: EASE }}>
             <div>
-              <label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Job Title</label>
-              <input type="text" defaultValue={selected.title} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+              <label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Job Title</label>
+              <input type="text" defaultValue={selected.title} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div>
-                <label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Department</label>
-                <input type="text" defaultValue={selected.department} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+                <label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Department</label>
+                <input type="text" defaultValue={selected.department} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
               </div>
               <div>
-                <label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Location</label>
-                <input type="text" defaultValue={selected.location} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+                <label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Location</label>
+                <input type="text" defaultValue={selected.location} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
               </div>
             </div>
             <div>
-              <label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Salary Range</label>
-              <input type="text" defaultValue={selected.salary} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+              <label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Salary Range</label>
+              <input type="text" defaultValue={selected.salary} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
             </div>
             <div>
-              <label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Description</label>
-              <textarea defaultValue="Join our team to build the next generation of product experiences..." rows={5} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] outline-none resize-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+              <label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Description</label>
+              <textarea defaultValue="Join our team to build the next generation of product experiences..." rows={5} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary outline-none resize-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
             </div>
             <div>
-              <label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Status</label>
+              <label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Status</label>
               <div className="flex gap-2">
                 {(["active", "paused", "closed"] as const).map(s => (
-                  <button key={s} onClick={() => setEditStatus(s)} className="text-[12px] px-4 py-2 rounded-lg cursor-pointer" style={{ background: editStatus === s ? "rgba(16,185,129,0.08)" : "rgba(255,255,255,0.02)", border: `1px solid ${editStatus === s ? "rgba(16,185,129,0.12)" : "rgba(255,255,255,0.04)"}`, color: editStatus === s ? "#10B981" : "#6B7280", fontFamily: "var(--font-body)" }}>{s.charAt(0).toUpperCase() + s.slice(1)}</button>
+                  <button key={s} onClick={() => setEditStatus(s)} className="text-[12px] px-4 py-2 rounded-lg cursor-pointer" style={{ background: editStatus === s ? "rgba(var(--ce-role-employer-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${editStatus === s ? "rgba(var(--ce-role-employer-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)"}`, color: editStatus === s ? "var(--ce-role-employer)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>{s.charAt(0).toUpperCase() + s.slice(1)}</button>
                 ))}
               </div>
             </div>
             {/* Sophia optimization suggestion */}
-            <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(34,211,238,0.03), rgba(179,255,59,0.015))", border: "1px solid rgba(34,211,238,0.06)" }}>
-              <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S SUGGESTION</span></div>
-              <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>Adding "remote-friendly" and specific tool requirements (e.g., "Figma, design systems") to your description could increase qualified applications by ~20%.</p>
+            <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+              <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S SUGGESTION</span></div>
+              <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>Adding "remote-friendly" and specific tool requirements (e.g., "Figma, design systems") to your description could increase qualified applications by ~20%.</p>
             </div>
             <div className="flex gap-3 pt-2">
-              <button onClick={() => { setViewMode("listings"); toast.success("Listing updated successfully"); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(179,255,59,0.1), rgba(34,211,238,0.06))", border: "1px solid rgba(179,255,59,0.15)", color: "#E8E8ED", fontFamily: "var(--font-display)", fontWeight: 500 }}>Save Changes</button>
-              <button onClick={() => setViewMode("listings")} className="px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>Cancel</button>
+              <button onClick={() => { setViewMode("listings"); toast.success("Listing updated successfully"); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>Save Changes</button>
+              <button onClick={() => setViewMode("listings")} className="px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>Cancel</button>
             </div>
           </motion.div>
         </div>
@@ -1074,10 +1074,10 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
       <div className="max-w-[1400px] mx-auto">
         <motion.div className="pt-4 pb-5 flex items-center justify-between" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{surfaceLabel}</h1>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{POSTED_JOBS.length} active listings · {POSTED_JOBS.reduce((s, j) => s + j.newApplicants, 0)} new applicants</span>
+            <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{surfaceLabel}</h1>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{POSTED_JOBS.length} active listings · {POSTED_JOBS.reduce((s, j) => s + j.newApplicants, 0)} new applicants</span>
           </div>
-          <button onClick={() => setShowPostForm(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(179,255,59,0.1), rgba(34,211,238,0.06))", border: "1px solid rgba(179,255,59,0.15)", color: "#E8E8ED", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <button onClick={() => setShowPostForm(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <Plus className="w-4 h-4" /> {postLabel}
           </button>
         </motion.div>
@@ -1085,38 +1085,38 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
         <div className="grid gap-5" style={{ gridTemplateColumns: selected ? "1fr 400px" : "1fr" }}>
           <div className="flex flex-col gap-3">
             {POSTED_JOBS.map((job, i) => (
-              <motion.div key={job.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedId === job.id ? "rgba(34,211,238,0.03)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedId === job.id ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.04)"}` }}
+              <motion.div key={job.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedId === job.id ? "rgba(var(--ce-role-edgestar-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${selectedId === job.id ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}` }}
                 onClick={() => setSelectedId(selectedId === job.id ? null : job.id)} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.04, duration: 0.4, ease: EASE }}>
                 <div className="flex items-center justify-between mb-3">
                   <div className="flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(16,185,129,0.06)" }}><Briefcase className="w-4 h-4 text-[#10B981]" /></div>
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-role-employer-rgb),0.06)" }}><Briefcase className="w-4 h-4 text-[var(--ce-role-employer)]" /></div>
                     <div>
-                      <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
-                      <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.department} · {job.location}{job.remote ? " · Remote" : ""}</span>
+                      <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                      <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.department} · {job.location}{job.remote ? " · Remote" : ""}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(16,185,129,0.06)", color: "#10B981", fontFamily: "var(--font-body)" }}>{job.status}</span>
-                    <span className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Posted {job.posted}</span>
+                    <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-employer-rgb),0.06)", color: "var(--ce-role-employer)", fontFamily: "var(--font-body)" }}>{job.status}</span>
+                    <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Posted {job.posted}</span>
                   </div>
                 </div>
                 <div className="flex items-center gap-6 ml-[44px]">
                   <div className="flex items-center gap-1.5">
-                    <Users className="w-3 h-3 text-[#6B7280]" />
-                    <span className="text-[12px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.applicants}</span>
-                    <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>applicants</span>
-                    {job.newApplicants > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded-full text-[#22D3EE]" style={{ background: "rgba(34,211,238,0.08)", fontFamily: "var(--font-body)" }}>+{job.newApplicants} new</span>}
+                    <Users className="w-3 h-3 text-ce-text-tertiary" />
+                    <span className="text-[12px] text-ce-text-primary tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.applicants}</span>
+                    <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>applicants</span>
+                    {job.newApplicants > 0 && <span className="text-[10px] px-1.5 py-0.5 rounded-full text-ce-cyan" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", fontFamily: "var(--font-body)" }}>+{job.newApplicants} new</span>}
                   </div>
-                  <div className="flex items-center gap-1.5"><Eye className="w-3 h-3 text-[#6B7280]" /><span className="text-[12px] text-[#9CA3AF] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.views} views</span></div>
-                  <div className="flex items-center gap-1.5"><Target className="w-3 h-3 text-[#B3FF3B]" /><span className="text-[12px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.topMatch}% top match</span></div>
+                  <div className="flex items-center gap-1.5"><Eye className="w-3 h-3 text-ce-text-tertiary" /><span className="text-[12px] text-ce-text-secondary tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.views} views</span></div>
+                  <div className="flex items-center gap-1.5"><Target className="w-3 h-3 text-ce-lime" /><span className="text-[12px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.topMatch}% top match</span></div>
                 </div>
                 {!isSimple && (
                   <div className="flex items-center gap-2 ml-[44px] mt-3">
                     {(["applied", "screened", "interview", "offer"] as const).map((stage, si) => {
-                      const colors = ["#6B7280", "#22D3EE", "#B3FF3B", "#10B981"];
-                      return (<div key={stage} className="flex items-center gap-1.5"><div className="h-1.5 rounded-full" style={{ width: `${Math.max(job.pipeline[stage] * 1.2, 8)}px`, background: colors[si] }} /><span className="text-[10px] text-[#374151] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.pipeline[stage]}</span></div>);
+                      const colors = ["var(--ce-text-tertiary)", "var(--ce-role-edgestar)", "var(--ce-lime)", "var(--ce-role-employer)"];
+                      return (<div key={stage} className="flex items-center gap-1.5"><div className="h-1.5 rounded-full" style={{ width: `${Math.max(job.pipeline[stage] * 1.2, 8)}px`, background: colors[si] }} /><span className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.pipeline[stage]}</span></div>);
                     })}
-                    <span className="text-[9px] text-[#374151] ml-1" style={{ fontFamily: "var(--font-body)" }}>Applied → Screened → Interview → Offer</span>
+                    <span className="text-[9px] text-[var(--ce-text-quaternary)] ml-1" style={{ fontFamily: "var(--font-body)" }}>Applied → Screened → Interview → Offer</span>
                   </div>
                 )}
               </motion.div>
@@ -1125,49 +1125,49 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
 
           <AnimatePresence>
             {selected && (
-              <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-14rem)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+              <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-14rem)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                 initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.3, ease: EASE }}>
-                <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="text-[16px] text-[#E8E8ED] mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selected.title}</h3>
-                      <span className="text-[13px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{selected.department} · {selected.salary}</span>
+                      <h3 className="text-[16px] text-ce-text-primary mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selected.title}</h3>
+                      <span className="text-[13px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{selected.department} · {selected.salary}</span>
                     </div>
-                    <button onClick={() => setSelectedId(null)} className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer"><X className="w-4 h-4 text-[#6B7280]" /></button>
+                    <button onClick={() => setSelectedId(null)} className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer"><X className="w-4 h-4 text-ce-text-tertiary" /></button>
                   </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>APPLICANT PIPELINE</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>APPLICANT PIPELINE</span>
                     {(["applied", "screened", "interview", "offer"] as const).map((stage, i) => {
                       const count = selected.pipeline[stage]; const maxCount = selected.pipeline.applied;
-                      const colors = ["#6B7280", "#22D3EE", "#B3FF3B", "#10B981"]; const labels = ["Applied", "Screened", "Interviewing", "Offer"];
-                      return (<div key={stage} className="flex items-center gap-3 mb-2"><span className="text-[11px] text-[#6B7280] w-20" style={{ fontFamily: "var(--font-body)" }}>{labels[i]}</span><div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}><motion.div className="h-full rounded-full" style={{ background: colors[i] }} initial={{ width: 0 }} animate={{ width: `${maxCount > 0 ? (count / maxCount) * 100 : 0}%` }} transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: EASE }} /></div><span className="text-[12px] text-[#E8E8ED] tabular-nums w-6 text-right" style={{ fontFamily: "var(--font-body)" }}>{count}</span></div>);
+                      const colors = ["var(--ce-text-tertiary)", "var(--ce-role-edgestar)", "var(--ce-lime)", "var(--ce-role-employer)"]; const labels = ["Applied", "Screened", "Interviewing", "Offer"];
+                      return (<div key={stage} className="flex items-center gap-3 mb-2"><span className="text-[11px] text-ce-text-tertiary w-20" style={{ fontFamily: "var(--font-body)" }}>{labels[i]}</span><div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}><motion.div className="h-full rounded-full" style={{ background: colors[i] }} initial={{ width: 0 }} animate={{ width: `${maxCount > 0 ? (count / maxCount) * 100 : 0}%` }} transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: EASE }} /></div><span className="text-[12px] text-ce-text-primary tabular-nums w-6 text-right" style={{ fontFamily: "var(--font-body)" }}>{count}</span></div>);
                     })}
                   </div>
-                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(34,211,238,0.03), rgba(179,255,59,0.015))", border: "1px solid rgba(34,211,238,0.06)" }}>
-                    <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S INSIGHT</span></div>
-                    <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                    <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S INSIGHT</span></div>
+                    <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                       {selected.newApplicants > 5 ? `Strong candidate flow — ${selected.newApplicants} new this week. Your ${selected.topMatch}% top match indicates well-targeted requirements.` : `View-to-apply rate of ${Math.round(selected.applicants / selected.views * 100)}% — I can suggest description optimizations to attract more qualified candidates.`}
                     </p>
                   </div>
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TOP CANDIDATES</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>TOP CANDIDATES</span>
                     {APPLICANTS.slice(0, 3).map((c, i) => (
-                      <div key={c.id} onClick={() => { setViewMode("applicants"); setSelectedApplicant(c.id); }} className="flex items-center gap-3 py-2.5 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] rounded-lg px-2" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+                      <div key={c.id} onClick={() => { setViewMode("applicants"); setSelectedApplicant(c.id); }} className="flex items-center gap-3 py-2.5 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] rounded-lg px-2" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                         <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: `${MATCH_COLOR(c.match)}12` }}>
                           <span className="text-[10px]" style={{ color: MATCH_COLOR(c.match), fontFamily: "var(--font-display)", fontWeight: 500 }}>{c.initial}</span>
                         </div>
-                        <div className="flex-1"><span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span><span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{STAGE_LABELS[c.stage]}</span></div>
+                        <div className="flex-1"><span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{c.name}</span><span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{STAGE_LABELS[c.stage]}</span></div>
                         <span className="text-[11px] tabular-nums" style={{ color: MATCH_COLOR(c.match), fontFamily: "var(--font-display)", fontWeight: 500 }}>{c.match}%</span>
-                        <ChevronRight className="w-3 h-3 text-[#374151]" />
+                        <ChevronRight className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                       </div>
                     ))}
                   </div>
                 </div>
-                <div className="p-4 flex-shrink-0 flex gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-                  <button onClick={() => setViewMode("applicants")} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#E8E8ED", fontFamily: "var(--font-display)", fontWeight: 500 }}><Users className="w-4 h-4 text-[#22D3EE]" /> View All Applicants</button>
-                  <button onClick={() => { setEditStatus(selected.status); setViewMode("edit"); }} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}><FileText className="w-3.5 h-3.5" /> Edit Listing</button>
+                <div className="p-4 flex-shrink-0 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <button onClick={() => setViewMode("applicants")} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}><Users className="w-4 h-4 text-ce-cyan" /> View All Applicants</button>
+                  <button onClick={() => { setEditStatus(selected.status); setViewMode("edit"); }} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}><FileText className="w-3.5 h-3.5" /> Edit Listing</button>
                 </div>
               </motion.div>
             )}
@@ -1179,23 +1179,23 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
           {showPostForm && (
             <motion.div className="fixed inset-0 z-50 flex items-center justify-center" initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
               <div className="absolute inset-0" style={{ background: "rgba(8,9,12,0.7)", backdropFilter: "blur(4px)" }} onClick={() => setShowPostForm(false)} />
-              <motion.div className="relative z-10 w-full max-w-lg mx-4 rounded-2xl p-6" style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.06)" }}
+              <motion.div className="relative z-10 w-full max-w-lg mx-4 rounded-2xl p-6" style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
                 initial={{ y: 24, opacity: 0, scale: 0.97 }} animate={{ y: 0, opacity: 1, scale: 1 }} exit={{ y: 24, opacity: 0, scale: 0.97 }} transition={{ duration: 0.3, ease: EASE }}>
                 <div className="flex items-center justify-between mb-5">
-                  <h3 className="text-[16px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{postLabel}</h3>
-                  <button onClick={() => setShowPostForm(false)} className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer"><X className="w-4 h-4 text-[#6B7280]" /></button>
+                  <h3 className="text-[16px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{postLabel}</h3>
+                  <button onClick={() => setShowPostForm(false)} className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer"><X className="w-4 h-4 text-ce-text-tertiary" /></button>
                 </div>
                 <div className="flex flex-col gap-4">
-                  <div><label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Job Title</label><input type="text" placeholder="e.g. Product Designer" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} /></div>
+                  <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Job Title</label><input type="text" placeholder="e.g. Product Designer" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
                   <div className="grid grid-cols-2 gap-3">
-                    <div><label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Department</label><input type="text" placeholder="e.g. Design" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} /></div>
-                    <div><label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Location</label><input type="text" placeholder="e.g. Remote" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} /></div>
+                    <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Department</label><input type="text" placeholder="e.g. Design" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
+                    <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Location</label><input type="text" placeholder="e.g. Remote" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
                   </div>
-                  <div><label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Salary Range</label><input type="text" placeholder="e.g. $120K – $160K" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} /></div>
-                  <div><label className="text-[11px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Description</label><textarea placeholder="Describe the role, responsibilities, and requirements..." rows={3} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none resize-none" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} /></div>
+                  <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Salary Range</label><input type="text" placeholder="e.g. $120K – $160K" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
+                  <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Description</label><textarea placeholder="Describe the role, responsibilities, and requirements..." rows={3} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none resize-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
                   <div className="flex gap-3 pt-2">
-                    <button onClick={() => { setShowPostForm(false); toast.success("Job posted successfully", { description: "Sophia will start matching candidates immediately." }); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", color: "#08090C", fontFamily: "var(--font-display)", fontWeight: 500 }}><Sparkles className="w-3.5 h-3.5" /> Publish Listing</button>
-                    <button onClick={() => setShowPostForm(false)} className="px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>Cancel</button>
+                    <button onClick={() => { setShowPostForm(false); toast.success("Job posted successfully", { description: "Sophia will start matching candidates immediately." }); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", color: "var(--ce-void)", fontFamily: "var(--font-display)", fontWeight: 500 }}><Sparkles className="w-3.5 h-3.5" /> Publish Listing</button>
+                    <button onClick={() => setShowPostForm(false)} className="px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>Cancel</button>
                   </div>
                 </div>
               </motion.div>
@@ -1225,8 +1225,8 @@ function ParentMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
     <div className="pt-4 pb-4">
       <div className="max-w-[1400px] mx-auto">
         <motion.div className="pt-4 pb-5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
-          <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Alex's Job Matches</h1>
-          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{JOBS.length} roles match Alex's profile · You can share opportunities with them</span>
+          <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Alex's Job Matches</h1>
+          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{JOBS.length} roles match Alex's profile · You can share opportunities with them</span>
         </motion.div>
 
         <div className="grid gap-5" style={{ gridTemplateColumns: selectedJob ? "1fr 400px" : "1fr" }}>
@@ -1234,28 +1234,28 @@ function ParentMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
             {JOBS.map((job, i) => {
               const matchColor = MATCH_COLOR(job.match);
               return (
-                <motion.div key={job.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedJobId === job.id ? "rgba(236,72,153,0.03)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedJobId === job.id ? "rgba(236,72,153,0.1)" : "rgba(255,255,255,0.04)"}` }}
+                <motion.div key={job.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedJobId === job.id ? "rgba(var(--ce-role-parent-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${selectedJobId === job.id ? "rgba(var(--ce-role-parent-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}` }}
                   onClick={() => setSelectedJobId(selectedJobId === job.id ? null : job.id)} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 + i * 0.04, duration: 0.4, ease: EASE }}>
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.04)" }}><Building2 className="w-4 h-4 text-[#6B7280]" /></div>
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}><Building2 className="w-4 h-4 text-ce-text-tertiary" /></div>
                       <div>
-                        <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
-                        <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.company} · {job.location}</span>
+                        <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                        <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.company} · {job.location}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: `${matchColor}10` }}>
                         <span className="text-[11px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.match}%</span>
                       </div>
-                      <button className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] cursor-pointer" style={{ background: shared.has(job.id) ? "rgba(16,185,129,0.06)" : "rgba(236,72,153,0.06)", border: `1px solid ${shared.has(job.id) ? "rgba(16,185,129,0.1)" : "rgba(236,72,153,0.1)"}`, color: shared.has(job.id) ? "#10B981" : "#EC4899", fontFamily: "var(--font-body)" }} onClick={(e) => { e.stopPropagation(); handleShare(job.id, job.title, job.company); }}>
+                      <button className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] cursor-pointer" style={{ background: shared.has(job.id) ? "rgba(var(--ce-role-employer-rgb),0.06)" : "rgba(var(--ce-role-parent-rgb),0.06)", border: `1px solid ${shared.has(job.id) ? "rgba(var(--ce-role-employer-rgb),0.1)" : "rgba(var(--ce-role-parent-rgb),0.1)"}`, color: shared.has(job.id) ? "var(--ce-role-employer)" : "var(--ce-role-parent)", fontFamily: "var(--font-body)" }} onClick={(e) => { e.stopPropagation(); handleShare(job.id, job.title, job.company); }}>
                         {shared.has(job.id) ? <><Check className="w-3 h-3" /> Shared</> : <><Share2 className="w-3 h-3" /> Share with Alex</>}
                       </button>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 ml-[42px]">
-                    <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{job.salary}</span>
-                    {job.remote && <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Remote</span>}
+                    <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{job.salary}</span>
+                    {job.remote && <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Remote</span>}
                   </div>
                 </motion.div>
               );
@@ -1264,24 +1264,24 @@ function ParentMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
 
           <AnimatePresence>
             {selectedJob && (
-              <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-12rem)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+              <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-12rem)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                 initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.3, ease: EASE }}>
-                <div className="p-5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                <div className="p-5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                   <div className="flex items-start justify-between mb-2">
-                    <div><h3 className="text-[16px] text-[#E8E8ED] mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selectedJob.title}</h3><span className="text-[13px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.company}</span></div>
-                    <button onClick={() => setSelectedJobId(null)} className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer"><X className="w-4 h-4 text-[#6B7280]" /></button>
+                    <div><h3 className="text-[16px] text-ce-text-primary mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selectedJob.title}</h3><span className="text-[13px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.company}</span></div>
+                    <button onClick={() => setSelectedJobId(null)} className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer"><X className="w-4 h-4 text-ce-text-tertiary" /></button>
                   </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
-                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(34,211,238,0.03), rgba(236,72,153,0.02))", border: "1px solid rgba(34,211,238,0.06)" }}>
-                    <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>FOR DAVID (PARENT)</span></div>
-                    <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.sophiaTake} This could be a great conversation starter with Alex about their career direction.</p>
+                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-role-parent-rgb),0.02))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                    <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>FOR DAVID (PARENT)</span></div>
+                    <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.sophiaTake} This could be a great conversation starter with Alex about their career direction.</p>
                   </div>
-                  <p className="text-[12px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.description}</p>
+                  <p className="text-[12px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.description}</p>
                 </div>
-                <div className="p-4 flex gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-                  <button onClick={() => handleShare(selectedJob.id, selectedJob.title, selectedJob.company)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: shared.has(selectedJob.id) ? "rgba(16,185,129,0.06)" : "rgba(236,72,153,0.08)", border: `1px solid ${shared.has(selectedJob.id) ? "rgba(16,185,129,0.1)" : "rgba(236,72,153,0.12)"}`, color: shared.has(selectedJob.id) ? "#10B981" : "#EC4899", fontFamily: "var(--font-display)", fontWeight: 500 }}>{shared.has(selectedJob.id) ? <><Check className="w-4 h-4" /> Shared with Alex</> : <><Share2 className="w-4 h-4" /> Share with Alex</>}</button>
-                  <button onClick={() => onNavigate("synthesis")} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}><MessageSquare className="w-3.5 h-3.5" /> Discuss with Alex</button>
+                <div className="p-4 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <button onClick={() => handleShare(selectedJob.id, selectedJob.title, selectedJob.company)} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: shared.has(selectedJob.id) ? "rgba(var(--ce-role-employer-rgb),0.06)" : "rgba(var(--ce-role-parent-rgb),0.08)", border: `1px solid ${shared.has(selectedJob.id) ? "rgba(var(--ce-role-employer-rgb),0.1)" : "rgba(var(--ce-role-parent-rgb),0.12)"}`, color: shared.has(selectedJob.id) ? "var(--ce-role-employer)" : "var(--ce-role-parent)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{shared.has(selectedJob.id) ? <><Check className="w-4 h-4" /> Shared with Alex</> : <><Share2 className="w-4 h-4" /> Share with Alex</>}</button>
+                  <button onClick={() => onNavigate("synthesis")} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}><MessageSquare className="w-3.5 h-3.5" /> Discuss with Alex</button>
                 </div>
               </motion.div>
             )}
@@ -1317,18 +1317,18 @@ function GuideMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
       <div className="max-w-[1400px] mx-auto">
         <motion.div className="pt-4 pb-5 flex items-center justify-between" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EdgeMatch</h1>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Viewing matches for {client.name} · {JOBS.length} roles</span>
+            <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EdgeMatch</h1>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Viewing matches for {client.name} · {JOBS.length} roles</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Viewing as:</span>
-            <div className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Viewing as:</span>
+            <div className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
               {clients.map((c, i) => (
                 <button key={i} onClick={() => { setClientIdx(i); setSelectedJobId(null); setRecommended(new Set()); }} className="relative flex items-center gap-1.5 px-3 py-1.5 rounded-lg cursor-pointer">
-                  {clientIdx === i && <motion.div className="absolute inset-0 rounded-lg" style={{ background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.12)" }} layoutId="guide-client-pill" transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
+                  {clientIdx === i && <motion.div className="absolute inset-0 rounded-lg" style={{ background: "rgba(var(--ce-role-guide-rgb),0.08)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.12)" }} layoutId="guide-client-pill" transition={{ type: "spring", stiffness: 400, damping: 30 }} />}
                   <div className="relative z-10 flex items-center gap-1.5">
-                    <div className="w-5 h-5 rounded-full flex items-center justify-center text-[9px]" style={{ background: "rgba(139,92,246,0.1)", color: "#8B5CF6", fontFamily: "var(--font-display)", fontWeight: 500 }}>{c.initial}</div>
-                    <span className={`text-[11px] ${clientIdx === i ? "text-[#E8E8ED]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{c.name.split(" ")[0]}</span>
+                    <div className="w-5 h-5 rounded-full flex items-center justify-center text-[9px]" style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", color: "var(--ce-role-guide)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{c.initial}</div>
+                    <span className={`text-[11px] ${clientIdx === i ? "text-ce-text-primary" : "text-ce-text-tertiary"}`} style={{ fontFamily: "var(--font-body)" }}>{c.name.split(" ")[0]}</span>
                   </div>
                 </button>
               ))}
@@ -1336,10 +1336,10 @@ function GuideMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
           </div>
         </motion.div>
 
-        <motion.div className="rounded-xl p-3.5 mb-5 flex items-start gap-3" style={{ background: "linear-gradient(145deg, rgba(139,92,246,0.04), rgba(34,211,238,0.02))", border: "1px solid rgba(139,92,246,0.08)" }}
+        <motion.div className="rounded-xl p-3.5 mb-5 flex items-start gap-3" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-guide-rgb),0.04), rgba(var(--ce-role-edgestar-rgb),0.02))", border: "1px solid rgba(var(--ce-role-guide-rgb),0.08)" }}
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.4, ease: EASE }}>
           <SophiaMark size={16} glowing={false} />
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
             {client.name} has been saving UX Research roles but their roadmap targets {client.role}. You might want to discuss whether they're considering a path change, or if these are stretch explorations.
           </p>
         </motion.div>
@@ -1350,29 +1350,29 @@ function GuideMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
               const matchColor = MATCH_COLOR(job.match);
               const isRec = recommended.has(job.id);
               return (
-                <motion.div key={job.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedJobId === job.id ? "rgba(139,92,246,0.03)" : "rgba(255,255,255,0.02)", border: `1px solid ${selectedJobId === job.id ? "rgba(139,92,246,0.1)" : "rgba(255,255,255,0.04)"}` }}
+                <motion.div key={job.id} className="rounded-xl p-4 cursor-pointer transition-all" style={{ background: selectedJobId === job.id ? "rgba(var(--ce-role-guide-rgb),0.03)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${selectedJobId === job.id ? "rgba(var(--ce-role-guide-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"}` }}
                   onClick={() => setSelectedJobId(selectedJobId === job.id ? null : job.id)}
                   initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.25 + i * 0.04, duration: 0.4, ease: EASE }}>
                   <div className="flex items-start justify-between mb-2">
                     <div className="flex items-center gap-2.5">
-                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.04)" }}><Building2 className="w-4 h-4 text-[#6B7280]" /></div>
+                      <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}><Building2 className="w-4 h-4 text-ce-text-tertiary" /></div>
                       <div>
-                        <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
-                        <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.company} · {job.location}</span>
+                        <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                        <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.company} · {job.location}</span>
                       </div>
                     </div>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1.5 px-2 py-1 rounded-full" style={{ background: `${matchColor}10` }}>
                         <span className="text-[11px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.match}%</span>
                       </div>
-                      <button className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] cursor-pointer" style={{ background: isRec ? "rgba(16,185,129,0.06)" : "rgba(139,92,246,0.06)", border: `1px solid ${isRec ? "rgba(16,185,129,0.1)" : "rgba(139,92,246,0.1)"}`, color: isRec ? "#10B981" : "#8B5CF6", fontFamily: "var(--font-body)" }} onClick={(e) => { e.stopPropagation(); if (!isRec) handleRecommend(job.id, job.title); }}>
+                      <button className="flex items-center gap-1 px-2 py-1 rounded-lg text-[10px] cursor-pointer" style={{ background: isRec ? "rgba(var(--ce-role-employer-rgb),0.06)" : "rgba(var(--ce-role-guide-rgb),0.06)", border: `1px solid ${isRec ? "rgba(var(--ce-role-employer-rgb),0.1)" : "rgba(var(--ce-role-guide-rgb),0.1)"}`, color: isRec ? "var(--ce-role-employer)" : "var(--ce-role-guide)", fontFamily: "var(--font-body)" }} onClick={(e) => { e.stopPropagation(); if (!isRec) handleRecommend(job.id, job.title); }}>
                         {isRec ? <><Check className="w-3 h-3" /> Sent</> : <><Send className="w-3 h-3" /> Recommend</>}
                       </button>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 ml-[42px]">
-                    <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{job.salary}</span>
-                    {job.remote && <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Remote</span>}
+                    <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{job.salary}</span>
+                    {job.remote && <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Remote</span>}
                   </div>
                 </motion.div>
               );
@@ -1382,55 +1382,55 @@ function GuideMatchView({ onNavigate }: { onNavigate: NavigateFn }) {
           {/* Guide detail panel */}
           <AnimatePresence>
             {selectedJob && (
-              <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-14rem)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}
+              <motion.div className="rounded-xl overflow-hidden flex flex-col h-[calc(100vh-14rem)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                 initial={{ opacity: 0, x: 16 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 16 }} transition={{ duration: 0.3, ease: EASE }}>
-                <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+                <div className="p-5 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                   <div className="flex items-start justify-between mb-3">
                     <div>
-                      <h3 className="text-[16px] text-[#E8E8ED] mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selectedJob.title}</h3>
-                      <span className="text-[13px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.company}</span>
+                      <h3 className="text-[16px] text-ce-text-primary mb-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{selectedJob.title}</h3>
+                      <span className="text-[13px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.company}</span>
                     </div>
-                    <button onClick={() => setSelectedJobId(null)} className="p-1 rounded-md hover:bg-[rgba(255,255,255,0.04)] cursor-pointer"><X className="w-4 h-4 text-[#6B7280]" /></button>
+                    <button onClick={() => setSelectedJobId(null)} className="p-1 rounded-md hover:bg-[rgba(var(--ce-glass-tint),0.04)] cursor-pointer"><X className="w-4 h-4 text-ce-text-tertiary" /></button>
                   </div>
                   <div className="flex items-center gap-3">
                     <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-full" style={{ background: `${MATCH_COLOR(selectedJob.match)}10`, border: `1px solid ${MATCH_COLOR(selectedJob.match)}20` }}>
                       <Target className="w-3.5 h-3.5" style={{ color: MATCH_COLOR(selectedJob.match) }} />
                       <span className="text-[14px] tabular-nums" style={{ color: MATCH_COLOR(selectedJob.match), fontFamily: "var(--font-display)", fontWeight: 500 }}>{selectedJob.match}% match</span>
                     </div>
-                    <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>for {client.name}</span>
+                    <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>for {client.name}</span>
                   </div>
                 </div>
                 <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS MATCH</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SKILLS MATCH</span>
                     <div className="flex flex-wrap gap-1.5">
                       {selectedJob.skills.map(s => (
-                        <span key={s.name} className="text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1" style={{ background: s.matched ? "rgba(179,255,59,0.06)" : "rgba(239,68,68,0.04)", color: s.matched ? "#B3FF3B" : "#EF4444", border: `1px solid ${s.matched ? "rgba(179,255,59,0.1)" : "rgba(239,68,68,0.06)"}`, fontFamily: "var(--font-body)" }}>
+                        <span key={s.name} className="text-[11px] px-2.5 py-1 rounded-full flex items-center gap-1" style={{ background: s.matched ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-status-error-rgb),0.04)", color: s.matched ? "var(--ce-lime)" : "var(--ce-status-error)", border: `1px solid ${s.matched ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-status-error-rgb),0.06)"}`, fontFamily: "var(--font-body)" }}>
                           {s.matched ? <Check className="w-3 h-3" /> : <X className="w-3 h-3" />}{s.name}
                         </span>
                       ))}
                     </div>
                   </div>
-                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(139,92,246,0.04), rgba(34,211,238,0.02))", border: "1px solid rgba(139,92,246,0.08)" }}>
-                    <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-[#8B5CF6]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>COACHING NOTE</span></div>
-                    <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.sophiaTake}</p>
+                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-guide-rgb),0.04), rgba(var(--ce-role-edgestar-rgb),0.02))", border: "1px solid rgba(var(--ce-role-guide-rgb),0.08)" }}>
+                    <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-[var(--ce-role-guide)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>COACHING NOTE</span></div>
+                    <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.sophiaTake}</p>
                   </div>
                   {selectedJob.edgePathConnection && (
-                    <div className="rounded-xl p-3.5" style={{ background: "rgba(34,211,238,0.02)", border: "1px solid rgba(34,211,238,0.05)" }}>
-                      <span className="text-[10px] text-[#374151] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ROADMAP CONNECTION</span>
-                      <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.edgePathConnection}</p>
+                    <div className="rounded-xl p-3.5" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.02)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.05)" }}>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ROADMAP CONNECTION</span>
+                      <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.edgePathConnection}</p>
                     </div>
                   )}
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DESCRIPTION</span>
-                    <p className="text-[12px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.description}</p>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DESCRIPTION</span>
+                    <p className="text-[12px] text-ce-text-tertiary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selectedJob.description}</p>
                   </div>
                 </div>
-                <div className="p-4 flex-shrink-0 flex gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
-                  <button onClick={() => { if (!recommended.has(selectedJob.id)) handleRecommend(selectedJob.id, selectedJob.title); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: recommended.has(selectedJob.id) ? "rgba(16,185,129,0.06)" : "rgba(139,92,246,0.08)", border: `1px solid ${recommended.has(selectedJob.id) ? "rgba(16,185,129,0.1)" : "rgba(139,92,246,0.12)"}`, color: recommended.has(selectedJob.id) ? "#10B981" : "#8B5CF6", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                <div className="p-4 flex-shrink-0 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <button onClick={() => { if (!recommended.has(selectedJob.id)) handleRecommend(selectedJob.id, selectedJob.title); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: recommended.has(selectedJob.id) ? "rgba(var(--ce-role-employer-rgb),0.06)" : "rgba(var(--ce-role-guide-rgb),0.08)", border: `1px solid ${recommended.has(selectedJob.id) ? "rgba(var(--ce-role-employer-rgb),0.1)" : "rgba(var(--ce-role-guide-rgb),0.12)"}`, color: recommended.has(selectedJob.id) ? "var(--ce-role-employer)" : "var(--ce-role-guide)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                     {recommended.has(selectedJob.id) ? <><Check className="w-4 h-4" /> Recommended</> : <><Send className="w-4 h-4" /> Recommend to {client.name.split(" ")[0]}</>}
                   </button>
-                  <button onClick={() => { if (!noted.has(selectedJob.id)) { setNoted(prev => { const n = new Set(prev); n.add(selectedJob.id); return n; }); toast.success(`Added to session notes for ${client.name}`); } }} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: noted.has(selectedJob.id) ? "rgba(16,185,129,0.06)" : "rgba(255,255,255,0.02)", border: `1px solid ${noted.has(selectedJob.id) ? "rgba(16,185,129,0.1)" : "rgba(255,255,255,0.06)"}`, color: noted.has(selectedJob.id) ? "#10B981" : "#9CA3AF", fontFamily: "var(--font-body)" }}>{noted.has(selectedJob.id) ? <><Check className="w-3.5 h-3.5" /> In Session Notes</> : <><FileText className="w-3.5 h-3.5" /> Add to Session Notes</>}</button>
+                  <button onClick={() => { if (!noted.has(selectedJob.id)) { setNoted(prev => { const n = new Set(prev); n.add(selectedJob.id); return n; }); toast.success(`Added to session notes for ${client.name}`); } }} className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: noted.has(selectedJob.id) ? "rgba(var(--ce-role-employer-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${noted.has(selectedJob.id) ? "rgba(var(--ce-role-employer-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.06)"}`, color: noted.has(selectedJob.id) ? "var(--ce-role-employer)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>{noted.has(selectedJob.id) ? <><Check className="w-3.5 h-3.5" /> In Session Notes</> : <><FileText className="w-3.5 h-3.5" /> Add to Session Notes</>}</button>
                 </div>
               </motion.div>
             )}
@@ -1448,50 +1448,50 @@ function EduAggregateView({ onNavigate }: { onNavigate: NavigateFn }) {
     <div className="pt-4 pb-4">
       <div className="max-w-[1200px] mx-auto">
         <motion.div className="pt-4 pb-5" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
-          <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Student Job Market</h1>
-          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Aggregate view of job matches across your student cohorts</span>
+          <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Student Job Market</h1>
+          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Aggregate view of job matches across your student cohorts</span>
         </motion.div>
 
         <div className="grid grid-cols-4 gap-4 mb-5">
           {[
-            { label: "Total Matches", value: "847", trend: "+12% vs last month", color: "#3B82F6" },
-            { label: "Avg Match Score", value: "74%", trend: "+3% this semester", color: "#22D3EE" },
-            { label: "Students w/ 80%+", value: "38%", trend: "56 students", color: "#B3FF3B" },
-            { label: "Top Hiring Companies", value: "12", trend: "Actively recruiting", color: "#8B5CF6" },
+            { label: "Total Matches", value: "847", trend: "+12% vs last month", color: "var(--ce-role-edu)" },
+            { label: "Avg Match Score", value: "74%", trend: "+3% this semester", color: "var(--ce-role-edgestar)" },
+            { label: "Students w/ 80%+", value: "38%", trend: "56 students", color: "var(--ce-lime)" },
+            { label: "Top Hiring Companies", value: "12", trend: "Actively recruiting", color: "var(--ce-role-guide)" },
           ].map((kpi, i) => (
-            <motion.div key={i} className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+            <motion.div key={i} className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
               initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.08, duration: 0.4, ease: EASE }}>
-              <div className="text-[24px] text-[#E8E8ED] tabular-nums mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{kpi.value}</div>
-              <span className="text-[11px] text-[#6B7280] block" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</span>
+              <div className="text-[24px] text-ce-text-primary tabular-nums mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{kpi.value}</div>
+              <span className="text-[11px] text-ce-text-tertiary block" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</span>
               <span className="text-[10px]" style={{ color: kpi.color, fontFamily: "var(--font-body)" }}>{kpi.trend}</span>
             </motion.div>
           ))}
         </div>
 
         <div className="grid grid-cols-2 gap-5">
-          <motion.div className="rounded-xl p-5" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+          <motion.div className="rounded-xl p-5" style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5, duration: 0.4, ease: EASE }}>
-            <span className="text-[13px] text-[#E8E8ED] block mb-4" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Match Distribution by Role</span>
+            <span className="text-[13px] text-ce-text-primary block mb-4" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Match Distribution by Role</span>
             {[
-              { role: "Software Engineering", pct: 32, students: 47, color: "#22D3EE" },
-              { role: "Product Design", pct: 24, students: 35, color: "#B3FF3B" },
-              { role: "Data Science", pct: 18, students: 26, color: "#8B5CF6" },
-              { role: "Product Management", pct: 14, students: 20, color: "#F59E0B" },
-              { role: "UX Research", pct: 12, students: 17, color: "#EC4899" },
+              { role: "Software Engineering", pct: 32, students: 47, color: "var(--ce-role-edgestar)" },
+              { role: "Product Design", pct: 24, students: 35, color: "var(--ce-lime)" },
+              { role: "Data Science", pct: 18, students: 26, color: "var(--ce-role-guide)" },
+              { role: "Product Management", pct: 14, students: 20, color: "var(--ce-role-edgepreneur)" },
+              { role: "UX Research", pct: 12, students: 17, color: "var(--ce-role-parent)" },
             ].map((r, i) => (
               <div key={i} className="flex items-center gap-3 mb-3">
-                <span className="text-[11px] text-[#6B7280] w-[140px]" style={{ fontFamily: "var(--font-body)" }}>{r.role}</span>
-                <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+                <span className="text-[11px] text-ce-text-tertiary w-[140px]" style={{ fontFamily: "var(--font-body)" }}>{r.role}</span>
+                <div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
                   <motion.div className="h-full rounded-full" style={{ background: r.color }} initial={{ width: 0 }} animate={{ width: `${r.pct}%` }} transition={{ delay: 0.6 + i * 0.1, duration: 0.5, ease: EASE }} />
                 </div>
-                <span className="text-[10px] text-[#9CA3AF] tabular-nums w-20 text-right" style={{ fontFamily: "var(--font-body)" }}>{r.students} students</span>
+                <span className="text-[10px] text-ce-text-secondary tabular-nums w-20 text-right" style={{ fontFamily: "var(--font-body)" }}>{r.students} students</span>
               </div>
             ))}
           </motion.div>
 
-          <motion.div className="rounded-xl p-5" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
+          <motion.div className="rounded-xl p-5" style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
             initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.55, duration: 0.4, ease: EASE }}>
-            <span className="text-[13px] text-[#E8E8ED] block mb-4" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Top Employers Matching Students</span>
+            <span className="text-[13px] text-ce-text-primary block mb-4" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Top Employers Matching Students</span>
             {[
               { company: "Google", openRoles: 8, avgMatch: 82 },
               { company: "Figma", openRoles: 4, avgMatch: 79 },
@@ -1499,20 +1499,20 @@ function EduAggregateView({ onNavigate }: { onNavigate: NavigateFn }) {
               { company: "Vercel", openRoles: 3, avgMatch: 74 },
               { company: "Stripe", openRoles: 6, avgMatch: 71 },
             ].map((e, i) => (
-              <div key={i} className="flex items-center gap-3 py-2.5" style={{ borderBottom: i < 4 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(255,255,255,0.04)" }}><Building2 className="w-3.5 h-3.5 text-[#6B7280]" /></div>
-                <span className="text-[12px] text-[#E8E8ED] flex-1" style={{ fontFamily: "var(--font-body)" }}>{e.company}</span>
-                <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{e.openRoles} roles</span>
-                <span className="text-[11px] text-[#22D3EE] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{e.avgMatch}% avg</span>
+              <div key={i} className="flex items-center gap-3 py-2.5" style={{ borderBottom: i < 4 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}><Building2 className="w-3.5 h-3.5 text-ce-text-tertiary" /></div>
+                <span className="text-[12px] text-ce-text-primary flex-1" style={{ fontFamily: "var(--font-body)" }}>{e.company}</span>
+                <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{e.openRoles} roles</span>
+                <span className="text-[11px] text-ce-cyan tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{e.avgMatch}% avg</span>
               </div>
             ))}
           </motion.div>
         </div>
 
-        <motion.div className="rounded-xl p-4 mt-5 flex items-start gap-3" style={{ background: "linear-gradient(145deg, rgba(34,211,238,0.03), rgba(59,130,246,0.02))", border: "1px solid rgba(59,130,246,0.08)" }}
+        <motion.div className="rounded-xl p-4 mt-5 flex items-start gap-3" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-role-edu-rgb),0.02))", border: "1px solid rgba(var(--ce-role-edu-rgb),0.08)" }}
           initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.65, duration: 0.4, ease: EASE }}>
           <SophiaMark size={16} glowing={false} />
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+          <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
             72% of your graduating students match with roles paying $65K+. The Design cohort is outperforming — their average match score is 82% compared to 71% across all programs.
           </p>
         </motion.div>
@@ -1640,20 +1640,20 @@ function EdgeMatchBrowse({ onNavigate }: { onNavigate: NavigateFn }) {
       <div className="max-w-[1400px] mx-auto">
         <motion.div className="pt-4 pb-5 flex items-center justify-between" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[20px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EdgeMatch</h1>
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{filteredJobs.length} roles match your profile · Sorted by match strength</span>
+            <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EdgeMatch</h1>
+            <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{filteredJobs.length} roles match your profile · Sorted by match strength</span>
           </div>
           <div className="relative w-[280px]">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#374151]" />
-            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search roles or companies..." className="w-full pl-9 pr-3 py-2 rounded-xl text-[12px] text-[#E8E8ED] placeholder:text-[#374151] outline-none" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} />
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--ce-text-quaternary)]" />
+            <input type="text" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} placeholder="Search roles or companies..." className="w-full pl-9 pr-3 py-2 rounded-xl text-[12px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} />
           </div>
         </motion.div>
 
         {(filters.remote || filters.saved || filters.applied || filters.minMatch > 50) && (
           <motion.div className="flex items-center gap-2 mb-4" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-            {filters.remote && <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer" style={{ background: "rgba(34,211,238,0.06)", color: "#22D3EE", border: "1px solid rgba(34,211,238,0.1)", fontFamily: "var(--font-body)" }} onClick={() => handleFilterChange("remote", false)}>Remote <X className="w-2.5 h-2.5" /></span>}
-            {filters.saved && <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer" style={{ background: "rgba(179,255,59,0.06)", color: "#B3FF3B", border: "1px solid rgba(179,255,59,0.1)", fontFamily: "var(--font-body)" }} onClick={() => handleFilterChange("saved", false)}>Saved <X className="w-2.5 h-2.5" /></span>}
-            {filters.minMatch > 50 && <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }} onClick={() => handleFilterChange("minMatch", 50)}>{filters.minMatch}%+ <X className="w-2.5 h-2.5" /></span>}
+            {filters.remote && <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", fontFamily: "var(--font-body)" }} onClick={() => handleFilterChange("remote", false)}>Remote <X className="w-2.5 h-2.5" /></span>}
+            {filters.saved && <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", color: "var(--ce-lime)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", fontFamily: "var(--font-body)" }} onClick={() => handleFilterChange("saved", false)}>Saved <X className="w-2.5 h-2.5" /></span>}
+            {filters.minMatch > 50 && <span className="text-[10px] px-2 py-1 rounded-full flex items-center gap-1 cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} onClick={() => handleFilterChange("minMatch", 50)}>{filters.minMatch}%+ <X className="w-2.5 h-2.5" /></span>}
           </motion.div>
         )}
 
@@ -1662,9 +1662,9 @@ function EdgeMatchBrowse({ onNavigate }: { onNavigate: NavigateFn }) {
           <div className="flex flex-col gap-3">
             {filteredJobs.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16">
-                <Search className="w-8 h-8 text-[#374151] mb-3" />
-                <p className="text-[14px] text-[#6B7280] mb-1" style={{ fontFamily: "var(--font-body)" }}>No jobs match your current filters.</p>
-                <button className="text-[12px] text-[#22D3EE] cursor-pointer" style={{ fontFamily: "var(--font-body)" }} onClick={() => setFilters({ remote: false, saved: false, applied: false, minMatch: 50 })}>Clear all filters</button>
+                <Search className="w-8 h-8 text-[var(--ce-text-quaternary)] mb-3" />
+                <p className="text-[14px] text-ce-text-tertiary mb-1" style={{ fontFamily: "var(--font-body)" }}>No jobs match your current filters.</p>
+                <button className="text-[12px] text-ce-cyan cursor-pointer" style={{ fontFamily: "var(--font-body)" }} onClick={() => setFilters({ remote: false, saved: false, applied: false, minMatch: 50 })}>Clear all filters</button>
               </div>
             ) : filteredJobs.map((job, i) => (
               <motion.div key={job.id} transition={{ delay: i * 0.04 }}>

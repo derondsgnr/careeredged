@@ -67,7 +67,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
   const stat3 = useCountUp(23);
 
   return (
-    <div className="min-h-screen" style={{ background: "#08090C" }}>
+    <div className="min-h-screen" style={{ background: "var(--ce-surface-bg)" }}>
       <LandingNav onNavigate={onNavigate} />
 
       {/* ═══ HERO ═══ */}
@@ -76,7 +76,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
         <div
           className="absolute top-1/2 left-1/2 w-[900px] h-[600px] -translate-x-1/2 -translate-y-1/3 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(179,255,59,0.06) 0%, rgba(4,44,1,0.03) 40%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.06) 0%, rgba(4,44,1,0.03) 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -91,21 +91,21 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           <div
             className="flex items-center gap-2 px-4 py-2 rounded-full"
             style={{
-              background: "rgba(179,255,59,0.06)",
-              border: "1px solid rgba(179,255,59,0.12)",
+              background: "rgba(var(--ce-lime-rgb),0.06)",
+              border: "1px solid rgba(var(--ce-lime-rgb),0.12)",
             }}
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-[#B3FF3B] animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)] animate-pulse" />
             <span
               className="text-[12px] tracking-[0.02em]"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#B3FF3B" }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-lime)" }}
             >
               Now in beta
             </span>
-            <span className="text-[12px]" style={{ color: "#6B7280" }}>·</span>
+            <span className="text-[12px]" style={{ color: "var(--ce-text-secondary)" }}>·</span>
             <span
               className="text-[12px]"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#9CA3AF" }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-tertiary)" }}
             >
               Career intelligence for everyone
             </span>
@@ -124,13 +124,13 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             fontSize: "clamp(40px, 7vw, 80px)",
             lineHeight: 1.05,
             letterSpacing: "-0.03em",
-            color: "#E8E8ED",
+            color: "var(--ce-text-primary)",
           }}
         >
           From where you are{" "}
           <br className="hidden sm:block" />
           to where you{" "}
-          <span style={{ color: "#B3FF3B" }}>belong</span>
+          <span style={{ color: "var(--ce-lime)" }}>belong</span>
         </motion.h1>
 
         {/* Subtext */}
@@ -144,7 +144,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             fontWeight: 400,
             fontSize: "17px",
             lineHeight: 1.65,
-            color: "#9CA3AF",
+            color: "var(--ce-text-tertiary)",
           }}
         >
           A personalized career roadmap in minutes. Guided by Sophia, 
@@ -164,10 +164,10 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             style={{
               fontFamily: "'Satoshi', sans-serif",
               fontWeight: 600,
-              background: "#B3FF3B",
-              color: "#0A0C10",
+              background: "var(--ce-lime)",
+              color: "var(--ce-surface-0)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(179,255,59,0.2)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
           >
             Get Your Edge
@@ -180,11 +180,11 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
               fontFamily: "'Satoshi', sans-serif",
               fontWeight: 500,
               background: "transparent",
-              color: "#9CA3AF",
-              border: "1px solid rgba(255,255,255,0.08)",
+              color: "var(--ce-text-tertiary)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.08)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; e.currentTarget.style.color = "#E8E8ED"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; e.currentTarget.style.color = "#9CA3AF"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.15)"; e.currentTarget.style.color = "var(--ce-text-primary)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.08)"; e.currentTarget.style.color = "var(--ce-text-tertiary)"; }}
           >
             See how it works
           </button>
@@ -201,7 +201,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           <div
             className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[80%] h-[200px] pointer-events-none"
             style={{
-              background: "radial-gradient(ellipse at center, rgba(179,255,59,0.08) 0%, transparent 70%)",
+              background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.08) 0%, transparent 70%)",
               filter: "blur(60px)",
             }}
           />
@@ -210,24 +210,24 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           <div
             className="relative rounded-xl overflow-hidden"
             style={{
-              background: "rgba(18, 20, 26, 0.8)",
-              border: "1px solid rgba(255,255,255,0.06)",
-              boxShadow: "0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.02)",
+              background: "rgba(var(--ce-glass-tint), 0.8)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+              boxShadow: "0 40px 80px rgba(var(--ce-shadow-tint),0.4), 0 0 0 1px rgba(var(--ce-glass-tint),0.02)",
             }}
           >
             {/* Window chrome */}
-            <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+            <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
               <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />
               </div>
               <div className="flex-1 flex justify-center">
                 <div
                   className="px-3 py-1 rounded-md text-[10px]"
                   style={{
-                    background: "rgba(255,255,255,0.03)",
-                    color: "#374151",
+                    background: "rgba(var(--ce-glass-tint),0.03)",
+                    color: "var(--ce-text-quaternary)",
                     fontFamily: "'Satoshi', sans-serif",
                   }}
                 >
@@ -241,12 +241,12 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
               {/* Sophia insight bar */}
               <div
                 className="flex items-center gap-3 px-4 py-3 rounded-lg mb-6"
-                style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)" }}
+                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}
               >
-                <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(34,211,238,0.15)" }}>
-                  <Sparkles size={12} style={{ color: "#22D3EE" }} />
+                <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.15)" }}>
+                  <Sparkles size={12} style={{ color: "var(--ce-role-edgestar)" }} />
                 </div>
-                <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#22D3EE" }}>
+                <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-role-edgestar)" }}>
                   Sophia: Based on your experience in marketing, I mapped 4 phases to reach VP of Marketing at a Series B startup.
                 </span>
               </div>
@@ -264,28 +264,28 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                     className="rounded-lg p-4"
                     style={{
                       background: p.progress === 100
-                        ? "rgba(179,255,59,0.04)"
-                        : "rgba(255,255,255,0.02)",
+                        ? "rgba(var(--ce-lime-rgb),0.04)"
+                        : "rgba(var(--ce-glass-tint),0.02)",
                       border: p.progress > 0 && p.progress < 100
-                        ? "1px solid rgba(179,255,59,0.15)"
-                        : "1px solid rgba(255,255,255,0.04)",
+                        ? "1px solid rgba(var(--ce-lime-rgb),0.15)"
+                        : "1px solid rgba(var(--ce-glass-tint),0.04)",
                     }}
                   >
-                    <span className="text-[10px] uppercase tracking-[0.1em]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+                    <span className="text-[10px] uppercase tracking-[0.1em]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
                       {p.phase}
                     </span>
-                    <h4 className="mt-1 text-[14px]" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, color: "#E8E8ED" }}>
+                    <h4 className="mt-1 text-[14px]" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, color: "var(--ce-text-primary)" }}>
                       {p.title}
                     </h4>
-                    <span className="text-[11px] mt-0.5 block" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+                    <span className="text-[11px] mt-0.5 block" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
                       {p.weeks}
                     </span>
-                    <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                    <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
                       <div
                         className="h-full rounded-full"
                         style={{
                           width: `${p.progress}%`,
-                          background: p.progress === 100 ? "#B3FF3B" : "rgba(179,255,59,0.6)",
+                          background: p.progress === 100 ? "var(--ce-lime)" : "rgba(var(--ce-lime-rgb),0.6)",
                         }}
                       />
                     </div>
@@ -293,7 +293,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                       className="text-[10px] mt-2 block"
                       style={{
                         fontFamily: "'Satoshi', sans-serif",
-                        color: p.progress === 100 ? "#B3FF3B" : p.progress > 0 ? "#9CA3AF" : "#374151",
+                        color: p.progress === 100 ? "var(--ce-lime)" : p.progress > 0 ? "var(--ce-text-tertiary)" : "var(--ce-text-quaternary)",
                       }}
                     >
                       {p.status}
@@ -322,7 +322,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                     fontWeight: 700,
                     fontSize: "48px",
                     letterSpacing: "-0.03em",
-                    color: "#B3FF3B",
+                    color: "var(--ce-lime)",
                     lineHeight: 1,
                   }}
                 >
@@ -330,14 +330,14 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                 </span>
                 <span
                   className="text-[10px] ml-1 inline-block"
-                  style={{ fontFamily: "'Satoshi', sans-serif", color: "#374151", verticalAlign: "super" }}
+                  style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-quaternary)", verticalAlign: "super" }}
                 >
                   _
                 </span>
-                <p className="mt-2 text-[14px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#E8E8ED" }}>
+                <p className="mt-2 text-[14px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-primary)" }}>
                   {stat.label}
                 </p>
-                <p className="mt-0.5 text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+                <p className="mt-0.5 text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
                   {stat.sub}
                 </p>
               </div>
@@ -347,13 +347,13 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
       </section>
 
       {/* ═══ FEATURES — BENTO ═══ */}
-      <section className="py-20 lg:py-28 px-6" style={{ background: "#0C0E12" }}>
+      <section className="py-20 lg:py-28 px-6" style={{ background: "var(--ce-surface-bg)" }}>
         <div className="max-w-[1200px] mx-auto">
           <Reveal>
             <div className="mb-16 max-w-[560px]">
               <span
                 className="text-[11px] uppercase tracking-[0.12em] block mb-4"
-                style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "#6B7280" }}
+                style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "var(--ce-text-secondary)" }}
               >
                 // What you get
               </span>
@@ -364,11 +364,11 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                   fontSize: "clamp(28px, 4vw, 44px)",
                   lineHeight: 1.1,
                   letterSpacing: "-0.02em",
-                  color: "#E8E8ED",
+                  color: "var(--ce-text-primary)",
                 }}
               >
                 Every tool your career needs.{" "}
-                <span style={{ color: "#6B7280" }}>Nothing it doesn't.</span>
+                <span style={{ color: "var(--ce-text-secondary)" }}>Nothing it doesn't.</span>
               </h2>
             </div>
           </Reveal>
@@ -412,22 +412,22 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                   className="group rounded-xl p-6 lg:p-7 h-full transition-all duration-300"
                   style={{
                     background: feature.accent
-                      ? "rgba(179,255,59,0.03)"
-                      : "rgba(255,255,255,0.02)",
+                      ? "rgba(var(--ce-lime-rgb),0.03)"
+                      : "rgba(var(--ce-glass-tint),0.02)",
                     border: feature.accent
-                      ? "1px solid rgba(179,255,59,0.1)"
-                      : "1px solid rgba(255,255,255,0.04)",
+                      ? "1px solid rgba(var(--ce-lime-rgb),0.1)"
+                      : "1px solid rgba(var(--ce-glass-tint),0.04)",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(179,255,59,0.2)" : "rgba(255,255,255,0.08)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.04)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(var(--ce-lime-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.08)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"; }}
                 >
                   <div
                     className="w-9 h-9 rounded-lg flex items-center justify-center mb-5"
                     style={{
-                      background: feature.accent ? "rgba(179,255,59,0.1)" : "rgba(255,255,255,0.04)",
+                      background: feature.accent ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)",
                     }}
                   >
-                    <feature.icon size={17} style={{ color: feature.accent ? "#B3FF3B" : "#9CA3AF" }} />
+                    <feature.icon size={17} style={{ color: feature.accent ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }} />
                   </div>
                   <h3
                     className="mb-2"
@@ -435,14 +435,14 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                       fontFamily: "'Urbanist', sans-serif",
                       fontWeight: 600,
                       fontSize: "17px",
-                      color: "#E8E8ED",
+                      color: "var(--ce-text-primary)",
                     }}
                   >
                     {feature.title}
                   </h3>
                   <p
                     className="text-[13px] leading-[1.65]"
-                    style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}
+                    style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}
                   >
                     {feature.desc}
                   </p>
@@ -454,7 +454,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
       </section>
 
       {/* ═══ ROLE SECTIONS ═══ */}
-      <section className="py-20 lg:py-28 px-6" style={{ background: "#08090C" }}>
+      <section className="py-20 lg:py-28 px-6" style={{ background: "var(--ce-surface-bg)" }}>
         <div className="max-w-[1200px] mx-auto">
           {[
             {
@@ -479,12 +479,12 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             <Reveal key={i}>
               <div
                 className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-16 py-16 lg:py-20"
-                style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.04)" : "none" }}
+                style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.04)" : "none" }}
               >
                 <div className="lg:col-span-3">
                   <span
                     className="text-[11px] tracking-[0.06em]"
-                    style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#6B7280" }}
+                    style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-secondary)" }}
                   >
                     {section.marker}
                   </span>
@@ -498,23 +498,23 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                       fontSize: "clamp(24px, 3vw, 36px)",
                       lineHeight: 1.15,
                       letterSpacing: "-0.02em",
-                      color: "#E8E8ED",
+                      color: "var(--ce-text-primary)",
                     }}
                   >
                     {section.headline}
                   </h3>
                   <p
                     className="text-[15px] leading-[1.7] mb-6"
-                    style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}
+                    style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}
                   >
                     {section.body}
                   </p>
                   <button
                     onClick={() => onNavigate("signup")}
                     className="flex items-center gap-2 text-[13px] transition-colors duration-200 cursor-pointer"
-                    style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "#B3FF3B" }}
+                    style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "var(--ce-lime)" }}
                     onMouseEnter={(e) => { e.currentTarget.style.color = "#c4ff6a"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "#B3FF3B"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-lime)"; }}
                   >
                     {section.cta}
                     <ArrowRight size={14} />
@@ -527,11 +527,11 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
       </section>
 
       {/* ═══ SOPHIA SECTION ═══ */}
-      <section className="relative py-20 lg:py-28 px-6 overflow-hidden" style={{ background: "#0A0C10" }}>
+      <section className="relative py-20 lg:py-28 px-6 overflow-hidden" style={{ background: "var(--ce-surface-bg)" }}>
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[400px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(34,211,238,0.04) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-role-edgestar-rgb),0.04) 0%, transparent 60%)",
             filter: "blur(60px)",
           }}
         />
@@ -539,7 +539,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           <Reveal>
             <span
               className="text-[11px] uppercase tracking-[0.12em] block mb-6"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "#6B7280" }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "var(--ce-text-secondary)" }}
             >
               // Meet Sophia
             </span>
@@ -551,15 +551,15 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                 fontSize: "clamp(28px, 4vw, 44px)",
                 lineHeight: 1.1,
                 letterSpacing: "-0.02em",
-                color: "#E8E8ED",
+                color: "var(--ce-text-primary)",
               }}
             >
               A career guide that{" "}
-              <span style={{ color: "#22D3EE" }}>remembers</span>
+              <span style={{ color: "var(--ce-role-edgestar)" }}>remembers</span>
             </h2>
             <p
               className="text-[16px] leading-[1.7] max-w-[600px] mx-auto mb-10"
-              style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}
+              style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}
             >
               Sophia doesn't start from scratch every time. She knows your goals, 
               your progress, your context. Ask her anything — she'll meet you where 
@@ -572,8 +572,8 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             <div
               className="rounded-xl p-5 text-left max-w-[540px] mx-auto"
               style={{
-                background: "rgba(18, 20, 26, 0.6)",
-                border: "1px solid rgba(255,255,255,0.06)",
+                background: "rgba(var(--ce-glass-tint), 0.6)",
+                border: "1px solid rgba(var(--ce-glass-tint),0.06)",
               }}
             >
               {[
@@ -591,10 +591,10 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                     style={{
                       fontFamily: "'Satoshi', sans-serif",
                       background: msg.from === "user"
-                        ? "rgba(255,255,255,0.06)"
-                        : "rgba(34,211,238,0.06)",
-                      border: msg.from === "sophia" ? "1px solid rgba(34,211,238,0.08)" : "1px solid rgba(255,255,255,0.04)",
-                      color: msg.from === "user" ? "#E8E8ED" : "#22D3EE",
+                        ? "rgba(var(--ce-glass-tint),0.06)"
+                        : "rgba(var(--ce-role-edgestar-rgb),0.06)",
+                      border: msg.from === "sophia" ? "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
+                      color: msg.from === "user" ? "var(--ce-text-primary)" : "var(--ce-role-edgestar)",
                     }}
                   >
                     {msg.text}
@@ -607,7 +607,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
       </section>
 
       {/* ═══ TRUST / FAQ ═══ */}
-      <section className="py-20 lg:py-28 px-6" style={{ background: "#08090C" }}>
+      <section className="py-20 lg:py-28 px-6" style={{ background: "var(--ce-surface-bg)" }}>
         <div className="max-w-[800px] mx-auto">
           <Reveal>
             <h2
@@ -618,7 +618,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                 fontSize: "clamp(24px, 3vw, 36px)",
                 lineHeight: 1.15,
                 letterSpacing: "-0.02em",
-                color: "#E8E8ED",
+                color: "var(--ce-text-primary)",
               }}
             >
               Questions
@@ -657,11 +657,11 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
       </section>
 
       {/* ═══ FINAL CTA ═══ */}
-      <section className="relative py-24 lg:py-32 px-6 overflow-hidden" style={{ background: "#0A0C10" }}>
+      <section className="relative py-24 lg:py-32 px-6 overflow-hidden" style={{ background: "var(--ce-surface-bg)" }}>
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(179,255,59,0.05) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.05) 0%, transparent 60%)",
             filter: "blur(80px)",
           }}
         />
@@ -675,16 +675,16 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                 fontSize: "clamp(28px, 4vw, 44px)",
                 lineHeight: 1.1,
                 letterSpacing: "-0.02em",
-                color: "#E8E8ED",
+                color: "var(--ce-text-primary)",
               }}
             >
               Your career has an edge.
               <br />
-              <span style={{ color: "#B3FF3B" }}>Find it.</span>
+              <span style={{ color: "var(--ce-lime)" }}>Find it.</span>
             </h2>
             <p
               className="text-[15px] leading-[1.7] mb-8 max-w-[420px] mx-auto"
-              style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}
+              style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}
             >
               Start free. Get a personalized roadmap in minutes. 
               No credit card required.
@@ -695,10 +695,10 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
               style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 600,
-                background: "#B3FF3B",
-                color: "#0A0C10",
+                background: "var(--ce-lime)",
+                color: "var(--ce-surface-0)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(179,255,59,0.2)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Get Your Edge
@@ -721,9 +721,9 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
     <div
       className="rounded-xl overflow-hidden transition-all duration-200"
       style={{
-        background: open ? "rgba(255,255,255,0.02)" : "transparent",
+        background: open ? "rgba(var(--ce-glass-tint),0.02)" : "transparent",
         border: "1px solid",
-        borderColor: open ? "rgba(255,255,255,0.06)" : "rgba(255,255,255,0.03)",
+        borderColor: open ? "rgba(var(--ce-glass-tint),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
       }}
     >
       <button
@@ -735,7 +735,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
           style={{
             fontFamily: "'Satoshi', sans-serif",
             fontWeight: 500,
-            color: open ? "#E8E8ED" : "#9CA3AF",
+            color: open ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
           }}
         >
           {question}
@@ -743,7 +743,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         <span
           className="text-[18px] transition-transform duration-200 ml-4 shrink-0"
           style={{
-            color: open ? "#B3FF3B" : "#374151",
+            color: open ? "var(--ce-lime)" : "var(--ce-text-quaternary)",
             transform: open ? "rotate(45deg)" : "rotate(0)",
           }}
         >
@@ -756,7 +756,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
       >
         <p
           className="px-5 pb-4 text-[13px] leading-[1.7]"
-          style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}
+          style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}
         >
           {answer}
         </p>
