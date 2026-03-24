@@ -74,6 +74,12 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
+  // Career Discovery — All roles
+  edgeTools.push({
+    id: "careers", label: "Career Discovery", description: "Explore 30+ careers & find your archetype",
+    icon: Compass, color: COLORS.cyan, surfaceId: "careers",
+  });
+
   // Workplace / Jobs — EdgeStar, EdgePreneur, Employer, NGO, Agency
   if (["edgestar", "edgepreneur", "employer", "ngo", "agency"].includes(role)) {
     const jobLabel = role === "employer" ? "Job Postings" : "EdgeWorkplace";

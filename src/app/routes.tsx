@@ -30,6 +30,7 @@ import { EdgeMatchForRole } from "./components/edge-match";
 import { TaskRoom } from "./components/task-room";
 import { GuideProfileEditSurface } from "./components/guide-profile-edit";
 import { ImmigrationSurface } from "./components/surfaces/immigration-surface";
+import { CareerDiscovery } from "./components/career-discovery";
 import { Messaging } from "./components/messaging";
 import { EdgeSight } from "./components/edgesight";
 import { Sessions } from "./components/sessions";
@@ -66,6 +67,7 @@ function LandingPage() {
     if (page === "home") navigate("/");
     else if (page === "login") navigate("/login");
     else if (page === "signup") navigate("/signup");
+    else if (page === "careers") navigate("/careers");
   }, [navigate]);
   return <LandingV1 onNavigate={handleNavigate} />;
 }
@@ -130,6 +132,7 @@ function useRoleNavigation(): {
       sessions:  `/${role}/sessions`,
       profile:   `/${role}/profile`,
       immigration: `/${role}/immigration`,
+      careers: `/${role}/careers`,
       // Layer 3 surfaces
       family:    `/${role}/family`,
       clients:   `/${role}/clients`,
@@ -410,6 +413,8 @@ export const router = createBrowserRouter([
       { path: ":role/programs",                 Component: ProgramsSurface },
       { path: ":role/funding",                  Component: FundingSurface },
       { path: ":role/immigration",              Component: ImmigrationSurface },
+      { path: ":role/careers",                  Component: CareerDiscovery },
+      { path: "careers",                        Component: CareerDiscovery },
 
       // Archives
       { path: "archive/onboarding",             Component: ArchiveOnboardingIndex },
