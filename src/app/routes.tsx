@@ -29,6 +29,7 @@ import { ResumeEdge } from "./components/resume-edge";
 import { EdgeMatchForRole } from "./components/edge-match";
 import { TaskRoom } from "./components/task-room";
 import { GuideProfileEditSurface } from "./components/guide-profile-edit";
+import { ImmigrationSurface } from "./components/surfaces/immigration-surface";
 import { Messaging } from "./components/messaging";
 import { EdgeSight } from "./components/edgesight";
 import { Sessions } from "./components/sessions";
@@ -128,6 +129,7 @@ function useRoleNavigation(): {
       taskroom:  `/${role}/taskroom`,
       sessions:  `/${role}/sessions`,
       profile:   `/${role}/profile`,
+      immigration: `/${role}/immigration`,
       // Layer 3 surfaces
       family:    `/${role}/family`,
       clients:   `/${role}/clients`,
@@ -407,6 +409,7 @@ export const router = createBrowserRouter([
       { path: ":role/events",                   Component: EventsSurface },
       { path: ":role/programs",                 Component: ProgramsSurface },
       { path: ":role/funding",                  Component: FundingSurface },
+      { path: ":role/immigration",              Component: ImmigrationSurface },
 
       // Archives
       { path: "archive/onboarding",             Component: ArchiveOnboardingIndex },

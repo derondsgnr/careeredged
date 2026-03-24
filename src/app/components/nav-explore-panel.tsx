@@ -99,10 +99,10 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
-  // ImmigrationEdge — EdgeStar only
-  if (role === "edgestar") {
+  // ImmigrationEdge — EdgeStar + EdgePreneur
+  if (["edgestar", "edgepreneur"].includes(role)) {
     edgeTools.push({
-      id: "immigration", label: "ImmigrationEdge", description: "Visa & immigration pathways",
+      id: "immigration", label: "ImmigrationEdge", description: "Global career mobility pathways",
       icon: Globe, color: COLORS.orange, surfaceId: "immigration",
     });
   }

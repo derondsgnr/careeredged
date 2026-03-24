@@ -25,7 +25,7 @@ import {
   Target, TrendingUp, Users, Briefcase, GraduationCap,
   ArrowRight, FileText,
   List, Map, Lock, Trophy, Rocket, X, AlertCircle, Circle,
-  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2,
+  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe,
 } from "lucide-react";
 import { MindMapView } from "./edgepath-mindmap";
 import { getRoleContext, type EdgePathRoleContext } from "./edgepath-context";
@@ -1181,7 +1181,7 @@ function PhaseDetail({ milestones, onMilestoneCheck, onOpenRoom, onNavigate }: {
 
 // ─── Sophia Panel (Right Column) ────────────────────────────────────────────
 
-function SophiaPanel({ onAskSophia, roleContext }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext }) {
+function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext; onNavigate?: (target: string) => void }) {
   const panel = roleContext?.sophiaPanel;
 
   if (panel) {
@@ -1484,6 +1484,28 @@ function SophiaPanel({ onAskSophia, roleContext }: { onAskSophia: (query: string
         <p className="text-[11px] text-ce-text-tertiary mt-2 italic" style={{ fontFamily: "var(--font-body)" }}>
           "Focus on one strong case study over two mediocre ones."
         </p>
+      </motion.div>
+
+      {/* Global Career Mobility — cross-link to ImmigrationEdge */}
+      <motion.div
+        className="rounded-xl p-4 cursor-pointer group"
+        style={{ background: "rgba(234,179,8,0.03)", border: "1px solid rgba(234,179,8,0.08)" }}
+        onClick={() => onNavigate?.("immigration")}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.95, duration: 0.4, ease: EASE }}
+        whileHover={{ scale: 1.01 }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(234,179,8,0.08)" }}>
+            <Globe className="w-4 h-4" style={{ color: "rgb(234,179,8)" }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Global Career Mobility</span>
+            <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>See how your credentials transfer internationally</span>
+          </div>
+          <ChevronRight className="w-3.5 h-3.5 text-ce-text-quaternary opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
       </motion.div>
     </div>
   );
@@ -1869,7 +1891,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
           {/* Two-Column: Milestones left, Sophia panel right */}
           <div className="grid grid-cols-[1fr_320px] gap-5">
             <PhaseDetail milestones={milestones} onMilestoneCheck={handleMilestoneCheck} onOpenRoom={onOpenTaskRoom} onNavigate={onNavigate} />
-            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} />
+            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} onNavigate={onNavigate} />
           </div>
 
           {/* State demo controls */}
