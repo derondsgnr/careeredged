@@ -15,6 +15,12 @@ import type { AppState } from "./components/state-toggle";
 import { LandingV1 } from "./components/landing/landing-v1";
 import { LandingV2 } from "./components/landing/landing-v2";
 import { LandingV3 } from "./components/landing/landing-v3";
+import { LandingV4 } from "./components/landing/landing-v4";
+import { LandingV5 } from "./components/landing/landing-v5";
+import { LandingV6 } from "./components/landing/landing-v6";
+import { LandingV7 } from "./components/landing/landing-v7";
+import { LandingV8 } from "./components/landing/landing-v8";
+import { LandingV9 } from "./components/landing/landing-v9";
 import { AuthPage } from "./components/landing/auth-page";
 import { OnboardingH1 } from "./components/onboarding-h1";
 import { OnboardingH2 } from "./components/onboarding-h2";
@@ -315,6 +321,12 @@ function ArchiveLanding() {
   }, [navigate]);
   if (variation === "v2") return <LandingV2 onNavigate={handleNavigate} />;
   if (variation === "v3") return <LandingV3 onNavigate={handleNavigate} />;
+  if (variation === "v4") return <LandingV4 onNavigate={handleNavigate} />;
+  if (variation === "v5") return <LandingV5 onNavigate={handleNavigate} />;
+  if (variation === "v6") return <LandingV6 onNavigate={handleNavigate} />;
+  if (variation === "v7") return <LandingV7 onNavigate={handleNavigate} />;
+  if (variation === "v8") return <LandingV8 onNavigate={handleNavigate} />;
+  if (variation === "v9") return <LandingV9 onNavigate={handleNavigate} />;
   return <LandingV1 onNavigate={handleNavigate} />;
 }
 
@@ -328,6 +340,12 @@ function ArchiveLandingIndex() {
           { id: "v1", label: "V1 — The Editorial" },
           { id: "v2", label: "V2 — The Proof" },
           { id: "v3", label: "V3 — The Narrative" },
+          { id: "v4", label: "V4 — The Architect" },
+          { id: "v5", label: "V5 — The Conversation" },
+          { id: "v6", label: "V6 — The Gallery" },
+          { id: "v7", label: "V7 — The Data Canvas" },
+          { id: "v8", label: "V8 — The Manifesto" },
+          { id: "v9", label: "V9 — The Ecosystem" },
         ].map(v => (
           <button key={v.id} onClick={() => navigate(`/archive/landing/${v.id}`)} className="px-4 py-3 rounded-xl cursor-pointer text-[13px] text-[#E8E8ED]" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             {v.label}

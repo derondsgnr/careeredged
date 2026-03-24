@@ -53,6 +53,19 @@ const GENERAL_ROUTES: RouteItem[] = [
   { path: "/onboarding",  label: "Onboarding", Icon: Compass },
 ];
 
+const LANDING_ROUTES: RouteItem[] = [
+  { path: "/archive/landing",     label: "All Variations", Icon: Sparkles },
+  { path: "/archive/landing/v1",  label: "V1 — Editorial", Icon: Sparkles },
+  { path: "/archive/landing/v2",  label: "V2 — Proof",     Icon: Sparkles },
+  { path: "/archive/landing/v3",  label: "V3 — Narrative",  Icon: Sparkles },
+  { path: "/archive/landing/v4",  label: "V4 — Architect",  Icon: Sparkles },
+  { path: "/archive/landing/v5",  label: "V5 — Conversation", Icon: Sparkles },
+  { path: "/archive/landing/v6",  label: "V6 — Gallery",    Icon: Sparkles },
+  { path: "/archive/landing/v7",  label: "V7 — Data Canvas", Icon: Sparkles },
+  { path: "/archive/landing/v8",  label: "V8 — Manifesto",  Icon: Sparkles },
+  { path: "/archive/landing/v9",  label: "V9 — Ecosystem",  Icon: Sparkles },
+];
+
 function getRoleRoutes(role: string): RouteItem[] {
   return [
     { path: `/${role}`,             label: "Home",      Icon: Home },
@@ -542,7 +555,7 @@ export function DevTools({ appState, onStateChange, familyVariation, onFamilyVar
                     >
                       <div
                         className="pb-2"
-                        style={{ maxHeight: 220, overflowY: "auto" }}
+                        style={{ maxHeight: 340, overflowY: "auto" }}
                       >
                         {/* General routes */}
                         <div
@@ -557,6 +570,54 @@ export function DevTools({ appState, onStateChange, familyVariation, onFamilyVar
                           </span>
                         </div>
                         {GENERAL_ROUTES.map(route => {
+                          const isActive = pathname === route.path;
+                          const Icon = route.Icon;
+                          return (
+                            <button
+                              key={route.path}
+                              onClick={() => handleRouteClick(route.path)}
+                              className="w-full flex items-center gap-2 px-3 py-1.5 cursor-pointer text-left transition-colors hover:bg-white/[0.03]"
+                              style={{
+                                background: isActive ? "rgba(var(--ce-lime-rgb),0.06)" : "transparent",
+                              }}
+                            >
+                              <Icon
+                                className="w-3 h-3 flex-shrink-0"
+                                style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}
+                              />
+                              <span
+                                className="text-[10px] flex-1 truncate"
+                                style={{
+                                  color: isActive ? "var(--ce-lime)" : "var(--ce-text-secondary)",
+                                  fontFamily: "var(--font-body)",
+                                  fontWeight: isActive ? 500 : 400,
+                                }}
+                              >
+                                {route.path}
+                              </span>
+                              <span
+                                className="text-[9px] flex-shrink-0"
+                                style={{ color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}
+                              >
+                                {route.label}
+                              </span>
+                            </button>
+                          );
+                        })}
+
+                        {/* Landing page variations */}
+                        <div
+                          className="px-3 py-1 mt-0.5"
+                          style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}
+                        >
+                          <span
+                            className="text-[9px] text-[var(--ce-text-quaternary)]"
+                            style={{ fontFamily: "var(--font-body)" }}
+                          >
+                            Landing Pages
+                          </span>
+                        </div>
+                        {LANDING_ROUTES.map(route => {
                           const isActive = pathname === route.path;
                           const Icon = route.Icon;
                           return (
