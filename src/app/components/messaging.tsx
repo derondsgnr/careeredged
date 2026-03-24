@@ -13,6 +13,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { toast } from "sonner";
 import { SophiaMark } from "./sophia-mark";
 import { RoleShell, type NavigateFn, type RoleId } from "./role-shell";
+import { consumeMessages as consumeQueuedMessages } from "./message-queue";
 import {
   Search, Pin, Video, MoreHorizontal, Send, Paperclip,
   X, ChevronLeft, ChevronRight, Calendar, Briefcase, Users,
@@ -1647,6 +1648,59 @@ function MessagingLayout({ role, onNavigate }: { role: RoleId; onNavigate?: Navi
     setThreads(newThreads);
     setSelectedId(newThreads[0]?.id || "");
   }, [role]);
+
+  // Consume queued messages from dashboard check-in chips
+  useEffect(() => {
+    const queued = consumeQueuedMessages();
+    if (queued.length === 0) return;
+
+    setThreads(prev => {
+      let updated = [...prev];
+      for (const qm of queued) {
+        const existingIdx = updated.findIndex(t => t.id === `dm-${qm.recipientId}`);
+        const newMsg: Message = {
+          id: qm.id,
+          senderId: "me",
+          senderName: "You",
+          type: "text",
+          content: qm.content,
+          timestamp: "Just now",
+        };
+
+        if (existingIdx >= 0) {
+          // Append to existing thread
+          const thread = updated[existingIdx];
+          updated[existingIdx] = {
+            ...thread,
+            messages: [...thread.messages, newMsg],
+            lastMessagePreview: qm.content,
+            lastMessageTime: "now",
+            unread: false,
+          };
+        } else {
+          // Create new DM thread for this recipient
+          const newThread: Thread = {
+            id: `dm-${qm.recipientId}`,
+            type: "dm",
+            title: qm.recipientName,
+            participants: [{
+              id: qm.recipientId,
+              name: qm.recipientName,
+              initial: qm.recipientInitial,
+            }],
+            messages: [newMsg],
+            unread: false,
+            pinned: false,
+            lastMessageTime: "now",
+            lastMessagePreview: qm.content,
+            smartReplies: ["Thanks!", "How are you doing?", "Let's catch up soon"],
+          };
+          updated = [newThread, ...updated];
+        }
+      }
+      return updated;
+    });
+  }, []);
 
   const selectedThread = threads.find(t => t.id === selectedId);
 

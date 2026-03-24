@@ -183,6 +183,9 @@
   --ce-glass-tint: 0, 0, 0;
   --ce-shadow-tint: 0, 0, 0;
 
+  /* Nav scrolled background — light mode uses white frost */
+  --ce-nav-scrolled-bg: rgba(255, 255, 255, 0.85);
+
   /* Surface tokens — light */
   --ce-surface-bg: #F8F9FC;
   --ce-surface-card: rgba(255, 255, 255, 0.8);

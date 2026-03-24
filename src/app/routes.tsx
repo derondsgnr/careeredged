@@ -28,6 +28,7 @@ import { EdgePathOptionB } from "./components/edgepath-option-b";
 import { ResumeEdge } from "./components/resume-edge";
 import { EdgeMatchForRole } from "./components/edge-match";
 import { TaskRoom } from "./components/task-room";
+import { GuideProfileEditSurface } from "./components/guide-profile-edit";
 import { Messaging } from "./components/messaging";
 import { EdgeSight } from "./components/edgesight";
 import { Sessions } from "./components/sessions";
@@ -126,6 +127,7 @@ function useRoleNavigation(): {
       analytics: `/${role}/analytics`,
       taskroom:  `/${role}/taskroom`,
       sessions:  `/${role}/sessions`,
+      profile:   `/${role}/profile`,
       // Layer 3 surfaces
       family:    `/${role}/family`,
       clients:   `/${role}/clients`,
@@ -230,6 +232,11 @@ function TaskRoomPage() {
 function SessionsPage() {
   const { role, onNavigate } = useRoleNavigation();
   return <Sessions role={role} onNavigate={onNavigate} />;
+}
+
+function ProfilePage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <GuideProfileEditSurface role={role} onNavigate={onNavigate} />;
 }
 
 // ─── Archive wrappers ───────────────────────────────────────────────
@@ -392,6 +399,7 @@ export const router = createBrowserRouter([
       { path: ":role/taskroom",                 Component: TaskRoomPage },
       { path: ":role/taskroom/:milestoneId",    Component: TaskRoomPage },
       { path: ":role/sessions",                 Component: SessionsPage },
+      { path: ":role/profile",                  Component: ProfilePage },
       // Layer 3 surfaces
       { path: ":role/family",                   Component: FamilySurfaceSwitcher },
       { path: ":role/clients",                  Component: ClientsSurface },

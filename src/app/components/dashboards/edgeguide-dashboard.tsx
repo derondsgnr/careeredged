@@ -9,10 +9,13 @@ import { RoleShell, GlassCard, type NavigateFn } from "../role-shell";
 import {
   Calendar, Users, DollarSign, Star, Check, Clock,
   ChevronRight, Video, MessageSquare, TrendingUp, ArrowUpRight,
+  UserCircle, ArrowRight, Pencil,
 } from "lucide-react";
 import { EASE } from "../tokens";
 import { KPIRow } from "../kpi-patterns";
 import { SophiaInsight } from "../sophia-patterns";
+import { GuideProfileModal, useGuideProfile } from "../guide-profile-modal";
+import { SophiaMark } from "../sophia-mark";
 
 const KPIS = [
   { label: "Sessions This Week", value: "8", trend: "+2 vs last week", icon: <Calendar className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
@@ -40,6 +43,10 @@ const PENDING_REVIEWS = [
 ];
 
 export function EdgeGuideDashboard({ onNavigate }: { onNavigate?: NavigateFn }) {
+  const { profile, save: saveProfile, reset: resetProfile } = useGuideProfile();
+  const [showProfileModal, setShowProfileModal] = useState(false);
+  const [modalKey, setModalKey] = useState(0);
+
   return (
     <RoleShell role="guide" userName="Alice" userInitial="A" edgeGas={62} onNavigate={onNavigate}>
       <div className="max-w-[1200px] mx-auto">
@@ -132,6 +139,57 @@ export function EdgeGuideDashboard({ onNavigate }: { onNavigate?: NavigateFn }) 
         </div>
 
         <div className="flex flex-col gap-5">
+          {/* Profile entry card */}
+          {!profile ? (
+            <GlassCard delay={0.55}>
+              <div className="text-center py-2">
+                <div className="w-10 h-10 rounded-xl mx-auto mb-3 flex items-center justify-center" style={{ background: "rgba(var(--ce-role-guide-rgb),0.08)" }}>
+                  <UserCircle className="w-5 h-5 text-[var(--ce-role-guide)]" />
+                </div>
+                <div className="text-[13px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                  Build your profile
+                </div>
+                <p className="text-[12px] text-ce-text-tertiary mb-3 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                  Clients find and book you through your profile. Takes about 2 minutes.
+                </p>
+                <button
+                  onClick={() => { setModalKey(k => k + 1); setShowProfileModal(true); }}
+                  className="w-full py-2 rounded-lg text-[12px] font-medium cursor-pointer flex items-center justify-center gap-1.5 transition-all duration-200"
+                  style={{ background: "rgba(var(--ce-role-guide-rgb),0.08)", color: "var(--ce-role-guide)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.12)", fontFamily: "var(--font-display)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(var(--ce-role-guide-rgb),0.14)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(var(--ce-role-guide-rgb),0.08)"; }}
+                >
+                  Set up your profile <ArrowRight className="w-3.5 h-3.5" />
+                </button>
+              </div>
+            </GlassCard>
+          ) : (
+            <GlassCard delay={0.55}>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-2">
+                  <UserCircle className="w-3.5 h-3.5 text-[var(--ce-role-guide)]" />
+                  <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Your Profile</span>
+                </div>
+                <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-employer-rgb),0.1)", color: "var(--ce-role-employer)", fontFamily: "var(--font-body)" }}>Live</span>
+              </div>
+              <p className="text-[12px] text-ce-text-secondary mb-2 line-clamp-1" style={{ fontFamily: "var(--font-body)" }}>{profile.headline}</p>
+              <div className="flex flex-wrap gap-1 mb-2">
+                {profile.specializations.slice(0, 3).map(s => (
+                  <span key={s} className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-guide-rgb),0.06)", color: "var(--ce-role-guide)", fontFamily: "var(--font-body)" }}>{s}</span>
+                ))}
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>${profile.rate}/hr · {profile.duration} min</span>
+                <button onClick={() => onNavigate?.("profile")} className="flex items-center gap-1 text-[10px] text-ce-text-quaternary cursor-pointer hover:text-ce-text-tertiary transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+                  <Pencil className="w-3 h-3" /> Edit
+                </button>
+              </div>
+              <button onClick={resetProfile} className="mt-2 text-[10px] text-ce-text-quaternary cursor-pointer hover:text-ce-text-tertiary transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+                Reset (demo)
+              </button>
+            </GlassCard>
+          )}
+
           <SophiaInsight
             message="Sharon just completed a major milestone — a portfolio debrief session would be high-value right now. She has an interview with Figma next week."
             actionLabel="View session prep"
@@ -177,6 +235,18 @@ export function EdgeGuideDashboard({ onNavigate }: { onNavigate?: NavigateFn }) 
         </div>
       </div>
       </div>
+
+      {/* Profile setup modal (first time) */}
+      <AnimatePresence>
+        {showProfileModal && (
+          <GuideProfileModal
+            key={modalKey}
+            onSuccess={(p) => { saveProfile(p); setShowProfileModal(false); }}
+            onClose={() => setShowProfileModal(false)}
+          />
+        )}
+      </AnimatePresence>
+
     </RoleShell>
   );
 }

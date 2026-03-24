@@ -203,6 +203,7 @@ export function EdgePreneurDashboard({ onNavigate }: { onNavigate?: NavigateFn }
             roleColor="var(--ce-role-edgepreneur)"
             roleRgb="var(--ce-role-edgepreneur-rgb)"
             onNavigate={(s) => onNavigate?.(s)}
+            onSophia={() => onNavigate?.("messages")}
             delay={0.5}
           />
         </div>

@@ -22,9 +22,11 @@ import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { SophiaMark } from "./sophia-mark";
 import { useSophia } from "./sophia-context";
+import { queueMessage } from "./message-queue";
+import { toast } from "sonner";
 import {
   Timer, Zap, Coffee, ChevronDown, Sparkles,
-  CheckCircle2, Target, Flame, Users,
+  CheckCircle2, Target, Flame, Users, MessageSquare,
 } from "lucide-react";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -313,14 +315,28 @@ export function EdgeBuddy({
                         <div className="text-[9px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{buddy.frequency} check-ins</div>
                       </div>
                     </div>
-                    <button
-                      onClick={() => handleSophia(`Check in with ${buddy.name} — what should I update them on?`)}
-                      className="mt-2 w-full py-1.5 rounded-md text-[10px] cursor-pointer transition-colors flex items-center justify-center gap-1"
-                      style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", fontFamily: "var(--font-body)" }}
-                    >
-                      <Users className="w-3 h-3" />
-                      Check in with {buddy.name.split(" ")[0]}
-                    </button>
+                    <div className="mt-2 flex flex-wrap gap-1">
+                      {["How's it going?", "Made progress!"].map((msg) => (
+                        <button
+                          key={msg}
+                          onClick={() => {
+                            queueMessage({
+                              recipientId: `buddy-${buddy.name.toLowerCase().replace(/\s/g, "-")}`,
+                              recipientName: buddy.name,
+                              recipientInitial: buddy.initial,
+                              content: msg,
+                              senderRole: "edgestar",
+                              threadType: "dm",
+                            });
+                            toast.success(`Sent to ${buddy.name.split(" ")[0]}`, { duration: 2000 });
+                          }}
+                          className="text-[9px] px-2 py-1 rounded-md cursor-pointer transition-colors"
+                          style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", fontFamily: "var(--font-body)" }}
+                        >
+                          {msg}
+                        </button>
+                      ))}
+                    </div>
                   </div>
                 );
               } catch { return null; }

@@ -206,28 +206,28 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             }}
           />
 
-          {/* Dashboard mockup */}
+          {/* Dashboard mockup — always renders as dark-themed app screenshot */}
           <div
             className="relative rounded-xl overflow-hidden"
             style={{
-              background: "rgba(var(--ce-glass-tint), 0.8)",
-              border: "1px solid rgba(var(--ce-glass-tint),0.06)",
-              boxShadow: "0 40px 80px rgba(var(--ce-shadow-tint),0.4), 0 0 0 1px rgba(var(--ce-glass-tint),0.02)",
+              background: "#0E1117",
+              border: "1px solid rgba(255,255,255,0.06)",
+              boxShadow: "0 40px 80px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.02)",
             }}
           >
             {/* Window chrome */}
-            <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+            <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
               <div className="flex gap-1.5">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: "rgba(255,255,255,0.08)" }} />
               </div>
               <div className="flex-1 flex justify-center">
                 <div
                   className="px-3 py-1 rounded-md text-[10px]"
                   style={{
-                    background: "rgba(var(--ce-glass-tint),0.03)",
-                    color: "var(--ce-text-quaternary)",
+                    background: "rgba(255,255,255,0.03)",
+                    color: "#5C6370",
                     fontFamily: "'Satoshi', sans-serif",
                   }}
                 >
@@ -241,12 +241,12 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
               {/* Sophia insight bar */}
               <div
                 className="flex items-center gap-3 px-4 py-3 rounded-lg mb-6"
-                style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}
+                style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)" }}
               >
-                <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.15)" }}>
-                  <Sparkles size={12} style={{ color: "var(--ce-role-edgestar)" }} />
+                <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(34,211,238,0.15)" }}>
+                  <Sparkles size={12} style={{ color: "#22D3EE" }} />
                 </div>
-                <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-role-edgestar)" }}>
+                <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#22D3EE" }}>
                   Sophia: Based on your experience in marketing, I mapped 4 phases to reach VP of Marketing at a Series B startup.
                 </span>
               </div>
@@ -264,28 +264,28 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                     className="rounded-lg p-4"
                     style={{
                       background: p.progress === 100
-                        ? "rgba(var(--ce-lime-rgb),0.04)"
-                        : "rgba(var(--ce-glass-tint),0.02)",
+                        ? "rgba(179,255,59,0.04)"
+                        : "rgba(255,255,255,0.02)",
                       border: p.progress > 0 && p.progress < 100
-                        ? "1px solid rgba(var(--ce-lime-rgb),0.15)"
-                        : "1px solid rgba(var(--ce-glass-tint),0.04)",
+                        ? "1px solid rgba(179,255,59,0.15)"
+                        : "1px solid rgba(255,255,255,0.04)",
                     }}
                   >
-                    <span className="text-[10px] uppercase tracking-[0.1em]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
+                    <span className="text-[10px] uppercase tracking-[0.1em]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}>
                       {p.phase}
                     </span>
-                    <h4 className="mt-1 text-[14px]" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, color: "var(--ce-text-primary)" }}>
+                    <h4 className="mt-1 text-[14px]" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, color: "#E8E8ED" }}>
                       {p.title}
                     </h4>
-                    <span className="text-[11px] mt-0.5 block" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
+                    <span className="text-[11px] mt-0.5 block" style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}>
                       {p.weeks}
                     </span>
-                    <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
+                    <div className="mt-3 h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
                       <div
                         className="h-full rounded-full"
                         style={{
                           width: `${p.progress}%`,
-                          background: p.progress === 100 ? "var(--ce-lime)" : "rgba(var(--ce-lime-rgb),0.6)",
+                          background: p.progress === 100 ? "#B3FF3B" : "rgba(179,255,59,0.6)",
                         }}
                       />
                     </div>
@@ -293,7 +293,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                       className="text-[10px] mt-2 block"
                       style={{
                         fontFamily: "'Satoshi', sans-serif",
-                        color: p.progress === 100 ? "var(--ce-lime)" : p.progress > 0 ? "var(--ce-text-tertiary)" : "var(--ce-text-quaternary)",
+                        color: p.progress === 100 ? "#B3FF3B" : p.progress > 0 ? "#8B90A0" : "#5C6370",
                       }}
                     >
                       {p.status}
@@ -567,13 +567,13 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             </p>
           </Reveal>
 
-          {/* Chat mockup */}
+          {/* Chat mockup — always dark-themed to match app screenshot */}
           <Reveal delay={0.15}>
             <div
               className="rounded-xl p-5 text-left max-w-[540px] mx-auto"
               style={{
-                background: "rgba(var(--ce-glass-tint), 0.6)",
-                border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                background: "#0E1117",
+                border: "1px solid rgba(255,255,255,0.06)",
               }}
             >
               {[
@@ -591,10 +591,10 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                     style={{
                       fontFamily: "'Satoshi', sans-serif",
                       background: msg.from === "user"
-                        ? "rgba(var(--ce-glass-tint),0.06)"
-                        : "rgba(var(--ce-role-edgestar-rgb),0.06)",
-                      border: msg.from === "sophia" ? "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
-                      color: msg.from === "user" ? "var(--ce-text-primary)" : "var(--ce-role-edgestar)",
+                        ? "rgba(255,255,255,0.06)"
+                        : "rgba(34,211,238,0.06)",
+                      border: msg.from === "sophia" ? "1px solid rgba(34,211,238,0.08)" : "1px solid rgba(255,255,255,0.04)",
+                      color: msg.from === "user" ? "#E8E8ED" : "#22D3EE",
                     }}
                   >
                     {msg.text}

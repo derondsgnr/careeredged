@@ -31,7 +31,7 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
       className="fixed top-0 left-0 right-0 z-50 transition-all duration-500"
       style={{
         background: scrolled
-          ? "rgba(var(--ce-glass-tint), 0.85)"
+          ? "var(--ce-nav-scrolled-bg, rgba(var(--ce-glass-tint), 0.85))"
           : "transparent",
         backdropFilter: scrolled ? "blur(20px) saturate(1.2)" : "none",
         borderBottom: scrolled ? "1px solid rgba(var(--ce-glass-tint),0.04)" : "1px solid transparent",

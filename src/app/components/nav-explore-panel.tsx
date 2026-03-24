@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "motion/react";
 import {
   Zap, Compass, FileText, Briefcase, BookOpen, Calendar,
   Globe, BarChart3, DollarSign, ShoppingBag, Users,
-  MessageSquare, GraduationCap, Search, X,
+  MessageSquare, GraduationCap, Search, X, Heart,
   type LucideIcon,
 } from "lucide-react";
 import { SophiaMark } from "./sophia-mark";
@@ -163,6 +163,14 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
   }
 
   // ── Community ──────────────────────────────────────────────────────────
+
+  // EdgeBuddy — EdgeStar + EdgePreneur only
+  if (["edgestar", "edgepreneur"].includes(role)) {
+    community.push({
+      id: "buddy", label: "EdgeBuddy", description: "Find an accountability partner",
+      icon: Heart, color: COLORS.cyan, sophiaPrompt: "Help me find an accountability partner who matches my career goals",
+    });
+  }
 
   community.push({
     id: "groups", label: "EdgeGroups", description: "Peer groups & accountability",
