@@ -156,17 +156,22 @@ function ActivityWidget({ onNav }: { onNav?: (id: string) => void }) {
   );
 }
 
-// ─── Roadmap Todos (from H3 timeline, reframed as checklist) ────────────────
+// ─── Roadmap Todos (Enhanced: cross-phase, time-grouped, Sophia daily brief) ─
 
 function RoadmapTodos({ onNav, onOpenTaskRoom }: { onNav: (id: string) => void; onOpenTaskRoom?: (milestoneId: string) => void }) {
-  const milestones = [
-    { id: "m-resume-audit", label: "Resume audit", status: "done" as const, date: "Mar 2" },
-    { id: "m-portfolio-review", label: "Portfolio review", status: "done" as const, date: "Mar 5" },
-    { id: "m-target-companies", label: "Target companies", status: "done" as const, date: "Mar 8" },
-    { id: "m-linkedin-optimization", label: "LinkedIn optimization", status: "current" as const, date: "Today" },
-    { id: "m-networking-outreach", label: "Networking outreach", status: "upcoming" as const, date: "Mar 17" },
-    { id: "m-first-applications", label: "First applications", status: "upcoming" as const, date: "Mar 20" },
+  const todayTasks = [
+    { id: "m-linkedin-optimization", label: "LinkedIn optimization", phase: "P1", status: "current" as const, time: "2h" },
+    { id: "m6", label: "Complete interaction design module", phase: "P2", status: "current" as const, time: "8h", cost: 299 },
   ];
+
+  const weekTasks = [
+    { id: "m-networking-outreach", label: "Networking outreach", phase: "P1", status: "upcoming" as const, time: "3h" },
+    { id: "m7", label: "Redesign a real product (case study #2)", phase: "P2", status: "upcoming" as const, time: "15h", cost: 12 },
+    { id: "m-first-applications", label: "First applications", phase: "P1", status: "upcoming" as const, time: "4h" },
+  ];
+
+  const completedCount = 8;
+  const totalCount = completedCount + todayTasks.length + weekTasks.length;
 
   return (
     <motion.div
@@ -176,65 +181,110 @@ function RoadmapTodos({ onNav, onOpenTaskRoom }: { onNav: (id: string) => void; 
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.5, duration: 0.4, ease: EASE }}
     >
-      <div className="flex items-center justify-between mb-4">
+      {/* Sophia daily brief */}
+      <motion.div
+        className="flex items-start gap-2 mb-4 px-3 py-2.5 rounded-lg"
+        style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 0.7 }}
+      >
+        <Sparkles className="w-3 h-3 text-ce-cyan flex-shrink-0 mt-0.5" />
+        <p className="text-[11px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+          {todayTasks.length} tasks today. The interaction design module is your highest-impact action — 6 of 8 target companies require it.
+        </p>
+      </motion.div>
+
+      {/* Header */}
+      <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <Compass className="w-4 h-4 text-ce-cyan" />
-          <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Phase 1 Milestones</span>
+          <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Your Tasks</span>
         </div>
-        <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>3 of 6</span>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{completedCount} of {totalCount}</span>
       </div>
 
       {/* Phase progress mini-bar */}
       <div className="flex gap-1 mb-4">
         {[1, 2, 3, 4].map((p) => (
-          <div key={p} className="flex-1 h-1 rounded-full" style={{ background: p === 1 ? "linear-gradient(90deg, var(--ce-role-edgestar), rgba(var(--ce-role-edgestar-rgb),0.3))" : `rgba(${GLASS_TINT},0.04)` }} />
+          <div key={p} className="flex-1 h-1 rounded-full" style={{
+            background: p === 1
+              ? "linear-gradient(90deg, var(--ce-lime), rgba(var(--ce-lime-rgb),0.3))"
+              : p === 2
+                ? "linear-gradient(90deg, var(--ce-role-edgestar), rgba(var(--ce-role-edgestar-rgb),0.3))"
+                : `rgba(${GLASS_TINT},0.04)`
+          }} />
         ))}
       </div>
 
-      {/* Timeline */}
-      <div className="flex flex-col flex-1">
-        {milestones.map((m, i) => (
-          <div key={i} className="flex items-start gap-2.5 relative cursor-pointer" onClick={() => {
-            if ((m.status === "current" || m.status === "upcoming") && onOpenTaskRoom) {
-              onOpenTaskRoom(m.id);
-            } else {
-              onNav("roadmap");
-            }
-          }}>
-            {/* Vertical connector */}
-            {i < milestones.length - 1 && (
-              <div className="absolute left-[9px] top-[18px] bottom-0 w-[1px]" style={{ background: m.status === "done" ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : `rgba(${GLASS_TINT},0.04)` }} />
-            )}
-            {/* Node */}
-            <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0 z-10 mt-0.5" style={{
-              background: m.status === "done" ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : SURFACE.bg,
-              border: `1.5px solid ${m.status === "done" ? "rgba(var(--ce-role-edgestar-rgb),0.25)" : m.status === "current" ? "var(--ce-role-edgestar)" : `rgba(${GLASS_TINT},0.06)`}`,
-              boxShadow: m.status === "current" ? "0 0 8px rgba(var(--ce-role-edgestar-rgb),0.2)" : "none",
-            }}>
-              {m.status === "done" && <Check className="w-2.5 h-2.5 text-ce-cyan" />}
-              {m.status === "current" && <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]" />}
-            </div>
-            {/* Content */}
-            <div className="flex-1 pb-3 min-w-0">
-              <div className="flex items-center justify-between gap-2">
-                <span className={`text-[12px] truncate ${m.status === "upcoming" ? "text-[var(--ce-text-secondary)]" : m.status === "done" ? "text-[var(--ce-text-tertiary)]" : "text-[var(--ce-text-primary)]"}`} style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
-                <span className="text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0 tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{m.date}</span>
-              </div>
-              {m.status === "current" && (
-                <motion.div
-                  className="flex items-center gap-1 mt-1"
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  transition={{ delay: 1 }}
-                >
-                  <Sparkles className="w-2.5 h-2.5 text-ce-cyan" />
-                  <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Due today · Open task room →</span>
-                </motion.div>
+      {/* Today */}
+      <div className="mb-3">
+        <span className="text-[10px] uppercase tracking-wider text-ce-text-quaternary mb-2 block" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>Today</span>
+        <div className="flex flex-col">
+          {todayTasks.map((m, i) => (
+            <div key={m.id} className="flex items-start gap-2.5 relative cursor-pointer group" onClick={() => onOpenTaskRoom?.(m.id)}>
+              {i < todayTasks.length - 1 && (
+                <div className="absolute left-[9px] top-[18px] bottom-0 w-[1px]" style={{ background: `rgba(${GLASS_TINT},0.04)` }} />
               )}
+              <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0 z-10 mt-0.5" style={{
+                background: SURFACE.bg,
+                border: "1.5px solid var(--ce-role-edgestar)",
+                boxShadow: "0 0 8px rgba(var(--ce-role-edgestar-rgb),0.2)",
+              }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]" />
+              </div>
+              <div className="flex-1 pb-3 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[12px] text-[var(--ce-text-primary)] truncate group-hover:text-ce-cyan transition-colors" style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-md text-ce-text-quaternary" style={{ background: `rgba(${GLASS_TINT},0.04)`, fontFamily: "var(--font-body)" }}>{m.phase}</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{m.time}</span>
+                    {m.cost && <span className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>${m.cost}</span>}
+                  </div>
+                </div>
+                <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Open task room →</span>
+              </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
+
+      {/* This Week */}
+      <div>
+        <span className="text-[10px] uppercase tracking-wider text-ce-text-quaternary mb-2 block" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>This week</span>
+        <div className="flex flex-col">
+          {weekTasks.map((m, i) => (
+            <div key={m.id} className="flex items-start gap-2.5 relative cursor-pointer group" onClick={() => onOpenTaskRoom?.(m.id)}>
+              {i < weekTasks.length - 1 && (
+                <div className="absolute left-[9px] top-[18px] bottom-0 w-[1px]" style={{ background: `rgba(${GLASS_TINT},0.04)` }} />
+              )}
+              <div className="w-[18px] h-[18px] rounded-full flex items-center justify-center flex-shrink-0 z-10 mt-0.5" style={{
+                background: SURFACE.bg,
+                border: `1.5px solid rgba(${GLASS_TINT},0.06)`,
+              }} />
+              <div className="flex-1 pb-3 min-w-0">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-[12px] text-[var(--ce-text-secondary)] truncate group-hover:text-ce-text-primary transition-colors" style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
+                  <div className="flex items-center gap-2 flex-shrink-0">
+                    <span className="text-[9px] px-1.5 py-0.5 rounded-md text-ce-text-quaternary" style={{ background: `rgba(${GLASS_TINT},0.04)`, fontFamily: "var(--font-body)" }}>{m.phase}</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{m.time}</span>
+                    {m.cost && <span className="text-[10px] text-[var(--ce-text-quaternary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>${m.cost}</span>}
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* See all deep-link */}
+      <button
+        className="mt-3 flex items-center gap-1.5 text-[11px] text-ce-cyan cursor-pointer hover:gap-2.5 transition-all"
+        style={{ fontFamily: "var(--font-body)" }}
+        onClick={() => onNav("edgepath")}
+      >
+        See all milestones <ChevronRight className="w-3 h-3" />
+      </button>
     </motion.div>
   );
 }
