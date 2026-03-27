@@ -23,9 +23,9 @@ import {
   Clock, BookOpen, ExternalLink, MoreHorizontal, Star,
   ChevronDown, ChevronUp, Mic, Search, Zap,
   Target, TrendingUp, Users, Briefcase, GraduationCap,
-  ArrowRight, FileText,
+  ArrowRight, FileText, Calendar,
   List, Map, Lock, Trophy, Rocket, X, AlertCircle, Circle,
-  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2,
+  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe,
 } from "lucide-react";
 import { MindMapView } from "./edgepath-mindmap";
 import { getRoleContext, type EdgePathRoleContext } from "./edgepath-context";
@@ -50,6 +50,14 @@ export interface Milestone {
   resources?: { label: string; type: string }[];
   actions?: string[];
   crossSurface?: { surface: string; note: string; icon: string }[];
+  /** Estimated cost in USD. $0 or undefined = free (not shown). */
+  estimatedCost?: number;
+  /** What the user actually paid. Tracks spending vs. estimate. */
+  actualCost?: number;
+  /** Short cost label, e.g. "Coursera UX Certificate" */
+  costNote?: string;
+  /** Due date for this milestone (ISO string). Computed from phase timeline. */
+  dueDate?: string;
 }
 
 export interface PhaseData {
@@ -60,6 +68,14 @@ export interface PhaseData {
   progress: number;
   milestonesDone: number;
   milestonesTotal: number;
+  /** Absolute date range, e.g. "Mar 4 – Mar 28" */
+  dateRange?: string;
+  /** Days remaining in this phase (negative = overdue) */
+  daysRemaining?: number;
+  /** Estimated total cost for this phase */
+  estimatedCost?: number;
+  /** Total spent so far in this phase */
+  actualCost?: number;
 }
 
 /** Injectable data for role-specific EdgePath content. When provided,
@@ -99,20 +115,22 @@ const ROADMAPS: RoadmapData[] = [
 ];
 
 const INITIAL_PHASES: PhaseData[] = [
-  { id: 1, title: "Discover & Position", weeks: "Weeks 1–3", status: "complete", progress: 1.0, milestonesDone: 6, milestonesTotal: 6 },
-  { id: 2, title: "Skill Bridge", weeks: "Weeks 4–8", status: "active", progress: 0.625, milestonesDone: 5, milestonesTotal: 8 },
-  { id: 3, title: "Build & Ship", weeks: "Weeks 9–13", status: "upcoming", progress: 0, milestonesDone: 0, milestonesTotal: 7 },
-  { id: 4, title: "Interview & Close", weeks: "Weeks 14–18", status: "locked", progress: 0, milestonesDone: 0, milestonesTotal: 5 },
+  { id: 1, title: "Discover & Position", weeks: "Weeks 1–3", status: "complete", progress: 1.0, milestonesDone: 6, milestonesTotal: 6, dateRange: "Jan 6 – Jan 24", daysRemaining: 0, estimatedCost: 0, actualCost: 0 },
+  { id: 2, title: "Skill Bridge", weeks: "Weeks 4–8", status: "active", progress: 0.625, milestonesDone: 5, milestonesTotal: 8, dateRange: "Jan 27 – Mar 28", daysRemaining: 2, estimatedCost: 650, actualCost: 299 },
+  { id: 3, title: "Build & Ship", weeks: "Weeks 9–13", status: "upcoming", progress: 0, milestonesDone: 0, milestonesTotal: 7, dateRange: "Apr 1 – Apr 30", estimatedCost: 162, actualCost: 0 },
+  { id: 4, title: "Interview & Close", weeks: "Weeks 14–18", status: "locked", progress: 0, milestonesDone: 0, milestonesTotal: 5, dateRange: "May 1 – May 30", estimatedCost: 300, actualCost: 0 },
 ];
 
 const PHASE_2_MILESTONES: Milestone[] = [
-  { id: "m1", label: "Complete Figma fundamentals course", category: "skill", status: "done", time: "8h" },
-  { id: "m2", label: "Learn design system principles", category: "skill", status: "done", time: "6h" },
-  { id: "m3", label: "Complete UX research foundations", category: "skill", status: "done", time: "10h" },
-  { id: "m4", label: "Build first case study", category: "action", status: "done", time: "12h" },
-  { id: "m5", label: "Get portfolio feedback from mentor", category: "action", status: "done", time: "2h" },
+  { id: "m1", label: "Complete Figma fundamentals course", category: "skill", status: "done", time: "8h", estimatedCost: 0, dueDate: "2026-02-07" },
+  { id: "m2", label: "Learn design system principles", category: "skill", status: "done", time: "6h", estimatedCost: 0, dueDate: "2026-02-14" },
+  { id: "m3", label: "Complete UX research foundations", category: "skill", status: "done", time: "10h", estimatedCost: 149, actualCost: 149, costNote: "IDF Membership", dueDate: "2026-02-21" },
+  { id: "m4", label: "Build first case study", category: "action", status: "done", time: "12h", estimatedCost: 0, dueDate: "2026-03-01" },
+  { id: "m5", label: "Get portfolio feedback from mentor", category: "action", status: "done", time: "2h", estimatedCost: 150, actualCost: 150, costNote: "Session with Alice", dueDate: "2026-03-08" },
   {
     id: "m6", label: "Complete interaction design module", category: "skill", status: "current", time: "8h",
+    estimatedCost: 299, costNote: "Coursera UX Certificate",
+    dueDate: "2026-03-26",
     sophiaNote: "Based on your saved jobs, 6 of 8 target companies list interaction design as required. Prioritize this over motion design.",
     resources: [
       { label: "Interaction Design Foundation", type: "course" },
@@ -127,9 +145,11 @@ const PHASE_2_MILESTONES: Milestone[] = [
   },
   {
     id: "m7", label: "Redesign a real product (case study #2)", category: "action", status: "upcoming", time: "15h",
+    estimatedCost: 12, costNote: "Portfolio domain",
+    dueDate: "2026-04-05",
     sophiaNote: "Pick a product you use daily. Recruiters value redesigns that show deep understanding over flashy visuals.",
   },
-  { id: "m8", label: "Submit portfolio for ATS optimization", category: "resource", status: "upcoming", time: "1h" },
+  { id: "m8", label: "Submit portfolio for ATS optimization", category: "resource", status: "upcoming", time: "1h", estimatedCost: 0, dueDate: "2026-04-10" },
 ];
 
 const CATEGORY_META = {
@@ -643,6 +663,188 @@ function PhaseCompletionCelebration({ phaseTitle, nextPhaseTitle, onDismiss }: {
   );
 }
 
+// ─── Gantt Timeline Panel ────────────────────────────────────────────────────
+// Slide-up overlay triggered by "Show timeline" chip in Sophia bar.
+// Same pattern as Path Compare panel — contextual, dismissable, not a mode.
+
+function GanttTimelinePanel({ phases, onClose, onOpenTaskRoom }: {
+  phases: PhaseData[];
+  onClose: () => void;
+  onOpenTaskRoom?: (milestoneId: string) => void;
+}) {
+  // Total weeks span for the Gantt
+  const totalWeeks = 18;
+  const today = 10; // Current week position (mock — would be computed from dates)
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-end justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      {/* Backdrop */}
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+
+      {/* Panel — slides up from bottom */}
+      <motion.div
+        className="relative z-10 w-full max-w-[1000px] mx-4 mb-16 rounded-xl overflow-hidden"
+        style={{
+          background: "rgba(10,12,16,0.97)",
+          border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+          boxShadow: "0 -20px 60px rgba(0,0,0,0.5)",
+        }}
+        initial={{ y: 40, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        exit={{ y: 40, opacity: 0 }}
+        transition={{ type: "spring", stiffness: 300, damping: 30 }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+          <div className="flex items-center gap-2">
+            <Calendar className="w-3.5 h-3.5 text-ce-cyan" />
+            <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              Timeline
+            </span>
+          </div>
+          <button
+            onClick={onClose}
+            className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+          >
+            <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+          </button>
+        </div>
+
+        {/* Month headers */}
+        <div className="px-5 pt-4 pb-2">
+          <div className="flex items-center gap-0 relative" style={{ paddingLeft: "120px" }}>
+            {["Jan", "Feb", "Mar", "Apr", "May", "Jun"].map((month, i) => (
+              <div key={month} className="flex-1 text-center">
+                <span className="text-[10px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>{month}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Gantt bars */}
+        <div className="px-5 pb-5 space-y-2 relative">
+          {/* Today marker */}
+          <div
+            className="absolute top-0 bottom-0 w-[1.5px] z-10"
+            style={{
+              left: `calc(120px + ${(today / totalWeeks) * 100}% * (1 - 120px / 100%))`,
+              background: "var(--ce-cyan)",
+              opacity: 0.4,
+            }}
+          >
+            <div
+              className="absolute -top-1 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-sm whitespace-nowrap"
+              style={{ background: "rgba(var(--ce-cyan-rgb),0.12)", border: "1px solid rgba(var(--ce-cyan-rgb),0.2)" }}
+            >
+              <span className="text-[9px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Today</span>
+            </div>
+          </div>
+
+          {phases.map((phase) => {
+            // Map phase position to percentage of total timeline
+            const startWeek = phase.id === 1 ? 0 : phase.id === 2 ? 3 : phase.id === 3 ? 8 : 13;
+            const endWeek = phase.id === 1 ? 3 : phase.id === 2 ? 8 : phase.id === 3 ? 13 : 18;
+            const startPct = (startWeek / totalWeeks) * 100;
+            const widthPct = ((endWeek - startWeek) / totalWeeks) * 100;
+            const progressPct = phase.progress * 100;
+
+            const isComplete = phase.status === "complete";
+            const isActive = phase.status === "active";
+            const isLocked = phase.status === "locked";
+
+            return (
+              <div key={phase.id} className="flex items-center gap-0 h-10">
+                {/* Phase label */}
+                <div className="w-[120px] flex-shrink-0 pr-3">
+                  <span
+                    className={`text-[11px] truncate block ${isLocked ? "text-[var(--ce-text-ghost)]" : "text-ce-text-secondary"}`}
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    {phase.title}
+                  </span>
+                  <span className="text-[9px] text-ce-text-quaternary tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
+                    {phase.dateRange || phase.weeks}
+                  </span>
+                </div>
+
+                {/* Bar track */}
+                <div className="flex-1 relative h-6">
+                  {/* Phase bar */}
+                  <motion.div
+                    className="absolute h-full rounded-sm overflow-hidden"
+                    style={{
+                      left: `${startPct}%`,
+                      width: `${widthPct}%`,
+                      background: isLocked
+                        ? "rgba(var(--ce-glass-tint),0.02)"
+                        : "rgba(var(--ce-glass-tint),0.04)",
+                      border: `1px solid ${isLocked ? "rgba(var(--ce-glass-tint),0.03)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                    }}
+                    initial={{ scaleX: 0, originX: 0 }}
+                    animate={{ scaleX: 1 }}
+                    transition={{ duration: 0.5, ease: EASE, delay: phase.id * 0.1 }}
+                  >
+                    {/* Progress fill */}
+                    {(isComplete || isActive) && (
+                      <motion.div
+                        className="absolute inset-y-0 left-0 rounded-sm"
+                        style={{
+                          background: isComplete
+                            ? "linear-gradient(90deg, rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-lime-rgb),0.08))"
+                            : "linear-gradient(90deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))",
+                        }}
+                        initial={{ width: 0 }}
+                        animate={{ width: `${progressPct}%` }}
+                        transition={{ duration: 0.8, ease: EASE, delay: 0.3 + phase.id * 0.1 }}
+                      />
+                    )}
+
+                    {/* Phase label inside bar */}
+                    <div className="absolute inset-0 flex items-center px-2">
+                      <span
+                        className="text-[10px] tabular-nums"
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          color: isComplete ? "var(--ce-lime)" : isActive ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)",
+                        }}
+                      >
+                        {isComplete ? "✓" : isActive ? `${phase.milestonesDone}/${phase.milestonesTotal}` : isLocked ? "🔒" : `0/${phase.milestonesTotal}`}
+                      </span>
+                    </div>
+                  </motion.div>
+                </div>
+              </div>
+            );
+          })}
+
+          {/* Budget summary line */}
+          {phases.some(p => p.estimatedCost && p.estimatedCost > 0) && (
+            <div className="flex items-center gap-0 h-8 mt-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)", paddingTop: "8px" }}>
+              <div className="w-[120px] flex-shrink-0 pr-3">
+                <span className="text-[10px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>Investment</span>
+              </div>
+              <div className="flex-1 flex items-center gap-3">
+                <span className="text-[12px] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-lime)" }}>
+                  ${phases.reduce((sum, p) => sum + (p.actualCost || 0), 0).toLocaleString()}
+                </span>
+                <span className="text-[10px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>
+                  of ${phases.reduce((sum, p) => sum + (p.estimatedCost || 0), 0).toLocaleString()} estimated
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // ─── Multiple Roadmaps Selector ─────────────────────────────────────────────
 
 function RoadmapSelector({ roadmaps, activeId, onSelect, onTogglePrimary, onCreateNew }: {
@@ -882,14 +1084,28 @@ function PhaseStrip({ phases, activePhase, onPhaseClick, celebratingPhase }: {
                       {phase.title}
                     </span>
                     <div className="flex items-center gap-2">
-                      <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{phase.weeks}</span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
+                        {phase.dateRange || phase.weeks}
+                      </span>
                       {isComplete && (
                         <span className="text-[9px] text-ce-lime px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.06)" }}>Complete</span>
                       )}
                       {isActive && (
-                        <span className="text-[9px] text-ce-cyan tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
-                          {phase.milestonesDone}/{phase.milestonesTotal}
-                        </span>
+                        <>
+                          <span className="text-[9px] text-ce-cyan tabular-nums" style={{ fontFamily: "var(--font-body)" }}>
+                            {phase.milestonesDone}/{phase.milestonesTotal}
+                          </span>
+                          {phase.daysRemaining !== undefined && phase.daysRemaining > 0 && (
+                            <span className="text-[9px] tabular-nums" style={{ fontFamily: "var(--font-body)", color: phase.daysRemaining <= 3 ? "var(--ce-status-warning)" : "var(--ce-text-quaternary)" }}>
+                              {phase.daysRemaining}d left
+                            </span>
+                          )}
+                          {phase.daysRemaining !== undefined && phase.daysRemaining < 0 && (
+                            <span className="text-[9px] tabular-nums" style={{ fontFamily: "var(--font-body)", color: "var(--ce-status-warning)" }}>
+                              {Math.abs(phase.daysRemaining)}d over
+                            </span>
+                          )}
+                        </>
                       )}
                       {isLocked && (
                         <span className="text-[9px] text-[var(--ce-text-ghost)]" style={{ fontFamily: "var(--font-body)" }}>Locked</span>
@@ -1038,6 +1254,11 @@ function MilestoneItem({ milestone, index, onCheck, onOpenRoom, onNavigate }: { 
                 <Clock className="w-3 h-3" />
                 <span className="text-[10px] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{milestone.time}</span>
               </div>
+              {milestone.estimatedCost !== undefined && milestone.estimatedCost > 0 && (
+                <span className="text-[10px] tabular-nums" style={{ fontFamily: "var(--font-body)", color: milestone.actualCost ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }}>
+                  ${milestone.estimatedCost}
+                </span>
+              )}
               {!checked && (
                 <button
                   onClick={(e) => { e.stopPropagation(); setExpanded(!expanded); }}
@@ -1181,7 +1402,7 @@ function PhaseDetail({ milestones, onMilestoneCheck, onOpenRoom, onNavigate }: {
 
 // ─── Sophia Panel (Right Column) ────────────────────────────────────────────
 
-function SophiaPanel({ onAskSophia, roleContext }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext }) {
+function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext; onNavigate?: (target: string) => void }) {
   const panel = roleContext?.sophiaPanel;
 
   if (panel) {
@@ -1485,6 +1706,28 @@ function SophiaPanel({ onAskSophia, roleContext }: { onAskSophia: (query: string
           "Focus on one strong case study over two mediocre ones."
         </p>
       </motion.div>
+
+      {/* Global Career Mobility — cross-link to ImmigrationEdge */}
+      <motion.div
+        className="rounded-xl p-4 cursor-pointer group"
+        style={{ background: "rgba(234,179,8,0.03)", border: "1px solid rgba(234,179,8,0.08)" }}
+        onClick={() => onNavigate?.("immigration")}
+        initial={{ opacity: 0, y: 12 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.95, duration: 0.4, ease: EASE }}
+        whileHover={{ scale: 1.01 }}
+      >
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(234,179,8,0.08)" }}>
+            <Globe className="w-4 h-4" style={{ color: "rgb(234,179,8)" }} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Global Career Mobility</span>
+            <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>See how your credentials transfer internationally</span>
+          </div>
+          <ChevronRight className="w-3.5 h-3.5 text-ce-text-quaternary opacity-0 group-hover:opacity-100 transition-opacity" />
+        </div>
+      </motion.div>
     </div>
   );
 }
@@ -1569,7 +1812,8 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
 
   // Sophia bar state
   const [barMessage, setBarMessage] = useState(roleContext.sophiaActiveDefault);
-  const [barChips, setBarChips] = useState(["Quick wins", "What's next?"]);
+  const [barChips, setBarChips] = useState(["Quick wins", "What's next?", "Show timeline"]);
+  const [showGantt, setShowGantt] = useState(false);
 
   // Roadmap selector — seed from injected data so the selector reflects the actual path title.
   // When the user creates additional roadmaps (via "Create new roadmap"), they are appended here.
@@ -1662,6 +1906,11 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
   }, [activePhase, phases]);
 
   const handleAskSophia = useCallback((query?: string) => {
+    // Intercept "Show timeline" to open Gantt panel instead of Sophia
+    if (query === "Show timeline") {
+      setShowGantt(true);
+      return;
+    }
     if (query) {
       setSophiaInitialMessage(query);
     }
@@ -1869,7 +2118,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
           {/* Two-Column: Milestones left, Sophia panel right */}
           <div className="grid grid-cols-[1fr_320px] gap-5">
             <PhaseDetail milestones={milestones} onMilestoneCheck={handleMilestoneCheck} onOpenRoom={onOpenTaskRoom} onNavigate={onNavigate} />
-            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} />
+            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} onNavigate={onNavigate} />
           </div>
 
           {/* State demo controls */}
@@ -1928,6 +2177,17 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
             phaseTitle={completedPhaseTitle}
             nextPhaseTitle={phases.find(p => p.id === (celebratingPhase ?? activePhase) + 1)?.title ?? "Next Phase"}
             onDismiss={() => setShowCelebration(false)}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Gantt Timeline Panel — triggered by "Show timeline" chip */}
+      <AnimatePresence>
+        {showGantt && (
+          <GanttTimelinePanel
+            phases={phases}
+            onClose={() => setShowGantt(false)}
+            onOpenTaskRoom={onOpenTaskRoom}
           />
         )}
       </AnimatePresence>

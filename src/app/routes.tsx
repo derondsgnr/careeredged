@@ -15,7 +15,17 @@ import type { AppState } from "./components/state-toggle";
 import { LandingV1 } from "./components/landing/landing-v1";
 import { LandingV2 } from "./components/landing/landing-v2";
 import { LandingV3 } from "./components/landing/landing-v3";
+import { LandingV4 } from "./components/landing/landing-v4";
+import { LandingV5 } from "./components/landing/landing-v5";
+import { LandingV6 } from "./components/landing/landing-v6";
+import { LandingV7 } from "./components/landing/landing-v7";
+import { LandingV8 } from "./components/landing/landing-v8";
+import { LandingV9 } from "./components/landing/landing-v9";
+import { LandingV6A } from "./components/landing/landing-v6a";
+import { LandingV6B } from "./components/landing/landing-v6b";
+import { LandingV6C } from "./components/landing/landing-v6c";
 import { AuthPage } from "./components/landing/auth-page";
+import { EdgeProd } from "./components/edge-prod";
 import { OnboardingH1 } from "./components/onboarding-h1";
 import { OnboardingH2 } from "./components/onboarding-h2";
 import { OnboardingH3 } from "./components/onboarding-h3";
@@ -28,6 +38,9 @@ import { EdgePathOptionB } from "./components/edgepath-option-b";
 import { ResumeEdge } from "./components/resume-edge";
 import { EdgeMatchForRole } from "./components/edge-match";
 import { TaskRoom } from "./components/task-room";
+import { GuideProfileEditSurface } from "./components/guide-profile-edit";
+import { ImmigrationSurface } from "./components/surfaces/immigration-surface";
+import { CareerDiscovery } from "./components/career-discovery";
 import { Messaging } from "./components/messaging";
 import { EdgeSight } from "./components/edgesight";
 import { Sessions } from "./components/sessions";
@@ -64,6 +77,7 @@ function LandingPage() {
     if (page === "home") navigate("/");
     else if (page === "login") navigate("/login");
     else if (page === "signup") navigate("/signup");
+    else if (page === "careers") navigate("/careers");
   }, [navigate]);
   return <LandingV1 onNavigate={handleNavigate} />;
 }
@@ -126,6 +140,10 @@ function useRoleNavigation(): {
       analytics: `/${role}/analytics`,
       taskroom:  `/${role}/taskroom`,
       sessions:  `/${role}/sessions`,
+      profile:   `/${role}/profile`,
+      productivity: `/${role}/productivity`,
+      immigration: `/${role}/immigration`,
+      careers: `/${role}/careers`,
       // Layer 3 surfaces
       family:    `/${role}/family`,
       clients:   `/${role}/clients`,
@@ -232,6 +250,16 @@ function SessionsPage() {
   return <Sessions role={role} onNavigate={onNavigate} />;
 }
 
+function ProfilePage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <GuideProfileEditSurface role={role} onNavigate={onNavigate} />;
+}
+
+function ProductivityPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeProd role={role} onNavigate={onNavigate} />;
+}
+
 // ─── Archive wrappers ───────────────────────────────────────────────
 
 function ArchiveOnboarding() {
@@ -303,6 +331,15 @@ function ArchiveLanding() {
   }, [navigate]);
   if (variation === "v2") return <LandingV2 onNavigate={handleNavigate} />;
   if (variation === "v3") return <LandingV3 onNavigate={handleNavigate} />;
+  if (variation === "v4") return <LandingV4 onNavigate={handleNavigate} />;
+  if (variation === "v5") return <LandingV5 onNavigate={handleNavigate} />;
+  if (variation === "v6") return <LandingV6 onNavigate={handleNavigate} />;
+  if (variation === "v7") return <LandingV7 onNavigate={handleNavigate} />;
+  if (variation === "v8") return <LandingV8 onNavigate={handleNavigate} />;
+  if (variation === "v9") return <LandingV9 onNavigate={handleNavigate} />;
+  if (variation === "v6a") return <LandingV6A onNavigate={handleNavigate} />;
+  if (variation === "v6b") return <LandingV6B onNavigate={handleNavigate} />;
+  if (variation === "v6c") return <LandingV6C onNavigate={handleNavigate} />;
   return <LandingV1 onNavigate={handleNavigate} />;
 }
 
@@ -316,6 +353,15 @@ function ArchiveLandingIndex() {
           { id: "v1", label: "V1 — The Editorial" },
           { id: "v2", label: "V2 — The Proof" },
           { id: "v3", label: "V3 — The Narrative" },
+          { id: "v4", label: "V4 — The Architect" },
+          { id: "v5", label: "V5 — The Conversation" },
+          { id: "v6", label: "V6 — The Gallery" },
+          { id: "v7", label: "V7 — The Data Canvas" },
+          { id: "v8", label: "V8 — The Manifesto" },
+          { id: "v9", label: "V9 — The Ecosystem" },
+          { id: "v6a", label: "V6-A — Conviction" },
+          { id: "v6b", label: "V6-B — Intimacy" },
+          { id: "v6c", label: "V6-C — Precision" },
         ].map(v => (
           <button key={v.id} onClick={() => navigate(`/archive/landing/${v.id}`)} className="px-4 py-3 rounded-xl cursor-pointer text-[13px] text-[#E8E8ED]" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             {v.label}
@@ -392,6 +438,8 @@ export const router = createBrowserRouter([
       { path: ":role/taskroom",                 Component: TaskRoomPage },
       { path: ":role/taskroom/:milestoneId",    Component: TaskRoomPage },
       { path: ":role/sessions",                 Component: SessionsPage },
+      { path: ":role/profile",                  Component: ProfilePage },
+      { path: ":role/productivity",              Component: ProductivityPage },
       // Layer 3 surfaces
       { path: ":role/family",                   Component: FamilySurfaceSwitcher },
       { path: ":role/clients",                  Component: ClientsSurface },
@@ -399,6 +447,9 @@ export const router = createBrowserRouter([
       { path: ":role/events",                   Component: EventsSurface },
       { path: ":role/programs",                 Component: ProgramsSurface },
       { path: ":role/funding",                  Component: FundingSurface },
+      { path: ":role/immigration",              Component: ImmigrationSurface },
+      { path: ":role/careers",                  Component: CareerDiscovery },
+      { path: "careers",                        Component: CareerDiscovery },
 
       // Archives
       { path: "archive/onboarding",             Component: ArchiveOnboardingIndex },

@@ -53,8 +53,8 @@ When users need to edit data they've already provided, support inline editing (c
 ### Pre-fill From Existing Data
 If Sophia already knows something from onboarding or another surface, don't ask again. Reference existing data and skip redundant questions. This is stated in Sophia's UX spec.
 
-### Justify Nav Items
-Each role's nav pills are limited to 4-7 items. Only persistent, daily-use surfaces get nav pills. One-time tasks (profile setup, onboarding) go in settings, avatar dropdown, or dashboard cards — not the nav bar.
+### Top Nav Bar Is Frozen
+The current nav pills per role are FINAL. No new surfaces get added to the top nav bar unless there is an explicit, justified reason approved by the user. New surfaces are accessed via the Explore menu (Dock/Segment), Sophia chips, cross-surface links, or dashboard cards. The top nav bar is reserved for daily-driver surfaces only — adding to it degrades the entire navigation system. If you think something deserves a nav pill, ask first and justify why it can't live in the Explore menu.
 
 ## Technical Rules
 

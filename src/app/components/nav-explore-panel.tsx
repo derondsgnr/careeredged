@@ -11,7 +11,7 @@ import { motion, AnimatePresence } from "motion/react";
 import {
   Zap, Compass, FileText, Briefcase, BookOpen, Calendar,
   Globe, BarChart3, DollarSign, ShoppingBag, Users,
-  MessageSquare, GraduationCap, Search, X,
+  MessageSquare, GraduationCap, Search, X, Heart,
   type LucideIcon,
 } from "lucide-react";
 import { SophiaMark } from "./sophia-mark";
@@ -74,6 +74,12 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
+  // Career Discovery — All roles
+  edgeTools.push({
+    id: "careers", label: "Career Discovery", description: "Explore 30+ careers & find your archetype",
+    icon: Compass, color: COLORS.cyan, surfaceId: "careers",
+  });
+
   // Workplace / Jobs — EdgeStar, EdgePreneur, Employer, NGO, Agency
   if (["edgestar", "edgepreneur", "employer", "ngo", "agency"].includes(role)) {
     const jobLabel = role === "employer" ? "Job Postings" : "EdgeWorkplace";
@@ -99,10 +105,10 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
-  // ImmigrationEdge — EdgeStar only
-  if (role === "edgestar") {
+  // ImmigrationEdge — EdgeStar + EdgePreneur
+  if (["edgestar", "edgepreneur"].includes(role)) {
     edgeTools.push({
-      id: "immigration", label: "ImmigrationEdge", description: "Visa & immigration pathways",
+      id: "immigration", label: "ImmigrationEdge", description: "Global career mobility pathways",
       icon: Globe, color: COLORS.orange, surfaceId: "immigration",
     });
   }
@@ -163,6 +169,14 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
   }
 
   // ── Community ──────────────────────────────────────────────────────────
+
+  // EdgeBuddy — EdgeStar + EdgePreneur only
+  if (["edgestar", "edgepreneur"].includes(role)) {
+    community.push({
+      id: "buddy", label: "EdgeBuddy", description: "Find an accountability partner",
+      icon: Heart, color: COLORS.cyan, sophiaPrompt: "Help me find an accountability partner who matches my career goals",
+    });
+  }
 
   community.push({
     id: "groups", label: "EdgeGroups", description: "Peer groups & accountability",

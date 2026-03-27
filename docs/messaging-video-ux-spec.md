@@ -348,3 +348,51 @@ All slides become instant renders. Fades remain. Typing indicator dots use opaci
 - Thread switch (crossfade + message render): <400ms
 - Message send to visual confirmation: <100ms
 - Video call UI load: <1s
+
+---
+
+## 10. Cross-Surface Inline Check-In Pattern
+
+### The Problem
+Dashboard cards (EdgeParent check-in, EdgeBuddy accountability) need to send messages without navigating away from the dashboard. The receiver needs to see these messages in their Messaging inbox.
+
+### The Pattern: Message Queue
+
+**Architecture:** `message-queue.ts` provides a localStorage-backed queue that bridges dashboard surfaces and the Messaging surface.
+
+**Sender flow (dashboard chip → queue → toast):**
+1. User taps an inline check-in chip (e.g., "Great progress!", "How's your week?")
+2. `queueMessage()` writes the message to localStorage with recipient info
+3. Toast confirmation appears: `Sent to Alex: "Great progress!"`
+4. User stays on the dashboard — no navigation required
+
+**Receiver flow (Messaging surface consumes queue):**
+1. When Messaging surface mounts, `consumeMessages()` reads and clears the queue
+2. If a DM thread for the recipient exists, the message is appended
+3. If no thread exists, a new DM thread is created at the top of the conversation list
+4. The thread shows the message with "Just now" timestamp and smart reply suggestions
+
+### Where This Pattern Is Used
+
+| Surface | Sender | Recipient | Chips |
+|---|---|---|---|
+| EdgeParent dashboard | Parent (David) | Child (Alex Chen) | "Great progress!", "How's it going?", "Need anything?" |
+| EdgeBuddy dashboard card | EdgeStar (Sharon) | Buddy (Jordan Rivera) | "How's your week?", "Hit a milestone!", "Need accountability?" |
+| EdgeBuddy focus companion | EdgeStar (Sharon) | Buddy (Jordan Rivera) | "How's it going?", "Made progress!" |
+
+### Design Rules
+- Chips are pre-written — the user does NOT type a message (friction-free)
+- Toast is the only feedback — no modal, no navigation, no loading state
+- The Messaging surface is the canonical conversation view — chips are a shortcut entry point, not a replacement
+- "Open full conversation" link below chips navigates to the Messages surface for longer exchanges
+- On the receiver's side, the message appears as a normal DM with smart reply suggestions
+
+### Sophia Integration
+Sophia does NOT mediate check-in messages. These are direct peer-to-peer (or parent-to-child) messages. Sophia's role is in the Sophia thread — she can reference check-in activity ("I noticed you and Jordan haven't checked in this week") but doesn't intercept or rewrite the messages.
+
+### Implementation
+- `src/app/components/message-queue.ts` — queue utility (queueMessage, consumeMessages, peekMessages)
+- `src/app/components/messaging.tsx` — consumes queue on mount via useEffect
+- `src/app/components/dashboards/edgeparent-dashboard.tsx` — parent check-in chips
+- `src/app/components/buddy-dashboard-card.tsx` — buddy check-in chips
+- `src/app/components/edge-buddy.tsx` — focus companion buddy chips
