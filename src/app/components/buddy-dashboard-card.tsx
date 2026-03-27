@@ -9,6 +9,8 @@ import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { Users, MessageSquare, Sparkles } from "lucide-react";
 import { BuddyPairModal } from "./buddy-pair-modal";
+import { queueMessage } from "./message-queue";
+import { toast } from "sonner";
 import { EASE } from "./tokens";
 
 // ─── Buddy State Hook ─────────────────────────────────────────────────────
@@ -59,7 +61,7 @@ export function BuddyDashboardCard({
   onSophia,
   delay = 0,
 }: BuddyDashboardCardProps) {
-  const { buddy, pair } = useBuddyState();
+  const { buddy, pair, unpair } = useBuddyState();
   const [modalOpen, setModalOpen] = useState(false);
   const [openCount, setOpenCount] = useState(0);
 
@@ -173,36 +175,53 @@ export function BuddyDashboardCard({
               </div>
             </div>
 
-            <div className="flex gap-2">
-              <button
-                onClick={() => onSophia?.(`Check in with ${buddy.name} — what should I update them on?`)}
-                className="flex-1 py-2 rounded-lg text-[11px] font-medium flex items-center justify-center gap-1.5 cursor-pointer transition-all duration-200"
-                style={{
-                  background: `rgba(${roleRgb}, 0.08)`,
-                  color: roleColor,
-                  border: `1px solid rgba(${roleRgb}, 0.1)`,
-                  fontFamily: "var(--font-display)",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = `rgba(${roleRgb}, 0.14)`; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = `rgba(${roleRgb}, 0.08)`; }}
-              >
-                <Sparkles className="w-3 h-3" />
-                Check in
-              </button>
+            {/* Inline check-in chips — mirrors EdgeParent pattern */}
+            <p className="text-[11px] text-ce-text-tertiary mb-2" style={{ fontFamily: "var(--font-body)" }}>
+              Quick check-in
+            </p>
+            <div className="flex flex-wrap gap-1.5">
+              {["How's your week?", "Hit a milestone!", "Need accountability?"].map((msg) => (
+                <button
+                  key={msg}
+                  onClick={() => {
+                    queueMessage({
+                      recipientId: `buddy-${buddy.name.toLowerCase().replace(/\s/g, "-")}`,
+                      recipientName: buddy.name,
+                      recipientInitial: buddy.initial,
+                      content: msg,
+                      senderRole: "edgestar",
+                      threadType: "dm",
+                    });
+                    toast.success(`Sent to ${buddy.name.split(" ")[0]}: "${msg}"`, { duration: 2500 });
+                  }}
+                  className="text-[11px] text-ce-text-secondary px-2.5 py-1.5 rounded-lg cursor-pointer transition-colors"
+                  style={{
+                    background: "rgba(var(--ce-glass-tint), 0.03)",
+                    border: "1px solid rgba(var(--ce-glass-tint), 0.06)",
+                    fontFamily: "var(--font-body)",
+                  }}
+                  onMouseEnter={(e) => { e.currentTarget.style.background = `rgba(${roleRgb}, 0.06)`; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(var(--ce-glass-tint), 0.03)"; }}
+                >
+                  {msg}
+                </button>
+              ))}
+            </div>
+            <div className="mt-2 flex items-center justify-between">
               <button
                 onClick={() => onNavigate?.("messages")}
-                className="py-2 px-3 rounded-lg text-[11px] flex items-center gap-1.5 cursor-pointer transition-all duration-200"
-                style={{
-                  background: "rgba(var(--ce-glass-tint), 0.04)",
-                  color: "var(--ce-text-secondary)",
-                  border: "1px solid rgba(var(--ce-glass-tint), 0.06)",
-                  fontFamily: "var(--font-body)",
-                }}
-                onMouseEnter={(e) => { e.currentTarget.style.background = "rgba(var(--ce-glass-tint), 0.08)"; }}
-                onMouseLeave={(e) => { e.currentTarget.style.background = "rgba(var(--ce-glass-tint), 0.04)"; }}
+                className="flex items-center gap-1.5 text-[11px] text-ce-text-tertiary cursor-pointer"
+                style={{ fontFamily: "var(--font-body)" }}
               >
                 <MessageSquare className="w-3 h-3" />
-                Message
+                Open full conversation
+              </button>
+              <button
+                onClick={unpair}
+                className="text-[10px] text-ce-text-quaternary cursor-pointer hover:text-ce-text-tertiary transition-colors"
+                style={{ fontFamily: "var(--font-body)" }}
+              >
+                Unpair
               </button>
             </div>
           </div>

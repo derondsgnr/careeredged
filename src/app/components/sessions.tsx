@@ -2065,7 +2065,7 @@ function WeekCalendar({ onEdit }: { onEdit: () => void }) {
 
 // ─── EdgeGuide: Availability Editor (Settings) ───────────────────────────────
 
-function AvailabilityEditor({ onClose }: { onClose: () => void }) {
+export function AvailabilityEditor({ onClose }: { onClose: () => void }) {
   const [policy, setPolicy] = useState<CancellationPolicy>("moderate");
   const [repeatWeekly, setRepeatWeekly] = useState(true);
   const [maxPerDay, setMaxPerDay] = useState(4);

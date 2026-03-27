@@ -15,6 +15,8 @@ import {
 import { EASE } from "../tokens";
 import { KPIRow, PhaseBar } from "../kpi-patterns";
 import { SophiaInsight } from "../sophia-patterns";
+import { queueMessage } from "../message-queue";
+import { toast } from "sonner";
 
 const KPIS = [
   { label: "Roadmap Progress", value: "63%", trend: "+12% this month", icon: <Compass className="w-4 h-4" />, color: "var(--ce-role-parent)", gauge: 0.63 },
@@ -197,7 +199,17 @@ export function EdgeParentDashboard({ onNavigate }: { onNavigate?: NavigateFn })
             </p>
             <div className="flex gap-2">
               {["Great progress!", "How's it going?", "Need anything?"].map((msg) => (
-                <button key={msg} onClick={() => onNavigate?.("messages")} className="text-[11px] text-[var(--ce-text-secondary)] px-2.5 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
+                <button key={msg} onClick={() => {
+                  queueMessage({
+                    recipientId: "child-alex",
+                    recipientName: "Alex Chen",
+                    recipientInitial: "A",
+                    content: msg,
+                    senderRole: "parent",
+                    threadType: "dm",
+                  });
+                  toast.success(`Sent to Alex: "${msg}"`, { duration: 2500 });
+                }} className="text-[11px] text-[var(--ce-text-secondary)] px-2.5 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
                   {msg}
                 </button>
               ))}

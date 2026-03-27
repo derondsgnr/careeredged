@@ -824,6 +824,28 @@ Everything in the current implementation uses pre-authored scenario data. In pro
 
 ---
 
+## 15. Sophia's Boundary with Direct Messaging
+
+### What Sophia Does NOT Do
+Sophia does not mediate, intercept, or rewrite direct peer-to-peer messages. The following message types are human-to-human and bypass Sophia entirely:
+
+- **Parent → Child check-ins** (inline chips on EdgeParent dashboard)
+- **Buddy → Buddy check-ins** (inline chips on EdgeBuddy dashboard card and focus companion)
+- **Session messages** (mentor/mentee DMs)
+
+These messages flow through the `message-queue.ts` cross-surface pattern directly into the Messaging surface as DM threads.
+
+### What Sophia CAN Do
+Sophia can *reference* check-in activity in her own coaching context:
+- "I noticed you and Jordan haven't checked in this week — want me to suggest a conversation starter?"
+- "Alex's parent sent encouragement yesterday — your support network is engaged"
+
+But she does not compose, send, or gatekeep direct messages. She is a coach observing the relationship graph, not a proxy for human communication.
+
+See: `docs/messaging-video-ux-spec.md` § Cross-Surface Inline Check-In Pattern
+
+---
+
 ## Continue to Part II
 
 **[Sophia Multi-Role System Design](./sophia-multi-role-system.md)** extends this architecture to all 8 user roles: EdgeStar, EdgePreneur, EdgeParent, EdgeGuide, EdgeEmployer, EdgeEducation, EdgeNGO, and EdgeAgency. It covers 118 total scenarios, 106 actions, 62 nav targets, role-specific tone matrices, and the implementation priority roadmap.
