@@ -61,7 +61,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
   const s3 = useCountUp(4);
 
   return (
-    <div className="min-h-screen" style={{ background: "#08090C" }}>
+    <div className="min-h-screen" style={{ background: "var(--ce-surface-bg)" }}>
       <LandingNav onNavigate={onNavigate} />
 
       {/* ═══ HERO ═══ */}
@@ -70,7 +70,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
         <div
           className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[1200px] h-[700px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(179,255,59,0.05) 0%, rgba(4,44,1,0.02) 45%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.05) 0%, rgba(4,44,1,0.02) 45%, transparent 70%)",
             filter: "blur(100px)",
           }}
         />
@@ -85,10 +85,10 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.1)" }}
+              style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-[#B3FF3B] animate-pulse" />
-              <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#B3FF3B" }}>
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)] animate-pulse" />
+              <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-lime)" }}>
                 Free for career seekers
               </span>
             </div>
@@ -106,12 +106,12 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
               fontSize: "clamp(36px, 6vw, 72px)",
               lineHeight: 1.05,
               letterSpacing: "-0.03em",
-              color: "#E8E8ED",
+              color: "var(--ce-text-primary)",
             }}
           >
             Career clarity in
             <br />
-            <span style={{ color: "#B3FF3B" }}>minutes, not months</span>
+            <span style={{ color: "var(--ce-lime)" }}>minutes, not months</span>
           </motion.h1>
 
           <motion.p
@@ -119,7 +119,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
             className="text-center max-w-[520px] mx-auto mb-10"
-            style={{ fontFamily: "'Satoshi', sans-serif", fontSize: "17px", lineHeight: 1.65, color: "#9CA3AF" }}
+            style={{ fontFamily: "'Satoshi', sans-serif", fontSize: "17px", lineHeight: 1.65, color: "var(--ce-text-tertiary)" }}
           >
             Personalized roadmaps. Optimized resumes. Matched opportunities. 
             One platform that understands your entire career journey.
@@ -135,8 +135,8 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             <button
               onClick={() => onNavigate("signup")}
               className="group flex items-center gap-2 px-7 py-3.5 rounded-lg text-[14px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "#B3FF3B", color: "#0A0C10" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(179,255,59,0.2)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Start free
@@ -145,9 +145,9 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             <button
               onClick={() => onNavigate("about")}
               className="px-7 py-3.5 rounded-lg text-[14px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#9CA3AF", border: "1px solid rgba(255,255,255,0.08)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#E8E8ED"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.15)"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "#9CA3AF"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-tertiary)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "var(--ce-text-primary)"; e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.15)"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-text-tertiary)"; e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.08)"; }}
             >
               Watch demo
             </button>
@@ -163,20 +163,20 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             <div
               className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[90%] h-[250px] pointer-events-none"
               style={{
-                background: "radial-gradient(ellipse at center, rgba(179,255,59,0.07) 0%, transparent 65%)",
+                background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.07) 0%, transparent 65%)",
                 filter: "blur(70px)",
               }}
             />
             <div
               className="relative rounded-xl overflow-hidden mx-auto max-w-[1100px]"
               style={{
-                background: "rgba(12,14,18,0.9)",
-                border: "1px solid rgba(255,255,255,0.06)",
-                boxShadow: "0 50px 100px rgba(0,0,0,0.5), 0 0 0 1px rgba(255,255,255,0.02)",
+                background: "rgba(var(--ce-glass-tint),0.9)",
+                border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                boxShadow: "0 50px 100px rgba(var(--ce-shadow-tint),0.5), 0 0 0 1px rgba(var(--ce-glass-tint),0.02)",
               }}
             >
               {/* Chrome */}
-              <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <div className="flex items-center gap-2 px-4 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <div className="flex gap-1.5">
                   <div className="w-2.5 h-2.5 rounded-full bg-white/[0.06]" />
                   <div className="w-2.5 h-2.5 rounded-full bg-white/[0.06]" />
@@ -196,8 +196,8 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                         style={{
                           fontFamily: "'Satoshi', sans-serif",
                           fontWeight: 500,
-                          color: i === 0 ? "#E8E8ED" : "#374151",
-                          background: i === 0 ? "rgba(255,255,255,0.04)" : "transparent",
+                          color: i === 0 ? "var(--ce-text-primary)" : "var(--ce-text-quaternary)",
+                          background: i === 0 ? "rgba(var(--ce-glass-tint),0.04)" : "transparent",
                         }}
                       >
                         {item}
@@ -210,10 +210,10 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                     {/* Sophia bar */}
                     <div
                       className="flex items-center gap-3 px-4 py-3 rounded-lg mb-5"
-                      style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.08)" }}
+                      style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}
                     >
-                      <Sparkles size={13} style={{ color: "#22D3EE" }} />
-                      <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#22D3EE" }}>
+                      <Sparkles size={13} style={{ color: "var(--ce-role-edgestar)" }} />
+                      <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-role-edgestar)" }}>
                         3 new jobs match your Phase 2 skills. 2 applications need follow-up.
                       </span>
                     </div>
@@ -229,18 +229,18 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                         <div
                           key={i}
                           className="rounded-lg p-3"
-                          style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}
+                          style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
                         >
-                          <span className="text-[10px] block" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+                          <span className="text-[10px] block" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>
                             {kpi.label}
                           </span>
                           <span
                             className="text-[22px] block mt-1"
-                            style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, color: "#E8E8ED", letterSpacing: "-0.02em" }}
+                            style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, color: "var(--ce-text-primary)", letterSpacing: "-0.02em" }}
                           >
                             {kpi.value}
                           </span>
-                          <span className="text-[10px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#B3FF3B" }}>
+                          <span className="text-[10px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-lime)" }}>
                             {kpi.trend}
                           </span>
                         </div>
@@ -255,10 +255,10 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                         { label: "Network", pct: 0 },
                         { label: "Launch", pct: 0 },
                       ].map((p, i) => (
-                        <div key={i} className="rounded-lg p-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.03)" }}>
-                          <span className="text-[10px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>{p.label}</span>
-                          <div className="mt-2 h-1 rounded-full" style={{ background: "rgba(255,255,255,0.06)" }}>
-                            <div className="h-full rounded-full" style={{ width: `${p.pct}%`, background: p.pct === 100 ? "#B3FF3B" : "rgba(179,255,59,0.6)" }} />
+                        <div key={i} className="rounded-lg p-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
+                          <span className="text-[10px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>{p.label}</span>
+                          <div className="mt-2 h-1 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
+                            <div className="h-full rounded-full" style={{ width: `${p.pct}%`, background: p.pct === 100 ? "var(--ce-lime)" : "rgba(var(--ce-lime-rgb),0.6)" }} />
                           </div>
                         </div>
                       ))}
@@ -272,9 +272,9 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
       </section>
 
       {/* ═══ LOGO BAR ═══ */}
-      <section className="py-12 px-6" style={{ borderTop: "1px solid rgba(255,255,255,0.03)", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
+      <section className="py-12 px-6" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
         <div className="max-w-[900px] mx-auto">
-          <p className="text-center text-[11px] mb-6" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#374151", letterSpacing: "0.06em", textTransform: "uppercase" }}>
+          <p className="text-center text-[11px] mb-6" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-quaternary)", letterSpacing: "0.06em", textTransform: "uppercase" }}>
             Built for universities, employers, and career services
           </p>
           <div className="flex items-center justify-center gap-10 lg:gap-16 flex-wrap">
@@ -282,7 +282,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
               <span
                 key={name}
                 className="text-[14px]"
-                style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, color: "#1F2937", letterSpacing: "-0.01em" }}
+                style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, color: "var(--ce-text-ghost)", letterSpacing: "-0.01em" }}
               >
                 {name}
               </span>
@@ -301,10 +301,10 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
           ].map((s, i) => (
             <Reveal key={i} delay={i * 0.1}>
               <div ref={s.ref} className="text-center">
-                <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "44px", letterSpacing: "-0.03em", color: "#B3FF3B", lineHeight: 1 }}>
+                <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "44px", letterSpacing: "-0.03em", color: "var(--ce-lime)", lineHeight: 1 }}>
                   {s.val}
                 </span>
-                <p className="mt-2 text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "#9CA3AF" }}>
+                <p className="mt-2 text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-secondary)" }}>
                   {s.label}
                 </p>
               </div>
@@ -314,14 +314,14 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
       </section>
 
       {/* ═══ FEATURES BENTO — LIGHT SECTION ═══ */}
-      <section className="py-20 lg:py-28 px-6" style={{ background: "#FAFAFA" }}>
+      <section className="py-20 lg:py-28 px-6" style={{ background: "var(--ce-surface-0)" }}>
         <div className="max-w-[1200px] mx-auto">
           <Reveal>
             <div className="text-center mb-16">
-              <h2 style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "#0A0C10" }}>
+              <h2 style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--ce-surface-0)" }}>
                 Everything connects
               </h2>
-              <p className="mt-4 text-[15px] max-w-[480px] mx-auto" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280", lineHeight: 1.65 }}>
+              <p className="mt-4 text-[15px] max-w-[480px] mx-auto" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)", lineHeight: 1.65 }}>
                 Six integrated tools that share context, so your progress in one flows into all the others.
               </p>
             </div>
@@ -340,24 +340,24 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                 <div
                   className="rounded-xl p-6 h-full transition-all duration-200"
                   style={{
-                    background: f.accent ? "#0A0C10" : "white",
-                    border: f.accent ? "none" : "1px solid #E5E7EB",
+                    background: f.accent ? "var(--ce-surface-0)" : "white",
+                    border: f.accent ? "none" : "1px solid var(--ce-text-ghost)",
                   }}
-                  onMouseEnter={(e) => { if (!f.accent) e.currentTarget.style.borderColor = "#D1D5DB"; }}
-                  onMouseLeave={(e) => { if (!f.accent) e.currentTarget.style.borderColor = "#E5E7EB"; }}
+                  onMouseEnter={(e) => { if (!f.accent) e.currentTarget.style.borderColor = "var(--ce-text-ghost)"; }}
+                  onMouseLeave={(e) => { if (!f.accent) e.currentTarget.style.borderColor = "var(--ce-text-ghost)"; }}
                 >
                   <div
                     className="w-9 h-9 rounded-lg flex items-center justify-center mb-4"
                     style={{
-                      background: f.accent ? "rgba(179,255,59,0.1)" : "#F3F4F6",
+                      background: f.accent ? "rgba(var(--ce-lime-rgb),0.1)" : "#F3F4F6",
                     }}
                   >
-                    <f.icon size={17} style={{ color: f.accent ? "#B3FF3B" : "#6B7280" }} />
+                    <f.icon size={17} style={{ color: f.accent ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }} />
                   </div>
-                  <h3 className="mb-2" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: f.accent ? "#E8E8ED" : "#0A0C10" }}>
+                  <h3 className="mb-2" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: f.accent ? "var(--ce-text-primary)" : "var(--ce-surface-0)" }}>
                     {f.title}
                   </h3>
-                  <p className="text-[13px] leading-[1.65]" style={{ fontFamily: "'Satoshi', sans-serif", color: f.accent ? "#9CA3AF" : "#6B7280" }}>
+                  <p className="text-[13px] leading-[1.65]" style={{ fontFamily: "'Satoshi', sans-serif", color: f.accent ? "var(--ce-text-secondary)" : "var(--ce-text-tertiary)" }}>
                     {f.desc}
                   </p>
                 </div>
@@ -368,10 +368,10 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
       </section>
 
       {/* ═══ WHO IT'S FOR — DARK ═══ */}
-      <section className="py-20 lg:py-28 px-6" style={{ background: "#08090C" }}>
+      <section className="py-20 lg:py-28 px-6" style={{ background: "var(--ce-void)" }}>
         <div className="max-w-[1100px] mx-auto">
           <Reveal>
-            <h2 className="text-center mb-16" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "#E8E8ED" }}>
+            <h2 className="text-center mb-16" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--ce-text-primary)" }}>
               Built for every side of the career ecosystem
             </h2>
           </Reveal>
@@ -388,17 +388,17 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
               <Reveal key={i} delay={i * 0.06}>
                 <div
                   className="rounded-xl p-6 h-full"
-                  style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}
+                  style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
                 >
-                  <role.icon size={20} style={{ color: "#9CA3AF" }} className="mb-4" />
-                  <h3 className="mb-3" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: "#E8E8ED" }}>
+                  <role.icon size={20} style={{ color: "var(--ce-text-secondary)" }} className="mb-4" />
+                  <h3 className="mb-3" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: "var(--ce-text-primary)" }}>
                     {role.title}
                   </h3>
                   <div className="flex flex-col gap-2">
                     {role.items.map((item, j) => (
                       <div key={j} className="flex items-center gap-2">
-                        <Check size={12} style={{ color: "#B3FF3B" }} />
-                        <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}>
+                        <Check size={12} style={{ color: "var(--ce-lime)" }} />
+                        <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
                           {item}
                         </span>
                       </div>
@@ -412,13 +412,13 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
       </section>
 
       {/* ═══ PRICING PREVIEW — LIGHT ═══ */}
-      <section className="py-20 lg:py-28 px-6" style={{ background: "#FAFAFA" }}>
+      <section className="py-20 lg:py-28 px-6" style={{ background: "var(--ce-surface-0)" }}>
         <div className="max-w-[1000px] mx-auto">
           <Reveal>
-            <h2 className="text-center mb-4" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "#0A0C10" }}>
+            <h2 className="text-center mb-4" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 40px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--ce-surface-0)" }}>
               Simple, transparent pricing
             </h2>
-            <p className="text-center mb-12 text-[15px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+            <p className="text-center mb-12 text-[15px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>
               Start free. Upgrade when you're ready.
             </p>
           </Reveal>
@@ -445,34 +445,34 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                 <div
                   className="rounded-xl p-6 h-full flex flex-col relative"
                   style={{
-                    background: tier.recommended ? "#0A0C10" : "white",
-                    border: tier.recommended ? "1px solid rgba(179,255,59,0.2)" : "1px solid #E5E7EB",
+                    background: tier.recommended ? "var(--ce-surface-0)" : "white",
+                    border: tier.recommended ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid var(--ce-text-ghost)",
                   }}
                 >
                   {tier.recommended && (
                     <div
                       className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px]"
-                      style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "#B3FF3B", color: "#0A0C10" }}
+                      style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
                     >
                       Recommended
                     </div>
                   )}
-                  <h3 className="mb-1" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "18px", color: tier.recommended ? "#E8E8ED" : "#0A0C10" }}>
+                  <h3 className="mb-1" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "18px", color: tier.recommended ? "var(--ce-text-primary)" : "var(--ce-surface-0)" }}>
                     {tier.name}
                   </h3>
                   <div className="mb-5">
-                    <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "36px", color: tier.recommended ? "#E8E8ED" : "#0A0C10", letterSpacing: "-0.02em" }}>
+                    <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "36px", color: tier.recommended ? "var(--ce-text-primary)" : "var(--ce-surface-0)", letterSpacing: "-0.02em" }}>
                       {tier.price}
                     </span>
-                    <span className="text-[13px] ml-1" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+                    <span className="text-[13px] ml-1" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>
                       {tier.period}
                     </span>
                   </div>
                   <div className="flex flex-col gap-2.5 mb-6 flex-1">
                     {tier.features.map((f, j) => (
                       <div key={j} className="flex items-center gap-2">
-                        <Check size={13} style={{ color: tier.recommended ? "#B3FF3B" : "#9CA3AF" }} />
-                        <span className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: tier.recommended ? "#9CA3AF" : "#6B7280" }}>
+                        <Check size={13} style={{ color: tier.recommended ? "var(--ce-lime)" : "var(--ce-text-secondary)" }} />
+                        <span className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: tier.recommended ? "var(--ce-text-secondary)" : "var(--ce-text-tertiary)" }}>
                           {f}
                         </span>
                       </div>
@@ -484,9 +484,9 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                     style={{
                       fontFamily: "'Satoshi', sans-serif",
                       fontWeight: 600,
-                      background: tier.recommended ? "#B3FF3B" : "transparent",
-                      color: tier.recommended ? "#0A0C10" : "#0A0C10",
-                      border: tier.recommended ? "none" : "1px solid #D1D5DB",
+                      background: tier.recommended ? "var(--ce-lime)" : "transparent",
+                      color: tier.recommended ? "var(--ce-surface-0)" : "var(--ce-surface-0)",
+                      border: tier.recommended ? "none" : "1px solid var(--ce-text-ghost)",
                     }}
                     onMouseEnter={(e) => { if (tier.recommended) { e.currentTarget.style.transform = "translateY(-1px)"; } }}
                     onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; }}
@@ -501,24 +501,24 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
       </section>
 
       {/* ═══ FINAL CTA — DARK ═══ */}
-      <section className="relative py-24 lg:py-32 px-6 overflow-hidden" style={{ background: "#08090C" }}>
+      <section className="relative py-24 lg:py-32 px-6 overflow-hidden" style={{ background: "var(--ce-void)" }}>
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center, rgba(179,255,59,0.05) 0%, transparent 60%)", filter: "blur(80px)" }}
+          style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.05) 0%, transparent 60%)", filter: "blur(80px)" }}
         />
         <div className="max-w-[600px] mx-auto text-center relative z-10">
           <Reveal>
-            <h2 className="mb-5" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "#E8E8ED" }}>
+            <h2 className="mb-5" style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "clamp(28px, 4vw, 44px)", lineHeight: 1.1, letterSpacing: "-0.02em", color: "var(--ce-text-primary)" }}>
               Ready to find your edge?
             </h2>
-            <p className="text-[15px] leading-[1.7] mb-8" style={{ fontFamily: "'Satoshi', sans-serif", color: "#9CA3AF" }}>
+            <p className="text-[15px] leading-[1.7] mb-8" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
               Join thousands of career seekers who mapped their next move. Free, no credit card.
             </p>
             <button
               onClick={() => onNavigate("signup")}
               className="group inline-flex items-center gap-2 px-8 py-4 rounded-lg text-[15px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "#B3FF3B", color: "#0A0C10" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(179,255,59,0.2)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Get Your Edge

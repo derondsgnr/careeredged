@@ -1,3 +1,4 @@
+import { EASE } from "./tokens";
 /**
  * Messaging Surface — Full implementation per /docs/messaging-video-ux-spec.md
  * 
@@ -20,7 +21,6 @@ import {
   MessageSquare,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 // ─── Types ────────────────────────────────────────────────────────────
 
@@ -406,7 +406,7 @@ const SIMULATED_RESPONSES: Record<string, string[]> = {
 // ─── Typing Indicator ─────────────────────────────────────────────────
 
 function TypingIndicator({ name, isSophia }: { name: string; isSophia?: boolean }) {
-  const dotColor = isSophia ? "#B3FF3B" : "#D1D5DB";
+  const dotColor = isSophia ? "var(--ce-lime)" : "var(--ce-text-ghost)";
   return (
     <motion.div
       className="flex items-center gap-2 px-3"
@@ -419,11 +419,11 @@ function TypingIndicator({ name, isSophia }: { name: string; isSophia?: boolean 
     >
       {isSophia && <SophiaMark size={20} glowing={false} />}
       {!isSophia && (
-        <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-          <span className="text-[9px] text-[#6B7280]" style={{ fontFamily: "var(--font-display)" }}>{name[0]}</span>
+        <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+          <span className="text-[9px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-display)" }}>{name[0]}</span>
         </div>
       )}
-      <div className="flex items-center gap-1 px-3 py-2 rounded-2xl" style={{ background: isSophia ? "rgba(34,211,238,0.06)" : "rgba(255,255,255,0.04)" }}>
+      <div className="flex items-center gap-1 px-3 py-2 rounded-2xl" style={{ background: isSophia ? "rgba(var(--ce-role-edgestar-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.04)" }}>
         {[0, 1, 2].map((i) => (
           <motion.div
             key={i}
@@ -434,7 +434,7 @@ function TypingIndicator({ name, isSophia }: { name: string; isSophia?: boolean 
           />
         ))}
       </div>
-      <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{name} is typing...</span>
+      <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{name} is typing...</span>
     </motion.div>
   );
 }
@@ -459,7 +459,7 @@ function MessageBubble({
   if (message.type === "system") {
     return (
       <div className="flex justify-center py-2">
-        <span className="text-[10px] text-[#374151] px-3 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.02)", fontFamily: "var(--font-body)" }}>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)] px-3 py-1 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}>
           {message.content}
         </span>
       </div>
@@ -468,20 +468,20 @@ function MessageBubble({
 
   if (message.type === "session_card" && message.sessionCard) {
     const sc = message.sessionCard;
-    const statusColors: Record<string, string> = { upcoming: "#22D3EE", in_progress: "#B3FF3B", completed: "#6B7280" };
+    const statusColors: Record<string, string> = { upcoming: "var(--ce-role-edgestar)", in_progress: "var(--ce-lime)", completed: "var(--ce-text-secondary)" };
     const statusLabels: Record<string, string> = { upcoming: "Upcoming", in_progress: "In Progress", completed: "Completed" };
     return (
       <motion.div
         className="mx-auto my-3 max-w-[400px] rounded-xl p-4"
-        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
+        style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
         initial={{ opacity: 0, scale: 0.97 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.2 }}
       >
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2">
-            <Calendar className="w-3.5 h-3.5 text-[#22D3EE]" />
-            <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Calendar className="w-3.5 h-3.5 text-ce-cyan" />
+            <span className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               {sc.status === "completed" ? "Session Complete" : "Scheduled Session"}
             </span>
           </div>
@@ -490,19 +490,19 @@ function MessageBubble({
           </span>
         </div>
         <div className="flex items-center gap-3 mb-3">
-          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(34,211,238,0.1)" }}>
-            <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)" }}>{sc.participantName[0]}</span>
+          <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
+            <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)" }}>{sc.participantName[0]}</span>
           </div>
           <div>
-            <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{sc.participantName}</span>
-            <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{sc.date} · {sc.time} {sc.timezone} · {sc.duration}</span>
+            <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{sc.participantName}</span>
+            <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{sc.date} · {sc.time} {sc.timezone} · {sc.duration}</span>
           </div>
         </div>
         {sc.status === "upcoming" && (
           <button
             onClick={() => onJoinCall?.(sc.participantName, sc.participantName[0])}
             className="w-full flex items-center justify-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[12px]"
-            style={{ background: "rgba(34,211,238,0.08)", border: "1px solid rgba(34,211,238,0.12)", color: "#22D3EE", fontFamily: "var(--font-display)", fontWeight: 500 }}
+            style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
           >
             <Video className="w-3.5 h-3.5" /> Join Call
           </button>
@@ -512,11 +512,11 @@ function MessageBubble({
   }
 
   const bubbleBg = isSophia
-    ? "rgba(34,211,238,0.08)"
+    ? "rgba(var(--ce-role-edgestar-rgb),0.08)"
     : isMe
-    ? "rgba(179,255,59,0.06)"
-    : "rgba(255,255,255,0.05)";
-  const borderLeft = isSophia ? "2px solid rgba(34,211,238,0.3)" : "none";
+    ? "rgba(var(--ce-lime-rgb),0.06)"
+    : "rgba(var(--ce-glass-tint),0.05)";
+  const borderLeft = isSophia ? "2px solid rgba(var(--ce-role-edgestar-rgb),0.3)" : "none";
   const align = isMe ? "flex-end" : "flex-start";
 
   return (
@@ -533,12 +533,12 @@ function MessageBubble({
       {!isMe && (
         <div className="flex-shrink-0 mt-1">
           {isSophia ? (
-            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "rgba(34,211,238,0.12)", border: "1.5px solid rgba(34,211,238,0.3)" }}>
+            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.12)", border: "1.5px solid rgba(var(--ce-role-edgestar-rgb),0.3)" }}>
               <SophiaMark size={14} glowing={false} />
             </div>
           ) : (
-            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-              <span className="text-[10px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{message.senderName[0]}</span>
+            <div className="w-7 h-7 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[10px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{message.senderName[0]}</span>
             </div>
           )}
         </div>
@@ -547,12 +547,12 @@ function MessageBubble({
       <div className="flex flex-col gap-0.5" style={{ maxWidth: "100%" }}>
         {/* Sender name for group chats */}
         {isGroup && !isMe && (
-          <span className="text-[10px] text-[#6B7280] ml-1" style={{ fontFamily: "var(--font-body)" }}>{message.senderName}</span>
+          <span className="text-[10px] text-[var(--ce-text-secondary)] ml-1" style={{ fontFamily: "var(--font-body)" }}>{message.senderName}</span>
         )}
 
         <div className="rounded-2xl px-3.5 py-2.5" style={{ background: bubbleBg, borderLeft }}>
           {message.type === "text" && (
-            <p className="text-[13px] text-[#E8E8ED] whitespace-pre-wrap" style={{ fontFamily: "var(--font-body)" }}>
+            <p className="text-[13px] text-[var(--ce-text-primary)] whitespace-pre-wrap" style={{ fontFamily: "var(--font-body)" }}>
               {message.content.split(/(\*\*.*?\*\*)/).map((part, i) =>
                 part.startsWith("**") && part.endsWith("**") ? (
                   <strong key={i} style={{ fontWeight: 600 }}>{part.slice(2, -2)}</strong>
@@ -565,15 +565,15 @@ function MessageBubble({
 
           {message.type === "file" && message.fileDetails && (
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(255,255,255,0.04)" }}>
-                <FileText className="w-5 h-5 text-[#6B7280]" />
+              <div className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
+                <FileText className="w-5 h-5 text-[var(--ce-text-secondary)]" />
               </div>
               <div className="flex-1 min-w-0">
-                <span className="text-[12px] text-[#E8E8ED] block truncate" style={{ fontFamily: "var(--font-body)" }}>{message.fileDetails.name}</span>
-                <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{message.fileDetails.size} · {message.fileDetails.type.toUpperCase()}</span>
+                <span className="text-[12px] text-[var(--ce-text-primary)] block truncate" style={{ fontFamily: "var(--font-body)" }}>{message.fileDetails.name}</span>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{message.fileDetails.size} · {message.fileDetails.type.toUpperCase()}</span>
               </div>
-              <button onClick={() => toast.success("Downloading...")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: "rgba(255,255,255,0.04)" }}>
-                <Download className="w-3.5 h-3.5 text-[#6B7280]" />
+              <button onClick={() => toast.success("Downloading...")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
+                <Download className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
               </button>
             </div>
           )}
@@ -586,44 +586,44 @@ function MessageBubble({
 
           {message.type === "voice" && (
             <div className="flex items-center gap-2">
-              <button onClick={() => toast("Playing voice note...")} className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "rgba(179,255,59,0.1)" }}>
-                <Play className="w-3.5 h-3.5 text-[#B3FF3B]" />
+              <button onClick={() => toast("Playing voice note...")} className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.1)" }}>
+                <Play className="w-3.5 h-3.5 text-ce-lime" />
               </button>
               <div className="flex-1 h-6 flex items-center gap-[2px]">
                 {Array.from({ length: 24 }).map((_, i) => (
-                  <div key={i} className="w-[3px] rounded-full" style={{ height: `${Math.random() * 16 + 4}px`, background: "rgba(179,255,59,0.3)" }} />
+                  <div key={i} className="w-[3px] rounded-full" style={{ height: `${Math.random() * 16 + 4}px`, background: "rgba(var(--ce-lime-rgb),0.3)" }} />
                 ))}
               </div>
-              <span className="text-[10px] text-[#6B7280] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>0:42</span>
+              <span className="text-[10px] text-[var(--ce-text-secondary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>0:42</span>
             </div>
           )}
 
           {message.type === "video" && (
             <div className="relative rounded-lg overflow-hidden cursor-pointer" onClick={() => toast("Playing video...")}>
-              <div className="w-[240px] h-[135px] flex items-center justify-center" style={{ background: "rgba(0,0,0,0.3)" }}>
-                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.15)", backdropFilter: "blur(4px)" }}>
+              <div className="w-[240px] h-[135px] flex items-center justify-center" style={{ background: "rgba(var(--ce-shadow-tint),0.3)" }}>
+                <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.15)", backdropFilter: "blur(4px)" }}>
                   <Play className="w-5 h-5 text-white" />
                 </div>
               </div>
-              <span className="absolute bottom-2 right-2 text-[10px] text-white px-1.5 py-0.5 rounded" style={{ background: "rgba(0,0,0,0.6)", fontFamily: "var(--font-body)" }}>2:15</span>
+              <span className="absolute bottom-2 right-2 text-[10px] text-white px-1.5 py-0.5 rounded" style={{ background: "rgba(var(--ce-shadow-tint),0.6)", fontFamily: "var(--font-body)" }}>2:15</span>
             </div>
           )}
 
           {message.type === "link" && message.linkPreview && (
-            <button onClick={() => window.open(message.linkPreview!.url, "_blank")} className="block w-full text-left cursor-pointer rounded-lg overflow-hidden" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.04)" }}>
+            <button onClick={() => window.open(message.linkPreview!.url, "_blank")} className="block w-full text-left cursor-pointer rounded-lg overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
               <div className="p-3">
                 <div className="flex items-center gap-1.5 mb-1.5">
                   <span className="text-[12px]">{message.linkPreview.favicon}</span>
-                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{new URL(message.linkPreview.url).hostname}</span>
+                  <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{new URL(message.linkPreview.url).hostname}</span>
                 </div>
-                <span className="text-[12px] text-[#E8E8ED] block mb-1" style={{ fontFamily: "var(--font-body)" }}>{message.linkPreview.title}</span>
-                <span className="text-[10px] text-[#6B7280] line-clamp-2" style={{ fontFamily: "var(--font-body)" }}>{message.linkPreview.description}</span>
+                <span className="text-[12px] text-[var(--ce-text-primary)] block mb-1" style={{ fontFamily: "var(--font-body)" }}>{message.linkPreview.title}</span>
+                <span className="text-[10px] text-[var(--ce-text-secondary)] line-clamp-2" style={{ fontFamily: "var(--font-body)" }}>{message.linkPreview.description}</span>
               </div>
             </button>
           )}
         </div>
 
-        <span className="text-[10px] text-[#374151] px-1" style={{ fontFamily: "var(--font-body)", textAlign: isMe ? "right" : "left" }}>
+        <span className="text-[10px] text-[var(--ce-text-quaternary)] px-1" style={{ fontFamily: "var(--font-body)", textAlign: isMe ? "right" : "left" }}>
           {message.timestamp}
         </span>
       </div>
@@ -648,8 +648,8 @@ function SmartReplies({ replies, onSelect, visible }: { replies: string[]; onSel
         <motion.button
           key={reply}
           onClick={() => onSelect(reply)}
-          className="flex-shrink-0 px-3 py-1.5 rounded-full cursor-pointer text-[11px] text-[#9CA3AF] hover:text-[#E8E8ED] transition-colors"
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}
+          className="flex-shrink-0 px-3 py-1.5 rounded-full cursor-pointer text-[11px] text-[var(--ce-text-tertiary)] hover:text-[var(--ce-text-primary)] transition-colors"
+          style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}
           initial={{ opacity: 0, x: -10 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: i * 0.05, duration: 0.2, ease: "easeOut" }}
@@ -668,7 +668,7 @@ function ThreadSummary({ text, onDismiss }: { text: string; onDismiss: () => voi
   return (
     <motion.div
       className="mx-4 mb-3 rounded-xl p-4"
-      style={{ background: "linear-gradient(145deg, rgba(34,211,238,0.05), rgba(255,255,255,0.02))", border: "1px solid rgba(34,211,238,0.08)" }}
+      style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}
       initial={{ opacity: 0, y: -8 }}
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -8 }}
@@ -677,14 +677,14 @@ function ThreadSummary({ text, onDismiss }: { text: string; onDismiss: () => voi
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <SophiaMark size={14} glowing={false} />
-          <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Thread Summary</span>
-          <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Updated 2 hours ago</span>
+          <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Thread Summary</span>
+          <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Updated 2 hours ago</span>
         </div>
-        <button onClick={onDismiss} className="w-5 h-5 rounded flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)]">
-          <X className="w-3 h-3 text-[#6B7280]" />
+        <button onClick={onDismiss} className="w-5 h-5 rounded flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)]">
+          <X className="w-3 h-3 text-[var(--ce-text-secondary)]" />
         </button>
       </div>
-      <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{text}</p>
+      <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{text}</p>
     </motion.div>
   );
 }
@@ -732,22 +732,22 @@ function ConversationList({
     });
 
   return (
-    <div className="w-[280px] flex-shrink-0 flex flex-col h-full" style={{ borderRight: "1px solid rgba(255,255,255,0.04)" }}>
+    <div className="w-[280px] flex-shrink-0 flex flex-col h-full" style={{ borderRight: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
       {/* Search */}
       <div className="p-3">
         <div className="relative" role="search">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#374151]" />
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
           <input
             type="text"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
             placeholder="Search conversations..."
-            className="w-full pl-9 pr-8 py-2 rounded-lg text-[12px] text-[#E8E8ED] placeholder-[#374151] outline-none"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}
+            className="w-full pl-9 pr-8 py-2 rounded-lg text-[12px] text-[var(--ce-text-primary)] placeholder-[var(--ce-text-quaternary)] outline-none"
+            style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}
           />
           {searchQuery && (
             <button onClick={() => onSearchChange("")} className="absolute right-2 top-1/2 -translate-y-1/2 cursor-pointer">
-              <X className="w-3 h-3 text-[#6B7280]" />
+              <X className="w-3 h-3 text-[var(--ce-text-secondary)]" />
             </button>
           )}
         </div>
@@ -763,9 +763,9 @@ function ConversationList({
             onClick={() => onFilterChange(f.id)}
             className="flex-shrink-0 px-2.5 py-1 rounded-md text-[10px] cursor-pointer transition-colors"
             style={{
-              background: activeFilter === f.id ? "rgba(179,255,59,0.12)" : "rgba(255,255,255,0.03)",
-              color: activeFilter === f.id ? "#B3FF3B" : "#6B7280",
-              border: activeFilter === f.id ? "1px solid rgba(179,255,59,0.2)" : "1px solid rgba(255,255,255,0.04)",
+              background: activeFilter === f.id ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)",
+              color: activeFilter === f.id ? "var(--ce-lime)" : "var(--ce-text-secondary)",
+              border: activeFilter === f.id ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
               fontFamily: "var(--font-body)",
             }}
           >
@@ -778,12 +778,12 @@ function ConversationList({
       <div className="flex-1 overflow-y-auto" role="listbox">
         {filtered.length === 0 && (
           <div className="flex flex-col items-center justify-center py-12 px-4">
-            <MessageSquare className="w-8 h-8 text-[#374151] mb-3" />
-            <span className="text-[12px] text-[#6B7280] text-center" style={{ fontFamily: "var(--font-body)" }}>
+            <MessageSquare className="w-8 h-8 text-[var(--ce-text-quaternary)] mb-3" />
+            <span className="text-[12px] text-[var(--ce-text-secondary)] text-center" style={{ fontFamily: "var(--font-body)" }}>
               {searchQuery ? `No conversations match "${searchQuery}"` : `No ${activeFilter === "all" ? "" : activeFilter + " "}conversations yet`}
             </span>
             {searchQuery && (
-              <button onClick={() => onSearchChange("")} className="mt-2 text-[11px] text-[#22D3EE] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Clear search</button>
+              <button onClick={() => onSearchChange("")} className="mt-2 text-[11px] text-ce-cyan cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Clear search</button>
             )}
           </div>
         )}
@@ -800,40 +800,40 @@ function ConversationList({
               onClick={() => onSelect(thread.id)}
               className="w-full flex items-start gap-3 px-3 py-3 cursor-pointer transition-colors text-left relative"
               style={{
-                background: isSelected ? "rgba(255,255,255,0.04)" : "transparent",
-                borderLeft: isSelected ? "2px solid #B3FF3B" : "2px solid transparent",
+                background: isSelected ? "rgba(var(--ce-glass-tint),0.04)" : "transparent",
+                borderLeft: isSelected ? "2px solid var(--ce-lime)" : "2px solid transparent",
               }}
             >
               {/* Unread dot */}
               {thread.unread && !isSelected && (
-                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[#B3FF3B]" />
+                <div className="absolute left-0 top-1/2 -translate-y-1/2 w-2 h-2 rounded-full bg-[var(--ce-lime)]" />
               )}
 
               {/* Avatar */}
               <div className="relative flex-shrink-0">
                 {isSophia ? (
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(34,211,238,0.1)", border: "2px solid rgba(34,211,238,0.3)" }}>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "2px solid rgba(var(--ce-role-edgestar-rgb),0.3)" }}>
                     <SophiaMark size={18} glowing={false} />
                   </div>
                 ) : (
-                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-                    <span className="text-[14px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{mainParticipant?.initial || "?"}</span>
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+                    <span className="text-[14px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{mainParticipant?.initial || "?"}</span>
                   </div>
                 )}
                 {/* Thread type overlay */}
                 {thread.type === "session" && (
-                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "#0E1014", border: "1.5px solid rgba(34,211,238,0.3)" }}>
-                    <Calendar className="w-2.5 h-2.5 text-[#22D3EE]" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "var(--ce-surface-0)", border: "1.5px solid rgba(var(--ce-role-edgestar-rgb),0.3)" }}>
+                    <Calendar className="w-2.5 h-2.5 text-ce-cyan" />
                   </div>
                 )}
                 {thread.type === "application" && (
-                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "#0E1014", border: "1.5px solid rgba(179,255,59,0.3)" }}>
-                    <Briefcase className="w-2.5 h-2.5 text-[#B3FF3B]" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "var(--ce-surface-0)", border: "1.5px solid rgba(var(--ce-lime-rgb),0.3)" }}>
+                    <Briefcase className="w-2.5 h-2.5 text-ce-lime" />
                   </div>
                 )}
                 {thread.type === "group" && (
-                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "#0E1014", border: "1.5px solid rgba(139,92,246,0.3)" }}>
-                    <Users className="w-2.5 h-2.5 text-[#8B5CF6]" />
+                  <div className="absolute -bottom-0.5 -right-0.5 w-4 h-4 rounded-full flex items-center justify-center" style={{ background: "var(--ce-surface-0)", border: "1.5px solid rgba(var(--ce-role-guide-rgb),0.3)" }}>
+                    <Users className="w-2.5 h-2.5 text-[var(--ce-role-guide)]" />
                   </div>
                 )}
               </div>
@@ -841,21 +841,21 @@ function ConversationList({
               {/* Content */}
               <div className="flex-1 min-w-0">
                 <div className="flex items-center justify-between mb-0.5">
-                  <span className={`text-[12px] truncate ${thread.unread ? "text-[#E8E8ED]" : "text-[#9CA3AF]"}`} style={{ fontFamily: "var(--font-display)", fontWeight: thread.unread ? 500 : 400 }}>
+                  <span className={`text-[12px] truncate ${thread.unread ? "text-[var(--ce-text-primary)]" : "text-[var(--ce-text-tertiary)]"}`} style={{ fontFamily: "var(--font-display)", fontWeight: thread.unread ? 500 : 400 }}>
                     {thread.title}
                   </span>
-                  <span className="text-[10px] text-[#374151] flex-shrink-0 ml-2" style={{ fontFamily: "var(--font-body)" }}>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0 ml-2" style={{ fontFamily: "var(--font-body)" }}>
                     {thread.lastMessageTime}
                   </span>
                 </div>
-                <span className="text-[11px] text-[#6B7280] truncate block" style={{ fontFamily: "var(--font-body)" }}>
+                <span className="text-[11px] text-[var(--ce-text-secondary)] truncate block" style={{ fontFamily: "var(--font-body)" }}>
                   {thread.lastMessagePreview}
                 </span>
               </div>
 
               {/* Pin icon */}
               {thread.pinned && (
-                <Pin className="w-3 h-3 text-[#374151] flex-shrink-0 mt-1" />
+                <Pin className="w-3 h-3 text-[var(--ce-text-quaternary)] flex-shrink-0 mt-1" />
               )}
             </button>
           );
@@ -895,13 +895,13 @@ function ContextPanel({
         style={{
           right: isOpen ? 280 : 0,
           background: "rgba(14,16,20,0.95)",
-          border: "1px solid rgba(255,255,255,0.06)",
+          border: "1px solid rgba(var(--ce-glass-tint),0.06)",
           borderRight: isOpen ? "none" : undefined,
           borderRadius: isOpen ? "6px 0 0 6px" : "6px 0 0 6px",
           transition: "right 200ms ease-out",
         }}
       >
-        {isOpen ? <ChevronRight className="w-3 h-3 text-[#6B7280]" /> : <ChevronLeft className="w-3 h-3 text-[#6B7280]" />}
+        {isOpen ? <ChevronRight className="w-3 h-3 text-[var(--ce-text-secondary)]" /> : <ChevronLeft className="w-3 h-3 text-[var(--ce-text-secondary)]" />}
       </button>
 
       {/* Panel */}
@@ -909,7 +909,7 @@ function ContextPanel({
         {isOpen && (
           <motion.div
             className="w-[280px] flex-shrink-0 overflow-y-auto"
-            style={{ borderLeft: "1px solid rgba(255,255,255,0.04)" }}
+            style={{ borderLeft: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
             initial={{ width: 0, opacity: 0 }}
             animate={{ width: 280, opacity: 1 }}
             exit={{ width: 0, opacity: 0 }}
@@ -921,15 +921,15 @@ function ContextPanel({
                 <div className="space-y-4">
                   {/* Profile card */}
                   <div className="text-center">
-                    <div className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-                      <span className="text-[18px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{thread.participants[0].initial}</span>
+                    <div className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+                      <span className="text-[18px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{thread.participants[0].initial}</span>
                     </div>
-                    <h3 className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.participants[0].name}</h3>
-                    <p className="text-[11px] text-[#6B7280] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].role}</p>
+                    <h3 className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.participants[0].name}</h3>
+                    <p className="text-[11px] text-[var(--ce-text-secondary)] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].role}</p>
                     {thread.participants[0].rating && (
                       <div className="flex items-center justify-center gap-1 mt-1.5">
-                        <Star className="w-3 h-3 text-[#F59E0B]" />
-                        <span className="text-[11px] text-[#F59E0B]" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].rating}</span>
+                        <Star className="w-3 h-3 text-[var(--ce-role-edgepreneur)]" />
+                        <span className="text-[11px] text-[var(--ce-role-edgepreneur)]" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].rating}</span>
                       </div>
                     )}
                   </div>
@@ -937,47 +937,47 @@ function ContextPanel({
                   {/* Specialties */}
                   {thread.participants[0].specialties && (
                     <div>
-                      <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SPECIALTIES</span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SPECIALTIES</span>
                       <div className="flex flex-wrap gap-1.5">
                         {thread.participants[0].specialties.map(s => (
-                          <span key={s} className="text-[10px] text-[#6B7280] px-2 py-1 rounded-md" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)" }}>{s}</span>
+                          <span key={s} className="text-[10px] text-[var(--ce-text-secondary)] px-2 py-1 rounded-md" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)" }}>{s}</span>
                         ))}
                       </div>
                     </div>
                   )}
 
                   {/* Your connection */}
-                  <div className="rounded-lg p-3" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
+                  <div className="rounded-lg p-3" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
                     <div className="flex items-center gap-1.5 mb-1">
-                      <Sparkles className="w-3 h-3 text-[#22D3EE]" />
-                      <span className="text-[10px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Your Connection</span>
+                      <Sparkles className="w-3 h-3 text-ce-cyan" />
+                      <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Your Connection</span>
                     </div>
-                    <p className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>
+                    <p className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>
                       Specializes in Product Management transitions — your target role.
                     </p>
                   </div>
 
                   {/* Shared files */}
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SHARED FILES</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SHARED FILES</span>
                     {thread.messages.filter(m => m.type === "file").length > 0 ? (
                       thread.messages.filter(m => m.type === "file").map(m => (
                         <div key={m.id} className="flex items-center gap-2 py-1.5">
-                          <FileText className="w-3.5 h-3.5 text-[#6B7280]" />
-                          <span className="text-[11px] text-[#9CA3AF] truncate" style={{ fontFamily: "var(--font-body)" }}>{m.fileDetails?.name}</span>
+                          <FileText className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
+                          <span className="text-[11px] text-[var(--ce-text-tertiary)] truncate" style={{ fontFamily: "var(--font-body)" }}>{m.fileDetails?.name}</span>
                         </div>
                       ))
                     ) : (
-                      <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>No files shared yet</span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>No files shared yet</span>
                     )}
                   </div>
 
                   {/* Quick actions */}
                   <div className="space-y-2">
-                    <button onClick={() => toast.info("Sophia can help you book a session.")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#E8E8ED] transition-colors hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
-                      <Calendar className="w-3.5 h-3.5 text-[#22D3EE]" /> Book a session
+                    <button onClick={() => toast.info("Sophia can help you book a session.")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-primary)] transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
+                      <Calendar className="w-3.5 h-3.5 text-ce-cyan" /> Book a session
                     </button>
-                    <button onClick={() => toast.info("Opening profile...")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#9CA3AF] transition-colors hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
+                    <button onClick={() => toast.info("Opening profile...")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-tertiary)] transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
                       <ExternalLink className="w-3.5 h-3.5" /> View their profile
                     </button>
                   </div>
@@ -988,34 +988,34 @@ function ContextPanel({
               {thread.type === "sophia" && (
                 <div className="space-y-4">
                   <div className="text-center">
-                    <div className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center" style={{ background: "rgba(34,211,238,0.1)", border: "2px solid rgba(34,211,238,0.2)" }}>
+                    <div className="w-14 h-14 rounded-full mx-auto mb-3 flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "2px solid rgba(var(--ce-role-edgestar-rgb),0.2)" }}>
                       <SophiaMark size={24} glowing={false} />
                     </div>
-                    <h3 className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</h3>
-                    <p className="text-[11px] text-[#22D3EE] mt-0.5" style={{ fontFamily: "var(--font-body)" }}>Your AI career partner</p>
+                    <h3 className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</h3>
+                    <p className="text-[11px] text-ce-cyan mt-0.5" style={{ fontFamily: "var(--font-body)" }}>Your AI career partner</p>
                   </div>
 
                   {/* Topics */}
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CONVERSATION TOPICS</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CONVERSATION TOPICS</span>
                     <div className="flex flex-wrap gap-1.5">
                       {(thread.id === "sophia-resume" ? ["Resume", "ATS Score", "Metrics"] : ["Onboarding", "Getting Started", "Career Goals"]).map(t => (
-                        <span key={t} className="text-[10px] text-[#22D3EE] px-2 py-1 rounded-md" style={{ background: "rgba(34,211,238,0.06)", fontFamily: "var(--font-body)" }}>{t}</span>
+                        <span key={t} className="text-[10px] text-ce-cyan px-2 py-1 rounded-md" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", fontFamily: "var(--font-body)" }}>{t}</span>
                       ))}
                     </div>
                   </div>
 
                   {/* Related surfaces */}
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>RELATED SURFACES</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>RELATED SURFACES</span>
                     <div className="space-y-1.5">
-                      <button onClick={() => handleAction("resume")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
+                      <button onClick={() => handleAction("resume")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-tertiary)] hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
                         <FileText className="w-3.5 h-3.5" /> Open ResumeEdge
                       </button>
-                      <button onClick={() => handleAction("edgepath")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
+                      <button onClick={() => handleAction("edgepath")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-tertiary)] hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
                         <Sparkles className="w-3.5 h-3.5" /> Open EdgePath
                       </button>
-                      <button onClick={() => handleAction("jobs")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
+                      <button onClick={() => handleAction("jobs")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-tertiary)] hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
                         <Search className="w-3.5 h-3.5" /> Browse EdgeMatch
                       </button>
                     </div>
@@ -1027,31 +1027,31 @@ function ContextPanel({
               {thread.type === "group" && thread.groupDetails && (
                 <div className="space-y-4">
                   <div>
-                    <h3 className="text-[14px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.title}</h3>
-                    <p className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{thread.groupDetails.description}</p>
+                    <h3 className="text-[14px] text-[var(--ce-text-primary)] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.title}</h3>
+                    <p className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{thread.groupDetails.description}</p>
                   </div>
 
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MEMBERS ({thread.participants.length})</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>MEMBERS ({thread.participants.length})</span>
                     {thread.participants.map(p => (
                       <div key={p.id} className="flex items-center gap-2 py-1.5">
-                        <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-                          <span className="text-[9px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{p.initial}</span>
+                        <div className="w-6 h-6 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+                          <span className="text-[9px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{p.initial}</span>
                         </div>
-                        <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{p.name}</span>
+                        <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{p.name}</span>
                       </div>
                     ))}
                   </div>
 
                   {/* Shared files */}
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SHARED FILES</span>
-                    <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>No files shared yet</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SHARED FILES</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>No files shared yet</span>
                   </div>
 
                   <div>
-                    <span className="text-[10px] text-[#374151] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PINNED MESSAGES</span>
-                    <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>No pinned messages</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PINNED MESSAGES</span>
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>No pinned messages</span>
                   </div>
                 </div>
               )}
@@ -1059,19 +1059,19 @@ function ContextPanel({
               {/* Session Context */}
               {thread.type === "session" && thread.sessionDetails && (
                 <div className="space-y-4">
-                  <div className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div className="rounded-xl p-3" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                     <div className="flex items-center gap-2 mb-2">
-                      <Calendar className="w-3.5 h-3.5 text-[#22D3EE]" />
-                      <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.sessionDetails.type}</span>
+                      <Calendar className="w-3.5 h-3.5 text-ce-cyan" />
+                      <span className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.sessionDetails.type}</span>
                     </div>
                     <div className="space-y-1">
-                      <span className="text-[11px] text-[#9CA3AF] block" style={{ fontFamily: "var(--font-body)" }}>{thread.sessionDetails.date}</span>
-                      <span className="text-[11px] text-[#9CA3AF] block" style={{ fontFamily: "var(--font-body)" }}>{thread.sessionDetails.time} {thread.sessionDetails.timezone}</span>
-                      <span className="text-[11px] text-[#6B7280] block" style={{ fontFamily: "var(--font-body)" }}>{thread.sessionDetails.duration}</span>
+                      <span className="text-[11px] text-[var(--ce-text-tertiary)] block" style={{ fontFamily: "var(--font-body)" }}>{thread.sessionDetails.date}</span>
+                      <span className="text-[11px] text-[var(--ce-text-tertiary)] block" style={{ fontFamily: "var(--font-body)" }}>{thread.sessionDetails.time} {thread.sessionDetails.timezone}</span>
+                      <span className="text-[11px] text-[var(--ce-text-secondary)] block" style={{ fontFamily: "var(--font-body)" }}>{thread.sessionDetails.duration}</span>
                     </div>
                     <span className="text-[10px] px-2 py-0.5 rounded-full mt-2 inline-block" style={{
-                      background: thread.sessionDetails.status === "upcoming" ? "rgba(34,211,238,0.1)" : "rgba(107,114,128,0.1)",
-                      color: thread.sessionDetails.status === "upcoming" ? "#22D3EE" : "#6B7280",
+                      background: thread.sessionDetails.status === "upcoming" ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(107,114,128,0.1)",
+                      color: thread.sessionDetails.status === "upcoming" ? "var(--ce-role-edgestar)" : "var(--ce-text-secondary)",
                       fontFamily: "var(--font-body)",
                     }}>
                       {thread.sessionDetails.status === "upcoming" ? "Upcoming" : "Completed"}
@@ -1080,12 +1080,12 @@ function ContextPanel({
 
                   {thread.participants[0] && (
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-                        <span className="text-[14px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{thread.participants[0].initial}</span>
+                      <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+                        <span className="text-[14px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{thread.participants[0].initial}</span>
                       </div>
                       <div>
-                        <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].name}</span>
-                        <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].role}</span>
+                        <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].name}</span>
+                        <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{thread.participants[0].role}</span>
                       </div>
                     </div>
                   )}
@@ -1095,12 +1095,12 @@ function ContextPanel({
               {/* Application Context */}
               {thread.type === "application" && thread.applicationDetails && (
                 <div className="space-y-4">
-                  <div className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                  <div className="rounded-xl p-3" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                     <div className="flex items-center gap-2 mb-2">
-                      <Briefcase className="w-3.5 h-3.5 text-[#B3FF3B]" />
-                      <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.applicationDetails.company}</span>
+                      <Briefcase className="w-3.5 h-3.5 text-ce-lime" />
+                      <span className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.applicationDetails.company}</span>
                     </div>
-                    <span className="text-[12px] text-[#9CA3AF] block mb-2" style={{ fontFamily: "var(--font-body)" }}>{thread.applicationDetails.role}</span>
+                    <span className="text-[12px] text-[var(--ce-text-tertiary)] block mb-2" style={{ fontFamily: "var(--font-body)" }}>{thread.applicationDetails.role}</span>
 
                     {/* Application status */}
                     <div className="flex items-center gap-2 mb-2">
@@ -1110,29 +1110,29 @@ function ContextPanel({
                         const isReached = i <= currentIdx;
                         return (
                           <div key={status} className="flex items-center gap-1">
-                            <div className="w-2 h-2 rounded-full" style={{ background: isReached ? "#B3FF3B" : "rgba(255,255,255,0.06)" }} />
-                            {i < 3 && <div className="w-4 h-[1px]" style={{ background: i < currentIdx ? "#B3FF3B" : "rgba(255,255,255,0.06)" }} />}
+                            <div className="w-2 h-2 rounded-full" style={{ background: isReached ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.06)" }} />
+                            {i < 3 && <div className="w-4 h-[1px]" style={{ background: i < currentIdx ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.06)" }} />}
                           </div>
                         );
                       })}
                     </div>
-                    <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)", textTransform: "capitalize" }}>{thread.applicationDetails.status}</span>
+                    <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-body)", textTransform: "capitalize" }}>{thread.applicationDetails.status}</span>
 
                     {/* Match % */}
                     <div className="mt-3 flex items-center gap-2">
-                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-                        <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.applicationDetails.matchPercent}%</span>
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+                        <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.applicationDetails.matchPercent}%</span>
                       </div>
-                      <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Match Score</span>
+                      <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Match Score</span>
                     </div>
                   </div>
 
                   {/* Quick actions */}
                   <div className="space-y-2">
-                    <button onClick={() => onNavigate?.("jobs")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#E8E8ED] transition-colors hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
-                      <Search className="w-3.5 h-3.5 text-[#22D3EE]" /> View job listing
+                    <button onClick={() => onNavigate?.("jobs")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-primary)] transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
+                      <Search className="w-3.5 h-3.5 text-ce-cyan" /> View job listing
                     </button>
-                    <button onClick={() => onNavigate?.("resume")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[#9CA3AF] transition-colors hover:bg-[rgba(255,255,255,0.03)]" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
+                    <button onClick={() => onNavigate?.("resume")} className="w-full flex items-center gap-2 px-3 py-2 rounded-lg cursor-pointer text-[11px] text-[var(--ce-text-tertiary)] transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
                       <FileText className="w-3.5 h-3.5" /> Optimize resume for this role
                     </button>
                   </div>
@@ -1221,29 +1221,29 @@ function ActiveThread({
   return (
     <div className="flex-1 flex flex-col h-full min-w-0 relative">
       {/* Header */}
-      <div className="flex items-center justify-between px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="flex items-center justify-between px-4 h-14 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <div className="flex items-center gap-3">
           {isSophiaThread ? (
-            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(34,211,238,0.1)", border: "1.5px solid rgba(34,211,238,0.3)" }}>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1.5px solid rgba(var(--ce-role-edgestar-rgb),0.3)" }}>
               <SophiaMark size={14} glowing={false} />
             </div>
           ) : isGroup ? (
-            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(139,92,246,0.1)" }}>
-              <Users className="w-4 h-4 text-[#8B5CF6]" />
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)" }}>
+              <Users className="w-4 h-4 text-[var(--ce-role-guide)]" />
             </div>
           ) : (
-            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-              <span className="text-[12px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{mainParticipant?.initial || "?"}</span>
+            <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+              <span className="text-[12px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{mainParticipant?.initial || "?"}</span>
             </div>
           )}
           <div>
-            <h2 className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.title}</h2>
+            <h2 className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{thread.title}</h2>
             {mainParticipant?.role && !isSophiaThread && !isGroup && (
-              <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{mainParticipant.role}</span>
+              <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{mainParticipant.role}</span>
             )}
           </div>
           {typeBadge[thread.type] && (
-            <span className="text-[9px] text-[#6B7280] px-2 py-0.5 rounded-full" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)" }}>
+            <span className="text-[9px] text-[var(--ce-text-secondary)] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)" }}>
               {typeBadge[thread.type]}
             </span>
           )}
@@ -1251,24 +1251,24 @@ function ActiveThread({
 
         <div className="flex items-center gap-1">
           {thread.hasSummary && (
-            <button onClick={() => setShowSummary(!showSummary)} className="px-2 py-1 rounded-md text-[10px] cursor-pointer transition-colors" style={{ background: showSummary ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.03)", color: showSummary ? "#22D3EE" : "#6B7280", fontFamily: "var(--font-body)" }}>
+            <button onClick={() => setShowSummary(!showSummary)} className="px-2 py-1 rounded-md text-[10px] cursor-pointer transition-colors" style={{ background: showSummary ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.03)", color: showSummary ? "var(--ce-role-edgestar)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
               Summary
             </button>
           )}
-          <button onClick={() => toast("Pinned thread")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.03)]">
-            <Pin className="w-3.5 h-3.5 text-[#6B7280]" />
+          <button onClick={() => toast("Pinned thread")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)]">
+            <Pin className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
           </button>
-          <button onClick={() => toast("Search within thread...")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.03)]">
-            <Search className="w-3.5 h-3.5 text-[#6B7280]" />
+          <button onClick={() => toast("Search within thread...")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)]">
+            <Search className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
           </button>
           {!isSophiaThread && (
-            <button onClick={() => onStartVideoCall?.(mainParticipant?.name || "Participant", mainParticipant?.initial || "?")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.03)]">
-              <Video className="w-3.5 h-3.5 text-[#6B7280]" />
+            <button onClick={() => onStartVideoCall?.(mainParticipant?.name || "Participant", mainParticipant?.initial || "?")} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)]">
+              <Video className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
             </button>
           )}
           <div className="relative">
-            <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.03)]">
-              <MoreHorizontal className="w-3.5 h-3.5 text-[#6B7280]" />
+            <button onClick={() => setMoreMenuOpen(!moreMenuOpen)} className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)]">
+              <MoreHorizontal className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
             </button>
             <AnimatePresence>
               {moreMenuOpen && (
@@ -1276,7 +1276,7 @@ function ActiveThread({
                   <div className="fixed inset-0 z-10" onClick={() => setMoreMenuOpen(false)} />
                   <motion.div
                     className="absolute right-0 top-full mt-1 w-[160px] rounded-lg overflow-hidden z-20"
-                    style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.06)" }}
+                    style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
                     initial={{ opacity: 0, y: -4, scale: 0.97 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
                     exit={{ opacity: 0, y: -4, scale: 0.97 }}
@@ -1290,8 +1290,8 @@ function ActiveThread({
                       <button
                         key={i}
                         onClick={() => { setMoreMenuOpen(false); item.action(); }}
-                        className="w-full text-left px-3 py-2.5 text-[11px] text-[#9CA3AF] cursor-pointer hover:bg-[rgba(255,255,255,0.03)] transition-colors"
-                        style={{ fontFamily: "var(--font-body)", borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}
+                        className="w-full text-left px-3 py-2.5 text-[11px] text-[var(--ce-text-tertiary)] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
+                        style={{ fontFamily: "var(--font-body)", borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}
                       >
                         {item.label}
                       </button>
@@ -1328,7 +1328,7 @@ function ActiveThread({
         {/* Read receipt on last sent message */}
         {thread.messages.length > 0 && thread.messages[thread.messages.length - 1].senderId === "me" && (
           <div className="text-right pr-1">
-            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Seen</span>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Seen</span>
           </div>
         )}
 
@@ -1350,7 +1350,7 @@ function ActiveThread({
         {newMsgPill && (
           <motion.button
             className="absolute top-16 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer z-10"
-            style={{ background: "rgba(14,16,20,0.95)", border: "1px solid rgba(179,255,59,0.2)" }}
+            style={{ background: "rgba(14,16,20,0.95)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)" }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -1360,8 +1360,8 @@ function ActiveThread({
               setNewMsgPill(false);
             }}
           >
-            <ArrowDown className="w-3 h-3 text-[#B3FF3B]" />
-            <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>New messages</span>
+            <ArrowDown className="w-3 h-3 text-ce-lime" />
+            <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>New messages</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -1378,13 +1378,13 @@ function ActiveThread({
       </AnimatePresence>
 
       {/* Input area */}
-      <div className="flex items-end gap-2 px-4 py-3 flex-shrink-0" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+      <div className="flex items-end gap-2 px-4 py-3 flex-shrink-0" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <button
           onClick={() => toast("Attachment menu: File, Image, Voice")}
-          className="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0 hover:bg-[rgba(255,255,255,0.04)]"
-          style={{ background: "rgba(255,255,255,0.03)" }}
+          className="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0 hover:bg-[rgba(var(--ce-glass-tint),0.04)]"
+          style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}
         >
-          <Paperclip className="w-4 h-4 text-[#6B7280]" />
+          <Paperclip className="w-4 h-4 text-[var(--ce-text-secondary)]" />
         </button>
 
         <textarea
@@ -1397,10 +1397,10 @@ function ActiveThread({
           onKeyDown={handleKeyDown}
           placeholder="Type a message..."
           rows={1}
-          className="flex-1 resize-none text-[13px] text-[#E8E8ED] placeholder-[#374151] py-2 px-3 rounded-lg outline-none"
+          className="flex-1 resize-none text-[13px] text-[var(--ce-text-primary)] placeholder-[var(--ce-text-quaternary)] py-2 px-3 rounded-lg outline-none"
           style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.04)",
+            background: "rgba(var(--ce-glass-tint),0.03)",
+            border: "1px solid rgba(var(--ce-glass-tint),0.04)",
             fontFamily: "var(--font-body)",
             maxHeight: "100px",
             minHeight: "36px",
@@ -1411,13 +1411,13 @@ function ActiveThread({
           onClick={() => handleSend(input)}
           className="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0"
           style={{
-            background: input.trim() ? "rgba(179,255,59,0.15)" : "rgba(255,255,255,0.03)",
-            border: input.trim() ? "1px solid rgba(179,255,59,0.25)" : "1px solid rgba(255,255,255,0.04)",
+            background: input.trim() ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.03)",
+            border: input.trim() ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
           }}
           whileTap={{ scale: 1.1 }}
           transition={{ duration: 0.2 }}
         >
-          <Send className="w-4 h-4" style={{ color: input.trim() ? "#B3FF3B" : "#374151" }} />
+          <Send className="w-4 h-4" style={{ color: input.trim() ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }} />
         </motion.button>
       </div>
 
@@ -1426,13 +1426,13 @@ function ActiveThread({
         {lightboxImage && (
           <motion.div
             className="fixed inset-0 z-[60] flex items-center justify-center"
-            style={{ background: "rgba(0,0,0,0.85)" }}
+            style={{ background: "rgba(var(--ce-shadow-tint),0.85)" }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={() => setLightboxImage(null)}
           >
-            <button onClick={() => setLightboxImage(null)} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "rgba(255,255,255,0.1)" }}>
+            <button onClick={() => setLightboxImage(null)} className="absolute top-4 right-4 w-10 h-10 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.1)" }}>
               <X className="w-5 h-5 text-white" />
             </button>
             <img src={lightboxImage} alt="Full size" className="max-w-[90vw] max-h-[90vh] rounded-xl object-contain" />
@@ -1479,7 +1479,7 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
   return (
     <motion.div
       className="fixed inset-0 z-[55] flex flex-col"
-      style={{ background: "#08090C" }}
+      style={{ background: "var(--ce-surface-bg)" }}
       initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -40 }}
@@ -1488,38 +1488,38 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
       {/* Top bar — recording indicator (only when active) */}
       {isRecording && (
         <div className="absolute top-4 left-4 z-10 flex items-center gap-2">
-          <div className="w-2 h-2 rounded-full bg-[#EF4444] animate-pulse" />
-          <span className="text-[10px] text-[#EF4444]" style={{ fontFamily: "var(--font-body)" }}>REC</span>
-          <button onClick={() => { setIsRecording(false); setRecordingConsent("idle"); }} className="text-[9px] text-[#6B7280] px-1.5 py-0.5 rounded cursor-pointer" style={{ background: "rgba(255,255,255,0.05)", fontFamily: "var(--font-body)" }}>Stop</button>
+          <div className="w-2 h-2 rounded-full bg-[var(--ce-status-error)] animate-pulse" />
+          <span className="text-[10px] text-[var(--ce-status-error)]" style={{ fontFamily: "var(--font-body)" }}>REC</span>
+          <button onClick={() => { setIsRecording(false); setRecordingConsent("idle"); }} className="text-[9px] text-[var(--ce-text-secondary)] px-1.5 py-0.5 rounded cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.05)", fontFamily: "var(--font-body)" }}>Stop</button>
         </div>
       )}
 
       {/* Recording consent modal */}
       <AnimatePresence>
         {recordingConsent === "pending" && (
-          <motion.div className="absolute inset-0 z-20 flex items-center justify-center" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }}
+          <motion.div className="absolute inset-0 z-20 flex items-center justify-center" style={{ background: "rgba(var(--ce-shadow-tint),0.6)", backdropFilter: "blur(4px)" }}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-            <motion.div className="w-[380px] rounded-2xl p-6" style={{ background: "rgba(14,16,20,0.99)", border: "1px solid rgba(255,255,255,0.08)" }}
+            <motion.div className="w-[380px] rounded-2xl p-6" style={{ background: "rgba(14,16,20,0.99)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
               initial={{ scale: 0.95, y: 8 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.95, y: 8 }}>
               <div className="flex items-center gap-2 mb-3">
-                <div className="w-2 h-2 rounded-full bg-[#EF4444]" />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Recording request</span>
+                <div className="w-2 h-2 rounded-full bg-[var(--ce-status-error)]" />
+                <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Recording request</span>
               </div>
-              <p className="text-[12px] text-[#9CA3AF] leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
-                <span className="text-[#E8E8ED]">You</span> want to record this session. Both parties must consent before recording starts.
+              <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                <span className="text-[var(--ce-text-primary)]">You</span> want to record this session. Both parties must consent before recording starts.
               </p>
-              <p className="text-[11px] text-[#6B7280] mb-5" style={{ fontFamily: "var(--font-body)" }}>
-                Recordings are stored in session history. Either party can request deletion at any time. <span className="text-[#22D3EE]">{participantName}</span> has been notified.
+              <p className="text-[11px] text-[var(--ce-text-secondary)] mb-5" style={{ fontFamily: "var(--font-body)" }}>
+                Recordings are stored in session history. Either party can request deletion at any time. <span className="text-ce-cyan">{participantName}</span> has been notified.
               </p>
-              <div className="flex items-center gap-2 px-3 py-2 rounded-xl mb-4" style={{ background: "rgba(34,211,238,0.05)", border: "1px solid rgba(34,211,238,0.1)" }}>
-                <div className="w-2 h-2 rounded-full bg-[#F59E0B]" />
-                <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>{participantName} sees: "You are being asked to allow recording."</span>
+              <div className="flex items-center gap-2 px-3 py-2 rounded-xl mb-4" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.05)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}>
+                <div className="w-2 h-2 rounded-full bg-[var(--ce-role-edgepreneur)]" />
+                <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>{participantName} sees: "You are being asked to allow recording."</span>
               </div>
               <div className="flex gap-2">
-                <button onClick={() => { setRecordingConsent("allowed"); setIsRecording(true); toast.success("Recording started — both parties notified"); }} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)", color: "#EF4444", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                <button onClick={() => { setRecordingConsent("allowed"); setIsRecording(true); toast.success("Recording started — both parties notified"); }} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-status-error-rgb),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb),0.2)", color: "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                   Allow Recording
                 </button>
-                <button onClick={() => { setRecordingConsent("declined"); toast("Recording declined"); }} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+                <button onClick={() => { setRecordingConsent("declined"); toast("Recording declined"); }} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                   Decline
                 </button>
               </div>
@@ -1528,7 +1528,7 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
         )}
       </AnimatePresence>
       <div className="absolute top-4 left-1/2 -translate-x-1/2 z-10">
-        <span className="text-[12px] text-[#6B7280] tabular-nums px-3 py-1 rounded-full" style={{ background: "rgba(255,255,255,0.04)", fontFamily: "var(--font-body)" }}>
+        <span className="text-[12px] text-[var(--ce-text-secondary)] tabular-nums px-3 py-1 rounded-full" style={{ background: "rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
           {callState === "connecting" ? "Connecting..." : callState === "ended" ? "Call ended" : formatTime(callDuration)}
         </span>
       </div>
@@ -1537,33 +1537,33 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
       <div className="flex-1 flex items-center justify-center relative">
         {callState === "connecting" && (
           <div className="flex flex-col items-center gap-4">
-            <motion.div className="w-24 h-24 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)", border: "2px solid rgba(34,211,238,0.2)" }} animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
-              <span className="text-[28px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{participantInitial}</span>
+            <motion.div className="w-24 h-24 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)", border: "2px solid rgba(var(--ce-role-edgestar-rgb),0.2)" }} animate={{ scale: [1, 1.05, 1] }} transition={{ duration: 1.5, repeat: Infinity }}>
+              <span className="text-[28px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{participantInitial}</span>
             </motion.div>
-            <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Connecting to {participantName}...</span>
+            <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Connecting to {participantName}...</span>
           </div>
         )}
         {callState === "active" && (
           <>
-            <div className="w-full max-w-[800px] aspect-video rounded-2xl flex items-center justify-center mx-4" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}>
+            <div className="w-full max-w-[800px] aspect-video rounded-2xl flex items-center justify-center mx-4" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
               <div className="flex flex-col items-center gap-3">
-                <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: "rgba(255,255,255,0.05)" }}>
-                  <span className="text-[24px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)" }}>{participantInitial}</span>
+                <div className="w-20 h-20 rounded-full flex items-center justify-center" style={{ background: "rgba(var(--ce-glass-tint),0.05)" }}>
+                  <span className="text-[24px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-display)" }}>{participantInitial}</span>
                 </div>
-                <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{participantName}</span>
+                <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{participantName}</span>
               </div>
             </div>
-            <div className="absolute bottom-24 right-8 w-[180px] aspect-video rounded-xl flex items-center justify-center" style={{ background: cameraOn ? "rgba(179,255,59,0.04)" : "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.08)" }}>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{cameraOn ? "Your camera" : "Camera off"}</span>
+            <div className="absolute bottom-24 right-8 w-[180px] aspect-video rounded-xl flex items-center justify-center" style={{ background: cameraOn ? "rgba(var(--ce-lime-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{cameraOn ? "Your camera" : "Camera off"}</span>
             </div>
           </>
         )}
         {callState === "ended" && (
           <div className="flex flex-col items-center gap-4">
-            <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Call ended — {formatTime(callDuration)}</span>
-            <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(34,211,238,0.06)" }}>
+            <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Call ended — {formatTime(callDuration)}</span>
+            <div className="flex items-center gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
               <SophiaMark size={14} glowing={false} />
-              <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>How did that go? I can add notes to your session thread.</span>
+              <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>How did that go? I can add notes to your session thread.</span>
             </div>
           </div>
         )}
@@ -1572,16 +1572,16 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
       {/* Sophia coaching panel */}
       <AnimatePresence>
         {sophiaPanelOpen && callState === "active" && (
-          <motion.div className="absolute right-0 top-0 bottom-16 w-[320px] overflow-y-auto" style={{ background: "rgba(10,12,16,0.95)", borderLeft: "1px solid rgba(34,211,238,0.08)" }} initial={{ x: 320 }} animate={{ x: 0 }} exit={{ x: 320 }} transition={{ duration: 0.3 }}>
+          <motion.div className="absolute right-0 top-0 bottom-16 w-[320px] overflow-y-auto" style={{ background: "rgba(10,12,16,0.95)", borderLeft: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }} initial={{ x: 320 }} animate={{ x: 0 }} exit={{ x: 320 }} transition={{ duration: 0.3 }}>
             <div className="p-4">
               <div className="flex items-center gap-2 mb-4">
                 <SophiaMark size={16} glowing={false} />
-                <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia Coaching</span>
+                <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia Coaching</span>
               </div>
               <div className="space-y-3">
                 {["Walk through your case study chronologically — problem → process → outcome.", "You've been talking for about 2 minutes — try to wrap up and move to impact metrics.", "Great mention of the A/B test results! Quantified impact always resonates.", "When they ask about collaboration, mention your design system work."].map((tip, i) => (
-                  <motion.div key={i} className="rounded-lg px-3 py-2.5" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.8 + 0.3, duration: 0.3 }}>
-                    <p className="text-[11px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{tip}</p>
+                  <motion.div key={i} className="rounded-lg px-3 py-2.5" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.8 + 0.3, duration: 0.3 }}>
+                    <p className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{tip}</p>
                   </motion.div>
                 ))}
               </div>
@@ -1592,38 +1592,38 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
 
       {/* Control bar */}
       {callState !== "ended" && (
-        <motion.div className="h-16 flex items-center justify-center gap-3 px-6" style={{ background: "rgba(10,12,16,0.95)", borderTop: "1px solid rgba(255,255,255,0.04)" }} initial={{ y: 64 }} animate={{ y: 0 }} transition={{ delay: 0.3, duration: 0.3 }}>
-          <button onClick={() => setCameraOn(!cameraOn)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: cameraOn ? "rgba(255,255,255,0.04)" : "rgba(239,68,68,0.1)", border: `1px solid ${cameraOn ? "rgba(255,255,255,0.06)" : "rgba(239,68,68,0.2)"}` }}>
-            <Video className="w-4 h-4" style={{ color: cameraOn ? "#E8E8ED" : "#EF4444" }} />
-            <span className="text-[11px]" style={{ color: cameraOn ? "#E8E8ED" : "#EF4444", fontFamily: "var(--font-body)" }}>Camera</span>
+        <motion.div className="h-16 flex items-center justify-center gap-3 px-6" style={{ background: "rgba(10,12,16,0.95)", borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ y: 64 }} animate={{ y: 0 }} transition={{ delay: 0.3, duration: 0.3 }}>
+          <button onClick={() => setCameraOn(!cameraOn)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: cameraOn ? "rgba(var(--ce-glass-tint),0.04)" : "rgba(var(--ce-status-error-rgb),0.1)", border: `1px solid ${cameraOn ? "rgba(var(--ce-glass-tint),0.06)" : "rgba(var(--ce-status-error-rgb),0.2)"}` }}>
+            <Video className="w-4 h-4" style={{ color: cameraOn ? "var(--ce-text-primary)" : "var(--ce-status-error)" }} />
+            <span className="text-[11px]" style={{ color: cameraOn ? "var(--ce-text-primary)" : "var(--ce-status-error)", fontFamily: "var(--font-body)" }}>Camera</span>
           </button>
-          <button onClick={() => setMicOn(!micOn)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: micOn ? "rgba(255,255,255,0.04)" : "rgba(239,68,68,0.1)", border: `1px solid ${micOn ? "rgba(255,255,255,0.06)" : "rgba(239,68,68,0.2)"}` }}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={micOn ? "#E8E8ED" : "#EF4444"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
-            <span className="text-[11px]" style={{ color: micOn ? "#E8E8ED" : "#EF4444", fontFamily: "var(--font-body)" }}>{micOn ? "Mic" : "Muted"}</span>
+          <button onClick={() => setMicOn(!micOn)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: micOn ? "rgba(var(--ce-glass-tint),0.04)" : "rgba(var(--ce-status-error-rgb),0.1)", border: `1px solid ${micOn ? "rgba(var(--ce-glass-tint),0.06)" : "rgba(var(--ce-status-error-rgb),0.2)"}` }}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={micOn ? "var(--ce-text-primary)" : "var(--ce-status-error)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
+            <span className="text-[11px]" style={{ color: micOn ? "var(--ce-text-primary)" : "var(--ce-status-error)", fontFamily: "var(--font-body)" }}>{micOn ? "Mic" : "Muted"}</span>
           </button>
-          <button onClick={() => { setScreenSharing(!screenSharing); toast(screenSharing ? "Screen sharing stopped" : "Sharing screen"); }} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: screenSharing ? "rgba(179,255,59,0.08)" : "rgba(255,255,255,0.04)", border: `1px solid ${screenSharing ? "rgba(179,255,59,0.15)" : "rgba(255,255,255,0.06)"}` }}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={screenSharing ? "#B3FF3B" : "#E8E8ED"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-            <span className="text-[11px]" style={{ color: screenSharing ? "#B3FF3B" : "#E8E8ED", fontFamily: "var(--font-body)" }}>Screen</span>
+          <button onClick={() => { setScreenSharing(!screenSharing); toast(screenSharing ? "Screen sharing stopped" : "Sharing screen"); }} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: screenSharing ? "rgba(var(--ce-lime-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${screenSharing ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={screenSharing ? "var(--ce-lime)" : "var(--ce-text-primary)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+            <span className="text-[11px]" style={{ color: screenSharing ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>Screen</span>
           </button>
-          <button onClick={() => setChatOpen(!chatOpen)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: chatOpen ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.04)", border: `1px solid ${chatOpen ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)"}` }}>
-            <MessageSquare className="w-4 h-4" style={{ color: chatOpen ? "#22D3EE" : "#E8E8ED" }} />
-            <span className="text-[11px]" style={{ color: chatOpen ? "#22D3EE" : "#E8E8ED", fontFamily: "var(--font-body)" }}>Chat</span>
+          <button onClick={() => setChatOpen(!chatOpen)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: chatOpen ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${chatOpen ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+            <MessageSquare className="w-4 h-4" style={{ color: chatOpen ? "var(--ce-role-edgestar)" : "var(--ce-text-primary)" }} />
+            <span className="text-[11px]" style={{ color: chatOpen ? "var(--ce-role-edgestar)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>Chat</span>
           </button>
-          <button onClick={() => setSophiaPanelOpen(!sophiaPanelOpen)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: sophiaPanelOpen ? "rgba(34,211,238,0.08)" : "rgba(255,255,255,0.04)", border: `1px solid ${sophiaPanelOpen ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)"}` }}>
-            <Sparkles className="w-4 h-4" style={{ color: sophiaPanelOpen ? "#22D3EE" : "#E8E8ED" }} />
-            <span className="text-[11px]" style={{ color: sophiaPanelOpen ? "#22D3EE" : "#E8E8ED", fontFamily: "var(--font-body)" }}>Sophia</span>
+          <button onClick={() => setSophiaPanelOpen(!sophiaPanelOpen)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: sophiaPanelOpen ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${sophiaPanelOpen ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+            <Sparkles className="w-4 h-4" style={{ color: sophiaPanelOpen ? "var(--ce-role-edgestar)" : "var(--ce-text-primary)" }} />
+            <span className="text-[11px]" style={{ color: sophiaPanelOpen ? "var(--ce-role-edgestar)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>Sophia</span>
           </button>
           <button
             onClick={() => { if (!isRecording) setRecordingConsent("pending"); }}
             className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer"
-            style={{ background: isRecording ? "rgba(239,68,68,0.12)" : "rgba(255,255,255,0.04)", border: `1px solid ${isRecording ? "rgba(239,68,68,0.25)" : "rgba(255,255,255,0.06)"}` }}
+            style={{ background: isRecording ? "rgba(var(--ce-status-error-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${isRecording ? "rgba(var(--ce-status-error-rgb),0.25)" : "rgba(var(--ce-glass-tint),0.06)"}` }}
           >
-            <div className="w-3 h-3 rounded-full" style={{ background: isRecording ? "#EF4444" : "#6B7280" }} />
-            <span className="text-[11px]" style={{ color: isRecording ? "#EF4444" : "#E8E8ED", fontFamily: "var(--font-body)" }}>{isRecording ? "Recording" : "Record"}</span>
+            <div className="w-3 h-3 rounded-full" style={{ background: isRecording ? "var(--ce-status-error)" : "var(--ce-text-secondary)" }} />
+            <span className="text-[11px]" style={{ color: isRecording ? "var(--ce-status-error)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>{isRecording ? "Recording" : "Record"}</span>
           </button>
-          <button onClick={handleEndCall} className="flex items-center gap-2 px-6 py-2 rounded-xl cursor-pointer" style={{ background: "rgba(239,68,68,0.15)", border: "1px solid rgba(239,68,68,0.3)" }}>
-            <X className="w-4 h-4 text-[#EF4444]" />
-            <span className="text-[11px] text-[#EF4444]" style={{ fontFamily: "var(--font-body)" }}>End</span>
+          <button onClick={handleEndCall} className="flex items-center gap-2 px-6 py-2 rounded-xl cursor-pointer" style={{ background: "rgba(var(--ce-status-error-rgb),0.15)", border: "1px solid rgba(var(--ce-status-error-rgb),0.3)" }}>
+            <X className="w-4 h-4 text-[var(--ce-status-error)]" />
+            <span className="text-[11px] text-[var(--ce-status-error)]" style={{ fontFamily: "var(--font-body)" }}>End</span>
           </button>
         </motion.div>
       )}

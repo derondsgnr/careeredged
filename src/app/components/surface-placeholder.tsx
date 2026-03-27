@@ -22,14 +22,14 @@ import {
 // ─── Role color map ───────────────────────────────────────────────────────────
 
 const ROLE_COLORS: Record<string, string> = {
-  edgestar: "#22D3EE",
-  edgepreneur: "#F59E0B",
-  parent: "#EC4899",
-  guide: "#8B5CF6",
-  employer: "#10B981",
-  edu: "#3B82F6",
-  ngo: "#F97316",
-  agency: "#6366F1",
+  edgestar: "var(--ce-role-edgestar)",
+  edgepreneur: "var(--ce-role-edgepreneur)",
+  parent: "var(--ce-role-parent)",
+  guide: "var(--ce-role-guide)",
+  employer: "var(--ce-role-employer)",
+  edu: "var(--ce-role-edu)",
+  ngo: "var(--ce-role-ngo)",
+  agency: "var(--ce-role-agency)",
 };
 
 const ALL_ROLES: RoleId[] = ["edgestar", "edgepreneur", "parent", "guide", "employer", "edu", "ngo", "agency"];
@@ -119,7 +119,7 @@ function SurfacePlaceholderPage({ surfaceKey }: { surfaceKey: string }) {
   const { role: roleParam } = useParams<{ role: string }>();
   const navigate = useNavigate();
   const role = (ALL_ROLES.includes(roleParam as RoleId) ? roleParam : "edgestar") as RoleId;
-  const roleColor = ROLE_COLORS[role] ?? "#22D3EE";
+  const roleColor = ROLE_COLORS[role] ?? "var(--ce-role-edgestar)";
 
   // Pick the right config — agency gets its own programs config
   const config =

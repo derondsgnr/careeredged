@@ -4,26 +4,27 @@
  */
 
 import { motion } from "motion/react";
-import { RoleShell, KPIRow, GlassCard, SophiaInsight, type NavigateFn } from "../role-shell";
+import { RoleShell, GlassCard, type NavigateFn } from "../role-shell";
 import {
   Briefcase, Users, BarChart3, Clock, ChevronRight,
   ArrowUpRight, TrendingUp, Star, Building2, Eye,
 } from "lucide-react";
-
-const EASE = [0.32, 0.72, 0, 1] as const;
+import { EASE } from "../tokens";
+import { KPIRow } from "../kpi-patterns";
+import { SophiaInsight } from "../sophia-patterns";
 
 const KPIS = [
-  { label: "Open Positions", value: "6", trend: "2 new this week", icon: <Briefcase className="w-4 h-4" />, color: "#10B981", gauge: null },
-  { label: "Total Applicants", value: "142", trend: "+28 this week", icon: <Users className="w-4 h-4" />, color: "#22D3EE", gauge: null },
-  { label: "Interview Pipeline", value: "18", trend: "5 scheduled", icon: <ArrowUpRight className="w-4 h-4" />, color: "#B3FF3B", gauge: null },
-  { label: "Avg Time-to-Hire", value: "23d", trend: "-4d vs last Q", icon: <Clock className="w-4 h-4" />, color: "#F59E0B", gauge: null },
+  { label: "Open Positions", value: "6", trend: "2 new this week", icon: <Briefcase className="w-4 h-4" />, color: "var(--ce-role-employer)", gauge: null },
+  { label: "Total Applicants", value: "142", trend: "+28 this week", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
+  { label: "Interview Pipeline", value: "18", trend: "5 scheduled", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "Avg Time-to-Hire", value: "23d", trend: "-4d vs last Q", icon: <Clock className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: null },
 ];
 
 const FUNNEL_STAGES = [
-  { label: "Applied", count: 142, width: 100, color: "#22D3EE" },
-  { label: "Screened", count: 67, width: 47, color: "#8B5CF6" },
-  { label: "Interview", count: 18, width: 13, color: "#B3FF3B" },
-  { label: "Offer", count: 3, width: 2, color: "#10B981" },
+  { label: "Applied", count: 142, width: 100, color: "var(--ce-role-edgestar)" },
+  { label: "Screened", count: 67, width: 47, color: "var(--ce-role-guide)" },
+  { label: "Interview", count: 18, width: 13, color: "var(--ce-lime)" },
+  { label: "Offer", count: 3, width: 2, color: "var(--ce-role-employer)" },
 ];
 
 const OPEN_JOBS = [
@@ -46,10 +47,10 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
       <div className="max-w-[1200px] mx-auto">
       {/* Greeting */}
       <motion.div className="pt-8 pb-6" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.4, ease: EASE }}>
-        <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <h1 className="text-[22px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Good morning, Rachel
         </h1>
-        <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+        <p className="text-[13px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
           14 new applicants today · 5 interviews this week
         </p>
       </motion.div>
@@ -61,10 +62,10 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
       <GlassCard delay={0.45} className="mb-5">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center gap-2.5">
-            <TrendingUp className="w-4 h-4 text-[#10B981]" />
-            <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Hiring Pipeline</span>
+            <TrendingUp className="w-4 h-4 text-[var(--ce-role-employer)]" />
+            <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Hiring Pipeline</span>
           </div>
-          <button onClick={() => onNavigate?.("pipeline")} className="flex items-center gap-1 text-[12px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+          <button onClick={() => onNavigate?.("pipeline")} className="flex items-center gap-1 text-[12px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
             View pipeline <ChevronRight className="w-3 h-3" />
           </button>
         </div>
@@ -79,15 +80,15 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
                 transition={{ delay: 0.8 + i * 0.1, duration: 0.6, ease: EASE }}
               />
               <div className="text-center">
-                <span className="text-[14px] text-[#E8E8ED] block tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{stage.count}</span>
-                <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{stage.label}</span>
+                <span className="text-[14px] text-ce-text-primary block tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{stage.count}</span>
+                <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{stage.label}</span>
               </div>
             </div>
           ))}
         </div>
-        <div className="flex items-center gap-4 mt-4 pt-3" style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
-          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Conversion: Applied → Screened <span className="text-[#22D3EE]">47%</span></span>
-          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Screened → Interview <span className="text-[#B3FF3B]">27%</span></span>
+        <div className="flex items-center gap-4 mt-4 pt-3" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
+          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Conversion: Applied → Screened <span className="text-ce-cyan">47%</span></span>
+          <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Screened → Interview <span className="text-ce-lime">27%</span></span>
         </div>
       </GlassCard>
 
@@ -98,32 +99,32 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
           <GlassCard delay={0.55}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-[#10B981]" />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Active Postings</span>
+                <Briefcase className="w-4 h-4 text-[var(--ce-role-employer)]" />
+                <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Active Postings</span>
               </div>
-              <button onClick={() => onNavigate?.("jobs")} className="text-[11px] text-[#10B981] px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(16,185,129,0.08)", border: "1px solid rgba(16,185,129,0.12)", fontFamily: "var(--font-body)" }}>
+              <button onClick={() => onNavigate?.("jobs")} className="text-[11px] text-[var(--ce-role-employer)] px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-role-employer-rgb),0.08)", border: "1px solid rgba(var(--ce-role-employer-rgb),0.12)", fontFamily: "var(--font-body)" }}>
                 + Post New Job
               </button>
             </div>
             {OPEN_JOBS.map((job, i) => (
-              <div key={i} onClick={() => onNavigate?.("jobs")} className="flex items-center gap-3 py-3 cursor-pointer hover:bg-[rgba(255,255,255,0.01)] transition-colors" style={{ borderBottom: i < OPEN_JOBS.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(16,185,129,0.06)" }}>
-                  <Building2 className="w-3.5 h-3.5 text-[#10B981]" />
+              <div key={i} onClick={() => onNavigate?.("jobs")} className="flex items-center gap-3 py-3 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.01)] transition-colors" style={{ borderBottom: i < OPEN_JOBS.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: "rgba(var(--ce-role-employer-rgb),0.06)" }}>
+                  <Building2 className="w-3.5 h-3.5 text-[var(--ce-role-employer)]" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-[12px] text-[#E8E8ED] block truncate" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
-                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{job.dept} · Posted {job.posted}</span>
+                  <span className="text-[12px] text-ce-text-primary block truncate" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                  <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.dept} · Posted {job.posted}</span>
                 </div>
                 <div className="flex items-center gap-3 flex-shrink-0">
                   <div className="text-right">
-                    <span className="text-[12px] text-[#E8E8ED] block tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.applicants}</span>
-                    <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>applicants</span>
+                    <span className="text-[12px] text-ce-text-primary block tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{job.applicants}</span>
+                    <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>applicants</span>
                   </div>
                   {job.new > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full text-[#22D3EE]" style={{ background: "rgba(34,211,238,0.08)", fontFamily: "var(--font-body)" }}>+{job.new} new</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full text-ce-cyan" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", fontFamily: "var(--font-body)" }}>+{job.new} new</span>
                   )}
                   {job.match90 > 0 && (
-                    <span className="text-[10px] px-1.5 py-0.5 rounded-full text-[#B3FF3B]" style={{ background: "rgba(179,255,59,0.06)", fontFamily: "var(--font-body)" }}>{job.match90} 90%+</span>
+                    <span className="text-[10px] px-1.5 py-0.5 rounded-full text-ce-lime" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", fontFamily: "var(--font-body)" }}>{job.match90} 90%+</span>
                   )}
                 </div>
               </div>
@@ -142,19 +143,19 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
           {/* Top candidates */}
           <GlassCard delay={0.65}>
             <div className="flex items-center gap-2 mb-3">
-              <Star className="w-3.5 h-3.5 text-[#B3FF3B]" />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Top Candidates</span>
+              <Star className="w-3.5 h-3.5 text-ce-lime" />
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Top Candidates</span>
             </div>
             {TOP_CANDIDATES.map((candidate, i) => (
-              <div key={i} onClick={() => onNavigate?.("pipeline")} className="flex items-center gap-3 py-2.5 cursor-pointer" style={{ borderBottom: i < TOP_CANDIDATES.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(179,255,59,0.08)" }}>
-                  <span className="text-[11px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.initial}</span>
+              <div key={i} onClick={() => onNavigate?.("pipeline")} className="flex items-center gap-3 py-2.5 cursor-pointer" style={{ borderBottom: i < TOP_CANDIDATES.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+                  <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.initial}</span>
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{candidate.name}</span>
-                  <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{candidate.role} · {candidate.status}</span>
+                  <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{candidate.name}</span>
+                  <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{candidate.role} · {candidate.status}</span>
                 </div>
-                <span className="text-[11px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.match}%</span>
+                <span className="text-[11px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.match}%</span>
               </div>
             ))}
           </GlassCard>
@@ -162,18 +163,18 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
           {/* Upcoming interviews */}
           <GlassCard delay={0.7}>
             <div className="flex items-center gap-2 mb-3">
-              <Clock className="w-3.5 h-3.5 text-[#8B5CF6]" />
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>This Week</span>
+              <Clock className="w-3.5 h-3.5 text-[var(--ce-role-guide)]" />
+              <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>This Week</span>
             </div>
             {[
               { text: "Sharon Lee — Product Designer round 2", time: "Tomorrow, 10 AM" },
               { text: "James Chen — Frontend take-home review", time: "Wednesday, 2 PM" },
               { text: "Priya Patel — Data Science panel", time: "Thursday, 11 AM" },
             ].map((item, i) => (
-              <div key={i} className="flex items-center gap-2 py-2" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                <div className="w-1.5 h-1.5 rounded-full bg-[#8B5CF6] flex-shrink-0" />
-                <span className="text-[11px] text-[#9CA3AF] flex-1" style={{ fontFamily: "var(--font-body)" }}>{item.text}</span>
-                <span className="text-[10px] text-[#374151] flex-shrink-0" style={{ fontFamily: "var(--font-body)" }}>{item.time}</span>
+              <div key={i} className="flex items-center gap-2 py-2" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-guide)] flex-shrink-0" />
+                <span className="text-[11px] text-ce-text-secondary flex-1" style={{ fontFamily: "var(--font-body)" }}>{item.text}</span>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0" style={{ fontFamily: "var(--font-body)" }}>{item.time}</span>
               </div>
             ))}
           </GlassCard>

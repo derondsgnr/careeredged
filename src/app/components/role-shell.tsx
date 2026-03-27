@@ -5,25 +5,27 @@
  * Extracted from shell-synthesis.tsx (EdgeStar's H2 pattern).
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import { useNavigate, useLocation } from "react-router";
-import { SophiaMark } from "./sophia-mark";
 import { SophiaForwardBackground } from "./shell-background";
 import { SophiaAsk } from "./sophia-ask";
 import { SophiaVoiceOverlay } from "./sophia-voice-overlay";
-import { SophiaCtx, useSophia } from "./sophia-context";
+import { SophiaCtx } from "./sophia-context";
 import { SettingsPanel } from "./settings";
+import { TabSwitcher } from "./tab-switcher";
+import { SophiaBottomBar, type NavVariation } from "./sophia-patterns";
+import { NavExplorePanel } from "./nav-explore-panel";
+import { EASE, COLORS, FONT, TEXT, SURFACE, GLASS_TINT } from "./tokens";
+import { useThemeToggle } from "./ui/use-theme";
 import {
   Sparkles, Zap, Bell, Home, Compass, FileText, Search,
   MessageSquare, Rocket, Users, Calendar,
   DollarSign, GraduationCap, BarChart3,
   Heart, Target, BookOpen, Briefcase,
-  Mic, TrendingUp, Kanban, Layers,
+  TrendingUp, Kanban, Layers, Sun, Moon,
   type LucideIcon,
 } from "lucide-react";
-
-const EASE = [0.32, 0.72, 0, 1] as const;
 
 // ─── Role configurations ──────────────────────────────────────────────
 
@@ -110,6 +112,7 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
     label: "EdgeParent",
     navPills: [
       { id: "home",     label: "Home",     icon: Home },
+      { id: "mypath",   label: "My Path",  icon: Compass,       surfaceId: "edgepath" },
       { id: "family",   label: "Family",   icon: Heart,         surfaceId: "family" },
       { id: "messages", label: "Messages", icon: MessageSquare, surfaceId: "messages" },
     ],
@@ -228,14 +231,14 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
 // ─── Role Badge ──────────────────────────────────────────────────────
 
 const ROLE_COLORS: Record<RoleId, string> = {
-  edgestar: "#22D3EE",
-  edgepreneur: "#F59E0B",
-  parent: "#EC4899",
-  guide: "#8B5CF6",
-  employer: "#10B981",
-  edu: "#3B82F6",
-  ngo: "#F97316",
-  agency: "#6366F1",
+  edgestar: "var(--ce-role-edgestar)",
+  edgepreneur: "var(--ce-role-edgepreneur)",
+  parent: "var(--ce-role-parent)",
+  guide: "var(--ce-role-guide)",
+  employer: "var(--ce-role-employer)",
+  edu: "var(--ce-role-edu)",
+  ngo: "var(--ce-role-ngo)",
+  agency: "var(--ce-role-agency)",
 };
 
 function RoleBadge({ role }: { role: RoleId }) {
@@ -281,8 +284,8 @@ function TopNav({ role, active, userName, userInitial, edgeGas, onOpenSophia, on
     <motion.header
       className="fixed top-0 left-0 right-0 h-14 z-40 flex items-center justify-between px-6"
       style={{
-        background: "rgba(8,9,12,0.85)",
-        borderBottom: "1px solid rgba(255,255,255,0.04)",
+        background: "color-mix(in srgb, var(--ce-surface-bg) 85%, transparent)",
+        borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
         backdropFilter: "blur(20px)",
       }}
       initial={{ y: -56 }}
@@ -291,62 +294,39 @@ function TopNav({ role, active, userName, userInitial, edgeGas, onOpenSophia, on
     >
       {/* Logo + Role Badge */}
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(179,255,59,0.08)" }}>
-          <Sparkles className="w-3.5 h-3.5 text-[#B3FF3B]" />
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
+          <Sparkles className="w-3.5 h-3.5 text-ce-lime" />
         </div>
-        <span className="text-[14px] text-[#E8E8ED] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
+        <span className="text-[14px] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>CareerEdge</span>
         <RoleBadge role={role} />
       </div>
 
       {/* Nav pills — centered */}
-      <nav className="flex items-center gap-1 p-1 rounded-xl" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
-        {config.navPills.map((item) => {
-          const Icon = item.icon;
-          const isActive = active === item.id;
-          return (
-            <button
-              key={item.id}
-              onClick={() => handleNavClick(item)}
-              className="relative flex items-center gap-2 px-4 py-2 rounded-lg cursor-pointer transition-colors"
-            >
-              {isActive && (
-                <motion.div
-                  className="absolute inset-0 rounded-lg"
-                  style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}
-                  layoutId="role-nav-pill"
-                  transition={{ type: "spring", stiffness: 400, damping: 30 }}
-                />
-              )}
-              <div className="relative z-10 flex items-center gap-2">
-                <Icon className="w-4 h-4" style={{ color: isActive ? "#E8E8ED" : "#6B7280" }} />
-                <span className={`text-[13px] ${isActive ? "text-[#E8E8ED]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
-                {item.badge && (
-                  <span className="text-[10px] px-1.5 py-0.5 rounded-full" style={{
-                    background: isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.06)",
-                    color: isActive ? "#22D3EE" : "#6B7280",
-                    fontFamily: "var(--font-body)",
-                  }}>{item.badge}</span>
-                )}
-              </div>
-            </button>
-          );
+      <TabSwitcher
+        variant="pill"
+        tabs={config.navPills.map((p) => {
+          const Icon = p.icon;
+          return { id: p.id, label: p.label, icon: <Icon className="w-4 h-4" />, badge: p.badge };
         })}
-      </nav>
+        active={active}
+        onChange={(id) => handleNavClick(config.navPills.find((p) => p.id === id)!)}
+        layoutId="role-nav-pill"
+      />
 
       {/* Right — EdgeGas + bell + avatar */}
       <div className="flex items-center gap-3">
-        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(179,255,59,0.06)", border: "1px solid rgba(179,255,59,0.1)" }}>
-          <Zap className="w-3 h-3 text-[#B3FF3B]" />
-          <span className="text-[11px] text-[#B3FF3B] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{edgeGas}</span>
+        <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
+          <Zap className="w-3 h-3 text-ce-lime" />
+          <span className="text-[11px] text-ce-lime tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{edgeGas}</span>
         </div>
 
-        <button onClick={onNotifClick} className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(255,255,255,0.03)" }}>
-          <Bell className="w-4 h-4 text-[#6B7280]" />
-          <div className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-[#22D3EE]" />
+        <button onClick={onNotifClick} className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer relative" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>
+          <Bell className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+          <div className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-[var(--ce-role-edgestar)]" />
         </button>
 
-        <button onClick={onProfileClick} className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: `linear-gradient(135deg, ${ROLE_COLORS[role]}25, rgba(179,255,59,0.1))`, border: "1.5px solid rgba(255,255,255,0.08)" }}>
-          <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{userInitial}</span>
+        <button onClick={onProfileClick} className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: `linear-gradient(135deg, ${ROLE_COLORS[role]}25, rgba(var(--ce-lime-rgb),0.1))`, border: `1.5px solid rgba(var(--ce-glass-tint),0.08)` }}>
+          <span className="text-[12px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>{userInitial}</span>
         </button>
       </div>
     </motion.header>
@@ -402,126 +382,6 @@ export function SharedTopNav({
   );
 }
 
-// ─── Sophia Bottom Bar ───────────────────────────────────────────────
-
-function SophiaBottomBar({
-  context,
-  onAskSophia,
-  onVoiceStart,
-  onChipClick,
-}: {
-  context: SophiaContext;
-  onAskSophia: () => void;
-  onVoiceStart: () => void;
-  onChipClick: (action: string) => void;
-}) {
-  return (
-    <motion.div
-      className="fixed bottom-0 left-0 right-0 z-40 flex items-center gap-4 px-6 h-14"
-      style={{
-        background: "rgba(10,12,16,0.92)",
-        borderTop: "1px solid rgba(255,255,255,0.04)",
-        backdropFilter: "blur(16px)",
-      }}
-      initial={{ y: 56 }}
-      animate={{ y: 0 }}
-      transition={{ delay: 0.4, duration: 0.4, ease: EASE }}
-    >
-      <SophiaMark size={18} glowing={false} />
-      <div className="flex-1 flex items-center gap-3">
-        <span className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
-          {context.message}
-        </span>
-        <div className="flex gap-2">
-          {context.chips.map((chip) => (
-            <button
-              key={chip.label}
-              onClick={() => onChipClick(chip.action)}
-              className="text-[11px] text-[#9CA3AF] px-2.5 py-1 rounded-md cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-              style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-body)" }}
-            >
-              {chip.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Voice entry point — always visible */}
-      <button
-        onClick={onVoiceStart}
-        className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(179,255,59,0.08)] group"
-        style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.06)" }}
-        title="Talk to Sophia"
-      >
-        <Mic className="w-3.5 h-3.5 text-[#374151] group-hover:text-[#B3FF3B] transition-colors" />
-      </button>
-
-      <button
-        onClick={onAskSophia}
-        className="flex items-center gap-2 px-3 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(34,211,238,0.08)] transition-colors"
-        style={{ background: "rgba(34,211,238,0.06)", border: "1px solid rgba(34,211,238,0.1)" }}
-      >
-        <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" />
-        <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)" }}>Ask Sophia</span>
-      </button>
-    </motion.div>
-  );
-}
-
-// ─── Shared KPI Row ──────────────────────────────────────────────────
-
-export interface KPIItem {
-  label: string;
-  value: string;
-  trend: string;
-  icon: React.ReactNode;
-  color: string;
-  gauge: number | null;
-}
-
-export function KPIRow({ kpis }: { kpis: KPIItem[] }) {
-  return (
-    <div className={`grid gap-4`} style={{ gridTemplateColumns: `repeat(${kpis.length}, 1fr)` }}>
-      {kpis.map((kpi, i) => (
-        <motion.div
-          key={i}
-          className="rounded-xl p-4"
-          style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.25 + i * 0.08, duration: 0.4, ease: EASE }}
-        >
-          <div className="flex items-center justify-between mb-3">
-            <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: `${kpi.color}10` }}>
-              <div style={{ color: kpi.color }}>{kpi.icon}</div>
-            </div>
-            {kpi.gauge !== null && (
-              <svg width="40" height="22" viewBox="0 0 40 22">
-                <path d="M4 20 A16 16 0 0 1 36 20" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="3" strokeLinecap="round" />
-                <motion.path
-                  d="M4 20 A16 16 0 0 1 36 20"
-                  fill="none"
-                  stroke={kpi.color}
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  initial={{ pathLength: 0 }}
-                  animate={{ pathLength: kpi.gauge }}
-                  transition={{ delay: 0.8, duration: 0.8, ease: EASE }}
-                />
-              </svg>
-            )}
-          </div>
-          <div className="text-[26px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{kpi.value}</div>
-          <div className="flex items-center justify-between mt-1">
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{kpi.label}</span>
-            <span className="text-[10px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>{kpi.trend}</span>
-          </div>
-        </motion.div>
-      ))}
-    </div>
-  );
-}
-
 // ─── Shared Card Shell ───────────────────────────────────────────────
 
 export function GlassCard({
@@ -541,12 +401,12 @@ export function GlassCard({
       style={
         gradient
           ? {
-              background: "linear-gradient(145deg, rgba(34,211,238,0.05), rgba(255,255,255,0.02) 50%, rgba(179,255,59,0.02))",
-              border: "1px solid rgba(34,211,238,0.08)",
+              background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+              border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
             }
           : {
-              background: "rgba(255,255,255,0.025)",
-              border: "1px solid rgba(255,255,255,0.05)",
+              background: "var(--ce-surface-card)",
+              border: "1px solid var(--ce-surface-card-border)",
             }
       }
       initial={{ opacity: 0, y: 12 }}
@@ -555,53 +415,6 @@ export function GlassCard({
     >
       {children}
     </motion.div>
-  );
-}
-
-// ─── Sophia Insight Card ─────────────────────────────────────────────
-
-export function SophiaInsight({
-  message,
-  actionLabel,
-  onAction,
-  actionPrompt,
-  delay = 0.6,
-}: {
-  message: string;
-  actionLabel: string;
-  onAction?: () => void;
-  /** If provided, clicking the CTA opens Sophia with this query via context */
-  actionPrompt?: string;
-  delay?: number;
-}) {
-  const { openSophia } = useSophia();
-  const handleClick = () => {
-    if (actionPrompt) openSophia(actionPrompt);
-    onAction?.();
-  };
-  return (
-    <GlassCard gradient delay={delay}>
-      <div className="flex items-center gap-2 mb-3">
-        <SophiaMark size={18} glowing={false} />
-        <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
-      </div>
-      <p className="text-[13px] text-[#9CA3AF] leading-relaxed mb-4" style={{ fontFamily: "var(--font-body)" }}>
-        {message}
-      </p>
-      <button
-        onClick={handleClick}
-        className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]"
-        style={{
-          background: "linear-gradient(135deg, rgba(34,211,238,0.1), rgba(179,255,59,0.05))",
-          border: "1px solid rgba(34,211,238,0.12)",
-          color: "#E8E8ED",
-          fontFamily: "var(--font-display)",
-          fontWeight: 500,
-        }}
-      >
-        <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" /> {actionLabel}
-      </button>
-    </GlassCard>
   );
 }
 
@@ -617,10 +430,10 @@ export function PlaceholderSurface({ name, role }: { name: string; role: RoleId 
       >
         <Sparkles className="w-7 h-7" style={{ color }} />
       </div>
-      <h2 className="text-[20px] text-[#E8E8ED] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+      <h2 className="text-[20px] text-[var(--ce-text-primary)] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
         {name}
       </h2>
-      <p className="text-[13px] text-[#6B7280] text-center max-w-[320px]" style={{ fontFamily: "var(--font-body)" }}>
+      <p className="text-[13px] text-[var(--ce-text-secondary)] text-center max-w-[320px]" style={{ fontFamily: "var(--font-body)" }}>
         This surface is designed and ready for build. The UX spec is locked.
       </p>
     </div>
@@ -645,6 +458,8 @@ interface RoleShellProps {
   sophiaOverride?: SophiaContext;
   /** Remove padding from main content area (for full-bleed layouts like Messaging) */
   noPadding?: boolean;
+  /** Navigation variation — controls Sophia bar and explore panel behavior */
+  navVariation?: NavVariation;
 }
 
 export function RoleShell({
@@ -658,7 +473,20 @@ export function RoleShell({
   onNavChange,
   sophiaOverride,
   noPadding = false,
+  navVariation: navVariationProp,
 }: RoleShellProps) {
+  // Read navVariation from localStorage, poll for DevTools changes
+  const [navVariationLocal, setNavVariationLocal] = useState<NavVariation>(() => {
+    return (localStorage.getItem("careerEdgeNavVariation") as NavVariation) || "A";
+  });
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const current = (localStorage.getItem("careerEdgeNavVariation") as NavVariation) || "A";
+      setNavVariationLocal(prev => prev !== current ? current : prev);
+    }, 500);
+    return () => clearInterval(interval);
+  }, []);
+  const navVariation = navVariationProp ?? navVariationLocal;
   const config = ROLE_CONFIGS[role];
   const location = useLocation();
   const [sophiaOpen, setSophiaOpen] = useState(false);
@@ -668,6 +496,11 @@ export function RoleShell({
   const [profileOpen, setProfileOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const [voiceOverlayOpen, setVoiceOverlayOpen] = useState(false);
+  const [exploreOpen, setExploreOpen] = useState(false);
+  const [exploreMode, setExploreMode] = useState<"chat" | "explore">("chat");
+
+  // Theme toggle — shared hook
+  const { theme: themeMode, toggle: toggleTheme } = useThemeToggle();
 
   // Auto-detect active nav based on current URL path
   const pathname = location.pathname;
@@ -723,7 +556,7 @@ export function RoleShell({
   };
 
   return (
-    <div className="min-h-screen w-full" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-surface-bg)" }}>
       <SophiaForwardBackground />
       <TopNav
         role={role}
@@ -745,24 +578,52 @@ export function RoleShell({
           setVoiceOverlayOpen(true);
         }}
         onChipClick={handleSophiaChipClick}
+        navVariation={navVariation}
+        onToggleExplore={() => setExploreOpen(v => !v)}
+        exploreMode={exploreMode}
+        onExploreModeChange={(mode) => {
+          setExploreMode(mode);
+          if (mode === "explore") {
+            setExploreOpen(true);
+            setSophiaOpen(false);
+          } else {
+            setExploreOpen(false);
+            setInitialMessage(null);
+            setSophiaOpen(true);
+          }
+        }}
+      />
+
+      {/* Explore panel — shared by both variations */}
+      <NavExplorePanel
+        role={role}
+        isOpen={exploreOpen}
+        onClose={() => {
+          setExploreOpen(false);
+          setExploreMode("chat");
+        }}
+        onNavigate={(surfaceId) => {
+          if (onNavigate) onNavigate(surfaceId);
+        }}
+        variant={navVariation === "A" ? "dock" : "inline"}
       />
 
       {/* Notification Panel */}
       <AnimatePresence>
         {notifOpen && (
-          <motion.div className="fixed top-14 right-6 z-50 w-[340px] rounded-xl overflow-hidden" style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+          <motion.div className="fixed top-14 right-6 z-50 w-[340px] rounded-xl overflow-hidden" style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
             initial={{ opacity: 0, y: -8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -8, scale: 0.97 }} transition={{ duration: 0.2 }}>
-            <div className="flex items-center justify-between p-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-              <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Notifications</span>
-              <button onClick={() => setNotifOpen(false)} className="text-[11px] text-[#22D3EE] cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Mark all read</button>
+            <div className="flex items-center justify-between p-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Notifications</span>
+              <button onClick={() => setNotifOpen(false)} className="text-[11px] text-ce-cyan cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Mark all read</button>
             </div>
             {config.notifications.map((n, i) => (
-              <button key={i} onClick={() => { setNotifOpen(false); if (n.target === "sophia") { setInitialMessage("What's the new insight you have for me?"); setSophiaOpen(true); } else if (onNavigate) { onNavigate(n.target); } }} className="w-full flex items-start gap-3 p-4 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors text-left" style={{ borderBottom: i < config.notifications.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                {n.unread && <div className="w-2 h-2 rounded-full bg-[#22D3EE] mt-1.5 flex-shrink-0" />}
+              <button key={i} onClick={() => { setNotifOpen(false); if (n.target === "sophia") { setInitialMessage("What's the new insight you have for me?"); setSophiaOpen(true); } else if (onNavigate) { onNavigate(n.target); } }} className="w-full flex items-start gap-3 p-4 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] transition-colors text-left" style={{ borderBottom: i < config.notifications.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                {n.unread && <div className="w-2 h-2 rounded-full bg-[var(--ce-role-edgestar)] mt-1.5 flex-shrink-0" />}
                 {!n.unread && <div className="w-2 h-2 rounded-full bg-transparent mt-1.5 flex-shrink-0" />}
                 <div>
-                  <span className={`text-[12px] block ${n.unread ? "text-[#E8E8ED]" : "text-[#6B7280]"}`} style={{ fontFamily: "var(--font-body)" }}>{n.title}</span>
-                  <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{n.time}</span>
+                  <span className={`text-[12px] block ${n.unread ? "text-[var(--ce-text-primary)]" : "text-[var(--ce-text-secondary)]"}`} style={{ fontFamily: "var(--font-body)" }}>{n.title}</span>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{n.time}</span>
                 </div>
               </button>
             ))}
@@ -773,12 +634,37 @@ export function RoleShell({
       {/* Profile Dropdown */}
       <AnimatePresence>
         {profileOpen && (
-          <motion.div className="fixed top-14 right-6 z-50 w-[220px] rounded-xl overflow-hidden" style={{ background: "rgba(14,16,20,0.98)", border: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+          <motion.div className="fixed top-14 right-6 z-50 w-[220px] rounded-xl overflow-hidden" style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
             initial={{ opacity: 0, y: -8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: -8, scale: 0.97 }} transition={{ duration: 0.2 }}>
-            <div className="p-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-              <span className="text-[13px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{userName}</span>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{config.label}</span>
+            <div className="p-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <span className="text-[13px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{userName}</span>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{config.label}</span>
             </div>
+            {/* Theme toggle */}
+            <div className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <span className="text-[11px]" style={{ color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>Theme</span>
+              <button
+                onClick={toggleTheme}
+                className="flex items-center gap-1.5 px-2.5 py-1 rounded-lg cursor-pointer transition-all"
+                style={{
+                  background: "rgba(var(--ce-glass-tint),0.04)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                }}
+              >
+                {themeMode === "dark" ? (
+                  <>
+                    <Moon className="w-3 h-3" style={{ color: "var(--ce-text-secondary)" }} />
+                    <span className="text-[11px]" style={{ color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>Dark</span>
+                  </>
+                ) : (
+                  <>
+                    <Sun className="w-3 h-3" style={{ color: "var(--ce-role-edgepreneur)" }} />
+                    <span className="text-[11px]" style={{ color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>Light</span>
+                  </>
+                )}
+              </button>
+            </div>
+
             {[
               { label: "Settings", action: "settings" },
               { label: "Help & Support", action: "help" },
@@ -794,7 +680,7 @@ export function RoleShell({
                   setInitialMessage("I need help using CareerEdge — can you walk me through the main features for my role?");
                   setSophiaOpen(true);
                 }
-              }} className="w-full text-left px-4 py-3 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] transition-colors text-[12px]" style={{ color: item.action === "signout" ? "#EF4444" : "#9CA3AF", fontFamily: "var(--font-body)", borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+              }} className="w-full text-left px-4 py-3 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] transition-colors text-[12px]" style={{ color: item.action === "signout" ? "var(--ce-status-error)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)", borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                 {item.label}
               </button>
             ))}

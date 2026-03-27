@@ -10,6 +10,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import { toast as sonnerToast } from "sonner";
 import { Check, AlertCircle, Info, X, Sparkles, Zap } from "lucide-react";
+import { TEXT, SURFACE, GLASS_TINT } from "../tokens";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
 
@@ -21,59 +22,59 @@ export const toast = {
     sonnerToast.success(msg, {
       description,
       style: {
-        background: "rgba(14,16,20,0.98)",
-        border: "1px solid rgba(179,255,59,0.2)",
-        color: "#E8E8ED",
+        background: SURFACE.modalBg,
+        border: "1px solid rgba(var(--ce-lime-rgb),0.2)",
+        color: TEXT.primary,
         fontFamily: "var(--font-body)",
       },
-      icon: <Check className="w-4 h-4 text-[#B3FF3B]" />,
+      icon: <Check className="w-4 h-4 text-ce-lime" />,
     }),
 
   error: (msg: string, description?: string) =>
     sonnerToast.error(msg, {
       description,
       style: {
-        background: "rgba(14,16,20,0.98)",
-        border: "1px solid rgba(239,68,68,0.2)",
-        color: "#E8E8ED",
+        background: SURFACE.modalBg,
+        border: "1px solid rgba(var(--ce-status-error-rgb),0.2)",
+        color: TEXT.primary,
         fontFamily: "var(--font-body)",
       },
-      icon: <X className="w-4 h-4 text-[#EF4444]" />,
+      icon: <X className="w-4 h-4 text-[var(--ce-status-error)]" />,
     }),
 
   info: (msg: string, description?: string) =>
     sonnerToast(msg, {
       description,
       style: {
-        background: "rgba(14,16,20,0.98)",
-        border: "1px solid rgba(34,211,238,0.2)",
-        color: "#E8E8ED",
+        background: SURFACE.modalBg,
+        border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)",
+        color: TEXT.primary,
         fontFamily: "var(--font-body)",
       },
-      icon: <Info className="w-4 h-4 text-[#22D3EE]" />,
+      icon: <Info className="w-4 h-4 text-ce-cyan" />,
     }),
 
   sophia: (msg: string) =>
     sonnerToast(msg, {
       style: {
-        background: "rgba(14,16,20,0.98)",
-        border: "1px solid rgba(34,211,238,0.15)",
-        color: "#E8E8ED",
+        background: SURFACE.modalBg,
+        border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
+        color: TEXT.primary,
         fontFamily: "var(--font-body)",
       },
-      icon: <Sparkles className="w-4 h-4 text-[#22D3EE]" />,
+      icon: <Sparkles className="w-4 h-4 text-ce-cyan" />,
     }),
 
   warning: (msg: string, description?: string) =>
     sonnerToast.warning(msg, {
       description,
       style: {
-        background: "rgba(14,16,20,0.98)",
-        border: "1px solid rgba(245,158,11,0.2)",
-        color: "#E8E8ED",
+        background: SURFACE.modalBg,
+        border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.2)",
+        color: TEXT.primary,
         fontFamily: "var(--font-body)",
       },
-      icon: <AlertCircle className="w-4 h-4 text-[#F59E0B]" />,
+      icon: <AlertCircle className="w-4 h-4 text-[var(--ce-role-edgepreneur)]" />,
     }),
 };
 
@@ -92,14 +93,14 @@ export function SkeletonBlock({
     <div
       className={`${rounded} ${className} overflow-hidden`}
       style={{
-        background: "rgba(255,255,255,0.04)",
+        background: `rgba(${GLASS_TINT},0.04)`,
         ...style,
       }}
     >
       <motion.div
         className="w-full h-full"
         style={{
-          background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.04), transparent)",
+          background: `linear-gradient(90deg, transparent, rgba(${GLASS_TINT},0.04), transparent)`,
         }}
         animate={{ x: ["-100%", "100%"] }}
         transition={{ duration: 1.4, repeat: Infinity, ease: "linear" }}
@@ -112,7 +113,7 @@ export function SkeletonKPIRow({ count = 4 }: { count?: number }) {
   return (
     <div className="grid gap-4" style={{ gridTemplateColumns: `repeat(${count}, 1fr)` }}>
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}>
+        <div key={i} className="rounded-xl p-4" style={{ background: `rgba(${GLASS_TINT},0.025)`, border: `1px solid rgba(${GLASS_TINT},0.05)` }}>
           <SkeletonBlock className="h-4 w-16 mb-3" />
           <SkeletonBlock className="h-8 w-20 mb-2" />
           <SkeletonBlock className="h-3 w-24" />
@@ -124,7 +125,7 @@ export function SkeletonKPIRow({ count = 4 }: { count?: number }) {
 
 export function SkeletonCard() {
   return (
-    <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.025)", border: "1px solid rgba(255,255,255,0.05)" }}>
+    <div className="rounded-xl p-4" style={{ background: `rgba(${GLASS_TINT},0.025)`, border: `1px solid rgba(${GLASS_TINT},0.05)` }}>
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
           <SkeletonBlock className="h-3 w-16 mb-2" />
@@ -144,7 +145,7 @@ export function SkeletonCard() {
 
 export function SkeletonRow() {
   return (
-    <div className="flex items-center gap-4 px-4 py-3.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+    <div className="flex items-center gap-4 px-4 py-3.5" style={{ borderBottom: `1px solid rgba(${GLASS_TINT},0.04)` }}>
       <SkeletonBlock className="w-9 h-9 rounded-xl flex-shrink-0" />
       <div className="flex-1">
         <SkeletonBlock className="h-3 w-32 mb-1.5" />
@@ -164,7 +165,7 @@ export function EmptyState({
   description,
   action,
   onAction,
-  accent = "#22D3EE",
+  accent = "var(--ce-role-edgestar)",
   delay = 0.2,
 }: {
   icon: React.ReactNode;
@@ -188,10 +189,10 @@ export function EmptyState({
       >
         <div style={{ color: accent }}>{icon}</div>
       </div>
-      <h3 className="text-[15px] text-[#E8E8ED] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+      <h3 className="text-[15px] text-[var(--ce-text-primary)] mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
         {title}
       </h3>
-      <p className="text-[13px] text-[#6B7280] leading-relaxed mb-5 max-w-[280px]" style={{ fontFamily: "var(--font-body)" }}>
+      <p className="text-[13px] text-[var(--ce-text-secondary)] leading-relaxed mb-5 max-w-[280px]" style={{ fontFamily: "var(--font-body)" }}>
         {description}
       </p>
       {action && onAction && (
@@ -217,7 +218,7 @@ export function ConfirmDialog({
   title,
   description,
   confirmLabel = "Confirm",
-  confirmColor = "#EF4444",
+  confirmColor = "var(--ce-status-error)",
   isDangerous = false,
 }: {
   isOpen: boolean;
@@ -238,10 +239,10 @@ export function ConfirmDialog({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
         >
-          <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} onClick={onCancel} />
+          <div className="absolute inset-0" style={{ background: SURFACE.overlay, backdropFilter: "blur(4px)" }} onClick={onCancel} />
           <motion.div
             className="relative w-full max-w-[400px] rounded-2xl overflow-hidden"
-            style={{ background: "rgba(14,16,20,0.98)", border: `1px solid ${isDangerous ? "rgba(239,68,68,0.15)" : "rgba(255,255,255,0.08)"}` }}
+            style={{ background: SURFACE.modalBg, border: `1px solid ${isDangerous ? "rgba(var(--ce-status-error-rgb),0.15)" : `rgba(${GLASS_TINT},0.08)`}` }}
             initial={{ scale: 0.95, y: 12 }}
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.95, y: 12 }}
@@ -249,22 +250,22 @@ export function ConfirmDialog({
           >
             <div className="px-5 py-5">
               {isDangerous && (
-                <div className="flex items-center justify-center w-12 h-12 rounded-xl mx-auto mb-4" style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)" }}>
-                  <AlertCircle className="w-5 h-5 text-[#EF4444]" />
+                <div className="flex items-center justify-center w-12 h-12 rounded-xl mx-auto mb-4" style={{ background: "rgba(var(--ce-status-error-rgb),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb),0.2)" }}>
+                  <AlertCircle className="w-5 h-5 text-[var(--ce-status-error)]" />
                 </div>
               )}
-              <h3 className="text-[16px] text-[#E8E8ED] mb-2 text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <h3 className="text-[16px] text-[var(--ce-text-primary)] mb-2 text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 {title}
               </h3>
-              <p className="text-[13px] text-[#6B7280] leading-relaxed text-center" style={{ fontFamily: "var(--font-body)" }}>
+              <p className="text-[13px] text-[var(--ce-text-secondary)] leading-relaxed text-center" style={{ fontFamily: "var(--font-body)" }}>
                 {description}
               </p>
             </div>
             <div className="flex gap-2 px-5 pb-5">
               <button
                 onClick={onCancel}
-                className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"
-                style={{ border: "1px solid rgba(255,255,255,0.08)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+                className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+                style={{ border: `1px solid rgba(${GLASS_TINT},0.08)`, color: TEXT.tertiary, fontFamily: "var(--font-body)" }}
               >
                 Cancel
               </button>
@@ -299,10 +300,10 @@ export function BannerAlert({
   onDismiss?: () => void;
 }) {
   const config = {
-    info:    { color: "#22D3EE", icon: <Info className="w-4 h-4" /> },
-    warning: { color: "#F59E0B", icon: <AlertCircle className="w-4 h-4" /> },
-    success: { color: "#B3FF3B", icon: <Check className="w-4 h-4" /> },
-    error:   { color: "#EF4444", icon: <X className="w-4 h-4" /> },
+    info:    { color: "var(--ce-role-edgestar)", icon: <Info className="w-4 h-4" /> },
+    warning: { color: "var(--ce-role-edgepreneur)", icon: <AlertCircle className="w-4 h-4" /> },
+    success: { color: "var(--ce-lime)", icon: <Check className="w-4 h-4" /> },
+    error:   { color: "var(--ce-status-error)", icon: <X className="w-4 h-4" /> },
   }[type];
 
   return (
@@ -315,7 +316,7 @@ export function BannerAlert({
       transition={{ duration: 0.25, ease: EASE }}
     >
       <div style={{ color: config.color }}>{config.icon}</div>
-      <span className="flex-1 text-[12px]" style={{ color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+      <span className="flex-1 text-[12px]" style={{ color: TEXT.tertiary, fontFamily: "var(--font-body)" }}>
         {message}
       </span>
       {action && onAction && (
@@ -329,7 +330,7 @@ export function BannerAlert({
       )}
       {onDismiss && (
         <button onClick={onDismiss} className="cursor-pointer flex-shrink-0">
-          <X className="w-3.5 h-3.5 text-[#374151]" />
+          <X className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
         </button>
       )}
     </motion.div>

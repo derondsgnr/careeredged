@@ -28,8 +28,7 @@ import {
   Check, Heart, RefreshCw, ChevronRight,
   Square, Radio,
 } from "lucide-react";
-
-const EASE = [0.32, 0.72, 0, 1] as const;
+import { EASE, COLORS, FONT, TEXT, SURFACE, GLASS_TINT } from "./tokens";
 
 // ─── Voice ──────────────────────────────────────────────────────────────────
 
@@ -219,11 +218,11 @@ const SCENARIOS: Record<string, Message[]> = {
       scorecard: {
         title: "Resume Health", totalScore: 72, maxTotal: 100,
         scores: [
-          { label: "ATS compatibility", score: 78, maxScore: 100, color: "#B3FF3B" },
-          { label: "Keyword match", score: 65, maxScore: 100, color: "#F59E0B" },
-          { label: "Experience framing", score: 82, maxScore: 100, color: "#B3FF3B" },
-          { label: "Impact quantification", score: 55, maxScore: 100, color: "#EF4444" },
-          { label: "Design role alignment", score: 80, maxScore: 100, color: "#22D3EE" },
+          { label: "ATS compatibility", score: 78, maxScore: 100, color: "var(--ce-lime)" },
+          { label: "Keyword match", score: 65, maxScore: 100, color: "var(--ce-role-edgepreneur)" },
+          { label: "Experience framing", score: 82, maxScore: 100, color: "var(--ce-lime)" },
+          { label: "Impact quantification", score: 55, maxScore: 100, color: "var(--ce-status-error)" },
+          { label: "Design role alignment", score: 80, maxScore: 100, color: "var(--ce-role-edgestar)" },
         ],
       },
     },
@@ -395,9 +394,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "jm-1", role: "sophia",
       text: "3 new matches since yesterday. Two are at companies you've saved.",
       cards: [
-        { title: "Product Designer", subtitle: "Figma · San Francisco", value: "92%", color: "#B3FF3B" },
-        { title: "UX Designer", subtitle: "Linear · Remote", value: "87%", color: "#22D3EE" },
-        { title: "Design Engineer", subtitle: "Vercel · Remote", value: "81%", color: "#9CA3AF" },
+        { title: "Product Designer", subtitle: "Figma · San Francisco", value: "92%", color: "var(--ce-lime)" },
+        { title: "UX Designer", subtitle: "Linear · Remote", value: "87%", color: "var(--ce-role-edgestar)" },
+        { title: "Design Engineer", subtitle: "Vercel · Remote", value: "81%", color: "var(--ce-text-tertiary)" },
       ],
       followups: [
         { label: "Why is Figma my top match?", icon: "ask" },
@@ -418,11 +417,11 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "ja-1", role: "sophia",
       text: "Of your 23 matches, I'd prioritize 5 this week based on timing, fit, and your prep level:",
       cards: [
-        { title: "Figma — Product Designer", subtitle: "Posting closes in 6 days", value: "Apply now", color: "#B3FF3B" },
-        { title: "Linear — UX Designer", subtitle: "Rolling applications", value: "This week", color: "#22D3EE" },
-        { title: "Vercel — Design Engineer", subtitle: "Referral contact available", value: "This week", color: "#22D3EE" },
-        { title: "Notion — Product Designer", subtitle: "Posting is 2 weeks old", value: "Next week", color: "#9CA3AF" },
-        { title: "Stripe — Design Systems", subtitle: "Needs portfolio update first", value: "After prep", color: "#9CA3AF" },
+        { title: "Figma — Product Designer", subtitle: "Posting closes in 6 days", value: "Apply now", color: "var(--ce-lime)" },
+        { title: "Linear — UX Designer", subtitle: "Rolling applications", value: "This week", color: "var(--ce-role-edgestar)" },
+        { title: "Vercel — Design Engineer", subtitle: "Referral contact available", value: "This week", color: "var(--ce-role-edgestar)" },
+        { title: "Notion — Product Designer", subtitle: "Posting is 2 weeks old", value: "Next week", color: "var(--ce-text-tertiary)" },
+        { title: "Stripe — Design Systems", subtitle: "Needs portfolio update first", value: "After prep", color: "var(--ce-text-tertiary)" },
       ],
     },
     {
@@ -441,10 +440,10 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "jwf-1", role: "sophia",
       text: "Figma scores 92% because of 4 strong alignment signals:",
       cards: [
-        { title: "Skill match", subtitle: "Figma proficiency + interaction design", value: "95%", color: "#B3FF3B" },
-        { title: "Experience level", subtitle: "3–5 years required, you have 3.5", value: "90%", color: "#B3FF3B" },
-        { title: "Culture signals", subtitle: "Portfolio-driven, collaborative", value: "88%", color: "#22D3EE" },
-        { title: "Location", subtitle: "SF-based, you're open to relocation", value: "100%", color: "#B3FF3B" },
+        { title: "Skill match", subtitle: "Figma proficiency + interaction design", value: "95%", color: "var(--ce-lime)" },
+        { title: "Experience level", subtitle: "3–5 years required, you have 3.5", value: "90%", color: "var(--ce-lime)" },
+        { title: "Culture signals", subtitle: "Portfolio-driven, collaborative", value: "88%", color: "var(--ce-role-edgestar)" },
+        { title: "Location", subtitle: "SF-based, you're open to relocation", value: "100%", color: "var(--ce-lime)" },
       ],
       followups: [
         { label: "See the full JD", icon: "navigate" },
@@ -611,10 +610,10 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "sp-1", role: "sophia",
       text: "Here's your progress snapshot for this week:",
       metric: [
-        { value: "60%", label: "Phase 1 Complete", context: "4 of 7 milestones done", trend: "up", color: "#B3FF3B" },
-        { value: "3", label: "Applications Sent", context: "Goal: 5 this week", trend: "up", color: "#22D3EE" },
-        { value: "72", label: "ATS Score", context: "Up from 58 at start", trend: "up", color: "#B3FF3B" },
-        { value: "5d", label: "Active Streak", context: "Longest: 8 days", trend: "up", color: "#22D3EE" },
+        { value: "60%", label: "Phase 1 Complete", context: "4 of 7 milestones done", trend: "up", color: "var(--ce-lime)" },
+        { value: "3", label: "Applications Sent", context: "Goal: 5 this week", trend: "up", color: "var(--ce-role-edgestar)" },
+        { value: "72", label: "ATS Score", context: "Up from 58 at start", trend: "up", color: "var(--ce-lime)" },
+        { value: "5d", label: "Active Streak", context: "Longest: 8 days", trend: "up", color: "var(--ce-role-edgestar)" },
       ],
     },
     {
@@ -707,9 +706,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "ns-1", role: "sophia",
       text: "I've identified 10 contacts at your target companies. Here are the 3 highest-value connections:",
       cards: [
-        { title: "Sarah Chen", subtitle: "Design Manager at Figma · 2nd connection", value: "High", color: "#B3FF3B" },
-        { title: "Marcus Rivera", subtitle: "Sr. Designer at Linear · Same university", value: "High", color: "#B3FF3B" },
-        { title: "Emily Park", subtitle: "Recruiter at Vercel · Actively hiring", value: "Direct", color: "#22D3EE" },
+        { title: "Sarah Chen", subtitle: "Design Manager at Figma · 2nd connection", value: "High", color: "var(--ce-lime)" },
+        { title: "Marcus Rivera", subtitle: "Sr. Designer at Linear · Same university", value: "High", color: "var(--ce-lime)" },
+        { title: "Emily Park", subtitle: "Recruiter at Vercel · Actively hiring", value: "Direct", color: "var(--ce-role-edgestar)" },
       ],
     },
     {
@@ -839,9 +838,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "sal-1", role: "sophia",
       text: "Based on your target roles, experience level, and location preferences — here's the market data:",
       metric: [
-        { value: "$152K", label: "Median Base Salary", context: "Product Designer, 3–5 years, SF/Remote", trend: "up", color: "#B3FF3B" },
-        { value: "$15–25K", label: "Equity Range", context: "Annual RSU grant at target companies", trend: "flat", color: "#22D3EE" },
-        { value: "$8–15K", label: "Signing Bonus", context: "Common at Figma, Vercel, Stripe", trend: "flat", color: "#22D3EE" },
+        { value: "$152K", label: "Median Base Salary", context: "Product Designer, 3–5 years, SF/Remote", trend: "up", color: "var(--ce-lime)" },
+        { value: "$15–25K", label: "Equity Range", context: "Annual RSU grant at target companies", trend: "flat", color: "var(--ce-role-edgestar)" },
+        { value: "$8–15K", label: "Signing Bonus", context: "Common at Figma, Vercel, Stripe", trend: "flat", color: "var(--ce-role-edgestar)" },
       ],
     },
     {
@@ -874,9 +873,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "es-2", role: "sophia",
       text: "Here's what I've noticed about your progress that you might be overlooking:",
       metric: [
-        { value: "4", label: "Milestones Completed", context: "More than 75% of users at this stage", trend: "up", color: "#B3FF3B" },
-        { value: "72", label: "ATS Score", context: "Started at 58 — that's real progress", trend: "up", color: "#22D3EE" },
-        { value: "3", label: "Applications Sent", context: "Ahead of your weekly goal", trend: "up", color: "#B3FF3B" },
+        { value: "4", label: "Milestones Completed", context: "More than 75% of users at this stage", trend: "up", color: "var(--ce-lime)" },
+        { value: "72", label: "ATS Score", context: "Started at 58 — that's real progress", trend: "up", color: "var(--ce-role-edgestar)" },
+        { value: "3", label: "Applications Sent", context: "Ahead of your weekly goal", trend: "up", color: "var(--ce-lime)" },
       ],
     },
     {
@@ -903,9 +902,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "er-1", role: "sophia",
       text: "Rejection stings, and I won't pretend otherwise. But here's the data that might reframe it:",
       metric: [
-        { value: "3%", label: "Cold Application Rate", context: "Average interview conversion for cold apps", trend: "flat", color: "#9CA3AF" },
-        { value: "35%", label: "Warm Outreach Rate", context: "With optimized profile + referral", trend: "up", color: "#B3FF3B" },
-        { value: "12–15", label: "Average Applications", context: "Before landing an offer in your field", trend: "flat", color: "#22D3EE" },
+        { value: "3%", label: "Cold Application Rate", context: "Average interview conversion for cold apps", trend: "flat", color: "var(--ce-text-tertiary)" },
+        { value: "35%", label: "Warm Outreach Rate", context: "With optimized profile + referral", trend: "up", color: "var(--ce-lime)" },
+        { value: "12–15", label: "Average Applications", context: "Before landing an offer in your field", trend: "flat", color: "var(--ce-role-edgestar)" },
       ],
     },
     {
@@ -979,9 +978,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "rsa-1", role: "sophia",
       text: "If you apply all 3 fixes I flagged, here's the projected change:",
       metric: [
-        { value: "89", label: "Projected ATS Score", context: "Up from 72 — a 17-point jump", trend: "up", color: "#B3FF3B" },
-        { value: "85", label: "Keyword Match", context: "Up from 65 — adding impact metrics helps", trend: "up", color: "#22D3EE" },
-        { value: "80", label: "Impact Quantification", context: "Up from 55 — biggest improvement area", trend: "up", color: "#B3FF3B" },
+        { value: "89", label: "Projected ATS Score", context: "Up from 72 — a 17-point jump", trend: "up", color: "var(--ce-lime)" },
+        { value: "85", label: "Keyword Match", context: "Up from 65 — adding impact metrics helps", trend: "up", color: "var(--ce-role-edgestar)" },
+        { value: "80", label: "Impact Quantification", context: "Up from 55 — biggest improvement area", trend: "up", color: "var(--ce-lime)" },
       ],
       followups: [
         { label: "Apply these fixes", icon: "action" },
@@ -1099,11 +1098,11 @@ const SCENARIOS: Record<string, Message[]> = {
       skillBars: {
         title: "Gap Analysis — Figma Product Designer",
         bars: [
-          { label: "Design Systems", current: 60, target: 90, color: "#EF4444" },
-          { label: "Prototyping", current: 85, target: 80, color: "#B3FF3B" },
-          { label: "User Research", current: 75, target: 80, color: "#F59E0B" },
-          { label: "Cross-functional Collab", current: 82, target: 85, color: "#22D3EE" },
-          { label: "Data-Informed Design", current: 45, target: 70, color: "#EF4444" },
+          { label: "Design Systems", current: 60, target: 90, color: "var(--ce-status-error)" },
+          { label: "Prototyping", current: 85, target: 80, color: "var(--ce-lime)" },
+          { label: "User Research", current: 75, target: 80, color: "var(--ce-role-edgepreneur)" },
+          { label: "Cross-functional Collab", current: 82, target: 85, color: "var(--ce-role-edgestar)" },
+          { label: "Data-Informed Design", current: 45, target: 70, color: "var(--ce-status-error)" },
         ],
       },
       followups: [
@@ -1140,8 +1139,8 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "jrc-1", role: "sophia",
       text: "I found a connection path to Vercel through your network:",
       cards: [
-        { title: "Emily Park", subtitle: "Design Recruiter at Vercel · Active on LinkedIn", value: "Direct", color: "#B3FF3B" },
-        { title: "Marcus Rivera", subtitle: "Senior Designer at Vercel · 2nd connection via your university network", value: "Warm", color: "#22D3EE" },
+        { title: "Emily Park", subtitle: "Design Recruiter at Vercel · Active on LinkedIn", value: "Direct", color: "var(--ce-lime)" },
+        { title: "Marcus Rivera", subtitle: "Senior Designer at Vercel · 2nd connection via your university network", value: "Warm", color: "var(--ce-role-edgestar)" },
       ],
       followups: [
         { label: "Draft outreach to Sarah", icon: "action" },
@@ -1200,9 +1199,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "sb-1", role: "sophia",
       text: "Looking at your activity patterns, here's what I see:",
       metric: [
-        { value: "2.3hrs", label: "Avg. daily active time", context: "Below the 3hr target for your phase", trend: "down", color: "#F59E0B" },
-        { value: "LinkedIn", label: "Biggest blocker", context: "Started 3 times, never finished — likely unclear on what to write", trend: "flat", color: "#EF4444" },
-        { value: "Resume", label: "Fastest completion", context: "You crushed the audit in one session", trend: "up", color: "#B3FF3B" },
+        { value: "2.3hrs", label: "Avg. daily active time", context: "Below the 3hr target for your phase", trend: "down", color: "var(--ce-role-edgepreneur)" },
+        { value: "LinkedIn", label: "Biggest blocker", context: "Started 3 times, never finished — likely unclear on what to write", trend: "flat", color: "var(--ce-status-error)" },
+        { value: "Resume", label: "Fastest completion", context: "You crushed the audit in one session", trend: "up", color: "var(--ce-lime)" },
       ],
       followups: [
         { label: "Start LinkedIn optimization", icon: "action" },
@@ -1261,9 +1260,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "stc-1", role: "sophia",
       text: "Here's the realistic time breakdown for the 2-week skill sprint:",
       metric: [
-        { value: "14hrs", label: "Total Time", context: "Spread across 10 days — about 1.5 hrs/day", trend: "flat", color: "#22D3EE" },
-        { value: "6hrs", label: "Design Systems Focus", context: "Highest leverage — appears in 4 of 5 JDs", trend: "up", color: "#B3FF3B" },
-        { value: "4hrs", label: "Data-Informed Design", context: "Second priority — weak spot in your portfolio", trend: "up", color: "#F59E0B" },
+        { value: "14hrs", label: "Total Time", context: "Spread across 10 days — about 1.5 hrs/day", trend: "flat", color: "var(--ce-role-edgestar)" },
+        { value: "6hrs", label: "Design Systems Focus", context: "Highest leverage — appears in 4 of 5 JDs", trend: "up", color: "var(--ce-lime)" },
+        { value: "4hrs", label: "Data-Informed Design", context: "Second priority — weak spot in your portfolio", trend: "up", color: "var(--ce-role-edgepreneur)" },
       ],
       followups: [
         { label: "Add to roadmap", icon: "action" },
@@ -1280,9 +1279,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "nrc-1", role: "sophia",
       text: "I've identified 5 active recruiters at your target companies who've posted or engaged in the last 7 days:",
       cards: [
-        { title: "Emily Park", subtitle: "Design Recruiter, Vercel · Posted 2 days ago", value: "Active", color: "#B3FF3B" },
-        { title: "David Kim", subtitle: "Talent Partner, Figma · Engaged yesterday", value: "Active", color: "#B3FF3B" },
-        { title: "Lisa Chen", subtitle: "Recruiting Lead, Linear · Posted 4 days ago", value: "Active", color: "#22D3EE" },
+        { title: "Emily Park", subtitle: "Design Recruiter, Vercel · Posted 2 days ago", value: "Active", color: "var(--ce-lime)" },
+        { title: "David Kim", subtitle: "Talent Partner, Figma · Engaged yesterday", value: "Active", color: "var(--ce-lime)" },
+        { title: "Lisa Chen", subtitle: "Recruiting Lead, Linear · Posted 4 days ago", value: "Active", color: "var(--ce-role-edgestar)" },
       ],
       followups: [
         { label: "Draft outreach to Sarah", icon: "action" },
@@ -1403,9 +1402,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "dt-1", role: "sophia",
       text: "Timing matters more than people think. Here's the data:",
       metric: [
-        { value: "Tue–Thu", label: "Best Days", context: "Response rates are 23% higher midweek", trend: "up", color: "#B3FF3B" },
-        { value: "9–11am", label: "Best Time", context: "Their timezone — catch them during morning email triage", trend: "up", color: "#22D3EE" },
-        { value: "5 days", label: "Follow-up Window", context: "Wait 5 business days before a gentle bump", trend: "flat", color: "#9CA3AF" },
+        { value: "Tue–Thu", label: "Best Days", context: "Response rates are 23% higher midweek", trend: "up", color: "var(--ce-lime)" },
+        { value: "9–11am", label: "Best Time", context: "Their timezone — catch them during morning email triage", trend: "up", color: "var(--ce-role-edgestar)" },
+        { value: "5 days", label: "Follow-up Window", context: "Wait 5 business days before a gentle bump", trend: "flat", color: "var(--ce-text-tertiary)" },
       ],
       followups: [
         { label: "Set a reminder to send", icon: "action" },
@@ -1497,9 +1496,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "ed-1", role: "sophia",
       text: "Fair. If the current plan isn't clicking, let's figure out why and adjust. Usually it's one of three things:",
       cards: [
-        { title: "The tasks feel too big", subtitle: "Solution: break into 10-min chunks", value: "Common", color: "#22D3EE" },
-        { title: "The order feels wrong", subtitle: "Solution: resequence around your energy", value: "Common", color: "#22D3EE" },
-        { title: "The goal feels unclear", subtitle: "Solution: reconnect with your 'why'", value: "Less common", color: "#9CA3AF" },
+        { title: "The tasks feel too big", subtitle: "Solution: break into 10-min chunks", value: "Common", color: "var(--ce-role-edgestar)" },
+        { title: "The order feels wrong", subtitle: "Solution: resequence around your energy", value: "Common", color: "var(--ce-role-edgestar)" },
+        { title: "The goal feels unclear", subtitle: "Solution: reconnect with your 'why'", value: "Less common", color: "var(--ce-text-tertiary)" },
       ],
       followups: [
         { label: "Break things into smaller steps", icon: "ask" },
@@ -1516,9 +1515,9 @@ const SCENARIOS: Record<string, Message[]> = {
       id: "fb-1", role: "sophia",
       text: "I'm not sure I have a specific playbook for that yet — but I can still help. Here's what I do have context on that might be useful:",
       cards: [
-        { title: "Your resume", subtitle: "ATS score 72 · 3 fixes pending", value: "Review", color: "#22D3EE" },
-        { title: "Job matches", subtitle: "3 new since yesterday · 1 closing soon", value: "View", color: "#B3FF3B" },
-        { title: "Next milestone", subtitle: "LinkedIn optimization · ~2 hours", value: "Start", color: "#B3FF3B" },
+        { title: "Your resume", subtitle: "ATS score 72 · 3 fixes pending", value: "Review", color: "var(--ce-role-edgestar)" },
+        { title: "Job matches", subtitle: "3 new since yesterday · 1 closing soon", value: "View", color: "var(--ce-lime)" },
+        { title: "Next milestone", subtitle: "LinkedIn optimization · ~2 hours", value: "Start", color: "var(--ce-lime)" },
       ],
       followups: [
         { label: "What should I focus on today?", icon: "ask" },
@@ -1612,22 +1611,22 @@ const ACTION_MAP: Record<string, { message: string; detail?: string }> = {
 
 function ScoreCardBlock({ data }: { data: NonNullable<Message["scorecard"]> }) {
   return (
-    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
       <div className="flex items-center justify-between mb-3">
-        <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+        <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
         <div className="flex items-baseline gap-0.5">
-          <span className="text-[22px] tabular-nums" style={{ color: data.totalScore >= 80 ? "#B3FF3B" : data.totalScore >= 60 ? "#F59E0B" : "#EF4444", fontFamily: "var(--font-display)", fontWeight: 500 }}>{data.totalScore}</span>
-          <span className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>/{data.maxTotal}</span>
+          <span className="text-[22px] tabular-nums" style={{ color: data.totalScore >= 80 ? "var(--ce-lime)" : data.totalScore >= 60 ? "var(--ce-role-edgepreneur)" : "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{data.totalScore}</span>
+          <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>/{data.maxTotal}</span>
         </div>
       </div>
       <div className="flex flex-col gap-2">
         {data.scores.map((s, i) => (
           <div key={i}>
             <div className="flex items-center justify-between mb-1">
-              <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{s.label}</span>
+              <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{s.label}</span>
               <span className="text-[10px] tabular-nums" style={{ color: s.color, fontFamily: "var(--font-body)" }}>{s.score}</span>
             </div>
-            <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
+            <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
               <motion.div className="h-full rounded-full" style={{ background: s.color }} initial={{ width: 0 }} animate={{ width: `${(s.score / s.maxScore) * 100}%` }} transition={{ delay: 0.2 + i * 0.08, duration: 0.5, ease: EASE }} />
             </div>
           </div>
@@ -1642,17 +1641,17 @@ function ChecklistBlock({ data }: { data: NonNullable<Message["checklist"]> }) {
   const toggle = (idx: number) => setItems(prev => prev.map((it, i) => i === idx ? { ...it, checked: !it.checked } : it));
 
   return (
-    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <span className="text-[11px] text-[#9CA3AF] block mb-2.5" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <span className="text-[11px] text-[var(--ce-text-tertiary)] block mb-2.5" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
       <div className="flex flex-col gap-0.5">
         {items.map((item, i) => (
-          <button key={i} onClick={() => toggle(i)} className="flex items-start gap-2.5 px-2 py-2 rounded-lg text-left cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.02)]">
+          <button key={i} onClick={() => toggle(i)} className="flex items-start gap-2.5 px-2 py-2 rounded-lg text-left cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.02)]">
             <div className="mt-0.5 flex-shrink-0">
-              {item.checked ? <CheckCircle2 className="w-4 h-4 text-[#B3FF3B]" /> : <Circle className="w-4 h-4 text-[#374151]" />}
+              {item.checked ? <CheckCircle2 className="w-4 h-4 text-ce-lime" /> : <Circle className="w-4 h-4 text-[var(--ce-text-quaternary)]" />}
             </div>
             <div className="flex-1 min-w-0">
-              <span className={`text-[12px] block ${item.checked ? "text-[#6B7280] line-through" : "text-[#E8E8ED]"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
-              {item.sub && <span className="text-[10px] text-[#374151] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{item.sub}</span>}
+              <span className={`text-[12px] block ${item.checked ? "text-[var(--ce-text-secondary)] line-through" : "text-[var(--ce-text-primary)]"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+              {item.sub && <span className="text-[10px] text-[var(--ce-text-quaternary)] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{item.sub}</span>}
             </div>
           </button>
         ))}
@@ -1664,21 +1663,21 @@ function ChecklistBlock({ data }: { data: NonNullable<Message["checklist"]> }) {
 function ComparisonBlock({ data }: { data: NonNullable<Message["comparison"]> }) {
   const rowCount = data.columns[0]?.items.length || 0;
   return (
-    <motion.div className="rounded-xl overflow-hidden mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <div className="px-4 py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-        <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+    <motion.div className="rounded-xl overflow-hidden mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <div className="px-4 py-2.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+        <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
       </div>
       <div className="overflow-x-auto">
         <table className="w-full">
           <thead>
-            <tr>{data.columns.map((col, ci) => <th key={ci} className="px-3 py-2 text-left"><span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>{col.header}</span></th>)}</tr>
+            <tr>{data.columns.map((col, ci) => <th key={ci} className="px-3 py-2 text-left"><span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)", fontWeight: 500 }}>{col.header}</span></th>)}</tr>
           </thead>
           <tbody>
             {Array.from({ length: rowCount }).map((_, ri) => (
-              <tr key={ri} style={{ borderTop: "1px solid rgba(255,255,255,0.03)" }}>
+              <tr key={ri} style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
                 {data.columns.map((col, ci) => (
                   <td key={ci} className="px-3 py-2">
-                    <span className="text-[11px]" style={{ fontFamily: "var(--font-body)", color: col.highlight ? "#E8E8ED" : "#9CA3AF" }}>{col.items[ri]}</span>
+                    <span className="text-[11px]" style={{ fontFamily: "var(--font-body)", color: col.highlight ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)" }}>{col.items[ri]}</span>
                   </td>
                 ))}
               </tr>
@@ -1692,21 +1691,21 @@ function ComparisonBlock({ data }: { data: NonNullable<Message["comparison"]> })
 
 function TimelineBlock({ data }: { data: NonNullable<Message["timeline"]> }) {
   return (
-    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <span className="text-[11px] text-[#9CA3AF] block mb-3" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <span className="text-[11px] text-[var(--ce-text-tertiary)] block mb-3" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
       <div className="flex flex-col gap-0">
         {data.steps.map((step, i) => (
           <div key={i} className="flex gap-3">
             <div className="flex flex-col items-center w-4 flex-shrink-0">
-              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1" style={{ background: step.status === "done" ? "#B3FF3B" : step.status === "current" ? "#22D3EE" : "rgba(255,255,255,0.08)", boxShadow: step.status === "current" ? "0 0 8px rgba(34,211,238,0.4)" : "none" }} />
-              {i < data.steps.length - 1 && <div className="w-px flex-1 min-h-[20px]" style={{ background: step.status === "done" ? "rgba(179,255,59,0.2)" : "rgba(255,255,255,0.06)" }} />}
+              <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1" style={{ background: step.status === "done" ? "var(--ce-lime)" : step.status === "current" ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.08)", boxShadow: step.status === "current" ? "0 0 8px rgba(var(--ce-role-edgestar-rgb),0.4)" : "none" }} />
+              {i < data.steps.length - 1 && <div className="w-px flex-1 min-h-[20px]" style={{ background: step.status === "done" ? "rgba(var(--ce-lime-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.06)" }} />}
             </div>
             <div className="pb-3 flex-1 min-w-0">
               <div className="flex items-center gap-2">
-                <span className={`text-[11px] ${step.status === "done" ? "text-[#6B7280]" : "text-[#E8E8ED]"}`} style={{ fontFamily: "var(--font-body)" }}>{step.label}</span>
-                {step.duration && <span className="text-[9px] text-[#374151] px-1.5 py-0.5 rounded" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)" }}>{step.duration}</span>}
+                <span className={`text-[11px] ${step.status === "done" ? "text-[var(--ce-text-secondary)]" : "text-[var(--ce-text-primary)]"}`} style={{ fontFamily: "var(--font-body)" }}>{step.label}</span>
+                {step.duration && <span className="text-[9px] text-[var(--ce-text-quaternary)] px-1.5 py-0.5 rounded" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)" }}>{step.duration}</span>}
               </div>
-              <span className="text-[10px] text-[#374151] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{step.detail}</span>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{step.detail}</span>
             </div>
           </div>
         ))}
@@ -1717,27 +1716,27 @@ function TimelineBlock({ data }: { data: NonNullable<Message["timeline"]> }) {
 
 function SkillBarsBlock({ data }: { data: NonNullable<Message["skillBars"]> }) {
   return (
-    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <span className="text-[11px] text-[#9CA3AF] block mb-3" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <span className="text-[11px] text-[var(--ce-text-tertiary)] block mb-3" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
       <div className="flex flex-col gap-2.5">
         {data.bars.map((bar, i) => {
           const exceeds = bar.current >= bar.target;
           return (
             <div key={i}>
               <div className="flex items-center justify-between mb-1">
-                <span className="text-[10px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{bar.name}</span>
-                <span className="text-[9px]" style={{ color: exceeds ? "#B3FF3B" : "#F59E0B", fontFamily: "var(--font-body)" }}>{bar.gap}</span>
+                <span className="text-[10px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>{bar.name}</span>
+                <span className="text-[9px]" style={{ color: exceeds ? "var(--ce-lime)" : "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>{bar.gap}</span>
               </div>
-              <div className="relative h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.04)" }}>
-                <div className="absolute top-0 bottom-0 w-px z-10" style={{ left: `${bar.target}%`, background: "rgba(255,255,255,0.15)" }} />
-                <motion.div className="h-full rounded-full" style={{ background: exceeds ? "#B3FF3B" : bar.current >= bar.target * 0.8 ? "#22D3EE" : "#F59E0B" }} initial={{ width: 0 }} animate={{ width: `${bar.current}%` }} transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: EASE }} />
+              <div className="relative h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
+                <div className="absolute top-0 bottom-0 w-px z-10" style={{ left: `${bar.target}%`, background: "rgba(var(--ce-glass-tint),0.15)" }} />
+                <motion.div className="h-full rounded-full" style={{ background: exceeds ? "var(--ce-lime)" : bar.current >= bar.target * 0.8 ? "var(--ce-role-edgestar)" : "var(--ce-role-edgepreneur)" }} initial={{ width: 0 }} animate={{ width: `${bar.current}%` }} transition={{ delay: 0.15 + i * 0.06, duration: 0.5, ease: EASE }} />
               </div>
             </div>
           );
         })}
         <div className="flex items-center gap-4 mt-1">
-          <div className="flex items-center gap-1.5"><div className="w-2 h-1 rounded-full bg-[#22D3EE]" /><span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Your level</span></div>
-          <div className="flex items-center gap-1.5"><div className="w-px h-2.5" style={{ background: "rgba(255,255,255,0.15)" }} /><span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Target</span></div>
+          <div className="flex items-center gap-1.5"><div className="w-2 h-1 rounded-full bg-[var(--ce-role-edgestar)]" /><span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Your level</span></div>
+          <div className="flex items-center gap-1.5"><div className="w-px h-2.5" style={{ background: "rgba(var(--ce-glass-tint),0.15)" }} /><span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Target</span></div>
         </div>
       </div>
     </motion.div>
@@ -1746,15 +1745,15 @@ function SkillBarsBlock({ data }: { data: NonNullable<Message["skillBars"]> }) {
 
 function DocumentBlock({ data }: { data: NonNullable<Message["document"]> }) {
   const styles = {
-    good: { icon: "#B3FF3B", bg: "rgba(179,255,59,0.04)", border: "rgba(179,255,59,0.08)", label: "Strong" },
-    warn: { icon: "#F59E0B", bg: "rgba(245,158,11,0.04)", border: "rgba(245,158,11,0.08)", label: "Improve" },
-    fix:  { icon: "#EF4444", bg: "rgba(239,68,68,0.04)", border: "rgba(239,68,68,0.08)", label: "Fix" },
+    good: { icon: "var(--ce-lime)", bg: "rgba(var(--ce-lime-rgb),0.04)", border: "rgba(var(--ce-lime-rgb),0.08)", label: "Strong" },
+    warn: { icon: "var(--ce-role-edgepreneur)", bg: "rgba(var(--ce-role-edgepreneur-rgb),0.04)", border: "rgba(var(--ce-role-edgepreneur-rgb),0.08)", label: "Improve" },
+    fix:  { icon: "var(--ce-status-error)", bg: "rgba(var(--ce-status-error-rgb),0.04)", border: "rgba(var(--ce-status-error-rgb),0.08)", label: "Fix" },
   };
   return (
-    <motion.div className="rounded-xl overflow-hidden mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <div className="flex items-center gap-2 px-4 py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-        <FileText className="w-3.5 h-3.5 text-[#6B7280]" />
-        <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+    <motion.div className="rounded-xl overflow-hidden mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <div className="flex items-center gap-2 px-4 py-2.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+        <FileText className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" />
+        <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
       </div>
       <div className="p-3 flex flex-col gap-2">
         {data.highlights.map((h, i) => {
@@ -1767,7 +1766,7 @@ function DocumentBlock({ data }: { data: NonNullable<Message["document"]> }) {
                 {h.type === "fix" && <Target className="w-3 h-3" style={{ color: s.icon }} />}
                 <span className="text-[9px]" style={{ color: s.icon, fontFamily: "var(--font-body)", fontWeight: 500 }}>{s.label}</span>
               </div>
-              <p className="text-[11px] text-[#E8E8ED] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{h.text}</p>
+              <p className="text-[11px] text-[var(--ce-text-primary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{h.text}</p>
             </div>
           );
         })}
@@ -1785,24 +1784,24 @@ function DraftBlock({ data }: { data: NonNullable<Message["draft"]> }) {
   };
 
   return (
-    <motion.div className="rounded-xl overflow-hidden mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <div className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+    <motion.div className="rounded-xl overflow-hidden mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <div className="flex items-center justify-between px-4 py-2.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
         <div className="flex items-center gap-2">
-          <FileText className="w-3.5 h-3.5 text-[#22D3EE]" />
-          <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+          <FileText className="w-3.5 h-3.5 text-ce-cyan" />
+          <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
         </div>
-        <button onClick={handleCopy} className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.04)]" style={{ border: "1px solid rgba(255,255,255,0.06)", color: copied ? "#B3FF3B" : "#6B7280", fontFamily: "var(--font-body)" }}>
+        <button onClick={handleCopy} className="flex items-center gap-1 px-2 py-1 rounded-md text-[10px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.04)]" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: copied ? "var(--ce-lime)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
           {copied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
           {copied ? "Copied" : "Copy"}
         </button>
       </div>
       {data.recipientContext && (
-        <div className="px-4 py-2" style={{ background: "rgba(255,255,255,0.01)", borderBottom: "1px solid rgba(255,255,255,0.03)" }}>
-          <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{data.recipientContext}</span>
+        <div className="px-4 py-2" style={{ background: "rgba(var(--ce-glass-tint),0.01)", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{data.recipientContext}</span>
         </div>
       )}
       <div className="px-4 py-3">
-        <pre className="text-[11px] text-[#E8E8ED] leading-relaxed whitespace-pre-wrap" style={{ fontFamily: "var(--font-body)" }}>{data.body}</pre>
+        <pre className="text-[11px] text-[var(--ce-text-primary)] leading-relaxed whitespace-pre-wrap" style={{ fontFamily: "var(--font-body)" }}>{data.body}</pre>
       </div>
     </motion.div>
   );
@@ -1810,22 +1809,22 @@ function DraftBlock({ data }: { data: NonNullable<Message["draft"]> }) {
 
 function ResourcesBlock({ data }: { data: NonNullable<Message["resources"]> }) {
   const typeIcons = { course: BookOpen, article: FileText, tool: Zap, video: TrendingUp };
-  const typeColors = { course: "#22D3EE", article: "#9CA3AF", tool: "#B3FF3B", video: "#F59E0B" };
+  const typeColors = { course: "var(--ce-role-edgestar)", article: "var(--ce-text-secondary)", tool: "var(--ce-lime)", video: "var(--ce-role-edgepreneur)" };
   return (
-    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
-      <span className="text-[11px] text-[#9CA3AF] block mb-2.5" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
+    <motion.div className="rounded-xl p-4 mt-1" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
+      <span className="text-[11px] text-[var(--ce-text-tertiary)] block mb-2.5" style={{ fontFamily: "var(--font-body)" }}>{data.title}</span>
       <div className="flex flex-col gap-1.5">
         {data.items.map((item, i) => {
           const Icon = typeIcons[item.type];
           const color = typeColors[item.type];
           return (
-            <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors hover:bg-[rgba(255,255,255,0.02)]" style={{ border: "1px solid rgba(255,255,255,0.03)" }}>
+            <div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.02)]" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
               <Icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color }} />
               <div className="flex-1 min-w-0">
-                <span className="text-[11px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{item.title}</span>
-                <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{item.source}</span>
+                <span className="text-[11px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{item.title}</span>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{item.source}</span>
               </div>
-              <ExternalLink className="w-3 h-3 text-[#374151] flex-shrink-0" />
+              <ExternalLink className="w-3 h-3 text-[var(--ce-text-quaternary)] flex-shrink-0" />
             </div>
           );
         })}
@@ -1838,13 +1837,13 @@ function MetricBlock({ data }: { data: NonNullable<Message["metric"]> }) {
   return (
     <motion.div className="grid grid-cols-2 gap-2 mt-1" initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, ease: EASE }}>
       {data.map((m, i) => (
-        <div key={i} className="rounded-xl p-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }}>
+        <div key={i} className="rounded-xl p-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <div className="flex items-center gap-1.5 mb-1">
             <span className="text-[20px] tabular-nums" style={{ color: m.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{m.value}</span>
-            {m.trend === "up" && <TrendingUp className="w-3 h-3 text-[#B3FF3B]" />}
+            {m.trend === "up" && <TrendingUp className="w-3 h-3 text-ce-lime" />}
           </div>
-          <span className="text-[10px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
-          <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{m.context}</span>
+          <span className="text-[10px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
+          <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{m.context}</span>
         </div>
       ))}
     </motion.div>
@@ -1853,11 +1852,11 @@ function MetricBlock({ data }: { data: NonNullable<Message["metric"]> }) {
 
 function ActionDoneBlock({ data }: { data: NonNullable<Message["actionDone"]> }) {
   return (
-    <motion.div className="rounded-xl px-4 py-3 mt-1 flex items-start gap-3" style={{ background: "rgba(179,255,59,0.04)", border: "1px solid rgba(179,255,59,0.08)" }} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3, ease: EASE }}>
-      <CheckCircle2 className="w-4 h-4 text-[#B3FF3B] flex-shrink-0 mt-0.5" />
+    <motion.div className="rounded-xl px-4 py-3 mt-1 flex items-start gap-3" style={{ background: "rgba(var(--ce-lime-rgb),0.04)", border: "1px solid rgba(var(--ce-lime-rgb),0.08)" }} initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3, ease: EASE }}>
+      <CheckCircle2 className="w-4 h-4 text-ce-lime flex-shrink-0 mt-0.5" />
       <div>
-        <span className="text-[12px] text-[#B3FF3B] block" style={{ fontFamily: "var(--font-body)" }}>{data.message}</span>
-        {data.detail && <span className="text-[10px] text-[#6B7280] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{data.detail}</span>}
+        <span className="text-[12px] text-ce-lime block" style={{ fontFamily: "var(--font-body)" }}>{data.message}</span>
+        {data.detail && <span className="text-[10px] text-[var(--ce-text-secondary)] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{data.detail}</span>}
       </div>
     </motion.div>
   );
@@ -1878,19 +1877,19 @@ function VoiceActionCard({ data, onResolve }: { data: VoiceActionData; onResolve
   return (
     <motion.div
       className="rounded-xl overflow-hidden mt-1"
-      style={{ background: "rgba(34,211,238,0.03)", border: "1px solid rgba(34,211,238,0.1)" }}
+      style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)" }}
       initial={{ opacity: 0, y: 6, scale: 0.98 }}
       animate={{ opacity: 1, y: 0, scale: 1 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
       {/* Header */}
-      <div className="flex items-center gap-2 px-3.5 py-2.5" style={{ borderBottom: "1px solid rgba(34,211,238,0.06)" }}>
-        <Radio className="w-3 h-3 text-[#22D3EE]" />
-        <span className="text-[9px] text-[#22D3EE]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.08em" }}>VOICE ACTION</span>
+      <div className="flex items-center gap-2 px-3.5 py-2.5" style={{ borderBottom: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+        <Radio className="w-3 h-3 text-ce-cyan" />
+        <span className="text-[9px] text-ce-cyan" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.08em" }}>VOICE ACTION</span>
       </div>
 
       <div className="px-3.5 py-3">
-        <p className="text-[12px] text-[#E8E8ED] mb-3 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+        <p className="text-[12px] text-[var(--ce-text-primary)] mb-3 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
           {data.prompt}
         </p>
 
@@ -1903,22 +1902,22 @@ function VoiceActionCard({ data, onResolve }: { data: VoiceActionData; onResolve
               animate={{ opacity: 1 }}
               transition={{ duration: 0.2 }}
             >
-              <CheckCircle2 className="w-4 h-4 text-[#B3FF3B]" />
-              <span className="text-[11px] text-[#B3FF3B]" style={{ fontFamily: "var(--font-body)" }}>{resolved}</span>
+              <CheckCircle2 className="w-4 h-4 text-ce-lime" />
+              <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>{resolved}</span>
             </motion.div>
           ) : data.type === "confirm" ? (
             <motion.div key="confirm" className="flex gap-2">
               <button
                 onClick={() => handleChoose(data.confirmLabel || "Yes")}
                 className="flex-1 py-2.5 rounded-lg text-[11px] cursor-pointer transition-all hover:brightness-110 active:scale-[0.98]"
-                style={{ background: "rgba(179,255,59,0.1)", border: "1px solid rgba(179,255,59,0.2)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}
+                style={{ background: "rgba(var(--ce-lime-rgb),0.1)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}
               >
                 {data.confirmLabel || "Yes"}
               </button>
               <button
                 onClick={() => handleChoose(data.cancelLabel || "Not now")}
-                className="flex-1 py-2.5 rounded-lg text-[11px] cursor-pointer transition-all hover:bg-[rgba(255,255,255,0.04)] active:scale-[0.98]"
-                style={{ border: "1px solid rgba(255,255,255,0.08)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}
+                className="flex-1 py-2.5 rounded-lg text-[11px] cursor-pointer transition-all hover:bg-[rgba(var(--ce-glass-tint),0.04)] active:scale-[0.98]"
+                style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
               >
                 {data.cancelLabel || "Not now"}
               </button>
@@ -1929,8 +1928,8 @@ function VoiceActionCard({ data, onResolve }: { data: VoiceActionData; onResolve
                 <button
                   key={i}
                   onClick={() => handleChoose(choice)}
-                  className="w-full text-left px-3 py-2.5 rounded-lg text-[11px] cursor-pointer transition-all hover:bg-[rgba(34,211,238,0.06)] active:scale-[0.99]"
-                  style={{ border: "1px solid rgba(255,255,255,0.06)", color: "#E8E8ED", fontFamily: "var(--font-body)" }}
+                  className="w-full text-left px-3 py-2.5 rounded-lg text-[11px] cursor-pointer transition-all hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] active:scale-[0.99]"
+                  style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}
                 >
                   {choice}
                 </button>
@@ -1954,14 +1953,14 @@ function VoiceBar({ mode, transcript, onStop }: {
   const isListening = mode === "listening";
   const isProcessing = mode === "processing";
   const isSpeaking = mode === "speaking";
-  const barColor = isSpeaking ? "#22D3EE" : "#B3FF3B";
+  const barColor = isSpeaking ? "var(--ce-role-edgestar)" : "var(--ce-lime)";
 
   return (
     <motion.div
       className="flex items-center gap-3 px-3 py-2.5 rounded-xl"
       style={{
-        background: isSpeaking ? "rgba(34,211,238,0.04)" : "rgba(179,255,59,0.04)",
-        border: `1px solid ${isSpeaking ? "rgba(34,211,238,0.15)" : "rgba(179,255,59,0.12)"}`,
+        background: isSpeaking ? "rgba(var(--ce-role-edgestar-rgb),0.04)" : "rgba(var(--ce-lime-rgb),0.04)",
+        border: `1px solid ${isSpeaking ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-lime-rgb),0.12)"}`,
       }}
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
@@ -1974,7 +1973,7 @@ function VoiceBar({ mode, transcript, onStop }: {
           {isListening ? "Listening" : isProcessing ? "Thinking…" : "Sophia"}
         </span>
         {transcript && (
-          <span className="text-[9px] text-[#6B7280] truncate block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
+          <span className="text-[9px] text-[var(--ce-text-secondary)] truncate block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>
             "{transcript}"
           </span>
         )}
@@ -2009,10 +2008,10 @@ function VoiceBar({ mode, transcript, onStop }: {
       <button
         onClick={onStop}
         className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-all hover:brightness-110 active:scale-95 flex-shrink-0"
-        style={{ background: "rgba(239,68,68,0.1)", border: "1px solid rgba(239,68,68,0.2)" }}
+        style={{ background: "rgba(var(--ce-status-error-rgb),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb),0.2)" }}
         title="Stop"
       >
-        <Square className="w-3 h-3" style={{ color: "#EF4444", fill: "#EF4444" }} />
+        <Square className="w-3 h-3" style={{ color: "var(--ce-status-error)", fill: "var(--ce-status-error)" }} />
       </button>
     </motion.div>
   );
@@ -2022,10 +2021,10 @@ function CardsBlock({ cards }: { cards: CardData[] }) {
   return (
     <div className="flex flex-col gap-1.5 mt-1">
       {cards.map((card, i) => (
-        <motion.div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.04)" }} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06, duration: 0.25, ease: EASE }}>
+        <motion.div key={i} className="flex items-center gap-3 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }} initial={{ opacity: 0, x: -4 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.06, duration: 0.25, ease: EASE }}>
           <div className="flex-1 min-w-0">
-            <span className="text-[11px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{card.title}</span>
-            <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{card.subtitle}</span>
+            <span className="text-[11px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{card.title}</span>
+            <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{card.subtitle}</span>
           </div>
           <span className="text-[11px] px-2 py-0.5 rounded-full tabular-nums flex-shrink-0" style={{ background: `${card.color}15`, color: card.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{card.value}</span>
         </motion.div>
@@ -2036,9 +2035,9 @@ function CardsBlock({ cards }: { cards: CardData[] }) {
 
 function FollowupChips({ chips, onChipClick }: { chips: FollowupChip[]; onChipClick: (chip: FollowupChip) => void }) {
   const chipStyles = {
-    ask: { bg: "rgba(34,211,238,0.06)", border: "rgba(34,211,238,0.1)", color: "#22D3EE", Icon: Sparkles },
-    action: { bg: "rgba(179,255,59,0.06)", border: "rgba(179,255,59,0.1)", color: "#B3FF3B", Icon: Zap },
-    navigate: { bg: "rgba(255,255,255,0.03)", border: "rgba(255,255,255,0.06)", color: "#9CA3AF", Icon: ExternalLink },
+    ask: { bg: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "rgba(var(--ce-role-edgestar-rgb),0.1)", color: "var(--ce-role-edgestar)", Icon: Sparkles },
+    action: { bg: "rgba(var(--ce-lime-rgb),0.06)", border: "rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", Icon: Zap },
+    navigate: { bg: "rgba(var(--ce-glass-tint),0.03)", border: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-tertiary)", Icon: ExternalLink },
   };
   return (
     <motion.div className="flex flex-wrap gap-1.5 mt-2" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.3, duration: 0.25 }}>
@@ -2061,8 +2060,8 @@ function SophiaMessage({ message, onFollowup, onVoiceAction }: { message: Messag
   if (message.role === "user") {
     return (
       <motion.div className="flex justify-end mb-3" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.25, ease: EASE }}>
-        <div className="max-w-[85%] px-3.5 py-2.5 rounded-xl" style={{ background: "rgba(255,255,255,0.06)", border: "1px solid rgba(255,255,255,0.08)" }}>
-          <p className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{message.text}</p>
+        <div className="max-w-[85%] px-3.5 py-2.5 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.06)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+          <p className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>{message.text}</p>
         </div>
       </motion.div>
     );
@@ -2073,8 +2072,8 @@ function SophiaMessage({ message, onFollowup, onVoiceAction }: { message: Messag
       <div className="max-w-[95%] flex gap-2.5">
         <div className="flex-shrink-0 mt-1"><SophiaMark size={16} glowing={false} /></div>
         <div className="flex flex-col gap-1.5 flex-1 min-w-0">
-          <div className="px-3.5 py-2.5 rounded-xl" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
-            <p className="text-[12px] text-[#E8E8ED] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{message.text}</p>
+          <div className="px-3.5 py-2.5 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+            <p className="text-[12px] text-[var(--ce-text-primary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{message.text}</p>
           </div>
           {message.cards && <CardsBlock cards={message.cards} />}
           {message.scorecard && <ScoreCardBlock data={message.scorecard} />}
@@ -2091,7 +2090,7 @@ function SophiaMessage({ message, onFollowup, onVoiceAction }: { message: Messag
             <VoiceActionCard data={message.voiceAction} onResolve={onVoiceAction} />
           )}
           {message.action && (
-            <button onClick={() => onFollowup({ label: message.action!.label, icon: message.action!.type === "navigate" ? "navigate" : "action" })} className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-125" style={{ background: message.action.type === "navigate" ? "rgba(255,255,255,0.04)" : "rgba(179,255,59,0.06)", border: `1px solid ${message.action.type === "navigate" ? "rgba(255,255,255,0.08)" : "rgba(179,255,59,0.1)"}`, color: message.action.type === "navigate" ? "#9CA3AF" : "#B3FF3B", fontFamily: "var(--font-body)" }}>
+            <button onClick={() => onFollowup({ label: message.action!.label, icon: message.action!.type === "navigate" ? "navigate" : "action" })} className="self-start flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-125" style={{ background: message.action.type === "navigate" ? "rgba(var(--ce-glass-tint),0.04)" : "rgba(var(--ce-lime-rgb),0.06)", border: `1px solid ${message.action.type === "navigate" ? "rgba(var(--ce-glass-tint),0.08)" : "rgba(var(--ce-lime-rgb),0.1)"}`, color: message.action.type === "navigate" ? "var(--ce-text-tertiary)" : "var(--ce-lime)", fontFamily: "var(--font-body)" }}>
               {message.action.label}
               {message.action.type === "navigate" ? <ArrowUpRight className="w-3 h-3" /> : <ArrowRight className="w-3 h-3" />}
             </button>
@@ -2109,8 +2108,8 @@ function TypingIndicator() {
   return (
     <motion.div className="flex items-center gap-2.5 mb-3" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <SophiaMark size={16} glowing={false} />
-      <div className="flex gap-1 px-3 py-2.5 rounded-xl" style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.06)" }}>
-        {[0, 1, 2].map((i) => <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-[#22D3EE]" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }} />)}
+      <div className="flex gap-1 px-3 py-2.5 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+        {[0, 1, 2].map((i) => <motion.div key={i} className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]" animate={{ opacity: [0.3, 1, 0.3] }} transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2 }} />)}
       </div>
     </motion.div>
   );
@@ -2131,19 +2130,19 @@ function InputBar({ onSend, onVoiceStart }: { onSend: (text: string) => void; on
   const handleSend = () => { if (!text.trim()) return; onSend(text.trim()); setText(""); };
 
   return (
-    <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all" style={{ background: focused ? "rgba(255,255,255,0.05)" : "rgba(255,255,255,0.03)", border: `1px solid ${focused ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.06)"}`, boxShadow: focused ? "0 0 20px rgba(34,211,238,0.04)" : "none" }}>
+    <div className="flex items-center gap-2.5 px-3 py-2 rounded-xl transition-all" style={{ background: focused ? "rgba(var(--ce-glass-tint),0.05)" : "rgba(var(--ce-glass-tint),0.03)", border: `1px solid ${focused ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}`, boxShadow: focused ? "0 0 20px rgba(var(--ce-role-edgestar-rgb),0.04)" : "none" }}>
       <SophiaMark size={16} glowing={false} />
-      <input ref={inputRef} type="text" value={text} placeholder="Ask Sophia anything..." className="flex-1 bg-transparent text-[13px] text-[#E8E8ED] placeholder:text-[#374151] focus:outline-none" style={{ fontFamily: "var(--font-body)" }} onChange={(e) => setText(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} onKeyDown={(e) => e.key === "Enter" && handleSend()} />
+      <input ref={inputRef} type="text" value={text} placeholder="Ask Sophia anything..." className="flex-1 bg-transparent text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] focus:outline-none" style={{ fontFamily: "var(--font-body)" }} onChange={(e) => setText(e.target.value)} onFocus={() => setFocused(true)} onBlur={() => setFocused(false)} onKeyDown={(e) => e.key === "Enter" && handleSend()} />
       <button
         onClick={onVoiceStart}
-        className="px-2 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(179,255,59,0.06)] transition-colors group"
-        style={{ border: "1px solid rgba(255,255,255,0.06)" }}
+        className="px-2 py-1.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-lime-rgb),0.06)] transition-colors group"
+        style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
         title="Talk to Sophia"
       >
-        <Mic className="w-3.5 h-3.5 text-[#374151] group-hover:text-[#B3FF3B] transition-colors" />
+        <Mic className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] group-hover:text-ce-lime transition-colors" />
       </button>
-      <button onClick={handleSend} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all" style={{ background: text.trim() ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.04)", border: `1px solid ${text.trim() ? "rgba(34,211,238,0.2)" : "rgba(255,255,255,0.06)"}` }}>
-        <Send className={`w-3.5 h-3.5 ${text.trim() ? "text-[#22D3EE]" : "text-[#374151]"}`} />
+      <button onClick={handleSend} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer transition-all" style={{ background: text.trim() ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${text.trim() ? "rgba(var(--ce-role-edgestar-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+        <Send className={`w-3.5 h-3.5 ${text.trim() ? "text-ce-cyan" : "text-[var(--ce-text-quaternary)]"}`} />
       </button>
     </div>
   );
@@ -2323,24 +2322,24 @@ export function SophiaAsk({ isOpen, onClose, initialMessage, onClearInitial, onN
     <div className="flex flex-col items-center gap-5 py-8">
       <SophiaMark size={28} glowing />
       <div className="text-center px-4">
-        <p className="text-[13px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <p className="text-[13px] text-[var(--ce-text-primary)] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Hey Sharon
         </p>
-        <p className="text-[11px] text-[#6B7280] max-w-[260px]" style={{ fontFamily: "var(--font-body)" }}>
+        <p className="text-[11px] text-[var(--ce-text-secondary)] max-w-[260px]" style={{ fontFamily: "var(--font-body)" }}>
           I'm tracking your roadmap, skills, and job matches. What do you need?
         </p>
       </div>
       <div className="flex flex-col gap-1.5 w-full max-w-[320px]">
         {CONTEXT_CHIPS.map((chip, i) => (
-          <button key={i} onClick={() => handleFollowup(chip)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-left cursor-pointer transition-all hover:bg-[rgba(255,255,255,0.03)]" style={{ border: "1px solid rgba(255,255,255,0.04)" }}>
-            <span className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: chip.icon === "ask" ? "rgba(34,211,238,0.06)" : "rgba(179,255,59,0.06)", border: `1px solid ${chip.icon === "ask" ? "rgba(34,211,238,0.1)" : "rgba(179,255,59,0.1)"}` }}>
-              {chip.icon === "ask" ? <Sparkles className="w-3.5 h-3.5 text-[#22D3EE]" /> : <Zap className="w-3.5 h-3.5 text-[#B3FF3B]" />}
+          <button key={i} onClick={() => handleFollowup(chip)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-left cursor-pointer transition-all hover:bg-[rgba(var(--ce-glass-tint),0.03)]" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+            <span className="flex-shrink-0 w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: chip.icon === "ask" ? "rgba(var(--ce-role-edgestar-rgb),0.06)" : "rgba(var(--ce-lime-rgb),0.06)", border: `1px solid ${chip.icon === "ask" ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-lime-rgb),0.1)"}` }}>
+              {chip.icon === "ask" ? <Sparkles className="w-3.5 h-3.5 text-ce-cyan" /> : <Zap className="w-3.5 h-3.5 text-ce-lime" />}
             </span>
             <div className="flex-1 min-w-0">
-              <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{chip.label}</span>
-              <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{chip.sub}</span>
+              <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{chip.label}</span>
+              <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{chip.sub}</span>
             </div>
-            <ChevronRight className="w-3.5 h-3.5 text-[#374151] flex-shrink-0" />
+            <ChevronRight className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] flex-shrink-0" />
           </button>
         ))}
       </div>
@@ -2366,7 +2365,7 @@ export function SophiaAsk({ isOpen, onClose, initialMessage, onClearInitial, onN
   );
 
   const input = (
-    <div className="px-5 pb-4 pt-2" style={{ borderTop: "1px solid rgba(255,255,255,0.04)" }}>
+    <div className="px-5 pb-4 pt-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
       <AnimatePresence mode="wait">
         {voiceMode !== "off" ? (
           <VoiceBar
@@ -2387,15 +2386,15 @@ export function SophiaAsk({ isOpen, onClose, initialMessage, onClearInitial, onN
   return (
     <AnimatePresence mode="wait">
       {isOpen && !expanded && (
-        <motion.div key="float" className="fixed z-50 flex flex-col" style={{ bottom: 72, right: 24, width: 400, maxHeight: "65vh", background: "rgba(10,12,16,0.97)", border: "1px solid rgba(34,211,238,0.08)", borderRadius: 20, backdropFilter: "blur(24px)", boxShadow: "0 20px 60px rgba(0,0,0,0.5), 0 0 1px rgba(34,211,238,0.15)" }} initial={{ opacity: 0, y: 16, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.96 }} transition={{ duration: 0.3, ease: EASE }}>
-          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <motion.div key="float" className="fixed z-50 flex flex-col" style={{ bottom: 72, right: 24, width: 400, maxHeight: "65vh", background: "var(--ce-surface-overlay)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)", borderRadius: 20, backdropFilter: "blur(24px)", boxShadow: "0 20px 60px rgba(var(--ce-shadow-tint),0.5), 0 0 1px rgba(var(--ce-role-edgestar-rgb),0.15)" }} initial={{ opacity: 0, y: 16, scale: 0.96 }} animate={{ opacity: 1, y: 0, scale: 1 }} exit={{ opacity: 0, y: 16, scale: 0.96 }} transition={{ duration: 0.3, ease: EASE }}>
+          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
             <div className="flex items-center gap-2">
               <SophiaMark size={16} glowing={false} />
-              <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+              <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
             </div>
             <div className="flex items-center gap-1">
-              <button onClick={() => setExpanded(true)} className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" title="Expand to panel"><Maximize2 className="w-3 h-3 text-[#374151]" /></button>
-              <button onClick={onClose} className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors"><X className="w-3.5 h-3.5 text-[#6B7280]" /></button>
+              <button onClick={() => setExpanded(true)} className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" title="Expand to panel"><Maximize2 className="w-3 h-3 text-[var(--ce-text-quaternary)]" /></button>
+              <button onClick={onClose} className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"><X className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" /></button>
             </div>
           </div>
           {body}
@@ -2404,17 +2403,17 @@ export function SophiaAsk({ isOpen, onClose, initialMessage, onClearInitial, onN
       )}
 
       {isOpen && expanded && (
-        <motion.div key="panel" className="fixed top-14 right-0 bottom-14 z-40 flex flex-col" style={{ width: 420, background: "rgba(10,12,16,0.97)", borderLeft: "1px solid rgba(34,211,238,0.06)", backdropFilter: "blur(24px)", boxShadow: "-10px 0 40px rgba(0,0,0,0.2)" }} initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }} transition={{ duration: 0.35, ease: EASE }}>
-          <div className="absolute top-0 left-0 bottom-0 w-px" style={{ background: "linear-gradient(180deg, rgba(34,211,238,0.15), transparent 50%)" }} />
-          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <motion.div key="panel" className="fixed top-14 right-0 bottom-14 z-40 flex flex-col" style={{ width: 420, background: "var(--ce-surface-overlay)", borderLeft: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)", backdropFilter: "blur(24px)", boxShadow: "-10px 0 40px rgba(var(--ce-shadow-tint),0.2)" }} initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }} transition={{ duration: 0.35, ease: EASE }}>
+          <div className="absolute top-0 left-0 bottom-0 w-px" style={{ background: "linear-gradient(180deg, rgba(var(--ce-role-edgestar-rgb),0.15), transparent 50%)" }} />
+          <div className="flex items-center justify-between px-5 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
             <div className="flex items-center gap-2">
               <SophiaMark size={16} glowing={false} />
-              <span className="text-[12px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
-              <span className="text-[9px] text-[#374151] px-1.5 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.03)", fontFamily: "var(--font-body)" }}>Dashboard</span>
+              <span className="text-[12px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+              <span className="text-[9px] text-[var(--ce-text-quaternary)] px-1.5 py-0.5 rounded-md" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)" }}>Dashboard</span>
             </div>
             <div className="flex items-center gap-1">
-              <button onClick={() => setExpanded(false)} className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" title="Minimize"><Minimize2 className="w-3 h-3 text-[#374151]" /></button>
-              <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ border: "1px solid rgba(255,255,255,0.06)" }}><X className="w-3.5 h-3.5 text-[#6B7280]" /></button>
+              <button onClick={() => setExpanded(false)} className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" title="Minimize"><Minimize2 className="w-3 h-3 text-[var(--ce-text-quaternary)]" /></button>
+              <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}><X className="w-3.5 h-3.5 text-[var(--ce-text-secondary)]" /></button>
             </div>
           </div>
           {body}

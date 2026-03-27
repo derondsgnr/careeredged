@@ -1,3 +1,4 @@
+import { EASE } from "../tokens";
 /**
  * Programs Surface — EdgeNGO (primary), EdgeAgency (secondary)
  * All dead ends fixed: New Program, Reach Out, program cards, participant rows,
@@ -7,7 +8,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { RoleShell, GlassCard, SophiaInsight } from "../role-shell";
+import { RoleShell, GlassCard } from "../role-shell";
+import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
 import { useSophia } from "../sophia-context";
 import { toast } from "../ui/feedback";
@@ -19,10 +21,9 @@ import {
   AlertCircle, FileText, Zap, BookOpen,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
 const ROLE_ACCENT: Record<string, string> = {
-  ngo:    "#F97316",
-  agency: "#6366F1",
+  ngo:    "var(--ce-role-ngo)",
+  agency: "var(--ce-role-agency)",
 };
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -110,10 +111,10 @@ const PARTICIPANTS: Participant[] = [
 ];
 
 const GRANT_STATUS_CONFIG = {
-  open:     { label: "Open",     color: "#22D3EE" },
-  applied:  { label: "Applied",  color: "#F59E0B" },
-  funded:   { label: "Funded",   color: "#B3FF3B" },
-  rejected: { label: "Rejected", color: "#6B7280" },
+  open:     { label: "Open",     color: "var(--ce-role-edgestar)" },
+  applied:  { label: "Applied",  color: "var(--ce-role-edgepreneur)" },
+  funded:   { label: "Funded",   color: "var(--ce-lime)" },
+  rejected: { label: "Rejected", color: "var(--ce-text-secondary)" },
 };
 
 // ─── Grant Detail Drawer ──────────────────────────────────────────────────────
@@ -123,41 +124,41 @@ function GrantDrawer({ grant, accent, onClose }: { grant: Grant; accent: string;
   const cfg = GRANT_STATUS_CONFIG[grant.status];
   return (
     <motion.div className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
-      style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
       initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }} transition={{ duration: 0.35, ease: EASE }}>
-      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <div className="flex-1 min-w-0 pr-3">
           <span className="text-[9px] px-1.5 py-0.5 rounded-full mb-1.5 inline-block" style={{ background: `${cfg.color}12`, color: cfg.color, border: `1px solid ${cfg.color}20`, fontFamily: "var(--font-body)" }}>{cfg.label}</span>
-          <span className="text-[14px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{grant.title}</span>
-          <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{grant.funder}</span>
+          <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{grant.title}</span>
+          <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{grant.funder}</span>
         </div>
-        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors flex-shrink-0">
-          <X className="w-4 h-4 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors flex-shrink-0">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto">
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           {[
             { label: "Amount",   value: grant.amount },
             { label: "Deadline", value: grant.deadline },
             { label: "Category", value: grant.category },
             { label: "Match",    value: `${grant.match}% fit` },
           ].map((row, i) => (
-            <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < 3 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
-              <span className="text-[11px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
+            <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < 3 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
+              <span className="text-[11px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
             </div>
           ))}
         </div>
         <div className="px-5 py-4">
           <div className="flex items-center gap-1.5 mb-2">
             <SophiaMark size={12} glowing={false} />
-            <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
+            <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
           </div>
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{grant.sophiaNote}</p>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{grant.sophiaNote}</p>
         </div>
       </div>
-      <div className="px-5 py-4 flex gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-5 py-4 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         {grant.status === "open" && (
           <button
             onClick={() => openSophia(`Help me start the grant application for "${grant.title}" from ${grant.funder}. Amount: ${grant.amount}, deadline: ${grant.deadline}. Sophia noted: ${grant.sophiaNote}`)}
@@ -170,15 +171,15 @@ function GrantDrawer({ grant, accent, onClose }: { grant: Grant; accent: string;
           <button
             onClick={() => openSophia(`Help me continue my in-progress application for "${grant.title}" from ${grant.funder}. Deadline: ${grant.deadline}. Sophia noted: ${grant.sophiaNote}`)}
             className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-            style={{ background: "rgba(245,158,11,0.1)", border: "1px solid rgba(245,158,11,0.2)", color: "#F59E0B", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.2)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <FileText className="w-3.5 h-3.5" /> Continue application
           </button>
         )}
         <button
           onClick={() => openSophia(`I'm working on "${grant.title}" — ${grant.sophiaNote} What should I focus on to maximize our chances?`)}
-          className="px-3 py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(179,255,59,0.06)] transition-colors"
-          style={{ border: "1px solid rgba(255,255,255,0.07)" }}>
-          <Zap className="w-3.5 h-3.5 text-[#B3FF3B]" />
+          className="px-3 py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-lime-rgb),0.06)] transition-colors"
+          style={{ border: "1px solid rgba(var(--ce-glass-tint),0.07)" }}>
+          <Zap className="w-3.5 h-3.5 text-ce-lime" />
         </button>
       </div>
     </motion.div>
@@ -191,31 +192,31 @@ function ProgramDrawer({ program, accent, onClose, onViewParticipants }: {
   program: Program; accent: string; onClose: () => void; onViewParticipants: () => void;
 }) {
   const { openSophia } = useSophia();
-  const statusColor = program.status === "active" ? accent : program.status === "enrolling" ? "#22D3EE" : program.status === "complete" ? "#B3FF3B" : "#374151";
+  const statusColor = program.status === "active" ? accent : program.status === "enrolling" ? "var(--ce-role-edgestar)" : program.status === "complete" ? "var(--ce-lime)" : "var(--ce-text-quaternary)";
   const statusLabel = program.status === "active" ? "Active" : program.status === "enrolling" ? "Enrolling" : program.status === "complete" ? "Complete" : "Draft";
   const fillPct = (program.participants / program.capacity) * 100;
 
   return (
     <motion.div className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
-      style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
       initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }} transition={{ duration: 0.35, ease: EASE }}>
-      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <div className="flex-1 min-w-0 pr-3">
           <span className="text-[9px] px-1.5 py-0.5 rounded-full mb-1.5 inline-block" style={{ background: `${statusColor}12`, color: statusColor, border: `1px solid ${statusColor}20`, fontFamily: "var(--font-body)" }}>{statusLabel}</span>
-          <span className="text-[14px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{program.title}</span>
-          {program.fundedBy && <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{program.fundedBy}</span>}
+          <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{program.title}</span>
+          {program.fundedBy && <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{program.fundedBy}</span>}
         </div>
-        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors flex-shrink-0">
-          <X className="w-4 h-4 text-[#6B7280]" />
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors flex-shrink-0">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
         </button>
       </div>
       <div className="flex-1 overflow-y-auto">
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <div className="flex justify-between mb-1.5">
-            <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Enrollment: {program.participants}/{program.capacity}</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Enrollment: {program.participants}/{program.capacity}</span>
             <span className="text-[11px] tabular-nums" style={{ color: statusColor, fontFamily: "var(--font-body)" }}>{Math.round(fillPct)}% full</span>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: "rgba(255,255,255,0.06)" }}>
+          <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
             <motion.div className="h-full rounded-full" style={{ background: statusColor }}
               initial={{ width: 0 }} animate={{ width: `${fillPct}%` }} transition={{ delay: 0.3, duration: 0.6, ease: EASE }} />
           </div>
@@ -226,21 +227,21 @@ function ProgramDrawer({ program, accent, onClose, onViewParticipants }: {
             { label: "Budget",  value: program.budget },
             ...(program.placementRate > 0 ? [{ label: "Placement rate", value: `${program.placementRate}%` }] : []),
           ] as { label: string; value: string }[]).map((row, i, arr) => (
-            <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < arr.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-              <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
-              <span className="text-[11px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
+            <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < arr.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
+              <span className="text-[11px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
             </div>
           ))}
         </div>
         <div className="px-5 py-4">
           <div className="flex items-center gap-1.5 mb-2">
             <SophiaMark size={12} glowing={false} />
-            <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
+            <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
           </div>
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{program.sophiaNote}</p>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{program.sophiaNote}</p>
         </div>
       </div>
-      <div className="px-5 py-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-5 py-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <button onClick={onViewParticipants}
           className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
           style={{ background: `${accent}12`, border: `1px solid ${accent}25`, color: accent, fontFamily: "var(--font-display)", fontWeight: 500 }}>
@@ -248,8 +249,8 @@ function ProgramDrawer({ program, accent, onClose, onViewParticipants }: {
         </button>
         <button
           onClick={() => openSophia(`Analyze the program "${program.title}": ${program.participants}/${program.capacity} enrolled, ${program.phase}. ${program.sophiaNote} What are the top 3 actions I should take right now?`)}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(34,211,238,0.06)] transition-colors"
-          style={{ background: "rgba(34,211,238,0.03)", border: "1px solid rgba(34,211,238,0.1)", color: "#22D3EE", fontFamily: "var(--font-body)" }}>
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] transition-colors"
+          style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.1)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
           <SophiaMark size={12} glowing={false} /> Ask Sophia about this program
         </button>
       </div>
@@ -280,27 +281,27 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
   return (
     <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-6"
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
-      <div className="absolute inset-0" style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(4px)" }} onClick={onClose} />
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.6)", backdropFilter: "blur(4px)" }} onClick={onClose} />
       <motion.div className="relative w-full max-w-[520px] rounded-2xl overflow-hidden"
-        style={{ background: "rgba(10,12,16,0.98)", border: "1px solid rgba(255,255,255,0.08)" }}
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
         initial={{ scale: 0.96, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 20 }} transition={{ duration: 0.3, ease: EASE }}>
-        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
           <div>
-            <span className="text-[14px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Create Program</span>
+            <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Create Program</span>
             <div className="flex items-center gap-2 mt-1">
               {steps.map((_, i) => (
                 <div key={i} className="flex items-center gap-1.5">
-                  <div className="w-4 h-4 rounded-full flex items-center justify-center" style={{ background: i <= step ? `${accent}18` : "rgba(255,255,255,0.04)", border: `1px solid ${i <= step ? `${accent}40` : "rgba(255,255,255,0.08)"}` }}>
-                    {i < step ? <Check className="w-2 h-2" style={{ color: accent }} /> : <span className="text-[7px]" style={{ color: i === step ? accent : "#374151", fontFamily: "var(--font-body)" }}>{i + 1}</span>}
+                  <div className="w-4 h-4 rounded-full flex items-center justify-center" style={{ background: i <= step ? `${accent}18` : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${i <= step ? `${accent}40` : "rgba(var(--ce-glass-tint),0.08)"}` }}>
+                    {i < step ? <Check className="w-2 h-2" style={{ color: accent }} /> : <span className="text-[7px]" style={{ color: i === step ? accent : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>{i + 1}</span>}
                   </div>
-                  {i < steps.length - 1 && <div className="w-4 h-px" style={{ background: i < step ? `${accent}40` : "rgba(255,255,255,0.06)" }} />}
+                  {i < steps.length - 1 && <div className="w-4 h-px" style={{ background: i < step ? `${accent}40` : "rgba(var(--ce-glass-tint),0.06)" }} />}
                 </div>
               ))}
-              <span className="text-[10px] text-[#6B7280] ml-1" style={{ fontFamily: "var(--font-body)" }}>{steps[step]}</span>
+              <span className="text-[10px] text-[var(--ce-text-secondary)] ml-1" style={{ fontFamily: "var(--font-body)" }}>{steps[step]}</span>
             </div>
           </div>
-          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors">
-            <X className="w-4 h-4 text-[#6B7280]" />
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
           </button>
         </div>
 
@@ -309,18 +310,18 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
             {step === 0 && (
               <motion.div key="s0" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-4">
                 <div>
-                  <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRAM TITLE</label>
+                  <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRAM TITLE</label>
                   <input value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} placeholder="e.g. Workforce Re-entry Cohort — Fall 2026"
-                    className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }} />
+                    className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
                 </div>
                 <div>
-                  <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRAM TYPE</label>
+                  <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRAM TYPE</label>
                   <div className="grid grid-cols-3 gap-2">
                     {PROGRAM_TYPES.map((type) => (
                       <button key={type} onClick={() => setForm({ ...form, type })}
                         className="px-3 py-2.5 rounded-xl cursor-pointer text-[10px] text-left transition-all"
-                        style={{ background: form.type === type ? `${accent}10` : "rgba(255,255,255,0.02)", border: `1px solid ${form.type === type ? `${accent}25` : "rgba(255,255,255,0.06)"}`, color: form.type === type ? accent : "#6B7280", fontFamily: "var(--font-body)" }}>
+                        style={{ background: form.type === type ? `${accent}10` : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${form.type === type ? `${accent}25` : "rgba(var(--ce-glass-tint),0.06)"}`, color: form.type === type ? accent : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                         {type}
                       </button>
                     ))}
@@ -331,23 +332,23 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
             {step === 1 && (
               <motion.div key="s1" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-4">
                 <div>
-                  <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>COHORT NAME</label>
+                  <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>COHORT NAME</label>
                   <input value={form.cohort} onChange={(e) => setForm({ ...form, cohort: e.target.value })} placeholder="e.g. Fall 2026"
-                    className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[#E8E8ED] placeholder:text-[#374151] outline-none"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }} />
+                    className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>START DATE</label>
+                    <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>START DATE</label>
                     <input type="date" value={form.startDate} onChange={(e) => setForm({ ...form, startDate: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[#E8E8ED] outline-none"
-                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)", colorScheme: "dark" }} />
+                      className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] outline-none"
+                      style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)", colorScheme: "dark" }} />
                   </div>
                   <div>
-                    <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>END DATE</label>
+                    <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>END DATE</label>
                     <input type="date" value={form.endDate} onChange={(e) => setForm({ ...form, endDate: e.target.value })}
-                      className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[#E8E8ED] outline-none"
-                      style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)", colorScheme: "dark" }} />
+                      className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] outline-none"
+                      style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)", colorScheme: "dark" }} />
                   </div>
                 </div>
               </motion.div>
@@ -355,32 +356,32 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
             {step === 2 && (
               <motion.div key="s2" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-4">
                 <div>
-                  <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PARTICIPANT CAPACITY</label>
+                  <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PARTICIPANT CAPACITY</label>
                   <FormattedNumberInput value={form.capacity} onChange={(v) => setForm({ ...form, capacity: v })} placeholder="50"
-                    className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[#E8E8ED] placeholder:text-[#374151] outline-none"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }} />
+                    className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
                 </div>
                 <div>
-                  <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>FUNDING SOURCE (optional)</label>
+                  <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>FUNDING SOURCE (optional)</label>
                   <input value={form.fundedBy} onChange={(e) => setForm({ ...form, fundedBy: e.target.value })} placeholder="e.g. WIOA, State block grant..."
-                    className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[#E8E8ED] placeholder:text-[#374151] outline-none"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }} />
+                    className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
                 </div>
                 <div>
-                  <label className="text-[10px] text-[#6B7280] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>BUDGET</label>
+                  <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>BUDGET</label>
                   <FormattedNumberInput
                     value={form.budget}
                     onChange={(value) => setForm({ ...form, budget: value })}
                     placeholder="$75,000"
-                    className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[#E8E8ED] placeholder:text-[#374151] outline-none"
-                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)", fontFamily: "var(--font-body)" }}
+                    className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }}
                   />
                 </div>
               </motion.div>
             )}
             {step === 3 && (
               <motion.div key="s3" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-3">
-                <div className="rounded-xl p-4" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.06)" }}>
+                <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                   {[
                     { label: "Title",    value: form.title    || "(untitled)" },
                     { label: "Type",     value: form.type },
@@ -390,13 +391,13 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
                     { label: "Capacity", value: form.capacity  ? `${form.capacity} participants` : "TBD" },
                     { label: "Budget",   value: form.budget    || "TBD" },
                   ].map((row, i) => (
-                    <div key={i} className="flex items-center justify-between py-1.5" style={{ borderBottom: i < 6 ? "1px solid rgba(255,255,255,0.04)" : "none" }}>
-                      <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
-                      <span className="text-[11px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
+                    <div key={i} className="flex items-center justify-between py-1.5" style={{ borderBottom: i < 6 ? "1px solid rgba(var(--ce-glass-tint),0.04)" : "none" }}>
+                      <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
+                      <span className="text-[11px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
                     </div>
                   ))}
                 </div>
-                <p className="text-[11px] text-[#6B7280] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                <p className="text-[11px] text-[var(--ce-text-secondary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                   Saved as draft. Sophia will suggest matching grants and forecast enrollment after creation.
                 </p>
               </motion.div>
@@ -406,7 +407,7 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
 
         <div className="flex gap-2 px-5 pb-5">
           {step > 0 && (
-            <button onClick={() => setStep(step - 1)} className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(255,255,255,0.04)] transition-colors" style={{ border: "1px solid rgba(255,255,255,0.08)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>
+            <button onClick={() => setStep(step - 1)} className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
               Back
             </button>
           )}
@@ -426,11 +427,11 @@ function CreateProgramPanel({ accent, onClose, onCreated }: { accent: string; on
 function AtRiskRow({ item, accent, isLast }: { item: { name: string; issue: string; severity: string }; accent: string; isLast: boolean }) {
   const { openSophia } = useSophia();
   return (
-    <div className="flex items-center gap-2.5 py-2" style={{ borderBottom: !isLast ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-      <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.severity === "high" ? "#EF4444" : "#F59E0B" }} />
+    <div className="flex items-center gap-2.5 py-2" style={{ borderBottom: !isLast ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+      <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.severity === "high" ? "var(--ce-status-error)" : "var(--ce-role-edgepreneur)" }} />
       <div className="flex-1 min-w-0">
-        <span className="text-[11px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{item.name}</span>
-        <span className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{item.issue}</span>
+        <span className="text-[11px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{item.name}</span>
+        <span className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{item.issue}</span>
       </div>
       <button
         onClick={() => openSophia(`Draft a warm, non-judgmental re-engagement message for program participant ${item.name} who has been ${item.issue.toLowerCase()}. Keep it encouraging and short — 2–3 sentences max.`)}
@@ -446,25 +447,25 @@ function AtRiskRow({ item, accent, isLast }: { item: { name: string; issue: stri
 
 function ParticipantRow({ p, accent, isLast }: { p: Participant; accent: string; isLast: boolean }) {
   const { openSophia } = useSophia();
-  const statusColor = p.status === "ahead" ? "#B3FF3B" : p.status === "at_risk" ? "#EF4444" : "#22D3EE";
+  const statusColor = p.status === "ahead" ? "var(--ce-lime)" : p.status === "at_risk" ? "var(--ce-status-error)" : "var(--ce-role-edgestar)";
   const statusLabel = p.status === "ahead" ? "Ahead" : p.status === "at_risk" ? "At risk" : "On track";
   return (
     <motion.div
-      className="grid px-4 py-3 items-center hover:bg-[rgba(255,255,255,0.02)] cursor-pointer transition-colors"
-      style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px", borderBottom: !isLast ? "1px solid rgba(255,255,255,0.03)" : "none", gap: 12 }}
+      className="grid px-4 py-3 items-center hover:bg-[rgba(var(--ce-glass-tint),0.02)] cursor-pointer transition-colors"
+      style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px", borderBottom: !isLast ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none", gap: 12 }}
       onClick={() => openSophia(`Tell me about participant ${p.name} in the ${p.program} program. Phase ${p.phase}, ${p.readiness}% readiness, status: ${statusLabel}, last active: ${p.lastActive}. What should I do to support them?`)}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
       <div className="flex items-center gap-2.5">
         <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0"
           style={{ background: `${accent}12`, color: accent, fontFamily: "var(--font-display)", fontWeight: 600 }}>{p.initial}</div>
         <div>
-          <span className="text-[12px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-body)" }}>{p.name}</span>
-          <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Last: {p.lastActive}</span>
+          <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{p.name}</span>
+          <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Last: {p.lastActive}</span>
         </div>
       </div>
-      <span className="text-[10px] text-[#6B7280] truncate" style={{ fontFamily: "var(--font-body)" }}>{p.program}</span>
-      <span className="text-[12px] text-[#9CA3AF] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>Phase {p.phase}</span>
-      <span className="text-[12px] tabular-nums" style={{ color: p.readiness >= 70 ? "#B3FF3B" : p.readiness >= 50 ? "#F59E0B" : "#EF4444", fontFamily: "var(--font-display)", fontWeight: 500 }}>{p.readiness}%</span>
+      <span className="text-[10px] text-[var(--ce-text-secondary)] truncate" style={{ fontFamily: "var(--font-body)" }}>{p.program}</span>
+      <span className="text-[12px] text-[var(--ce-text-tertiary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>Phase {p.phase}</span>
+      <span className="text-[12px] tabular-nums" style={{ color: p.readiness >= 70 ? "var(--ce-lime)" : p.readiness >= 50 ? "var(--ce-role-edgepreneur)" : "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{p.readiness}%</span>
       <span className="text-[10px] px-2 py-0.5 rounded-full w-fit" style={{ background: `${statusColor}10`, color: statusColor, border: `1px solid ${statusColor}20`, fontFamily: "var(--font-body)" }}>{statusLabel}</span>
     </motion.div>
   );
@@ -476,7 +477,7 @@ export function ProgramsSurface() {
   const { role: roleParam } = useParams<{ role: string }>();
   const navigate = useNavigate();
   const role = (["ngo", "agency"].includes(roleParam ?? "") ? roleParam : "ngo") as string;
-  const accent = ROLE_ACCENT[role] ?? "#F97316";
+  const accent = ROLE_ACCENT[role] ?? "var(--ce-role-ngo)";
 
   const [tab, setTab] = useState<"programs" | "grants" | "participants">("programs");
   const [selectedGrant, setSelectedGrant] = useState<Grant | null>(null);
@@ -544,8 +545,8 @@ export function ProgramsSurface() {
         <motion.div className="pt-8 pb-5 flex items-center justify-between"
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Programs & Grants</h1>
-            <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <h1 className="text-[22px] text-[var(--ce-text-primary)] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Programs & Grants</h1>
+            <p className="text-[13px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               {programs.filter(p => p.status === "active").length} active programs · {openGrants.length} open grants
             </p>
           </div>
@@ -561,13 +562,13 @@ export function ProgramsSurface() {
           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}>
           {[
             { label: "Active participants",  value: totalParticipants, color: accent },
-            { label: "Avg placement rate",   value: `${Math.round(programs.filter(p => p.placementRate > 0).reduce((a, p) => a + p.placementRate, 0) / Math.max(programs.filter(p => p.placementRate > 0).length, 1))}%`, color: "#B3FF3B" },
-            { label: "Grants funded",        value: `$${fundedGrants.reduce((a, g) => a + parseInt(g.amount.replace(/\D/g, "")), 0).toLocaleString()}`, color: "#22D3EE" },
-            { label: "Open applications",    value: openGrants.length, color: "#F59E0B" },
+            { label: "Avg placement rate",   value: `${Math.round(programs.filter(p => p.placementRate > 0).reduce((a, p) => a + p.placementRate, 0) / Math.max(programs.filter(p => p.placementRate > 0).length, 1))}%`, color: "var(--ce-lime)" },
+            { label: "Grants funded",        value: `$${fundedGrants.reduce((a, g) => a + parseInt(g.amount.replace(/\D/g, "")), 0).toLocaleString()}`, color: "var(--ce-role-edgestar)" },
+            { label: "Open applications",    value: openGrants.length, color: "var(--ce-role-edgepreneur)" },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
               <div className="text-[22px] tabular-nums mb-0.5" style={{ color: stat.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{stat.value}</div>
-              <div className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</div>
+              <div className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -575,11 +576,11 @@ export function ProgramsSurface() {
         {/* Tabs */}
         <motion.div className="flex items-center gap-1 mb-5 p-0.5 rounded-lg w-fit"
           initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.25 }}
-          style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+          style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
           {(["programs", "grants", "participants"] as const).map((t) => (
             <button key={t} onClick={() => setTab(t)}
               className="px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all capitalize"
-              style={{ background: tab === t ? "rgba(255,255,255,0.08)" : "transparent", color: tab === t ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+              style={{ background: tab === t ? "rgba(var(--ce-glass-tint),0.08)" : "transparent", color: tab === t ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
               {t}
             </button>
           ))}
@@ -594,44 +595,44 @@ export function ProgramsSurface() {
                 <motion.div key="programs" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col gap-3">
                   {programs.map((prog, i) => {
                     const fillPct = (prog.participants / prog.capacity) * 100;
-                    const statusColor = prog.status === "active" ? accent : prog.status === "enrolling" ? "#22D3EE" : prog.status === "complete" ? "#B3FF3B" : "#374151";
+                    const statusColor = prog.status === "active" ? accent : prog.status === "enrolling" ? "var(--ce-role-edgestar)" : prog.status === "complete" ? "var(--ce-lime)" : "var(--ce-text-quaternary)";
                     const statusLabel = prog.status === "active" ? "Active" : prog.status === "enrolling" ? "Enrolling" : prog.status === "complete" ? "Complete" : "Draft";
                     return (
                       <motion.div key={prog.id} className="rounded-xl p-4 cursor-pointer group"
-                        style={{ background: "rgba(255,255,255,0.025)", border: `1px solid ${prog.status === "active" ? `${accent}10` : "rgba(255,255,255,0.05)"}` }}
+                        style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: `1px solid ${prog.status === "active" ? `${accent}10` : "rgba(var(--ce-glass-tint),0.05)"}` }}
                         initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06, duration: 0.3, ease: EASE }}
                         whileHover={{ y: -1 }} onClick={() => setSelectedProgram(prog)}>
                         <div className="flex items-start justify-between mb-3">
                           <div className="flex-1 min-w-0 pr-3">
                             <div className="flex items-center gap-2 mb-1">
                               <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: `${statusColor}12`, color: statusColor, border: `1px solid ${statusColor}20`, fontFamily: "var(--font-body)" }}>{statusLabel}</span>
-                              {prog.fundedBy && <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{prog.fundedBy}</span>}
+                              {prog.fundedBy && <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{prog.fundedBy}</span>}
                             </div>
-                            <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{prog.title}</span>
+                            <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{prog.title}</span>
                           </div>
                           <div className="flex items-center gap-2 flex-shrink-0">
-                            <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{prog.budget}</span>
-                            <ChevronRight className="w-3.5 h-3.5 text-[#374151] opacity-0 group-hover:opacity-100 transition-opacity" />
+                            <span className="text-[12px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{prog.budget}</span>
+                            <ChevronRight className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] opacity-0 group-hover:opacity-100 transition-opacity" />
                           </div>
                         </div>
-                        <div className="flex items-center gap-4 text-[10px] text-[#374151] mb-3">
+                        <div className="flex items-center gap-4 text-[10px] text-[var(--ce-text-quaternary)] mb-3">
                           <div className="flex items-center gap-1"><Users className="w-2.5 h-2.5" />{prog.participants}/{prog.capacity}</div>
                           <div className="flex items-center gap-1"><Calendar className="w-2.5 h-2.5" />{prog.startDate} – {prog.endDate}</div>
                           {prog.placementRate > 0 && <div className="flex items-center gap-1"><TrendingUp className="w-2.5 h-2.5" />{prog.placementRate}% placed</div>}
                         </div>
                         <div className="mb-3">
                           <div className="flex justify-between mb-1">
-                            <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{prog.phase}</span>
+                            <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{prog.phase}</span>
                             <span className="text-[10px] tabular-nums" style={{ color: statusColor, fontFamily: "var(--font-body)" }}>{Math.round(fillPct)}% full</span>
                           </div>
-                          <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+                          <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
                             <motion.div className="h-full rounded-full" style={{ background: statusColor }}
                               initial={{ width: 0 }} animate={{ width: `${fillPct}%` }} transition={{ delay: 0.4, duration: 0.6, ease: EASE }} />
                           </div>
                         </div>
-                        <div className="flex items-start gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(34,211,238,0.02)", border: "1px solid rgba(34,211,238,0.05)" }}>
+                        <div className="flex items-start gap-2 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.02)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.05)" }}>
                           <SophiaMark size={11} glowing={false} />
-                          <p className="text-[10px] text-[#6B7280] leading-relaxed flex-1" style={{ fontFamily: "var(--font-body)" }}>{prog.sophiaNote}</p>
+                          <p className="text-[10px] text-[var(--ce-text-secondary)] leading-relaxed flex-1" style={{ fontFamily: "var(--font-body)" }}>{prog.sophiaNote}</p>
                         </div>
                       </motion.div>
                     );
@@ -646,29 +647,29 @@ export function ProgramsSurface() {
                     const cfg = GRANT_STATUS_CONFIG[grant.status];
                     return (
                       <motion.div key={grant.id} className="rounded-xl p-4 cursor-pointer group"
-                        style={{ background: "rgba(255,255,255,0.025)", border: `1px solid ${grant.status === "applied" ? "rgba(245,158,11,0.12)" : "rgba(255,255,255,0.05)"}` }}
+                        style={{ background: "rgba(var(--ce-glass-tint),0.025)", border: `1px solid ${grant.status === "applied" ? "rgba(var(--ce-role-edgepreneur-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.05)"}` }}
                         initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05, duration: 0.3, ease: EASE }}
                         onClick={() => setSelectedGrant(grant)} whileHover={{ y: -1 }}>
                         <div className="flex items-start justify-between gap-3 mb-2">
                           <div className="flex-1 min-w-0">
                             <div className="flex items-center gap-2 mb-1.5">
                               <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: `${cfg.color}12`, color: cfg.color, border: `1px solid ${cfg.color}20`, fontFamily: "var(--font-body)" }}>{cfg.label}</span>
-                              <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>{grant.category}</span>
+                              <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{grant.category}</span>
                               {grant.daysUntil !== undefined && grant.daysUntil <= 30 && (
-                                <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(239,68,68,0.08)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.15)", fontFamily: "var(--font-body)" }}>{grant.daysUntil}d left</span>
+                                <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-status-error-rgb),0.08)", color: "var(--ce-status-error)", border: "1px solid rgba(var(--ce-status-error-rgb),0.15)", fontFamily: "var(--font-body)" }}>{grant.daysUntil}d left</span>
                               )}
                             </div>
-                            <span className="text-[12px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{grant.title}</span>
-                            <span className="text-[10px] text-[#6B7280] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{grant.funder}</span>
+                            <span className="text-[12px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{grant.title}</span>
+                            <span className="text-[10px] text-[var(--ce-text-secondary)] block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{grant.funder}</span>
                           </div>
                           <div className="text-right flex-shrink-0">
-                            <div className="text-[16px] text-[#E8E8ED] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{grant.amount}</div>
-                            <div className="text-[9px] tabular-nums" style={{ color: grant.match >= 85 ? "#B3FF3B" : "#F59E0B", fontFamily: "var(--font-body)" }}>{grant.match}% match</div>
+                            <div className="text-[16px] text-[var(--ce-text-primary)] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{grant.amount}</div>
+                            <div className="text-[9px] tabular-nums" style={{ color: grant.match >= 85 ? "var(--ce-lime)" : "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>{grant.match}% match</div>
                           </div>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>Due: {grant.deadline}</span>
-                          <ChevronRight className="w-3.5 h-3.5 text-[#374151] opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Due: {grant.deadline}</span>
+                          <ChevronRight className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] opacity-0 group-hover:opacity-100 transition-opacity" />
                         </div>
                       </motion.div>
                     );
@@ -679,10 +680,10 @@ export function ProgramsSurface() {
               {/* Participants tab */}
               {tab === "participants" && (
                 <motion.div key="participants" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
-                  <div className="rounded-xl overflow-hidden" style={{ background: "rgba(255,255,255,0.015)", border: "1px solid rgba(255,255,255,0.05)" }}>
-                    <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px", borderBottom: "1px solid rgba(255,255,255,0.05)", gap: 12 }}>
+                  <div className="rounded-xl overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                    <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)", gap: 12 }}>
                       {["PARTICIPANT", "PROGRAM", "PHASE", "READINESS", "STATUS"].map((h) => (
-                        <span key={h} className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{h}</span>
+                        <span key={h} className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{h}</span>
                       ))}
                     </div>
                     {PARTICIPANTS.map((p, i) => (
@@ -705,8 +706,8 @@ export function ProgramsSurface() {
             />
             <GlassCard delay={0.5}>
               <div className="flex items-center gap-2 mb-3">
-                <AlertCircle className="w-3.5 h-3.5 text-[#EF4444]" />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Needs attention</span>
+                <AlertCircle className="w-3.5 h-3.5 text-[var(--ce-status-error)]" />
+                <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Needs attention</span>
               </div>
               {[
                 { name: "Deon P.", issue: "12 days inactive", severity: "high" },
@@ -718,16 +719,16 @@ export function ProgramsSurface() {
             </GlassCard>
             <GlassCard delay={0.6}>
               <div className="flex items-center gap-2 mb-3">
-                <DollarSign className="w-3.5 h-3.5" style={{ color: "#B3FF3B" }} />
-                <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Grant pipeline</span>
+                <DollarSign className="w-3.5 h-3.5" style={{ color: "var(--ce-lime)" }} />
+                <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Grant pipeline</span>
               </div>
               {[
-                { label: "Funded",  value: "$120,000", color: "#B3FF3B" },
-                { label: "Applied", value: "$250,000", color: "#F59E0B" },
-                { label: "Open",    value: "$205,000", color: "#22D3EE" },
+                { label: "Funded",  value: "$120,000", color: "var(--ce-lime)" },
+                { label: "Applied", value: "$250,000", color: "var(--ce-role-edgepreneur)" },
+                { label: "Open",    value: "$205,000", color: "var(--ce-role-edgestar)" },
               ].map((row, i) => (
-                <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < 2 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                  <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
+                <div key={i} className="flex justify-between py-1.5" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                  <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
                   <span className="text-[12px] tabular-nums" style={{ color: row.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{row.value}</span>
                 </div>
               ))}
@@ -740,7 +741,7 @@ export function ProgramsSurface() {
       <AnimatePresence>
         {selectedGrant && (
           <>
-            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(0,0,0,0.4)" }}
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedGrant(null)} />
             <GrantDrawer grant={selectedGrant} accent={accent} onClose={() => setSelectedGrant(null)} />
           </>
@@ -751,7 +752,7 @@ export function ProgramsSurface() {
       <AnimatePresence>
         {selectedProgram && (
           <>
-            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(0,0,0,0.4)" }}
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedProgram(null)} />
             <ProgramDrawer program={selectedProgram} accent={accent} onClose={() => setSelectedProgram(null)}
               onViewParticipants={() => { setSelectedProgram(null); setTab("participants"); }} />

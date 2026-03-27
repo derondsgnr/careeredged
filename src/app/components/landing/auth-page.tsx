@@ -17,7 +17,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
   const isLogin = mode === "login";
 
   return (
-    <div className="min-h-screen flex" style={{ background: "#08090C" }}>
+    <div className="min-h-screen flex" style={{ background: "var(--ce-void)" }}>
       {/* Left — Form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <motion.div
@@ -29,11 +29,11 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
           {/* Logo */}
           <button onClick={() => onNavigate("home")} className="flex items-center gap-2.5 mb-12 cursor-pointer group">
             <svg width="24" height="32" viewBox="0 0 133 180" fill="none" className="transition-transform duration-300 group-hover:scale-105">
-              <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="#B3FF3B"/>
-              <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="#B3FF3B"/>
-              <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="#B3FF3B"/>
+              <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="var(--ce-lime)"/>
+              <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="var(--ce-lime)"/>
+              <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="var(--ce-lime)"/>
             </svg>
-            <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: "#E8E8ED" }}>
+            <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: "var(--ce-text-primary)" }}>
               CareerEdged
             </span>
           </button>
@@ -46,12 +46,12 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
               fontWeight: 700,
               fontSize: "28px",
               letterSpacing: "-0.02em",
-              color: "#E8E8ED",
+              color: "var(--ce-text-primary)",
             }}
           >
             {isLogin ? "Welcome back" : "Create your account"}
           </h1>
-          <p className="mb-8 text-[14px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+          <p className="mb-8 text-[14px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>
             {isLogin
               ? "Log in to continue your career journey."
               : "Start free. Get your personalized career roadmap in minutes."
@@ -64,12 +64,12 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
             style={{
               fontFamily: "'Satoshi', sans-serif",
               fontWeight: 500,
-              background: "rgba(255,255,255,0.04)",
-              border: "1px solid rgba(255,255,255,0.08)",
-              color: "#E8E8ED",
+              background: "rgba(var(--ce-glass-tint),0.04)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+              color: "var(--ce-text-primary)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.12)"; }}
-            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.12)"; }}
+            onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.08)"; }}
           >
             <svg width="16" height="16" viewBox="0 0 24 24">
               <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/>
@@ -82,9 +82,9 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
 
           {/* Divider */}
           <div className="flex items-center gap-3 mb-6">
-            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
-            <span className="text-[11px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#374151" }}>or</span>
-            <div className="flex-1 h-px" style={{ background: "rgba(255,255,255,0.06)" }} />
+            <div className="flex-1 h-px" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }} />
+            <span className="text-[11px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-quaternary)" }}>or</span>
+            <div className="flex-1 h-px" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }} />
           </div>
 
           {/* Form */}
@@ -97,7 +97,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
           >
             {!isLogin && (
               <div className="relative">
-                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#374151" }} />
+                <User size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "var(--ce-text-quaternary)" }} />
                 <input
                   type="text"
                   placeholder="Full name"
@@ -106,18 +106,18 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                   className="w-full pl-10 pr-4 py-3 rounded-lg text-[13px] outline-none transition-all duration-200"
                   style={{
                     fontFamily: "'Satoshi', sans-serif",
-                    background: "rgba(255,255,255,0.03)",
-                    border: "1px solid rgba(255,255,255,0.06)",
-                    color: "#E8E8ED",
+                    background: "rgba(var(--ce-glass-tint),0.03)",
+                    border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                    color: "var(--ce-text-primary)",
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(179,255,59,0.3)"; }}
-                  onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.3)"; }}
+                  onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.06)"; }}
                 />
               </div>
             )}
 
             <div className="relative">
-              <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#374151" }} />
+              <Mail size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "var(--ce-text-quaternary)" }} />
               <input
                 type="email"
                 placeholder="Email address"
@@ -126,17 +126,17 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                 className="w-full pl-10 pr-4 py-3 rounded-lg text-[13px] outline-none transition-all duration-200"
                 style={{
                   fontFamily: "'Satoshi', sans-serif",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  color: "#E8E8ED",
+                  background: "rgba(var(--ce-glass-tint),0.03)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                  color: "var(--ce-text-primary)",
                 }}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(179,255,59,0.3)"; }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.3)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.06)"; }}
               />
             </div>
 
             <div className="relative">
-              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "#374151" }} />
+              <Lock size={15} className="absolute left-3.5 top-1/2 -translate-y-1/2" style={{ color: "var(--ce-text-quaternary)" }} />
               <input
                 type={showPassword ? "text" : "password"}
                 placeholder="Password"
@@ -145,12 +145,12 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                 className="w-full pl-10 pr-10 py-3 rounded-lg text-[13px] outline-none transition-all duration-200"
                 style={{
                   fontFamily: "'Satoshi', sans-serif",
-                  background: "rgba(255,255,255,0.03)",
-                  border: "1px solid rgba(255,255,255,0.06)",
-                  color: "#E8E8ED",
+                  background: "rgba(var(--ce-glass-tint),0.03)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                  color: "var(--ce-text-primary)",
                 }}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(179,255,59,0.3)"; }}
-                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(255,255,255,0.06)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.3)"; }}
+                onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.06)"; }}
               />
               <button
                 type="button"
@@ -158,8 +158,8 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                 className="absolute right-3.5 top-1/2 -translate-y-1/2 cursor-pointer"
               >
                 {showPassword
-                  ? <EyeOff size={15} style={{ color: "#374151" }} />
-                  : <Eye size={15} style={{ color: "#374151" }} />
+                  ? <EyeOff size={15} style={{ color: "var(--ce-text-quaternary)" }} />
+                  : <Eye size={15} style={{ color: "var(--ce-text-quaternary)" }} />
                 }
               </button>
             </div>
@@ -169,9 +169,9 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                 <button
                   type="button"
                   className="text-[12px] cursor-pointer transition-colors duration-200"
-                  style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}
-                  onMouseEnter={(e) => { e.currentTarget.style.color = "#9CA3AF"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.color = "#6B7280"; }}
+                  style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}
+                  onMouseEnter={(e) => { e.currentTarget.style.color = "var(--ce-text-secondary)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-text-tertiary)"; }}
                 >
                   Forgot password?
                 </button>
@@ -184,10 +184,10 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
               style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 600,
-                background: "#B3FF3B",
-                color: "#0A0C10",
+                background: "var(--ce-lime)",
+                color: "var(--ce-surface-0)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(179,255,59,0.15)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(var(--ce-lime-rgb),0.15)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               {isLogin ? "Log in" : "Create account"}
@@ -196,33 +196,33 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
           </form>
 
           {/* Toggle */}
-          <p className="mt-6 text-center text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+          <p className="mt-6 text-center text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>
             {isLogin ? "Don't have an account? " : "Already have an account? "}
             <button
               onClick={() => onNavigate(isLogin ? "signup" : "login")}
               className="cursor-pointer transition-colors duration-200"
-              style={{ color: "#B3FF3B", fontWeight: 500 }}
+              style={{ color: "var(--ce-lime)", fontWeight: 500 }}
               onMouseEnter={(e) => { e.currentTarget.style.color = "#c4ff6a"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "#B3FF3B"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-lime)"; }}
             >
               {isLogin ? "Sign up" : "Log in"}
             </button>
           </p>
 
           {/* Trust */}
-          <p className="mt-8 text-[11px] text-center" style={{ fontFamily: "'Satoshi', sans-serif", color: "#374151" }}>
+          <p className="mt-8 text-[11px] text-center" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-quaternary)" }}>
             Your data stays yours. We don't sell it, share it, or use it to train models.
           </p>
         </motion.div>
       </div>
 
       {/* Right — Visual (desktop only) */}
-      <div className="hidden lg:flex flex-1 items-center justify-center relative overflow-hidden" style={{ background: "#0A0C10" }}>
+      <div className="hidden lg:flex flex-1 items-center justify-center relative overflow-hidden" style={{ background: "var(--ce-surface-0)" }}>
         {/* Ambient glow */}
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
           style={{
-            background: "radial-gradient(circle at center, rgba(179,255,59,0.05) 0%, transparent 60%)",
+            background: "radial-gradient(circle at center, rgba(var(--ce-lime-rgb),0.05) 0%, transparent 60%)",
             filter: "blur(80px)",
           }}
         />
@@ -230,9 +230,9 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
         <div className="relative z-10 text-center max-w-[360px]">
           {/* Large monogram */}
           <svg width="80" height="108" viewBox="0 0 133 180" fill="none" className="mx-auto mb-8">
-            <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="rgba(179,255,59,0.15)"/>
-            <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="rgba(179,255,59,0.15)"/>
-            <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="rgba(179,255,59,0.15)"/>
+            <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="rgba(var(--ce-lime-rgb),0.15)"/>
+            <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="rgba(var(--ce-lime-rgb),0.15)"/>
+            <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="rgba(var(--ce-lime-rgb),0.15)"/>
           </svg>
 
           <p
@@ -241,7 +241,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
               fontFamily: "'Urbanist', sans-serif",
               fontWeight: 600,
               letterSpacing: "-0.01em",
-              color: "#E8E8ED",
+              color: "var(--ce-text-primary)",
             }}
           >
             {isLogin
@@ -249,7 +249,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
               : "From where you are to where you belong"
             }
           </p>
-          <p className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "#6B7280" }}>
+          <p className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-tertiary)" }}>
             {isLogin
               ? "Pick up right where you left off."
               : "Career intelligence, guided by Sophia."

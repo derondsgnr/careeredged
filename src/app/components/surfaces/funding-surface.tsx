@@ -1,3 +1,4 @@
+import { EASE } from "../tokens";
 /**
  * Funding Surface — EdgePreneur
  *
@@ -16,7 +17,8 @@
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
-import { RoleShell, GlassCard, SophiaInsight } from "../role-shell";
+import { RoleShell, GlassCard } from "../role-shell";
+import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
 import { useSophia } from "../sophia-context";
 import { toast } from "../ui/feedback";
@@ -28,8 +30,7 @@ import {
   Sparkles, FileText,
 } from "lucide-react";
 
-const EASE = [0.32, 0.72, 0, 1] as const;
-const PRENEUR_GOLD = "#F59E0B";
+const PRENEUR_GOLD = "var(--ce-role-edgepreneur)";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -60,11 +61,11 @@ interface FundingOpp {
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<FundingType, { label: string; color: string; icon: React.ReactNode }> = {
-  accelerator:  { label: "Accelerator",   color: "#F59E0B", icon: <Rocket className="w-3 h-3" /> },
-  grant:        { label: "Grant",         color: "#B3FF3B", icon: <Award className="w-3 h-3" /> },
-  angel:        { label: "Angel",         color: "#22D3EE", icon: <Users className="w-3 h-3" /> },
-  vc:           { label: "VC",            color: "#8B5CF6", icon: <TrendingUp className="w-3 h-3" /> },
-  partnership:  { label: "Partnership",   color: "#EC4899", icon: <Globe className="w-3 h-3" /> },
+  accelerator:  { label: "Accelerator",   color: "var(--ce-role-edgepreneur)", icon: <Rocket className="w-3 h-3" /> },
+  grant:        { label: "Grant",         color: "var(--ce-lime)", icon: <Award className="w-3 h-3" /> },
+  angel:        { label: "Angel",         color: "var(--ce-role-edgestar)", icon: <Users className="w-3 h-3" /> },
+  vc:           { label: "VC",            color: "var(--ce-role-guide)", icon: <TrendingUp className="w-3 h-3" /> },
+  partnership:  { label: "Partnership",   color: "var(--ce-role-parent)", icon: <Globe className="w-3 h-3" /> },
 };
 
 const STAGE_LABELS: Record<VentureStage, string> = {
@@ -75,12 +76,12 @@ const STAGE_LABELS: Record<VentureStage, string> = {
 };
 
 const APP_STATUS_CONFIG: Record<AppStatus, { label: string; color: string }> = {
-  not_started: { label: "Not started",  color: "#374151" },
-  in_progress: { label: "In progress",  color: "#22D3EE" },
-  submitted:   { label: "Submitted",    color: "#F59E0B" },
-  interview:   { label: "Interview",    color: "#8B5CF6" },
-  accepted:    { label: "Accepted",     color: "#B3FF3B" },
-  rejected:    { label: "Rejected",     color: "#6B7280" },
+  not_started: { label: "Not started",  color: "var(--ce-text-quaternary)" },
+  in_progress: { label: "In progress",  color: "var(--ce-role-edgestar)" },
+  submitted:   { label: "Submitted",    color: "var(--ce-role-edgepreneur)" },
+  interview:   { label: "Interview",    color: "var(--ce-role-guide)" },
+  accepted:    { label: "Accepted",     color: "var(--ce-lime)" },
+  rejected:    { label: "Rejected",     color: "var(--ce-text-secondary)" },
 };
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -205,17 +206,17 @@ function OpportunityDrawer({
   const { openSophia } = useSophia();
   const typeCfg = TYPE_CONFIG[opp.type];
   const statusCfg = APP_STATUS_CONFIG[opp.appStatus];
-  const matchColor = opp.match >= 85 ? "#B3FF3B" : opp.match >= 75 ? PRENEUR_GOLD : "#9CA3AF";
+  const matchColor = opp.match >= 85 ? "var(--ce-lime)" : opp.match >= 75 ? PRENEUR_GOLD : "var(--ce-text-tertiary)";
 
   return (
     <motion.div
       className="fixed top-0 right-0 bottom-0 w-[440px] z-50 flex flex-col"
-      style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(255,255,255,0.06)", backdropFilter: "blur(20px)" }}
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
       initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }}
       transition={{ duration: 0.35, ease: EASE }}
     >
       {/* Header */}
-      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="flex items-start justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         <div className="flex-1 min-w-0 pr-3">
           <div className="flex items-center gap-2 mb-1.5">
             <span className="text-[9px] px-1.5 py-0.5 rounded-full flex items-center gap-1" style={{ background: `${typeCfg.color}12`, color: typeCfg.color, border: `1px solid ${typeCfg.color}20`, fontFamily: "var(--font-body)" }}>
@@ -225,69 +226,69 @@ function OpportunityDrawer({
               {statusCfg.label}
             </span>
           </div>
-          <span className="text-[14px] text-[#E8E8ED] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.name}</span>
+          <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.name}</span>
         </div>
         <div className="flex items-center gap-1.5">
           <button onClick={() => onStar(opp.id)} className="cursor-pointer">
-            <Star className="w-4 h-4" style={{ color: opp.starred ? PRENEUR_GOLD : "#374151", fill: opp.starred ? "rgba(245,158,11,0.3)" : "none" }} />
+            <Star className="w-4 h-4" style={{ color: opp.starred ? PRENEUR_GOLD : "var(--ce-text-quaternary)", fill: opp.starred ? "rgba(var(--ce-role-edgepreneur-rgb),0.3)" : "none" }} />
           </button>
-          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(255,255,255,0.06)] transition-colors">
-            <X className="w-4 h-4 text-[#6B7280]" />
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
           </button>
         </div>
       </div>
 
       <div className="flex-1 overflow-y-auto">
         {/* Match + amount */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <div className="flex items-center justify-between mb-2">
             <div>
-              <div className="text-[22px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
-                {opp.amount}{opp.amountMax && <span className="text-[14px] text-[#6B7280]"> – {opp.amountMax}</span>}
+              <div className="text-[22px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                {opp.amount}{opp.amountMax && <span className="text-[14px] text-[var(--ce-text-secondary)]"> – {opp.amountMax}</span>}
               </div>
-              {opp.equity && <span className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>Equity: {opp.equity}</span>}
+              {opp.equity && <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Equity: {opp.equity}</span>}
             </div>
             <div className="text-right">
               <div className="text-[28px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.match}%</div>
-              <div className="text-[10px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>match</div>
+              <div className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>match</div>
             </div>
           </div>
-          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(255,255,255,0.06)" }}>
+          <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
             <motion.div className="h-full rounded-full" style={{ background: matchColor }}
               initial={{ width: 0 }} animate={{ width: `${opp.match}%` }} transition={{ delay: 0.3, duration: 0.6, ease: EASE }} />
           </div>
           <div className="flex items-center gap-4 mt-3 text-[11px]">
-            <div className="flex items-center gap-1.5 text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <div className="flex items-center gap-1.5 text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               <Calendar className="w-3 h-3" />{opp.deadline}{opp.daysUntil && ` · ${opp.daysUntil}d left`}
             </div>
-            <div className="flex items-center gap-1.5 text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <div className="flex items-center gap-1.5 text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               <Globe className="w-3 h-3" />{opp.location}
             </div>
           </div>
         </div>
 
         {/* Description */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{opp.description}</p>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{opp.description}</p>
         </div>
 
         {/* Sophia note */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <div className="flex items-center gap-1.5 mb-2">
             <SophiaMark size={12} glowing={false} />
-            <span className="text-[11px] text-[#22D3EE]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
+            <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's read</span>
           </div>
-          <p className="text-[12px] text-[#9CA3AF] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{opp.sophiaNote}</p>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{opp.sophiaNote}</p>
         </div>
 
         {/* Requirements */}
-        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
-          <span className="text-[10px] text-[#374151] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>REQUIREMENTS</span>
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+          <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>REQUIREMENTS</span>
           <div className="flex flex-col gap-1.5">
             {opp.requirements.map((req, i) => (
               <div key={i} className="flex items-start gap-2">
-                <Check className="w-3 h-3 text-[#374151] mt-0.5 flex-shrink-0" />
-                <span className="text-[11px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{req}</span>
+                <Check className="w-3 h-3 text-[var(--ce-text-quaternary)] mt-0.5 flex-shrink-0" />
+                <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{req}</span>
               </div>
             ))}
           </div>
@@ -296,10 +297,10 @@ function OpportunityDrawer({
         {/* Portfolio */}
         {opp.notablePortfolio && (
           <div className="px-5 py-4">
-            <span className="text-[10px] text-[#374151] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NOTABLE PORTFOLIO</span>
+            <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NOTABLE PORTFOLIO</span>
             <div className="flex flex-wrap gap-1.5">
               {opp.notablePortfolio.map((co) => (
-                <span key={co} className="text-[11px] px-2.5 py-1 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)", color: "#9CA3AF", fontFamily: "var(--font-body)" }}>{co}</span>
+                <span key={co} className="text-[11px] px-2.5 py-1 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.07)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>{co}</span>
               ))}
             </div>
           </div>
@@ -307,7 +308,7 @@ function OpportunityDrawer({
       </div>
 
       {/* Actions */}
-      <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
+      <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         {opp.appStatus === "not_started" && (
           <button
             onClick={() => openSophia(`Help me start my application for "${opp.name}". It's a ${opp.type} offering ${opp.amount}${opp.equity ? ` for ${opp.equity} equity` : ""}. Deadline: ${opp.deadline}. My match score: ${opp.match}%. Requirements: ${opp.requirements.join(", ")}. Sophia noted: ${opp.sophiaNote}`)}
@@ -320,20 +321,20 @@ function OpportunityDrawer({
           <button
             onClick={() => openSophia(`Help me continue my in-progress application for "${opp.name}". Deadline: ${opp.deadline}. ${opp.sophiaNote} What are the 3 most important things to add or improve?`)}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-            style={{ background: "rgba(34,211,238,0.1)", border: "1px solid rgba(34,211,238,0.2)", color: "#22D3EE", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <FileText className="w-3.5 h-3.5" /> Continue application
           </button>
         )}
         {opp.appStatus === "submitted" && (
           <div className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px]"
-            style={{ background: "rgba(245,158,11,0.06)", border: "1px solid rgba(245,158,11,0.15)", color: "#F59E0B", fontFamily: "var(--font-body)" }}>
+            style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.15)", color: "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>
             <Check className="w-3.5 h-3.5" /> Submitted — awaiting response
           </div>
         )}
         <button
           onClick={() => openSophia(`Help me prepare my pitch for "${opp.name}". ${opp.sophiaNote} What should I emphasize, what are the judges looking for, and what are my biggest gaps?`)}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(179,255,59,0.06)] transition-colors"
-          style={{ background: "rgba(179,255,59,0.03)", border: "1px solid rgba(179,255,59,0.1)", color: "#B3FF3B", fontFamily: "var(--font-body)" }}>
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-lime-rgb),0.06)] transition-colors"
+          style={{ background: "rgba(var(--ce-lime-rgb),0.03)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>
           <Sparkles className="w-3.5 h-3.5" /> Prep pitch with Sophia
         </button>
       </div>
@@ -346,14 +347,14 @@ function OpportunityDrawer({
 function OppCard({ opp, onSelect, onStar }: { opp: FundingOpp; onSelect: (o: FundingOpp) => void; onStar: (id: string) => void }) {
   const typeCfg = TYPE_CONFIG[opp.type];
   const statusCfg = APP_STATUS_CONFIG[opp.appStatus];
-  const matchColor = opp.match >= 85 ? "#B3FF3B" : opp.match >= 75 ? PRENEUR_GOLD : "#9CA3AF";
+  const matchColor = opp.match >= 85 ? "var(--ce-lime)" : opp.match >= 75 ? PRENEUR_GOLD : "var(--ce-text-tertiary)";
 
   return (
     <motion.div
       className="rounded-xl p-4 cursor-pointer group relative"
       style={{
-        background: "rgba(255,255,255,0.025)",
-        border: `1px solid ${opp.starred ? `${PRENEUR_GOLD}15` : opp.appStatus !== "not_started" ? "rgba(34,211,238,0.1)" : "rgba(255,255,255,0.05)"}`,
+        background: "rgba(var(--ce-glass-tint),0.025)",
+        border: `1px solid ${opp.starred ? `${PRENEUR_GOLD}15` : opp.appStatus !== "not_started" ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.05)"}`,
       }}
       whileHover={{ y: -1 }}
       transition={{ duration: 0.15 }}
@@ -372,26 +373,26 @@ function OppCard({ opp, onSelect, onStar }: { opp: FundingOpp; onSelect: (o: Fun
               </span>
             )}
             {opp.daysUntil !== undefined && opp.daysUntil <= 14 && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(239,68,68,0.08)", color: "#EF4444", border: "1px solid rgba(239,68,68,0.15)", fontFamily: "var(--font-body)" }}>
+              <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-status-error-rgb),0.08)", color: "var(--ce-status-error)", border: "1px solid rgba(var(--ce-status-error-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                 {opp.daysUntil}d left
               </span>
             )}
           </div>
-          <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.name}</span>
+          <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.name}</span>
         </div>
         <div className="flex items-center gap-2 flex-shrink-0">
           <button onClick={(e) => { e.stopPropagation(); onStar(opp.id); }} className="cursor-pointer">
-            <Star className="w-3.5 h-3.5 transition-colors" style={{ color: opp.starred ? PRENEUR_GOLD : "#374151", fill: opp.starred ? "rgba(245,158,11,0.3)" : "none" }} />
+            <Star className="w-3.5 h-3.5 transition-colors" style={{ color: opp.starred ? PRENEUR_GOLD : "var(--ce-text-quaternary)", fill: opp.starred ? "rgba(var(--ce-role-edgepreneur-rgb),0.3)" : "none" }} />
           </button>
           <div className="text-right">
             <div className="text-[14px] tabular-nums" style={{ color: matchColor, fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.match}%</div>
-            <div className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>match</div>
+            <div className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>match</div>
           </div>
         </div>
       </div>
 
       {/* Meta row */}
-      <div className="flex items-center gap-4 text-[10px] text-[#374151] mb-3">
+      <div className="flex items-center gap-4 text-[10px] text-[var(--ce-text-quaternary)] mb-3">
         <div className="flex items-center gap-1"><DollarSign className="w-2.5 h-2.5" />{opp.amount}{opp.equity && ` · ${opp.equity}`}</div>
         <div className="flex items-center gap-1"><Calendar className="w-2.5 h-2.5" />{opp.deadline}</div>
         <div className="flex items-center gap-1"><Globe className="w-2.5 h-2.5" />{opp.location.split("(")[0].trim()}</div>
@@ -400,7 +401,7 @@ function OppCard({ opp, onSelect, onStar }: { opp: FundingOpp; onSelect: (o: Fun
       {/* Stage tags */}
       <div className="flex flex-wrap gap-1 mb-3">
         {opp.stage.map((s) => (
-          <span key={s} className="text-[9px] px-1.5 py-0.5 rounded-md" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", color: "#6B7280", fontFamily: "var(--font-body)" }}>
+          <span key={s} className="text-[9px] px-1.5 py-0.5 rounded-md" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
             {STAGE_LABELS[s]}
           </span>
         ))}
@@ -409,7 +410,7 @@ function OppCard({ opp, onSelect, onStar }: { opp: FundingOpp; onSelect: (o: Fun
       {/* Sophia teaser */}
       <div className="flex items-start gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
         <SophiaMark size={10} glowing={false} />
-        <span className="text-[10px] text-[#6B7280] line-clamp-1 flex-1" style={{ fontFamily: "var(--font-body)" }}>
+        <span className="text-[10px] text-[var(--ce-text-secondary)] line-clamp-1 flex-1" style={{ fontFamily: "var(--font-body)" }}>
           {opp.sophiaNote.slice(0, 80)}…
         </span>
       </div>
@@ -483,13 +484,13 @@ export function FundingSurface() {
         <motion.div className="pt-8 pb-5 flex items-center justify-between"
           initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.12, duration: 0.4, ease: EASE }}>
           <div>
-            <h1 className="text-[22px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Funding</h1>
-            <p className="text-[13px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>
+            <h1 className="text-[22px] text-[var(--ce-text-primary)] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Funding</h1>
+            <p className="text-[13px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
               {filtered.length} opportunities matched · {activeApps.length} active applications
             </p>
           </div>
           <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
-            style={{ background: "rgba(179,255,59,0.08)", border: "1px solid rgba(179,255,59,0.15)", color: "#B3FF3B", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <Sparkles className="w-3.5 h-3.5" /> Funding strategy
           </button>
         </motion.div>
@@ -499,13 +500,13 @@ export function FundingSurface() {
           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}>
           {[
             { label: "Opportunities matched",  value: opps.length,                                                      color: PRENEUR_GOLD },
-            { label: "Total available",         value: `$${(4645000).toLocaleString()}`,                                 color: "#B3FF3B"    },
-            { label: "Active applications",     value: activeApps.length,                                                color: "#22D3EE"    },
-            { label: "Urgent deadlines",        value: urgentDeadlines.length,                                           color: urgentDeadlines.length > 0 ? "#EF4444" : "#374151" },
+            { label: "Total available",         value: `$${(4645000).toLocaleString()}`,                                 color: "var(--ce-lime)"    },
+            { label: "Active applications",     value: activeApps.length,                                                color: "var(--ce-role-edgestar)"    },
+            { label: "Urgent deadlines",        value: urgentDeadlines.length,                                           color: urgentDeadlines.length > 0 ? "var(--ce-status-error)" : "var(--ce-text-quaternary)" },
           ].map((stat) => (
-            <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(255,255,255,0.02)", border: "1px solid rgba(255,255,255,0.05)" }}>
+            <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
               <div className="text-[22px] tabular-nums mb-0.5" style={{ color: stat.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{stat.value}</div>
-              <div className="text-[10px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</div>
+              <div className="text-[10px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</div>
             </div>
           ))}
         </motion.div>
@@ -515,16 +516,16 @@ export function FundingSurface() {
           <div>
             {/* Toolbar */}
             <div className="flex items-center gap-2 mb-4">
-              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}>
-                <Search className="w-3.5 h-3.5 text-[#374151]" />
+              <div className="flex items-center gap-2 flex-1 px-3 py-2 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.07)" }}>
+                <Search className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)]" />
                 <input value={search} onChange={(e) => setSearch(e.target.value)} placeholder="Search opportunities..."
-                  className="flex-1 text-[12px] text-[#E8E8ED] placeholder:text-[#374151] bg-transparent outline-none" style={{ fontFamily: "var(--font-body)" }} />
+                  className="flex-1 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none" style={{ fontFamily: "var(--font-body)" }} />
               </div>
-              <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+              <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 {(["all", "accelerator", "grant", "angel", "vc", "partnership"] as const).map((t) => (
                   <button key={t} onClick={() => setTypeFilter(t)}
                     className="px-2.5 py-1.5 rounded-md text-[10px] cursor-pointer capitalize transition-all"
-                    style={{ background: typeFilter === t ? "rgba(255,255,255,0.08)" : "transparent", color: typeFilter === t ? "#E8E8ED" : "#6B7280", fontFamily: "var(--font-body)" }}>
+                    style={{ background: typeFilter === t ? "rgba(var(--ce-glass-tint),0.08)" : "transparent", color: typeFilter === t ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                     {t === "all" ? "All" : TYPE_CONFIG[t as FundingType]?.label ?? t}
                   </button>
                 ))}
@@ -560,20 +561,20 @@ export function FundingSurface() {
               <GlassCard delay={0.5}>
                 <div className="flex items-center gap-2 mb-3">
                   <Target className="w-3.5 h-3.5" style={{ color: PRENEUR_GOLD }} />
-                  <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Active applications</span>
+                  <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Active applications</span>
                 </div>
                 {activeApps.map((opp, i) => {
                   const statusCfg = APP_STATUS_CONFIG[opp.appStatus];
                   return (
                     <button key={opp.id} onClick={() => setSelectedOpp(opp)}
-                      className="w-full flex items-center gap-2.5 py-2 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] rounded-lg px-1 text-left transition-colors"
-                      style={{ borderBottom: i < activeApps.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
+                      className="w-full flex items-center gap-2.5 py-2 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] rounded-lg px-1 text-left transition-colors"
+                      style={{ borderBottom: i < activeApps.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                       <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: statusCfg.color }} />
                       <div className="flex-1 min-w-0">
-                        <span className="text-[11px] text-[#E8E8ED] block truncate" style={{ fontFamily: "var(--font-body)" }}>{opp.name}</span>
+                        <span className="text-[11px] text-[var(--ce-text-primary)] block truncate" style={{ fontFamily: "var(--font-body)" }}>{opp.name}</span>
                         <span className="text-[10px]" style={{ color: statusCfg.color, fontFamily: "var(--font-body)" }}>{statusCfg.label}{opp.daysUntil ? ` · ${opp.daysUntil}d` : ""}</span>
                       </div>
-                      <ChevronRight className="w-3 h-3 text-[#374151] flex-shrink-0" />
+                      <ChevronRight className="w-3 h-3 text-[var(--ce-text-quaternary)] flex-shrink-0" />
                     </button>
                   );
                 })}
@@ -584,15 +585,15 @@ export function FundingSurface() {
             {starred.length > 0 && (
               <GlassCard delay={0.6}>
                 <div className="flex items-center gap-2 mb-3">
-                  <Star className="w-3.5 h-3.5" style={{ color: PRENEUR_GOLD, fill: "rgba(245,158,11,0.3)" }} />
-                  <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Starred</span>
+                  <Star className="w-3.5 h-3.5" style={{ color: PRENEUR_GOLD, fill: "rgba(var(--ce-role-edgepreneur-rgb),0.3)" }} />
+                  <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Starred</span>
                 </div>
                 {starred.map((opp, i) => (
                   <button key={opp.id} onClick={() => setSelectedOpp(opp)}
-                    className="w-full flex items-center gap-2 py-2 cursor-pointer hover:bg-[rgba(255,255,255,0.02)] rounded-lg px-1 text-left transition-colors"
-                    style={{ borderBottom: i < starred.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                    <span className="text-[11px] text-[#9CA3AF] flex-1 truncate" style={{ fontFamily: "var(--font-body)" }}>{opp.name}</span>
-                    <span className="text-[10px] tabular-nums" style={{ color: opp.match >= 85 ? "#B3FF3B" : PRENEUR_GOLD, fontFamily: "var(--font-body)" }}>{opp.match}%</span>
+                    className="w-full flex items-center gap-2 py-2 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.02)] rounded-lg px-1 text-left transition-colors"
+                    style={{ borderBottom: i < starred.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                    <span className="text-[11px] text-[var(--ce-text-tertiary)] flex-1 truncate" style={{ fontFamily: "var(--font-body)" }}>{opp.name}</span>
+                    <span className="text-[10px] tabular-nums" style={{ color: opp.match >= 85 ? "var(--ce-lime)" : PRENEUR_GOLD, fontFamily: "var(--font-body)" }}>{opp.match}%</span>
                   </button>
                 ))}
               </GlassCard>
@@ -602,14 +603,14 @@ export function FundingSurface() {
             {urgentDeadlines.length > 0 && (
               <GlassCard delay={0.7}>
                 <div className="flex items-center gap-2 mb-3">
-                  <Clock className="w-3.5 h-3.5 text-[#EF4444]" />
-                  <span className="text-[13px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Deadline alerts</span>
+                  <Clock className="w-3.5 h-3.5 text-[var(--ce-status-error)]" />
+                  <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Deadline alerts</span>
                 </div>
                 {urgentDeadlines.map((opp, i) => (
-                  <div key={opp.id} className="flex items-center gap-2 py-1.5" style={{ borderBottom: i < urgentDeadlines.length - 1 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: opp.daysUntil! <= 7 ? "#EF4444" : "#F59E0B" }} />
-                    <span className="text-[11px] text-[#9CA3AF] flex-1 truncate" style={{ fontFamily: "var(--font-body)" }}>{opp.name}</span>
-                    <span className="text-[10px] tabular-nums" style={{ color: opp.daysUntil! <= 7 ? "#EF4444" : "#F59E0B", fontFamily: "var(--font-body)" }}>{opp.daysUntil}d</span>
+                  <div key={opp.id} className="flex items-center gap-2 py-1.5" style={{ borderBottom: i < urgentDeadlines.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
+                    <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: opp.daysUntil! <= 7 ? "var(--ce-status-error)" : "var(--ce-role-edgepreneur)" }} />
+                    <span className="text-[11px] text-[var(--ce-text-tertiary)] flex-1 truncate" style={{ fontFamily: "var(--font-body)" }}>{opp.name}</span>
+                    <span className="text-[10px] tabular-nums" style={{ color: opp.daysUntil! <= 7 ? "var(--ce-status-error)" : "var(--ce-role-edgepreneur)", fontFamily: "var(--font-body)" }}>{opp.daysUntil}d</span>
                   </div>
                 ))}
               </GlassCard>
@@ -622,7 +623,7 @@ export function FundingSurface() {
       <AnimatePresence>
         {selectedOpp && (
           <>
-            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(0,0,0,0.4)" }}
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setSelectedOpp(null)} />
             <OpportunityDrawer opp={selectedOpp} onClose={() => setSelectedOpp(null)} onStar={handleStar} />

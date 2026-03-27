@@ -369,9 +369,9 @@ function TypingDots() {
     <div className="flex items-start gap-2.5 max-w-[85%]">
       <div className="flex-shrink-0 mt-1"><SophiaMark size={24} glowing={false} /></div>
       <div className="rounded-2xl rounded-tl-md px-4 py-3.5 flex items-center gap-1.5 h-[42px]"
-        style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
+        style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         {[0, 1, 2].map(i => (
-          <motion.div key={i} className="w-[5px] h-[5px] rounded-full bg-[#6B7280]"
+          <motion.div key={i} className="w-[5px] h-[5px] rounded-full bg-[var(--ce-text-tertiary)]"
             animate={{ opacity: [0.25, 0.8, 0.25], y: [0, -3, 0] }}
             transition={{ duration: 1, repeat: Infinity, delay: i * 0.18, ease: "easeInOut" }} />
         ))}
@@ -399,8 +399,8 @@ function SophiaMsg({ text, typingMs = 700, onReady }: { text: string; typingMs?:
       transition={{ duration: 0.25, ease: EASE_CONTENT }}>
       <div className="flex-shrink-0 mt-1"><SophiaMark size={24} glowing={false} /></div>
       <div className="rounded-2xl rounded-tl-md px-4 py-3"
-        style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}>
-        <span className="text-[14px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{text}</span>
+        style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", boxShadow: "0 2px 8px rgba(var(--ce-shadow-tint),0.15)" }}>
+        <span className="text-[14px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{text}</span>
       </div>
     </motion.div>
   );
@@ -412,8 +412,8 @@ function SophiaMsgStatic({ text }: { text: string }) {
     <div className="flex items-start gap-2.5 max-w-[85%]">
       <div className="flex-shrink-0 mt-1"><SophiaMark size={24} glowing={false} /></div>
       <div className="rounded-2xl rounded-tl-md px-4 py-3"
-        style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)" }}>
-        <span className="text-[14px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-body)" }}>{text}</span>
+        style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <span className="text-[14px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{text}</span>
       </div>
     </div>
   );
@@ -427,11 +427,11 @@ function UserBubble({ text, icon }: { text: string; icon?: React.ReactNode }) {
       transition={{ duration: 0.3, ease: EASE_CONTENT }}>
       <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl rounded-tr-md"
         style={{
-          background: "linear-gradient(135deg, rgba(34,211,238,0.12), rgba(179,255,59,0.06))",
-          border: "1px solid rgba(34,211,238,0.15)",
+          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-lime-rgb),0.06))",
+          border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
         }}>
-        {icon && <span className="text-[#22D3EE]">{icon}</span>}
-        <span className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-body)" }}>{text}</span>
+        {icon && <span className="text-ce-cyan">{icon}</span>}
+        <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-body)" }}>{text}</span>
       </div>
     </motion.div>
   );
@@ -451,10 +451,10 @@ function OptionChips({ options, onSelect }: { options: Option[]; onSelect: (id: 
       transition={{ duration: 0.25, ease: EASE_CONTENT }}>
       {options.map((o, i) => (
         <motion.button key={o.id} onClick={() => onSelect(o.id)}
-          className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl cursor-pointer text-[13px] text-[#9CA3AF] hover:text-[#E8E8ED] transition-colors"
+          className="flex items-center gap-2 px-3.5 py-2.5 rounded-xl cursor-pointer text-[13px] text-ce-text-secondary hover:text-ce-text-primary transition-colors"
           style={{
-            background: "rgba(255,255,255,0.025)",
-            border: "1px solid rgba(255,255,255,0.06)",
+            background: "rgba(var(--ce-glass-tint),0.025)",
+            border: "1px solid rgba(var(--ce-glass-tint),0.06)",
             fontFamily: "var(--font-body)",
             willChange: "transform, opacity",
           }}
@@ -462,8 +462,8 @@ function OptionChips({ options, onSelect }: { options: Option[]; onSelect: (id: 
           animate={{ opacity: 1, scale: 1, y: 0 }}
           transition={{ delay: i * 0.06, duration: 0.3, ease: EASE_CONTENT }}
           whileTap={{ scale: 0.96 }}
-          whileHover={{ borderColor: "rgba(34,211,238,0.15)", background: "rgba(34,211,238,0.04)" }}>
-          <span className="text-[#6B7280]">{o.icon}</span>
+          whileHover={{ borderColor: "rgba(var(--ce-role-edgestar-rgb),0.15)", background: "rgba(var(--ce-role-edgestar-rgb),0.04)" }}>
+          <span className="text-ce-text-tertiary">{o.icon}</span>
           {o.label}
         </motion.button>
       ))}
@@ -513,18 +513,18 @@ function ThinkingOverlay({ target, onDone, pathConfig }: { target: string; onDon
         <div className="flex-shrink-0 mt-1"><SophiaMark size={32} glowing /></div>
         <div className="rounded-2xl rounded-tl-md px-5 py-5 min-w-[280px]"
           style={{
-            background: "rgba(255,255,255,0.05)",
-            border: "1px solid rgba(255,255,255,0.08)",
-            boxShadow: "0 4px 30px rgba(0,0,0,0.3), 0 0 40px rgba(34,211,238,0.03)",
+            background: "rgba(var(--ce-glass-tint),0.05)",
+            border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+            boxShadow: "0 4px 30px rgba(var(--ce-shadow-tint),0.3), 0 0 40px rgba(var(--ce-role-edgestar-rgb),0.03)",
           }}>
           {/* Percentage */}
-          <motion.div className="text-[28px] text-[#E8E8ED] tabular-nums mb-1"
+          <motion.div className="text-[28px] text-ce-text-primary tabular-nums mb-1"
             style={{ fontFamily: "var(--font-display)", fontWeight: 500, willChange: "contents" }}>
             {displayPct}
           </motion.div>
 
           {/* Current step label */}
-          <div className="text-[13px] text-[#9CA3AF] mb-5" style={{ fontFamily: "var(--font-body)" }}>
+          <div className="text-[13px] text-ce-text-secondary mb-5" style={{ fontFamily: "var(--font-body)" }}>
             {steps[activeStep]}...
           </div>
 
@@ -539,17 +539,17 @@ function ThinkingOverlay({ target, onDone, pathConfig }: { target: string; onDon
                     {done ? (
                       <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }}
                         transition={{ type: "spring", stiffness: 400, damping: 20 }}>
-                        <Check className="w-4 h-4 text-[#22D3EE]" />
+                        <Check className="w-4 h-4 text-ce-cyan" />
                       </motion.div>
                     ) : current ? (
-                      <motion.div className="w-2.5 h-2.5 rounded-full bg-[#22D3EE]"
+                      <motion.div className="w-2.5 h-2.5 rounded-full bg-[var(--ce-role-edgestar)]"
                         animate={{ opacity: [1, 0.3, 1], scale: [1, 0.8, 1] }}
                         transition={{ duration: 1.2, repeat: Infinity, ease: "easeInOut" }} />
                     ) : (
-                      <div className="w-2 h-2 rounded-full bg-[#374151]" />
+                      <div className="w-2 h-2 rounded-full bg-[var(--ce-text-quaternary)]" />
                     )}
                   </div>
-                  <span className={`text-[12px] ${done ? "text-[#9CA3AF]" : current ? "text-[#9CA3AF]" : "text-[#374151]"}`}
+                  <span className={`text-[12px] ${done ? "text-ce-text-secondary" : current ? "text-ce-text-secondary" : "text-[var(--ce-text-quaternary)]"}`}
                     style={{ fontFamily: "var(--font-body)" }}>
                     {label}
                   </span>
@@ -575,7 +575,7 @@ function OrbitalView({ phases }: { phases: Phase[] }) {
       <svg viewBox="0 0 400 400" className="w-full h-full">
         {rings.map((r, i) => (
           <motion.circle key={i} cx={cx} cy={cy} r={r} fill="none"
-            stroke={i === 0 ? "rgba(34,211,238,0.15)" : "rgba(255,255,255,0.04)"}
+            stroke={i === 0 ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)"}
             strokeWidth={i === 0 ? 1.5 : 0.5} strokeDasharray={i === 0 ? "none" : "3 6"}
             initial={{ scale: 0, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}
             transition={{ delay: 0.3 + i * 0.12, duration: 0.6 }}
@@ -589,32 +589,32 @@ function OrbitalView({ phases }: { phases: Phase[] }) {
             <motion.g key={p.id} initial={{ opacity: 0, scale: 0 }} animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.6 + i * 0.15, type: "spring", stiffness: 200, damping: 20 }}
               style={{ transformOrigin: `${x}px ${y}px` }}>
-              <line x1={cx} y1={cy} x2={x} y2={y} stroke={isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.03)"} strokeWidth={0.5} strokeDasharray="2 4" />
-              {isActive && <circle cx={x} cy={y} r={32} fill="none" stroke="rgba(34,211,238,0.08)" strokeWidth={1}>
+              <line x1={cx} y1={cy} x2={x} y2={y} stroke={isActive ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)"} strokeWidth={0.5} strokeDasharray="2 4" />
+              {isActive && <circle cx={x} cy={y} r={32} fill="none" stroke="rgba(var(--ce-role-edgestar-rgb),0.08)" strokeWidth={1}>
                 <animate attributeName="r" values="28;36;28" dur="3s" repeatCount="indefinite" />
                 <animate attributeName="opacity" values="0.6;0.15;0.6" dur="3s" repeatCount="indefinite" />
               </circle>}
-              <circle cx={x} cy={y} r={nodeR} fill={isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.03)"}
-                stroke={isActive ? "#22D3EE" : "rgba(255,255,255,0.08)"} strokeWidth={isActive ? 1.5 : 0.5} />
-              <text x={x} y={y + 1} textAnchor="middle" dominantBaseline="central" fill={isActive ? "#E8E8ED" : "#6B7280"}
+              <circle cx={x} cy={y} r={nodeR} fill={isActive ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)"}
+                stroke={isActive ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.08)"} strokeWidth={isActive ? 1.5 : 0.5} />
+              <text x={x} y={y + 1} textAnchor="middle" dominantBaseline="central" fill={isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)"}
                 fontSize={isActive ? 11 : 9} fontFamily="var(--font-display)" fontWeight={500}>{i + 1}</text>
-              <text x={x} y={y + nodeR + 14} textAnchor="middle" fill={isActive ? "#E8E8ED" : "#6B7280"}
+              <text x={x} y={y + nodeR + 14} textAnchor="middle" fill={isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)"}
                 fontSize={10} fontFamily="var(--font-display)" fontWeight={500}>{p.title}</text>
-              <text x={x} y={y + nodeR + 26} textAnchor="middle" fill="#374151" fontSize={8} fontFamily="var(--font-body)">{p.duration}</text>
-              {!isActive && <text x={x} y={y + nodeR + 38} textAnchor="middle" fill="#374151" fontSize={7} fontFamily="var(--font-body)">{p.items.length} milestones</text>}
+              <text x={x} y={y + nodeR + 26} textAnchor="middle" fill="var(--ce-text-quaternary)" fontSize={8} fontFamily="var(--font-body)">{p.duration}</text>
+              {!isActive && <text x={x} y={y + nodeR + 38} textAnchor="middle" fill="var(--ce-text-quaternary)" fontSize={7} fontFamily="var(--font-body)">{p.items.length} milestones</text>}
             </motion.g>
           );
         })}
-        <circle cx={cx} cy={cy} r={16} fill="rgba(34,211,238,0.06)" stroke="rgba(34,211,238,0.15)" strokeWidth={1} />
-        <text x={cx} y={cy + 1} textAnchor="middle" dominantBaseline="central" fill="#22D3EE" fontSize={8} fontFamily="var(--font-body)">YOU</text>
+        <circle cx={cx} cy={cy} r={16} fill="rgba(var(--ce-role-edgestar-rgb),0.06)" stroke="rgba(var(--ce-role-edgestar-rgb),0.15)" strokeWidth={1} />
+        <text x={cx} y={cy + 1} textAnchor="middle" dominantBaseline="central" fill="var(--ce-role-edgestar)" fontSize={8} fontFamily="var(--font-body)">YOU</text>
       </svg>
       {phases.filter(p => p.status === "active").map(p => (
         <motion.div key={p.id} className="absolute left-1/2 -translate-x-1/2 w-[220px]" style={{ top: "12px" }}
           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.2, duration: 0.4 }}>
           <div className="flex flex-wrap gap-1 justify-center">
             {p.items.map((item, mi) => (
-              <span key={mi} className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] ${mi === 0 ? "bg-[rgba(34,211,238,0.08)] text-[#E8E8ED]" : "bg-[rgba(255,255,255,0.02)] text-[#6B7280]"}`}>
-                <span className={mi === 0 ? "text-[#22D3EE]" : "text-[#374151]"}>{item.icon}</span>{item.text}
+              <span key={mi} className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded text-[9px] ${mi === 0 ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] text-ce-text-primary" : "bg-[rgba(var(--ce-glass-tint),0.02)] text-ce-text-tertiary"}`}>
+                <span className={mi === 0 ? "text-ce-cyan" : "text-[var(--ce-text-quaternary)]"}>{item.icon}</span>{item.text}
               </span>
             ))}
           </div>
@@ -631,7 +631,7 @@ function ConstellationView({ phases }: { phases: Phase[] }) {
       <svg viewBox="0 0 400 380" className="w-full h-full">
         {Array.from({ length: 40 }, (_, i) => (
           <motion.circle key={`bg-${i}`} cx={20 + (i * 97) % 360} cy={10 + (i * 73) % 360} r={0.5 + (i % 3) * 0.3}
-            fill="rgba(255,255,255,0.08)" initial={{ opacity: 0 }}
+            fill="rgba(var(--ce-glass-tint),0.08)" initial={{ opacity: 0 }}
             animate={{ opacity: [0.02, 0.12, 0.02] }} transition={{ duration: 3 + (i % 4), repeat: Infinity, delay: i * 0.2 }} />
         ))}
         {clusters.slice(0, -1).map((c, i) => {
@@ -643,7 +643,7 @@ function ConstellationView({ phases }: { phases: Phase[] }) {
         })}
         <defs>
           <linearGradient id="constellation-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="#22D3EE" /><stop offset="100%" stopColor="#B3FF3B" />
+            <stop offset="0%" stopColor="var(--ce-role-edgestar)" /><stop offset="100%" stopColor="var(--ce-lime)" />
           </linearGradient>
         </defs>
         {phases.map((p, i) => {
@@ -657,22 +657,22 @@ function ConstellationView({ phases }: { phases: Phase[] }) {
             <motion.g key={p.id} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 + i * 0.18 }}>
               {stars.slice(0, -1).map((s, si) => (
                 <line key={si} x1={s.x} y1={s.y} x2={stars[si + 1].x} y2={stars[si + 1].y}
-                  stroke={isActive ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.04)"} strokeWidth={0.4} />
+                  stroke={isActive ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)"} strokeWidth={0.4} />
               ))}
               {stars.map((s, si) => (
                 <motion.circle key={si} cx={s.x} cy={s.y} r={s.size}
-                  fill={isActive && si === 0 ? "#22D3EE" : isActive ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.15)"}
+                  fill={isActive && si === 0 ? "var(--ce-role-edgestar)" : isActive ? "rgba(var(--ce-role-edgestar-rgb),0.5)" : "rgba(var(--ce-glass-tint),0.15)"}
                   initial={{ scale: 0 }} animate={{ scale: 1 }}
                   transition={{ delay: 0.7 + i * 0.15 + si * 0.06, type: "spring", stiffness: 300, damping: 20 }}>
                   {isActive && si === 0 && <animate attributeName="r" values="3;4.5;3" dur="2.5s" repeatCount="indefinite" />}
                 </motion.circle>
               ))}
-              {isActive && <circle cx={cl.cx} cy={cl.cy} r={cl.spread + 8} fill="none" stroke="rgba(34,211,238,0.06)" strokeWidth={1} strokeDasharray="2 4">
+              {isActive && <circle cx={cl.cx} cy={cl.cy} r={cl.spread + 8} fill="none" stroke="rgba(var(--ce-role-edgestar-rgb),0.06)" strokeWidth={1} strokeDasharray="2 4">
                 <animate attributeName="r" values={`${cl.spread + 4};${cl.spread + 12};${cl.spread + 4}`} dur="4s" repeatCount="indefinite" />
               </circle>}
-              <text x={cl.cx} y={cl.cy + cl.spread + 18} textAnchor="middle" fill={isActive ? "#E8E8ED" : "#6B7280"}
+              <text x={cl.cx} y={cl.cy + cl.spread + 18} textAnchor="middle" fill={isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)"}
                 fontSize={10} fontFamily="var(--font-display)" fontWeight={500}>{p.title}</text>
-              <text x={cl.cx} y={cl.cy + cl.spread + 30} textAnchor="middle" fill="#374151" fontSize={8} fontFamily="var(--font-body)">
+              <text x={cl.cx} y={cl.cy + cl.spread + 30} textAnchor="middle" fill="var(--ce-text-quaternary)" fontSize={8} fontFamily="var(--font-body)">
                 {p.duration} · {p.items.length} milestones</text>
             </motion.g>
           );
@@ -689,7 +689,7 @@ function TerrainView({ phases }: { phases: Phase[] }) {
     <div className="relative w-full aspect-[5/3] max-w-[440px] mx-auto">
       <svg viewBox="0 0 400 240" className="w-full h-full">
         {[180, 150, 120, 90, 60].map((y, i) => (
-          <motion.line key={i} x1={0} y1={y} x2={400} y2={y} stroke="rgba(255,255,255,0.02)" strokeWidth={0.5}
+          <motion.line key={i} x1={0} y1={y} x2={400} y2={y} stroke="rgba(var(--ce-glass-tint),0.02)" strokeWidth={0.5}
             initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.2 + i * 0.08 }} />
         ))}
         <motion.path d={terrainD} fill="none" stroke="url(#terrain-grad)" strokeWidth={1.5}
@@ -699,10 +699,10 @@ function TerrainView({ phases }: { phases: Phase[] }) {
           initial={{ opacity: 0 }} animate={{ opacity: 0.3 }} transition={{ delay: 1.5, duration: 0.8 }} />
         <defs>
           <linearGradient id="terrain-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="#22D3EE" /><stop offset="100%" stopColor="#B3FF3B" />
+            <stop offset="0%" stopColor="var(--ce-role-edgestar)" /><stop offset="100%" stopColor="var(--ce-lime)" />
           </linearGradient>
           <linearGradient id="terrain-fill" x1="0%" y1="0%" x2="0%" y2="100%">
-            <stop offset="0%" stopColor="rgba(34,211,238,0.08)" /><stop offset="100%" stopColor="transparent" />
+            <stop offset="0%" stopColor="rgba(var(--ce-role-edgestar-rgb),0.08)" /><stop offset="100%" stopColor="transparent" />
           </linearGradient>
         </defs>
         {phases.map((p, i) => {
@@ -711,16 +711,16 @@ function TerrainView({ phases }: { phases: Phase[] }) {
             <motion.g key={p.id} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 1.2 + i * 0.2, duration: 0.4 }}>
               <line x1={markerX} y1={markerY - 4} x2={markerX} y2={204}
-                stroke={isActive ? "rgba(34,211,238,0.2)" : "rgba(255,255,255,0.04)"} strokeWidth={0.5} strokeDasharray="2 3" />
-              <circle cx={markerX} cy={markerY} r={isActive ? 5 : 3} fill={isActive ? "#22D3EE" : "rgba(255,255,255,0.12)"}
-                stroke={isActive ? "rgba(34,211,238,0.3)" : "none"} strokeWidth={1}>
+                stroke={isActive ? "rgba(var(--ce-role-edgestar-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.04)"} strokeWidth={0.5} strokeDasharray="2 3" />
+              <circle cx={markerX} cy={markerY} r={isActive ? 5 : 3} fill={isActive ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.12)"}
+                stroke={isActive ? "rgba(var(--ce-role-edgestar-rgb),0.3)" : "none"} strokeWidth={1}>
                 {isActive && <animate attributeName="r" values="4;6;4" dur="2.5s" repeatCount="indefinite" />}
               </circle>
-              <text x={markerX} y={215} textAnchor="middle" fill={isActive ? "#E8E8ED" : "#6B7280"}
+              <text x={markerX} y={215} textAnchor="middle" fill={isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)"}
                 fontSize={9} fontFamily="var(--font-display)" fontWeight={500}>{p.title}</text>
-              <text x={markerX} y={227} textAnchor="middle" fill="#374151" fontSize={7} fontFamily="var(--font-body)">{p.duration}</text>
+              <text x={markerX} y={227} textAnchor="middle" fill="var(--ce-text-quaternary)" fontSize={7} fontFamily="var(--font-body)">{p.duration}</text>
               <text x={markerX + 8} y={markerY - 8} textAnchor="start"
-                fill={isActive ? "rgba(34,211,238,0.5)" : "rgba(255,255,255,0.06)"} fontSize={7} fontFamily="var(--font-body)">{p.items.length} milestones</text>
+                fill={isActive ? "rgba(var(--ce-role-edgestar-rgb),0.5)" : "rgba(var(--ce-glass-tint),0.06)"} fontSize={7} fontFamily="var(--font-body)">{p.items.length} milestones</text>
             </motion.g>
           );
         })}
@@ -760,14 +760,14 @@ function RoadmapOverlay({ phases, target, onSave, onAdjust }: {
           <div className="flex items-start gap-2.5">
             <div className="flex-shrink-0 mt-1"><SophiaMark size={28} glowing /></div>
             <div>
-              <span className="text-[14px] text-[#9CA3AF] block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>Here's your roadmap for {tl}.</span>
-              <span className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}><Sparkles className="w-2.5 h-2.5 inline mr-1 text-[#B3FF3B]" />Personalized</span>
+              <span className="text-[14px] text-ce-text-secondary block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>Here's your roadmap for {tl}.</span>
+              <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}><Sparkles className="w-2.5 h-2.5 inline mr-1 text-ce-lime" />Personalized</span>
             </div>
           </div>
-          <div className="flex gap-1 p-0.5 rounded-lg" style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.05)" }}>
+          <div className="flex gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
             {MODE_LABELS.map(m => (
               <button key={m.id} onClick={() => setMode(m.id)}
-                className={`px-2.5 py-1 rounded-md text-[10px] transition-all cursor-pointer ${mode === m.id ? "bg-[rgba(34,211,238,0.1)] text-[#E8E8ED] border border-[rgba(34,211,238,0.15)]" : "text-[#6B7280] hover:text-[#9CA3AF] border border-transparent"}`}
+                className={`px-2.5 py-1 rounded-md text-[10px] transition-all cursor-pointer ${mode === m.id ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.1)] text-ce-text-primary border border-[rgba(var(--ce-role-edgestar-rgb),0.15)]" : "text-ce-text-tertiary hover:text-ce-text-secondary border border-transparent"}`}
                 style={{ fontFamily: "var(--font-body)" }}>{m.label}</button>
             ))}
           </div>
@@ -777,7 +777,7 @@ function RoadmapOverlay({ phases, target, onSave, onAdjust }: {
         <motion.div initial={{ opacity: 0, scale: 0.97 }} animate={{ opacity: 1, scale: 1 }}
           transition={{ delay: 0.6, duration: 0.5, ease: EASE_CONTENT }}>
           <div className="rounded-2xl p-5"
-            style={{ background: "rgba(10,12,16,0.8)", border: "1px solid rgba(255,255,255,0.05)", boxShadow: "0 4px 40px rgba(0,0,0,0.4)" }}>
+            style={{ background: "rgba(10,12,16,0.8)", border: "1px solid rgba(var(--ce-glass-tint),0.05)", boxShadow: "0 4px 40px rgba(var(--ce-shadow-tint),0.4)" }}>
             <AnimatePresence mode="wait">
               <motion.div key={mode} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -8 }} transition={{ duration: 0.3 }}>
@@ -795,14 +795,14 @@ function RoadmapOverlay({ phases, target, onSave, onAdjust }: {
             <motion.div className="flex flex-col gap-3" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE_CONTENT }}>
               <div className="flex gap-2">
                 <motion.button onClick={onSave} className="flex items-center gap-2 px-5 py-3 rounded-xl cursor-pointer"
-                  style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C", boxShadow: "0 0 24px rgba(34,211,238,0.12), 0 2px 8px rgba(0,0,0,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12), 0 2px 8px rgba(var(--ce-shadow-tint),0.3)" }}
                   whileTap={{ scale: 0.97 }}><Sparkles className="w-3.5 h-3.5" /> Save my roadmap</motion.button>
-                <button className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer border border-[rgba(255,255,255,0.06)] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.03)] transition-colors text-[13px]"
+                <button className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer border border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors text-[13px]"
                   style={{ fontFamily: "var(--font-body)" }}>Tell me more</button>
               </div>
               <div className="flex items-center gap-4">
-                <button className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RefreshCw className="w-3 h-3" /> Not quite right?</button>
-                <button onClick={onAdjust} className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3 h-3" /> Adjust my answers</button>
+                <button className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RefreshCw className="w-3 h-3" /> Not quite right?</button>
+                <button onClick={onAdjust} className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3 h-3" /> Adjust my answers</button>
               </div>
             </motion.div>
           )}
@@ -838,16 +838,16 @@ function DashboardPreview({ pathConfig, target, level, onSave, onAdjust }: {
           transition={{ duration: 0.4, delay: 0.3, ease: EASE_CONTENT }}>
           <div className="flex-shrink-0 mt-1"><SophiaMark size={28} glowing /></div>
           <div>
-            <span className="text-[14px] text-[#9CA3AF] block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>Here's what I've set up for you.</span>
-            <span className="text-[11px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}><Sparkles className="w-2.5 h-2.5 inline mr-1 text-[#B3FF3B]" />Personalized to your answers</span>
+            <span className="text-[14px] text-ce-text-secondary block mb-0.5" style={{ fontFamily: "var(--font-body)" }}>Here's what I've set up for you.</span>
+            <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}><Sparkles className="w-2.5 h-2.5 inline mr-1 text-ce-lime" />Personalized to your answers</span>
           </div>
         </motion.div>
 
         {/* Dashboard title */}
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.4, ease: EASE_CONTENT }}>
-          <h2 className="text-[18px] text-[#E8E8ED] mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{title}</h2>
-          <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(34,211,238,0.2), rgba(179,255,59,0.1), transparent)" }} />
+          <h2 className="text-[18px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{title}</h2>
+          <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(var(--ce-role-edgestar-rgb),0.2), rgba(var(--ce-lime-rgb),0.1), transparent)" }} />
         </motion.div>
 
         {/* Cards grid */}
@@ -855,19 +855,19 @@ function DashboardPreview({ pathConfig, target, level, onSave, onAdjust }: {
           {cards.map((card, i) => (
             <motion.div key={i} className="rounded-xl p-4 flex flex-col gap-2"
               style={{
-                background: card.accent ? "rgba(34,211,238,0.04)" : "rgba(255,255,255,0.02)",
-                border: `1px solid ${card.accent ? "rgba(34,211,238,0.12)" : "rgba(255,255,255,0.05)"}`,
-                boxShadow: card.accent ? "0 0 20px rgba(34,211,238,0.03)" : "none",
+                background: card.accent ? "rgba(var(--ce-role-edgestar-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)",
+                border: `1px solid ${card.accent ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.05)"}`,
+                boxShadow: card.accent ? "0 0 20px rgba(var(--ce-role-edgestar-rgb),0.03)" : "none",
               }}
               initial={{ opacity: 0, y: 10, scale: 0.97 }}
               animate={{ opacity: 1, y: 0, scale: 1 }}
               transition={{ delay: 0.7 + i * 0.12, duration: 0.35, ease: EASE_CONTENT }}>
               <div className="flex items-center gap-2">
-                <span className={card.accent ? "text-[#22D3EE]" : "text-[#6B7280]"}>{card.icon}</span>
-                <span className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{card.title}</span>
+                <span className={card.accent ? "text-ce-cyan" : "text-ce-text-tertiary"}>{card.icon}</span>
+                <span className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{card.title}</span>
               </div>
-              <div className="text-[16px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{card.value}</div>
-              <p className="text-[11px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>{card.desc}</p>
+              <div className="text-[16px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{card.value}</div>
+              <p className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{card.desc}</p>
             </motion.div>
           ))}
         </div>
@@ -878,13 +878,13 @@ function DashboardPreview({ pathConfig, target, level, onSave, onAdjust }: {
             <motion.div className="flex flex-col gap-3" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE_CONTENT }}>
               <div className="flex gap-2">
                 <motion.button onClick={onSave} className="flex items-center gap-2 px-5 py-3 rounded-xl cursor-pointer"
-                  style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C", boxShadow: "0 0 24px rgba(34,211,238,0.12), 0 2px 8px rgba(0,0,0,0.3)" }}
+                  style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12), 0 2px 8px rgba(var(--ce-shadow-tint),0.3)" }}
                   whileTap={{ scale: 0.97 }}><Sparkles className="w-3.5 h-3.5" /> Get started</motion.button>
-                <button className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer border border-[rgba(255,255,255,0.06)] text-[#9CA3AF] hover:bg-[rgba(255,255,255,0.03)] transition-colors text-[13px]"
+                <button className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer border border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors text-[13px]"
                   style={{ fontFamily: "var(--font-body)" }}>Tell me more</button>
               </div>
               <div className="flex items-center gap-4">
-                <button onClick={onAdjust} className="flex items-center gap-1.5 text-[13px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3 h-3" /> Adjust my answers</button>
+                <button onClick={onAdjust} className="flex items-center gap-1.5 text-[13px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}><RotateCcw className="w-3 h-3" /> Adjust my answers</button>
               </div>
             </motion.div>
           )}
@@ -908,27 +908,27 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
         initial={{ y: 60, opacity: 0, scale: 0.96 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.2 }}>
-        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(34,211,238,0.25), rgba(179,255,59,0.15), rgba(34,211,238,0.08))" }}>
+        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.25), rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))" }}>
           <div className="rounded-2xl p-6 flex flex-col gap-5"
-            style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.1) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(0,0,0,0.6), inset 0 1px 1px rgba(255,255,255,0.05)" }}>
+            style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.1) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(var(--ce-shadow-tint),0.6), inset 0 1px 1px rgba(var(--ce-glass-tint),0.05)" }}>
             <div className="flex items-center gap-3">
               <SophiaMark size={28} glowing />
               <div>
-                <div className="text-[14px] text-[#E8E8ED]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Want to keep this?</div>
-                <div className="text-[12px] text-[#6B7280]" style={{ fontFamily: "var(--font-body)" }}>I'll remember everything.</div>
+                <div className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Want to keep this?</div>
+                <div className="text-[12px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>I'll remember everything.</div>
               </div>
             </div>
-            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-[#1a1a1a] hover:bg-white/90 transition-colors cursor-pointer" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-3 px-4 py-3 rounded-xl bg-white text-[var(--ce-surface-1)] hover:bg-white/90 transition-colors cursor-pointer" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               <svg className="w-4 h-4" viewBox="0 0 24 24"><path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z" fill="#4285F4"/><path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/><path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/><path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/></svg>
               Continue with Google
             </button>
-            <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(255,255,255,0.05)]" /><span className="text-[11px] text-[#6B7280]">or</span><div className="flex-1 h-px bg-[rgba(255,255,255,0.05)]" /></div>
-            <input type="email" placeholder="Where should I send this?" className="w-full px-3.5 py-2.5 rounded-xl bg-[rgba(255,255,255,0.03)] border border-[rgba(255,255,255,0.05)] text-[#E8E8ED] placeholder:text-[#6B7280] focus:outline-none focus:border-[rgba(34,211,238,0.2)] text-[13px]" style={{ fontFamily: "var(--font-body)" }} />
-            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, #22D3EE, #B3FF3B)", fontFamily: "var(--font-display)", fontWeight: 500, color: "#08090C" }}>
+            <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /><span className="text-[11px] text-ce-text-tertiary">or</span><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /></div>
+            <input type="email" placeholder="Where should I send this?" className="w-full px-3.5 py-2.5 rounded-xl bg-[rgba(var(--ce-glass-tint),0.03)] border border-[rgba(var(--ce-glass-tint),0.05)] text-ce-text-primary placeholder:text-ce-text-tertiary focus:outline-none focus:border-[rgba(var(--ce-role-edgestar-rgb),0.2)] text-[13px]" style={{ fontFamily: "var(--font-body)" }} />
+            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
               <Sparkles className="w-3.5 h-3.5" /> Get started free
             </button>
-            <p className="text-[11px] text-[#6B7280] text-center">Free. No catch.</p>
-            <button onClick={onDismiss} className="text-[12px] text-[#374151] hover:text-[#6B7280] transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Maybe later</button>
+            <p className="text-[11px] text-ce-text-tertiary text-center">Free. No catch.</p>
+            <button onClick={onDismiss} className="text-[12px] text-[var(--ce-text-quaternary)] hover:text-ce-text-tertiary transition-colors cursor-pointer text-center" style={{ fontFamily: "var(--font-body)" }}>Maybe later</button>
           </div>
         </div>
       </motion.div>
@@ -1039,16 +1039,16 @@ export function OnboardingH3({ onComplete }: { onComplete?: (role?: string) => v
   };
 
   return (
-    <div className="min-h-screen w-full flex flex-col relative overflow-hidden" style={{ backgroundColor: "#08090C" }}>
+    <div className="min-h-screen w-full flex flex-col relative overflow-hidden" style={{ backgroundColor: "var(--ce-void)" }}>
       {/* Background — clean void */}
       <div className="absolute inset-0 pointer-events-none">
-        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(34,211,238,0.03) 0%, transparent 70%)" }} />
+        <div className="absolute inset-0" style={{ background: "radial-gradient(ellipse 70% 50% at 50% 40%, rgba(var(--ce-role-edgestar-rgb),0.03) 0%, transparent 70%)" }} />
         {/* Subtle topo lines from Figma — very low opacity for H3 */}
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 1099 851" preserveAspectRatio="xMidYMid slice" style={{ opacity: 0.008 }}>
-          <path d={topoSvgPaths.p338f9380} fill="none" stroke="#22D3EE" strokeOpacity="0.6" strokeWidth="1.16" />
-          <path d={topoSvgPaths.p3e16f200} fill="none" stroke="#22D3EE" strokeOpacity="0.6" strokeWidth="1.16" />
-          <path d={topoSvgPaths.p21888e60} fill="none" stroke="#042C01" strokeOpacity="0.6" strokeWidth="1.16" />
-          <path d={topoSvgPaths.p2d0f2fc0} fill="none" stroke="#042C01" strokeOpacity="0.6" strokeWidth="1.16" />
+          <path d={topoSvgPaths.p338f9380} fill="none" stroke="var(--ce-role-edgestar)" strokeOpacity="0.6" strokeWidth="1.16" />
+          <path d={topoSvgPaths.p3e16f200} fill="none" stroke="var(--ce-role-edgestar)" strokeOpacity="0.6" strokeWidth="1.16" />
+          <path d={topoSvgPaths.p21888e60} fill="none" stroke="var(--ce-forest)" strokeOpacity="0.6" strokeWidth="1.16" />
+          <path d={topoSvgPaths.p2d0f2fc0} fill="none" stroke="var(--ce-forest)" strokeOpacity="0.6" strokeWidth="1.16" />
         </svg>
         <div className="absolute inset-0 opacity-[0.015]" style={{
           backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
@@ -1057,21 +1057,21 @@ export function OnboardingH3({ onComplete }: { onComplete?: (role?: string) => v
       </div>
 
       {/* Top bar */}
-      <div className="relative z-20 flex items-center justify-between px-5 py-3 border-b border-[rgba(255,255,255,0.04)]">
+      <div className="relative z-20 flex items-center justify-between px-5 py-3 border-b border-[rgba(var(--ce-glass-tint),0.04)]">
         <div className="flex items-center gap-2">
           {canBack && (
-            <motion.button onClick={back} className="flex items-center gap-1 text-[12px] text-[#6B7280] hover:text-[#9CA3AF] transition-colors cursor-pointer mr-2"
+            <motion.button onClick={back} className="flex items-center gap-1 text-[12px] text-ce-text-tertiary hover:text-ce-text-secondary transition-colors cursor-pointer mr-2"
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} whileTap={{ scale: 0.95 }} style={{ fontFamily: "var(--font-body)" }}>
               <RotateCcw className="w-3 h-3" /> Redo
             </motion.button>
           )}
           <SophiaMark size={20} glowing={false} />
-          <span className="text-[13px] text-[#9CA3AF]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
-          <span className="flex items-center gap-1 text-[10px] text-[#22D3EE] bg-[rgba(34,211,238,0.08)] px-1.5 py-0.5 rounded">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#22D3EE]" /> Online
+          <span className="text-[13px] text-ce-text-secondary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+          <span className="flex items-center gap-1 text-[10px] text-ce-cyan bg-[rgba(var(--ce-role-edgestar-rgb),0.08)] px-1.5 py-0.5 rounded">
+            <span className="w-1.5 h-1.5 rounded-full bg-[var(--ce-role-edgestar)]" /> Online
           </span>
         </div>
-        <span className="text-[10px] tracking-[0.15em] text-[#1F2937]" style={{ fontFamily: "var(--font-display)" }}>CAREEREDGE</span>
+        <span className="text-[10px] tracking-[0.15em] text-[var(--ce-text-ghost)]" style={{ fontFamily: "var(--font-display)" }}>CAREEREDGE</span>
       </div>
 
       {/* Chat stream */}
@@ -1091,7 +1091,7 @@ export function OnboardingH3({ onComplete }: { onComplete?: (role?: string) => v
                   transition={{ type: "spring", stiffness: 180, damping: 22 }}>
                   <SophiaMark size={72} glowing />
                 </motion.div>
-                <motion.p className="text-[#6B7280] text-center text-sm" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
+                <motion.p className="text-ce-text-tertiary text-center text-sm" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 1, duration: 0.5, ease: EASE_CONTENT }} style={{ fontFamily: "var(--font-body)" }}>
                   Starting conversation...
                 </motion.p>

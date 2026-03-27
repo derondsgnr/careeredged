@@ -20,18 +20,20 @@ import {
   User, GraduationCap,
 } from "lucide-react";
 import type { AppState } from "./state-toggle";
+import type { FamilyVariation, ThemeMode, NavVariation } from "../layouts/root-layout";
+import { Sun, Moon } from "lucide-react";
 
 // ─── Role definitions ──────────────────────────────────────────────────────
 
 const ALL_ROLES = [
-  { id: "edgestar",   label: "EdgeStar",     short: "ES",  color: "#22D3EE", icon: User },
-  { id: "edgepreneur", label: "EdgePreneur", short: "EP",  color: "#F59E0B", icon: Rocket },
-  { id: "parent",     label: "EdgeParent",   short: "PA",  color: "#EC4899", icon: Heart },
-  { id: "guide",      label: "EdgeGuide",    short: "GU",  color: "#8B5CF6", icon: BookOpen },
-  { id: "employer",   label: "EdgeEmployer", short: "EM",  color: "#10B981", icon: Briefcase },
-  { id: "edu",        label: "EdgeEducation",short: "ED",  color: "#3B82F6", icon: GraduationCap },
-  { id: "ngo",        label: "EdgeNGO",      short: "NG",  color: "#F97316", icon: Globe },
-  { id: "agency",     label: "EdgeAgency",   short: "AG",  color: "#6366F1", icon: Building2 },
+  { id: "edgestar",   label: "EdgeStar",     short: "ES",  color: "var(--ce-role-edgestar)", icon: User },
+  { id: "edgepreneur", label: "EdgePreneur", short: "EP",  color: "var(--ce-role-edgepreneur)", icon: Rocket },
+  { id: "parent",     label: "EdgeParent",   short: "PA",  color: "var(--ce-role-parent)", icon: Heart },
+  { id: "guide",      label: "EdgeGuide",    short: "GU",  color: "var(--ce-role-guide)", icon: BookOpen },
+  { id: "employer",   label: "EdgeEmployer", short: "EM",  color: "var(--ce-role-employer)", icon: Briefcase },
+  { id: "edu",        label: "EdgeEducation",short: "ED",  color: "var(--ce-role-edu)", icon: GraduationCap },
+  { id: "ngo",        label: "EdgeNGO",      short: "NG",  color: "var(--ce-role-ngo)", icon: Globe },
+  { id: "agency",     label: "EdgeAgency",   short: "AG",  color: "var(--ce-role-agency)", icon: Building2 },
 ] as const;
 
 type RoleId = typeof ALL_ROLES[number]["id"];
@@ -66,19 +68,31 @@ function getRoleRoutes(role: string): RouteItem[] {
 // ─── State label/color map ─────────────────────────────────────────────────
 
 const STATE_OPTIONS: { id: AppState; label: string; color: string }[] = [
-  { id: "onboarding", label: "Onboarding", color: "#22D3EE" },
-  { id: "empty",      label: "Empty",      color: "#9CA3AF" },
-  { id: "active",     label: "Active",     color: "#B3FF3B" },
+  { id: "onboarding", label: "Onboarding", color: "var(--ce-role-edgestar)" },
+  { id: "empty",      label: "Empty",      color: "var(--ce-text-secondary)" },
+  { id: "active",     label: "Active",     color: "var(--ce-lime)" },
 ];
 
 // ─── DevTools component ────────────────────────────────────────────────────
 
+const FAMILY_VARIATIONS: { id: FamilyVariation; label: string; desc: string; color: string }[] = [
+  { id: "A", label: "Constellation", desc: "Overview-first orbit cards", color: "var(--ce-role-parent)" },
+  { id: "B", label: "Journal",       desc: "Narrative scroll",          color: "var(--ce-role-guide)" },
+  { id: "C", label: "Command Center", desc: "Three-pane layout",       color: "var(--ce-role-edgestar)" },
+];
+
 interface DevToolsProps {
   appState: AppState;
   onStateChange: (state: AppState) => void;
+  familyVariation: FamilyVariation;
+  onFamilyVariationChange: (v: FamilyVariation) => void;
+  theme: ThemeMode;
+  onThemeChange: (t: ThemeMode) => void;
+  navVariation: NavVariation;
+  onNavVariationChange: (v: NavVariation) => void;
 }
 
-export function DevTools({ appState, onStateChange }: DevToolsProps) {
+export function DevTools({ appState, onStateChange, familyVariation, onFamilyVariationChange, theme, onThemeChange, navVariation, onNavVariationChange }: DevToolsProps) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -169,28 +183,28 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
       <div
         style={{
           background: "rgba(10,12,16,0.96)",
-          border: "1px solid rgba(255,255,255,0.08)",
+          border: "1px solid rgba(var(--ce-glass-tint),0.08)",
           borderRadius: 14,
           backdropFilter: "blur(24px)",
           overflow: "hidden",
-          boxShadow: "0 8px 32px rgba(0,0,0,0.4)",
+          boxShadow: "0 8px 32px rgba(var(--ce-shadow-tint),0.4)",
         }}
       >
         {/* ── Header ───────────────────────────────────────────── */}
         <div
           className="flex items-center gap-2 px-3 py-2.5 cursor-grab active:cursor-grabbing"
-          style={{ borderBottom: "1px solid rgba(255,255,255,0.05)" }}
+          style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)" }}
         >
-          <GripVertical className="w-3.5 h-3.5 text-[#374151] flex-shrink-0" />
+          <GripVertical className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] flex-shrink-0" />
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <div
               className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0"
-              style={{ background: "rgba(179,255,59,0.08)" }}
+              style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}
             >
-              <Sparkles className="w-3 h-3 text-[#B3FF3B]" />
+              <Sparkles className="w-3 h-3 text-ce-lime" />
             </div>
             <span
-              className="text-[11px] text-[#E8E8ED] truncate"
+              className="text-[11px] text-ce-text-primary truncate"
               style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
             >
               Demo Controls
@@ -214,9 +228,9 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
             className="flex-shrink-0 w-5 h-5 flex items-center justify-center rounded cursor-pointer hover:bg-white/5 transition-colors"
           >
             {expanded ? (
-              <ChevronUp className="w-3 h-3 text-[#6B7280]" />
+              <ChevronUp className="w-3 h-3 text-ce-text-tertiary" />
             ) : (
-              <ChevronDown className="w-3 h-3 text-[#6B7280]" />
+              <ChevronDown className="w-3 h-3 text-ce-text-tertiary" />
             )}
           </button>
         </div>
@@ -234,11 +248,11 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
               {/* Current path */}
               <div
                 className="px-3 py-2 flex items-center gap-1.5"
-                style={{ borderBottom: "1px solid rgba(255,255,255,0.04)", background: "rgba(255,255,255,0.015)" }}
+                style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)", background: "rgba(var(--ce-glass-tint),0.015)" }}
               >
-                <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)" }}>PATH</span>
+                <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>PATH</span>
                 <span
-                  className="text-[10px] text-[#6B7280] truncate flex-1"
+                  className="text-[10px] text-ce-text-tertiary truncate flex-1"
                   style={{ fontFamily: "var(--font-body)", fontFeatureSettings: "'tnum'" }}
                 >
                   {pathname || "/"}
@@ -246,18 +260,18 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
               </div>
 
               {/* ── ROLE section ──────────────────────────────── */}
-              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <div style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <button
                   onClick={() => setRolesExpanded(v => !v)}
                   className="w-full flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-white/[0.02] transition-colors"
                 >
-                  <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
                     ROLE
                   </span>
                   {rolesExpanded ? (
-                    <ChevronUp className="w-3 h-3 text-[#374151]" />
+                    <ChevronUp className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   ) : (
-                    <ChevronDown className="w-3 h-3 text-[#374151]" />
+                    <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   )}
                 </button>
                 <AnimatePresence initial={false}>
@@ -287,12 +301,12 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                             >
                               <Icon
                                 className="w-3 h-3 flex-shrink-0"
-                                style={{ color: isActive ? role.color : "#4B5563" }}
+                                style={{ color: isActive ? role.color : "var(--ce-text-tertiary)" }}
                               />
                               <span
                                 className="text-[10px] truncate"
                                 style={{
-                                  color: isActive ? role.color : "#9CA3AF",
+                                  color: isActive ? role.color : "var(--ce-text-secondary)",
                                   fontFamily: "var(--font-body)",
                                   fontWeight: isActive ? 500 : 400,
                                 }}
@@ -309,18 +323,18 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
               </div>
 
               {/* ── STATE section ─────────────────────────────── */}
-              <div style={{ borderBottom: "1px solid rgba(255,255,255,0.04)" }}>
+              <div style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 <button
                   onClick={() => setStateExpanded(v => !v)}
                   className="w-full flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-white/[0.02] transition-colors"
                 >
-                  <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
                     STATE
                   </span>
                   {stateExpanded ? (
-                    <ChevronUp className="w-3 h-3 text-[#374151]" />
+                    <ChevronUp className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   ) : (
-                    <ChevronDown className="w-3 h-3 text-[#374151]" />
+                    <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   )}
                 </button>
                 <AnimatePresence initial={false}>
@@ -349,12 +363,12 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                             >
                               <div
                                 className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                                style={{ background: isActive ? s.color : "#374151" }}
+                                style={{ background: isActive ? s.color : "var(--ce-text-quaternary)" }}
                               />
                               <span
                                 className="text-[11px] capitalize"
                                 style={{
-                                  color: isActive ? s.color : "#9CA3AF",
+                                  color: isActive ? s.color : "var(--ce-text-secondary)",
                                   fontFamily: "var(--font-body)",
                                   fontWeight: isActive ? 500 : 400,
                                 }}
@@ -370,19 +384,151 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                 </AnimatePresence>
               </div>
 
+              {/* ── THEME section ─────────────────────────────── */}
+              <div style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <div className="px-3 py-2 flex items-center justify-between">
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                    THEME
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {([
+                      { id: "dark" as ThemeMode, label: "Dark", Icon: Moon, color: "var(--ce-role-guide)" },
+                      { id: "light" as ThemeMode, label: "Light", Icon: Sun, color: "var(--ce-role-edgepreneur)" },
+                    ]).map(t => {
+                      const isActive = theme === t.id;
+                      return (
+                        <button
+                          key={t.id}
+                          onClick={() => onThemeChange(t.id)}
+                          className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer transition-colors hover:bg-white/[0.03]"
+                          style={{
+                            background: isActive ? `${t.color}10` : "transparent",
+                            border: isActive ? `1px solid ${t.color}25` : "1px solid transparent",
+                          }}
+                        >
+                          <t.Icon
+                            className="w-3 h-3"
+                            style={{ color: isActive ? t.color : "var(--ce-text-tertiary)" }}
+                          />
+                          <span
+                            className="text-[10px]"
+                            style={{
+                              color: isActive ? t.color : "var(--ce-text-secondary)",
+                              fontFamily: "var(--font-body)",
+                              fontWeight: isActive ? 500 : 400,
+                            }}
+                          >
+                            {t.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* ── NAV VARIATION section ──────────────────── */}
+              <div style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <div className="px-3 py-2 flex items-center justify-between">
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                    NAV STYLE
+                  </span>
+                  <div className="flex items-center gap-1">
+                    {([
+                      { id: "A" as NavVariation, label: "Dock", color: "var(--ce-role-parent)" },
+                      { id: "B" as NavVariation, label: "Segment", color: "var(--ce-role-edgestar)" },
+                    ]).map(v => {
+                      const isActive = navVariation === v.id;
+                      return (
+                        <button
+                          key={v.id}
+                          onClick={() => onNavVariationChange(v.id)}
+                          className="flex items-center gap-1 px-2 py-1 rounded-md cursor-pointer transition-colors hover:bg-white/[0.03]"
+                          style={{
+                            background: isActive ? `${v.color}10` : "transparent",
+                            border: isActive ? `1px solid ${v.color}25` : "1px solid transparent",
+                          }}
+                        >
+                          <span
+                            className="text-[10px]"
+                            style={{
+                              color: isActive ? v.color : "var(--ce-text-secondary)",
+                              fontFamily: "var(--font-body)",
+                              fontWeight: isActive ? 500 : 400,
+                            }}
+                          >
+                            {v.label}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+
+              {/* ── VARIATION section (family surface only) ──── */}
+              {pathname.includes("/family") && (
+                <div style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <div className="px-3 py-2">
+                    <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                      FAMILY VARIATION
+                    </span>
+                  </div>
+                  <div className="px-2 pb-2 flex flex-col gap-1">
+                    {FAMILY_VARIATIONS.map(v => {
+                      const isActive = familyVariation === v.id;
+                      return (
+                        <button
+                          key={v.id}
+                          onClick={() => onFamilyVariationChange(v.id)}
+                          className="flex items-center gap-2 px-2.5 py-1.5 rounded-lg cursor-pointer text-left transition-colors hover:bg-white/[0.03]"
+                          style={{
+                            background: isActive ? `${v.color}10` : "transparent",
+                            border: isActive ? `1px solid ${v.color}25` : "1px solid transparent",
+                          }}
+                        >
+                          <div
+                            className="w-4 h-4 rounded flex items-center justify-center flex-shrink-0 text-[9px]"
+                            style={{
+                              background: isActive ? `${v.color}20` : "rgba(var(--ce-glass-tint),0.04)",
+                              color: isActive ? v.color : "var(--ce-text-tertiary)",
+                              fontFamily: "var(--font-display)",
+                              fontWeight: 600,
+                            }}
+                          >
+                            {v.id}
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <span
+                              className="text-[10px] block leading-tight"
+                              style={{ color: isActive ? v.color : "var(--ce-text-secondary)", fontFamily: "var(--font-body)", fontWeight: isActive ? 500 : 400 }}
+                            >
+                              {v.label}
+                            </span>
+                            <span className="text-[9px] block leading-tight text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
+                              {v.desc}
+                            </span>
+                          </div>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+
               {/* ── ROUTES section ────────────────────────────── */}
               <div>
                 <button
                   onClick={() => setRoutesExpanded(v => !v)}
                   className="w-full flex items-center justify-between px-3 py-2 cursor-pointer hover:bg-white/[0.02] transition-colors"
                 >
-                  <span className="text-[9px] text-[#374151]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
                     NAVIGATE
                   </span>
                   {routesExpanded ? (
-                    <ChevronUp className="w-3 h-3 text-[#374151]" />
+                    <ChevronUp className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   ) : (
-                    <ChevronDown className="w-3 h-3 text-[#374151]" />
+                    <ChevronDown className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
                   )}
                 </button>
                 <AnimatePresence initial={false}>
@@ -401,10 +547,10 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                         {/* General routes */}
                         <div
                           className="px-3 py-1"
-                          style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}
+                          style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}
                         >
                           <span
-                            className="text-[9px] text-[#374151]"
+                            className="text-[9px] text-[var(--ce-text-quaternary)]"
                             style={{ fontFamily: "var(--font-body)" }}
                           >
                             General
@@ -419,17 +565,17 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                               onClick={() => handleRouteClick(route.path)}
                               className="w-full flex items-center gap-2 px-3 py-1.5 cursor-pointer text-left transition-colors hover:bg-white/[0.03]"
                               style={{
-                                background: isActive ? "rgba(179,255,59,0.06)" : "transparent",
+                                background: isActive ? "rgba(var(--ce-lime-rgb),0.06)" : "transparent",
                               }}
                             >
                               <Icon
                                 className="w-3 h-3 flex-shrink-0"
-                                style={{ color: isActive ? "#B3FF3B" : "#4B5563" }}
+                                style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}
                               />
                               <span
                                 className="text-[10px] flex-1 truncate"
                                 style={{
-                                  color: isActive ? "#B3FF3B" : "#9CA3AF",
+                                  color: isActive ? "var(--ce-lime)" : "var(--ce-text-secondary)",
                                   fontFamily: "var(--font-body)",
                                   fontWeight: isActive ? 500 : 400,
                                 }}
@@ -438,7 +584,7 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                               </span>
                               <span
                                 className="text-[9px] flex-shrink-0"
-                                style={{ color: "#374151", fontFamily: "var(--font-body)" }}
+                                style={{ color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}
                               >
                                 {route.label}
                               </span>
@@ -449,7 +595,7 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                         {/* Role routes */}
                         <div
                           className="px-3 py-1 mt-0.5"
-                          style={{ borderBottom: "1px solid rgba(255,255,255,0.03)" }}
+                          style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}
                         >
                           <span
                             className="text-[9px]"
@@ -478,12 +624,12 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                             >
                               <Icon
                                 className="w-3 h-3 flex-shrink-0"
-                                style={{ color: isExact ? displayRole.color : "#4B5563" }}
+                                style={{ color: isExact ? displayRole.color : "var(--ce-text-tertiary)" }}
                               />
                               <span
                                 className="text-[10px] flex-1 truncate"
                                 style={{
-                                  color: isExact ? displayRole.color : "#9CA3AF",
+                                  color: isExact ? displayRole.color : "var(--ce-text-secondary)",
                                   fontFamily: "var(--font-body)",
                                   fontWeight: isExact ? 500 : 400,
                                   fontFeatureSettings: "'tnum'",
@@ -493,7 +639,7 @@ export function DevTools({ appState, onStateChange }: DevToolsProps) {
                               </span>
                               <span
                                 className="text-[9px] flex-shrink-0"
-                                style={{ color: "#374151", fontFamily: "var(--font-body)" }}
+                                style={{ color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}
                               >
                                 {route.label}
                               </span>
