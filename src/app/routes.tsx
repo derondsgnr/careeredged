@@ -25,6 +25,7 @@ import { LandingV6A } from "./components/landing/landing-v6a";
 import { LandingV6B } from "./components/landing/landing-v6b";
 import { LandingV6C } from "./components/landing/landing-v6c";
 import { AuthPage } from "./components/landing/auth-page";
+import { EdgeProd } from "./components/edge-prod";
 import { OnboardingH1 } from "./components/onboarding-h1";
 import { OnboardingH2 } from "./components/onboarding-h2";
 import { OnboardingH3 } from "./components/onboarding-h3";
@@ -140,6 +141,7 @@ function useRoleNavigation(): {
       taskroom:  `/${role}/taskroom`,
       sessions:  `/${role}/sessions`,
       profile:   `/${role}/profile`,
+      productivity: `/${role}/productivity`,
       immigration: `/${role}/immigration`,
       careers: `/${role}/careers`,
       // Layer 3 surfaces
@@ -251,6 +253,11 @@ function SessionsPage() {
 function ProfilePage() {
   const { role, onNavigate } = useRoleNavigation();
   return <GuideProfileEditSurface role={role} onNavigate={onNavigate} />;
+}
+
+function ProductivityPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeProd role={role} onNavigate={onNavigate} />;
 }
 
 // ─── Archive wrappers ───────────────────────────────────────────────
@@ -432,6 +439,7 @@ export const router = createBrowserRouter([
       { path: ":role/taskroom/:milestoneId",    Component: TaskRoomPage },
       { path: ":role/sessions",                 Component: SessionsPage },
       { path: ":role/profile",                  Component: ProfilePage },
+      { path: ":role/productivity",              Component: ProductivityPage },
       // Layer 3 surfaces
       { path: ":role/family",                   Component: FamilySurfaceSwitcher },
       { path: ":role/clients",                  Component: ClientsSurface },
