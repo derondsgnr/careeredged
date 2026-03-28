@@ -66,6 +66,9 @@ import { ScheduleSurface } from "./components/surfaces/schedule-surface";
 import { ResourcesSurface } from "./components/surfaces/resources-surface";
 import { WorkplaceSurface } from "./components/surfaces/workplace-surface";
 import { CommunitySurface } from "./components/surfaces/community-surface";
+import { EdgeMarketSurface } from "./components/surfaces/edgemarket-surface";
+import { CoursesSurface } from "./components/surfaces/courses-surface";
+import { BudgetSurface } from "./components/surfaces/budget-surface";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -159,6 +162,9 @@ function useRoleNavigation(): {
       resources: `/${role}/resources`,
       schedule:  `/${role}/schedule`,
       community: `/${role}/community`,
+      market:    `/${role}/market`,
+      courses:   `/${role}/courses`,
+      budget:    `/${role}/budget`,
       // Global
       landing:   "/",
     };
@@ -286,6 +292,21 @@ function WorkplacePage() {
 function CommunityPage() {
   const { role, onNavigate } = useRoleNavigation();
   return <CommunitySurface role={role} onNavigate={onNavigate} />;
+}
+
+function MarketPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeMarketSurface role={role} onNavigate={onNavigate} />;
+}
+
+function CoursesPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <CoursesSurface role={role} onNavigate={onNavigate} />;
+}
+
+function BudgetPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <BudgetSurface role={role} onNavigate={onNavigate} />;
 }
 
 // ─── Archive wrappers ───────────────────────────────────────────────
@@ -480,6 +501,9 @@ export const router = createBrowserRouter([
       { path: ":role/resources",                Component: ResourcesPage },
       { path: ":role/workplace",                Component: WorkplacePage },
       { path: ":role/community",                Component: CommunityPage },
+      { path: ":role/market",                   Component: MarketPage },
+      { path: ":role/courses",                  Component: CoursesPage },
+      { path: ":role/budget",                   Component: BudgetPage },
       { path: ":role/careers",                  Component: CareerDiscovery },
       { path: "careers",                        Component: CareerDiscovery },
 
