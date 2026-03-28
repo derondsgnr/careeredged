@@ -12,7 +12,7 @@ import { EASE } from "../tokens";
  * localStorage key: ce-schedule-data
  */
 
-import { useState } from "react";
+import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { RoleShell, GlassCard } from "../role-shell";
@@ -21,7 +21,7 @@ import { SophiaMark } from "../sophia-mark";
 import { toast } from "../ui/feedback";
 import {
   Calendar, Clock, MapPin, Users, Video, Check, ChevronRight,
-  Plus, ArrowRight, Send, Bell, Target, Sparkles, ExternalLink, Circle,
+  Plus, ArrowRight, Send, Bell, Target, Sparkles, ExternalLink, Circle, X,
 } from "lucide-react";
 
 
@@ -209,7 +209,7 @@ export function ScheduleSurface({ role: roleProp, onNavigate: onNavProp }: Sched
   const [importConfirmed, setImportConfirmed] = useState(false);
 
   // Active state data
-  const [events] = useState<CalendarEvent[]>(MOCK_EVENTS);
+  const [events, setEvents] = useState<CalendarEvent[]>(MOCK_EVENTS);
   const [availability, setAvailability] = useState<AvailabilityBlock[]>(MOCK_AVAILABILITY);
 
   const toggleSlot = (dayIdx: number, period: "morning" | "afternoon" | "evening") => {
@@ -261,6 +261,7 @@ export function ScheduleSurface({ role: roleProp, onNavigate: onNavProp }: Sched
               activeView={activeView}
               setActiveView={setActiveView}
               events={events}
+              setEvents={setEvents}
               availability={availability}
               toggleAvailability={toggleAvailability}
               onNavigate={handleNavigate}
@@ -478,16 +479,64 @@ function BuildingState({
 // ─── Active State ────────────────────────────────────────────────────────────
 
 function ActiveState({
-  activeView, setActiveView, events, availability, toggleAvailability, onNavigate,
+  activeView, setActiveView, events, setEvents, availability, toggleAvailability, onNavigate,
 }: {
   activeView: "timeline" | "week" | "availability";
   setActiveView: (v: "timeline" | "week" | "availability") => void;
   events: CalendarEvent[];
+  setEvents: React.Dispatch<React.SetStateAction<CalendarEvent[]>>;
   availability: AvailabilityBlock[];
   toggleAvailability: (id: string) => void;
   onNavigate: (t: string) => void;
 }) {
   const views = ["timeline", "week", "availability"] as const;
+
+  // Create panel state
+  const [showCreatePanel, setShowCreatePanel] = useState(false);
+  const [newEvent, setNewEvent] = useState({
+    title: "", type: "event" as EventType, date: "", time: "", duration: "1 hour", location: "", isVirtual: false,
+  });
+
+  // Detail panel state
+  const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
+
+  const handleCreateEvent = () => {
+    if (!newEvent.title.trim()) return;
+    const created: CalendarEvent = {
+      id: `user-${Date.now()}`,
+      title: newEvent.title,
+      type: newEvent.type,
+      date: newEvent.date || "2026-03-28",
+      time: newEvent.time || "12:00 PM",
+      duration: newEvent.duration,
+      location: newEvent.location,
+      attendees: [],
+      sophiaNote: "",
+      isVirtual: newEvent.isVirtual,
+    };
+    setEvents((prev) => [...prev, created]);
+    setShowCreatePanel(false);
+    setNewEvent({ title: "", type: "event", date: "", time: "", duration: "1 hour", location: "", isVirtual: false });
+    toast.success("Event created", `"${created.title}" added to your schedule.`);
+  };
+
+  const handleCancelEvent = (event: CalendarEvent) => {
+    setEvents((prev) => prev.filter((e) => e.id !== event.id));
+    setSelectedEvent(null);
+    toast.success("Event cancelled", `"${event.title}" removed from your schedule.`);
+  };
+
+  const glassInputStyle: React.CSSProperties = {
+    width: "100%",
+    padding: "8px 10px",
+    borderRadius: 8,
+    background: "rgba(var(--ce-glass-tint),0.03)",
+    border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+    fontFamily: "var(--font-body)",
+    fontSize: 12,
+    color: "var(--ce-text-primary)",
+    outline: "none",
+  };
 
   return (
     <motion.div
@@ -504,7 +553,7 @@ function ActiveState({
           </h1>
         </div>
         <button
-          onClick={() => toast.success("New event", "Event creation coming soon.")}
+          onClick={() => setShowCreatePanel(true)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02]"
           style={{
             fontFamily: "var(--font-body)", fontWeight: 500,
@@ -541,8 +590,333 @@ function ActiveState({
       {/* View content */}
       <AnimatePresence mode="wait">
         {activeView === "timeline" && <TimelineView key="timeline" events={events} onNavigate={onNavigate} />}
-        {activeView === "week" && <WeekView key="week" events={events} />}
+        {activeView === "week" && <WeekView key="week" events={events} onSelectEvent={setSelectedEvent} />}
         {activeView === "availability" && <AvailabilityView key="availability" blocks={availability} toggle={toggleAvailability} />}
+      </AnimatePresence>
+
+      {/* ── Create Event Panel ── */}
+      <AnimatePresence>
+        {showCreatePanel && (
+          <>
+            <motion.div
+              className="fixed inset-0 z-[50]"
+              style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: EASE }}
+              onClick={() => setShowCreatePanel(false)}
+            />
+            <motion.div
+              className="fixed top-0 right-0 bottom-0 z-[50] flex flex-col"
+              style={{
+                width: 400, maxWidth: "100vw",
+                background: "var(--ce-surface-base)",
+                borderLeft: "1px solid rgba(var(--ce-glass-tint),0.08)",
+              }}
+              initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }}
+              transition={{ duration: 0.3, ease: EASE }}
+            >
+              {/* Panel header */}
+              <div className="flex items-center justify-between p-5 pb-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 14, color: "var(--ce-text-primary)" }}>
+                  New Event
+                </h2>
+                <button
+                  onClick={() => setShowCreatePanel(false)}
+                  className="w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-all hover:scale-[1.05]"
+                  style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}
+                >
+                  <X className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
+                </button>
+              </div>
+
+              {/* Form */}
+              <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-4">
+                {/* Title */}
+                <div className="flex flex-col gap-1.5">
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Title</label>
+                  <input
+                    type="text"
+                    value={newEvent.title}
+                    onChange={(e) => setNewEvent((prev) => ({ ...prev, title: e.target.value }))}
+                    placeholder="e.g. Mock interview prep"
+                    style={glassInputStyle}
+                  />
+                </div>
+
+                {/* Type */}
+                <div className="flex flex-col gap-1.5">
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Type</label>
+                  <select
+                    value={newEvent.type}
+                    onChange={(e) => setNewEvent((prev) => ({ ...prev, type: e.target.value as EventType }))}
+                    style={{ ...glassInputStyle, appearance: "none" as const }}
+                  >
+                    <option value="session">Session</option>
+                    <option value="interview">Interview</option>
+                    <option value="event">Event</option>
+                    <option value="deadline">Deadline</option>
+                    <option value="reminder">Reminder</option>
+                  </select>
+                </div>
+
+                {/* Date */}
+                <div className="flex flex-col gap-1.5">
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Date</label>
+                  <input
+                    type="text"
+                    value={newEvent.date}
+                    onChange={(e) => setNewEvent((prev) => ({ ...prev, date: e.target.value }))}
+                    placeholder="2026-03-28"
+                    style={glassInputStyle}
+                  />
+                </div>
+
+                {/* Time */}
+                <div className="flex flex-col gap-1.5">
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Time</label>
+                  <input
+                    type="text"
+                    value={newEvent.time}
+                    onChange={(e) => setNewEvent((prev) => ({ ...prev, time: e.target.value }))}
+                    placeholder="2:00 PM"
+                    style={glassInputStyle}
+                  />
+                </div>
+
+                {/* Duration */}
+                <div className="flex flex-col gap-1.5">
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Duration</label>
+                  <input
+                    type="text"
+                    value={newEvent.duration}
+                    onChange={(e) => setNewEvent((prev) => ({ ...prev, duration: e.target.value }))}
+                    placeholder="1 hour"
+                    style={glassInputStyle}
+                  />
+                </div>
+
+                {/* Location */}
+                <div className="flex flex-col gap-1.5">
+                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Location</label>
+                  <input
+                    type="text"
+                    value={newEvent.location}
+                    onChange={(e) => setNewEvent((prev) => ({ ...prev, location: e.target.value }))}
+                    placeholder="e.g. Career Center Room 101"
+                    style={glassInputStyle}
+                  />
+                </div>
+
+                {/* Virtual toggle */}
+                <div className="flex items-center gap-3">
+                  <button
+                    onClick={() => setNewEvent((prev) => ({ ...prev, isVirtual: !prev.isVirtual }))}
+                    className="w-8 h-4.5 rounded-full flex items-center transition-all flex-shrink-0 px-0.5 cursor-pointer"
+                    style={{
+                      background: newEvent.isVirtual ? "rgba(34,211,238,0.2)" : "rgba(var(--ce-glass-tint),0.08)",
+                    }}
+                  >
+                    <motion.div
+                      className="w-3.5 h-3.5 rounded-full"
+                      animate={{ x: newEvent.isVirtual ? 14 : 0 }}
+                      transition={{ duration: 0.2, ease: EASE }}
+                      style={{ background: newEvent.isVirtual ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }}
+                    />
+                  </button>
+                  <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>
+                    Virtual meeting
+                  </span>
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="p-5 pt-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <button
+                  onClick={handleCreateEvent}
+                  disabled={!newEvent.title.trim()}
+                  className="w-full py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5"
+                  style={{
+                    fontFamily: "var(--font-body)", fontWeight: 500,
+                    background: newEvent.title.trim() ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.06)",
+                    color: newEvent.title.trim() ? "#000" : "var(--ce-text-quaternary)",
+                    opacity: newEvent.title.trim() ? 1 : 0.7,
+                  }}
+                >
+                  <Plus className="w-3 h-3" /> Create Event
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ── Event Detail Panel ── */}
+      <AnimatePresence>
+        {selectedEvent && (
+          <>
+            <motion.div
+              className="fixed inset-0 z-[50]"
+              style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: EASE }}
+              onClick={() => setSelectedEvent(null)}
+            />
+            <motion.div
+              className="fixed top-0 right-0 bottom-0 z-[50] flex flex-col"
+              style={{
+                width: 400, maxWidth: "100vw",
+                background: "var(--ce-surface-base)",
+                borderLeft: "1px solid rgba(var(--ce-glass-tint),0.08)",
+              }}
+              initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }}
+              transition={{ duration: 0.3, ease: EASE }}
+            >
+              {/* Panel header */}
+              <div className="flex items-center justify-between p-5 pb-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 14, color: "var(--ce-text-primary)" }}>
+                  Event Details
+                </h2>
+                <button
+                  onClick={() => setSelectedEvent(null)}
+                  className="w-7 h-7 rounded-md flex items-center justify-center cursor-pointer transition-all hover:scale-[1.05]"
+                  style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}
+                >
+                  <X className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
+                </button>
+              </div>
+
+              {/* Detail content */}
+              <div className="flex-1 overflow-y-auto p-5 flex flex-col gap-5">
+                {/* Title + type badge */}
+                <div>
+                  <h3 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 16, color: "var(--ce-text-primary)", marginBottom: 6 }}>
+                    {selectedEvent.title}
+                  </h3>
+                  <span
+                    className="inline-flex px-2 py-0.5 rounded text-[10px]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      color: TYPE_CONFIG[selectedEvent.type].color,
+                      background: "rgba(var(--ce-glass-tint),0.06)",
+                    }}
+                  >
+                    {TYPE_CONFIG[selectedEvent.type].label}
+                  </span>
+                </div>
+
+                {/* Date / time / duration */}
+                <div className="flex flex-col gap-2.5">
+                  <div className="flex items-center gap-2.5">
+                    <Calendar className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ce-text-tertiary)" }} />
+                    <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>
+                      {selectedEvent.date}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2.5">
+                    <Clock className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ce-text-tertiary)" }} />
+                    <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>
+                      {selectedEvent.time}{selectedEvent.duration ? ` (${selectedEvent.duration})` : ""}
+                    </span>
+                  </div>
+                  {selectedEvent.location && (
+                    <div className="flex items-center gap-2.5">
+                      {selectedEvent.isVirtual
+                        ? <Video className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ce-text-tertiary)" }} />
+                        : <MapPin className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ce-text-tertiary)" }} />
+                      }
+                      <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>
+                        {selectedEvent.location}
+                      </span>
+                      {selectedEvent.isVirtual && (
+                        <span
+                          className="px-1.5 py-0.5 rounded text-[10px]"
+                          style={{ fontFamily: "var(--font-body)", color: "var(--ce-role-edgestar)", background: "rgba(34,211,238,0.1)" }}
+                        >
+                          Virtual
+                        </span>
+                      )}
+                    </div>
+                  )}
+                </div>
+
+                {/* Attendees */}
+                {selectedEvent.attendees.length > 0 && (
+                  <div>
+                    <p style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500, marginBottom: 8 }}>
+                      Attendees
+                    </p>
+                    <div className="flex flex-col gap-2">
+                      {selectedEvent.attendees.map((a, i) => (
+                        <div key={i} className="flex items-center gap-2.5">
+                          <div
+                            className="w-7 h-7 rounded-full flex items-center justify-center text-[11px]"
+                            style={{
+                              fontFamily: "var(--font-body)", fontWeight: 500,
+                              background: "rgba(var(--ce-glass-tint),0.08)",
+                              color: "var(--ce-text-secondary)",
+                            }}
+                          >
+                            {a.avatarInitial}
+                          </div>
+                          <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)" }}>
+                            {a.name}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
+
+                {/* Sophia note */}
+                {selectedEvent.sophiaNote && (
+                  <div
+                    className="p-3 rounded-lg"
+                    style={{ background: "rgba(34,211,238,0.04)", border: "1px solid rgba(34,211,238,0.1)" }}
+                  >
+                    <div className="flex items-center gap-1.5 mb-1.5">
+                      <SophiaMark size={16} />
+                      <span style={{ fontFamily: "var(--font-body)", fontSize: 10, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>
+                        Sophia
+                      </span>
+                    </div>
+                    <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)", lineHeight: 1.5 }}>
+                      {selectedEvent.sophiaNote}
+                    </p>
+                  </div>
+                )}
+              </div>
+
+              {/* Actions footer */}
+              <div className="p-5 pt-4 flex items-center gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <button
+                  onClick={() => {
+                    toast.success("Event rescheduled", `"${selectedEvent.title}" has been rescheduled.`);
+                    setSelectedEvent(null);
+                  }}
+                  className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                  style={{
+                    fontFamily: "var(--font-body)", fontWeight: 500,
+                    background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
+                    border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                  }}
+                >
+                  Reschedule
+                </button>
+                <button
+                  onClick={() => handleCancelEvent(selectedEvent)}
+                  className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                  style={{
+                    fontFamily: "var(--font-body)", fontWeight: 500,
+                    background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.08)", color: "var(--ce-status-error)",
+                    border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)",
+                  }}
+                >
+                  Cancel Event
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
       </AnimatePresence>
     </motion.div>
   );
@@ -677,7 +1051,7 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
 
 // ─── Week View ───────────────────────────────────────────────────────────────
 
-function WeekView({ events }: { events: CalendarEvent[] }) {
+function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelectEvent: (e: CalendarEvent) => void }) {
   // Build columns: Mon–Sun
   const columns: CalendarEvent[][] = Array.from({ length: 7 }, () => []);
   events.forEach((e) => {
@@ -713,7 +1087,7 @@ function WeekView({ events }: { events: CalendarEvent[] }) {
               return (
                 <button
                   key={event.id}
-                  onClick={() => toast.info(event.title, "Detail view coming soon.")}
+                  onClick={() => onSelectEvent(event)}
                   className="text-left p-2 rounded-lg cursor-pointer transition-all hover:scale-[1.02]"
                   style={{
                     background: "rgba(var(--ce-glass-tint),0.04)",
@@ -834,7 +1208,11 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
 
       {/* Share button */}
       <button
-        onClick={() => toast.success("Link copied", "Your availability link is ready to share.")}
+        onClick={() => {
+          const url = "https://careeredge.com/availability/user-123";
+          navigator.clipboard?.writeText(url);
+          toast.success("Link copied", "Your availability link is ready to share.");
+        }}
         className="flex items-center gap-2 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02] w-fit"
         style={{
           fontFamily: "var(--font-body)", fontWeight: 500,

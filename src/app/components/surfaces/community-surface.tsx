@@ -24,7 +24,7 @@ import {
   Users, Heart, MessageSquare, Share2, Plus, Search,
   Calendar, MapPin, Video, Crown, ChevronRight, ArrowRight,
   Sparkles, Check, X, Send, Globe, Star, TrendingUp,
-  Circle, Flame,
+  Circle, Flame, Copy, Link2, MessageCircle,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -233,6 +233,48 @@ const EVENTS: CommunityEvent[] = [
   { id: "ev5", title: "Mock Interview Marathon",              date: "April 12, 2026", time: "9:00 AM – 12:00 PM",  location: "Virtual",                     attendees: 89,  capacity: 100, rsvpd: false, virtual: true  },
 ];
 
+// ─── Mock Comments ──────────────────────────────────────────────────────────
+
+interface Comment {
+  id: string;
+  author: { name: string; initial: string; avatarColor: string };
+  text: string;
+  timestamp: string;
+}
+
+const MOCK_COMMENTS: Record<string, Comment[]> = {
+  p1: [
+    { id: "c1a", author: { name: "James L.", initial: "J", avatarColor: "var(--ce-role-edu)" }, text: "Congrats Sarah! This is so inspiring. What was the biggest challenge during your job search?", timestamp: "1h ago" },
+    { id: "c1b", author: { name: "Coach Maria", initial: "M", avatarColor: "var(--ce-role-guide)" }, text: "So proud of you! The mock interviews really paid off.", timestamp: "45m ago" },
+    { id: "c1c", author: { name: "Nina R.", initial: "N", avatarColor: "var(--ce-role-edgestar)" }, text: "Amazing! Which EdgePath track were you on?", timestamp: "30m ago" },
+  ],
+  p2: [
+    { id: "c2a", author: { name: "Priya M.", initial: "P", avatarColor: "var(--ce-role-edgepreneur)" }, text: "I made this exact transition! Happy to chat about it. The product sense interviews were the hardest part.", timestamp: "3h ago" },
+    { id: "c2b", author: { name: "Alex T.", initial: "A", avatarColor: "var(--ce-role-ngo)" }, text: "Google's PM certificate on Coursera was genuinely useful. Skip the expensive bootcamps.", timestamp: "2h ago" },
+    { id: "c2c", author: { name: "Coach Ben", initial: "B", avatarColor: "var(--ce-role-guide)" }, text: "Your storytelling skills from marketing are a huge advantage in PM interviews. Lean into that.", timestamp: "1h ago" },
+  ],
+  p3: [
+    { id: "c3a", author: { name: "David P.", initial: "D", avatarColor: "var(--ce-role-parent)" }, text: "This is exactly what I needed. My interview is next month. Bookmarked!", timestamp: "5h ago" },
+    { id: "c3b", author: { name: "Fatima A.", initial: "F", avatarColor: "var(--ce-role-ngo)" }, text: "Can you share more about the document prep timeline? When did you start gathering everything?", timestamp: "4h ago" },
+  ],
+  p4: [
+    { id: "c4a", author: { name: "Nina R.", initial: "N", avatarColor: "var(--ce-role-edgestar)" }, text: "Count me in! I've been wanting to build a daily design habit.", timestamp: "7h ago" },
+    { id: "c4b", author: { name: "Sarah K.", initial: "S", avatarColor: "var(--ce-role-edgestar)" }, text: "Great idea! I did a similar challenge last year and it transformed my portfolio.", timestamp: "6h ago" },
+  ],
+  p5: [
+    { id: "c5a", author: { name: "James L.", initial: "J", avatarColor: "var(--ce-role-edu)" }, text: "This matches what I'm seeing in the market. Location-agnostic is the future.", timestamp: "10h ago" },
+    { id: "c5b", author: { name: "Raj S.", initial: "R", avatarColor: "var(--ce-role-edgepreneur)" }, text: "How does this affect negotiation strategy? Should we still anchor to local market rates?", timestamp: "8h ago" },
+    { id: "c5c", author: { name: "Priya M.", initial: "P", avatarColor: "var(--ce-role-edgepreneur)" }, text: "Would love a deep dive on this in your next coaching session!", timestamp: "6h ago" },
+  ],
+};
+
+const BUDDY_MATCHES = [
+  { name: "Lena K.", initial: "L", role: "UX Designer", avatarColor: "var(--ce-role-edgestar)", match: 92 },
+  { name: "Marcus W.", initial: "M", role: "Career Changer", avatarColor: "var(--ce-role-edu)", match: 87 },
+  { name: "Aisha N.", initial: "A", role: "Frontend Dev", avatarColor: "var(--ce-role-edgepreneur)", match: 85 },
+  { name: "Tom R.", initial: "T", role: "PM Aspirant", avatarColor: "var(--ce-role-ngo)", match: 81 },
+];
+
 // ─── Building step config ────────────────────────────────────────────────────
 
 const INTEREST_PILLS = ["Industry Groups", "Career Stage Peers", "Local Professionals", "Coach-Led Communities"];
@@ -258,6 +300,22 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
   const [posts, setPosts] = useState<FeedPost[]>(FEED_POSTS);
   const [groups, setGroups] = useState<Group[]>(GROUPS);
   const [events, setEvents] = useState<CommunityEvent[]>(EVENTS);
+
+  // Compose modal
+  const [showCompose, setShowCompose] = useState(false);
+  const [composeText, setComposeText] = useState("");
+  const [composeType, setComposeType] = useState<PostType>("update");
+
+  // Comment drawer
+  const [commentingPost, setCommentingPost] = useState<FeedPost | null>(null);
+  const [postComments, setPostComments] = useState<Record<string, Comment[]>>(MOCK_COMMENTS);
+  const [newCommentText, setNewCommentText] = useState("");
+
+  // Buddy modal
+  const [showBuddyModal, setShowBuddyModal] = useState(false);
+
+  // Share popover
+  const [sharingPost, setSharingPost] = useState<string | null>(null);
 
   const accent = "var(--ce-cyan)";
 
@@ -310,7 +368,51 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
   };
 
   const handleCompose = () => {
-    toast("Compose coming soon", "This feature is being built.");
+    setComposeText("");
+    setComposeType("update");
+    setShowCompose(true);
+  };
+
+  const handlePublishPost = () => {
+    if (!composeText.trim()) return;
+    const newPost: FeedPost = {
+      id: `p-${Date.now()}`,
+      author: { name: "You", initial: "Y", role: (role as string) || "edgestar", avatarColor: "var(--ce-cyan)" },
+      type: composeType,
+      content: composeText.trim(),
+      timestamp: "Just now",
+      likes: 0,
+      comments: 0,
+      liked: false,
+    };
+    setPosts(prev => [newPost, ...prev]);
+    setShowCompose(false);
+    setComposeText("");
+    toast.success("Post published");
+  };
+
+  const handleAddComment = () => {
+    if (!commentingPost || !newCommentText.trim()) return;
+    const newComment: Comment = {
+      id: `c-${Date.now()}`,
+      author: { name: "You", initial: "Y", avatarColor: "var(--ce-cyan)" },
+      text: newCommentText.trim(),
+      timestamp: "Just now",
+    };
+    setPostComments(prev => ({
+      ...prev,
+      [commentingPost.id]: [...(prev[commentingPost.id] || []), newComment],
+    }));
+    setPosts(prev => prev.map(p =>
+      p.id === commentingPost.id ? { ...p, comments: p.comments + 1 } : p
+    ));
+    setNewCommentText("");
+  };
+
+  const handleCopyLink = (postId: string) => {
+    navigator.clipboard.writeText(`https://careeredge.com/community/post/${postId}`);
+    toast.success("Link copied");
+    setSharingPost(null);
   };
 
   // ─── Empty State ─────────────────────────────────────────────────────────
@@ -581,7 +683,7 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
         {/* Cross-surface chips */}
         <div className="flex items-center gap-2 mb-5">
           <button
-            onClick={() => toast("Opening Sophia...", "Find a study buddy or accountability partner.")}
+            onClick={() => setShowBuddyModal(true)}
             className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[10px] cursor-pointer transition-all hover:bg-[rgba(var(--ce-glass-tint),0.06)]"
             style={{
               border: "1px solid rgba(var(--ce-glass-tint),0.08)",
@@ -721,20 +823,64 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
                           {post.likes}
                         </button>
                         <button
-                          onClick={() => toast("Comments coming soon")}
+                          onClick={() => { setCommentingPost(post); setNewCommentText(""); }}
                           className="flex items-center gap-1.5 text-[11px] text-[var(--ce-text-quaternary)] cursor-pointer hover:text-[var(--ce-text-secondary)] transition-colors"
                           style={{ fontFamily: "var(--font-body)" }}
                         >
                           <MessageSquare className="w-3.5 h-3.5" />
                           {post.comments}
                         </button>
-                        <button
-                          onClick={() => toast("Share coming soon")}
-                          className="flex items-center gap-1.5 text-[11px] text-[var(--ce-text-quaternary)] cursor-pointer hover:text-[var(--ce-text-secondary)] transition-colors"
-                          style={{ fontFamily: "var(--font-body)" }}
-                        >
-                          <Share2 className="w-3.5 h-3.5" />
-                        </button>
+                        <div className="relative">
+                          <button
+                            onClick={() => setSharingPost(sharingPost === post.id ? null : post.id)}
+                            className="flex items-center gap-1.5 text-[11px] text-[var(--ce-text-quaternary)] cursor-pointer hover:text-[var(--ce-text-secondary)] transition-colors"
+                            style={{ fontFamily: "var(--font-body)" }}
+                          >
+                            <Share2 className="w-3.5 h-3.5" />
+                          </button>
+                          <AnimatePresence>
+                            {sharingPost === post.id && (
+                              <motion.div
+                                initial={{ opacity: 0, y: 4, scale: 0.95 }}
+                                animate={{ opacity: 1, y: 0, scale: 1 }}
+                                exit={{ opacity: 0, y: 4, scale: 0.95 }}
+                                transition={{ duration: 0.15, ease: EASE }}
+                                className="absolute bottom-full left-0 mb-2 w-48 rounded-xl overflow-hidden z-50"
+                                style={{
+                                  background: "rgba(var(--ce-glass-tint),0.06)",
+                                  backdropFilter: "blur(24px)",
+                                  WebkitBackdropFilter: "blur(24px)",
+                                  border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                                }}
+                              >
+                                <button
+                                  onClick={() => handleCopyLink(post.id)}
+                                  className="flex items-center gap-2 w-full px-3 py-2.5 text-[11px] text-[var(--ce-text-secondary)] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors text-left"
+                                  style={{ fontFamily: "var(--font-body)" }}
+                                >
+                                  <Copy className="w-3 h-3" />
+                                  Copy link
+                                </button>
+                                <button
+                                  onClick={() => { onNavigate?.("messages"); setSharingPost(null); }}
+                                  className="flex items-center gap-2 w-full px-3 py-2.5 text-[11px] text-[var(--ce-text-secondary)] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors text-left"
+                                  style={{ fontFamily: "var(--font-body)" }}
+                                >
+                                  <MessageCircle className="w-3 h-3" />
+                                  Share to Messages
+                                </button>
+                                <button
+                                  onClick={() => { toast.success("Shared to your EdgePath timeline"); setSharingPost(null); }}
+                                  className="flex items-center gap-2 w-full px-3 py-2.5 text-[11px] text-[var(--ce-text-secondary)] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors text-left"
+                                  style={{ fontFamily: "var(--font-body)" }}
+                                >
+                                  <ArrowRight className="w-3 h-3" />
+                                  Share to EdgePath
+                                </button>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        </div>
                       </div>
                     </GlassCard>
                   </motion.div>
@@ -945,6 +1091,425 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
                   </motion.div>
                 ))}
               </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* Click-outside handler for share popover */}
+        {sharingPost && (
+          <div
+            className="fixed inset-0 z-40"
+            onClick={() => setSharingPost(null)}
+          />
+        )}
+
+        {/* ─── Compose Modal ──────────────────────────────────────────── */}
+        <AnimatePresence>
+          {showCompose && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: EASE }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+                onClick={() => setShowCompose(false)}
+              />
+              <motion.div
+                className="relative w-full max-w-[500px] mx-4 rounded-2xl overflow-hidden"
+                style={{
+                  background: "rgba(var(--ce-glass-tint),0.04)",
+                  backdropFilter: "blur(32px)",
+                  WebkitBackdropFilter: "blur(32px)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                }}
+                initial={{ opacity: 0, scale: 0.95, y: 12 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 12 }}
+                transition={{ duration: 0.25, ease: EASE }}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                  <h3
+                    className="text-[14px] text-[var(--ce-text-primary)]"
+                    style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
+                  >
+                    Create Post
+                  </h3>
+                  <button
+                    onClick={() => setShowCompose(false)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.08)] transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[var(--ce-text-tertiary)]" />
+                  </button>
+                </div>
+
+                {/* Post type selector */}
+                <div className="px-5 pt-4 pb-2 flex flex-wrap gap-1.5">
+                  {(Object.keys(POST_TYPE_CONFIG) as PostType[]).map(type => {
+                    const cfg = POST_TYPE_CONFIG[type];
+                    const selected = composeType === type;
+                    return (
+                      <button
+                        key={type}
+                        onClick={() => setComposeType(type)}
+                        className="px-2.5 py-1 rounded-lg text-[10px] cursor-pointer transition-all"
+                        style={{
+                          background: selected ? `${cfg.color}18` : "rgba(var(--ce-glass-tint),0.04)",
+                          border: selected ? `1px solid ${cfg.color}30` : "1px solid rgba(var(--ce-glass-tint),0.08)",
+                          color: selected ? cfg.color : "var(--ce-text-tertiary)",
+                          fontFamily: "var(--font-body)",
+                        }}
+                      >
+                        {cfg.label}
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* Textarea */}
+                <div className="px-5 py-3">
+                  <textarea
+                    autoFocus
+                    value={composeText}
+                    onChange={e => setComposeText(e.target.value.slice(0, 500))}
+                    placeholder="Share something with the community..."
+                    className="w-full h-32 resize-none rounded-xl px-4 py-3 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                    style={{
+                      background: "rgba(var(--ce-glass-tint),0.04)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                      fontFamily: "var(--font-body)",
+                    }}
+                  />
+                  <div className="flex justify-end mt-1">
+                    <span
+                      className="text-[10px]"
+                      style={{
+                        color: composeText.length > 450 ? "var(--ce-status-warning)" : "var(--ce-text-quaternary)",
+                        fontFamily: "var(--font-body)",
+                      }}
+                    >
+                      {composeText.length}/500
+                    </span>
+                  </div>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center justify-end gap-2 px-5 py-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                  <button
+                    onClick={() => setShowCompose(false)}
+                    className="px-4 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.06)]"
+                    style={{ color: "var(--ce-text-secondary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    onClick={handlePublishPost}
+                    disabled={!composeText.trim()}
+                    className="px-4 py-2 rounded-lg text-[11px] cursor-pointer transition-all active:scale-[0.97] disabled:opacity-70 disabled:cursor-default"
+                    style={{
+                      background: composeText.trim() ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)",
+                      border: `1px solid ${composeText.trim() ? "rgba(var(--ce-cyan-rgb),0.25)" : "rgba(var(--ce-glass-tint),0.08)"}`,
+                      color: composeText.trim() ? accent : "var(--ce-text-quaternary)",
+                      fontFamily: "var(--font-display)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Post
+                  </button>
+                </div>
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ─── Buddy Modal ────────────────────────────────────────────── */}
+        <AnimatePresence>
+          {showBuddyModal && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: EASE }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+                onClick={() => setShowBuddyModal(false)}
+              />
+              <motion.div
+                className="relative w-full max-w-[400px] mx-4 rounded-2xl overflow-hidden"
+                style={{
+                  background: "rgba(var(--ce-glass-tint),0.04)",
+                  backdropFilter: "blur(32px)",
+                  WebkitBackdropFilter: "blur(32px)",
+                  border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                }}
+                initial={{ opacity: 0, scale: 0.95, y: 12 }}
+                animate={{ opacity: 1, scale: 1, y: 0 }}
+                exit={{ opacity: 0, scale: 0.95, y: 12 }}
+                transition={{ duration: 0.25, ease: EASE }}
+              >
+                {/* Header */}
+                <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                  <div className="flex items-center gap-2">
+                    <h3
+                      className="text-[14px] text-[var(--ce-text-primary)]"
+                      style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
+                    >
+                      Find a Buddy
+                    </h3>
+                    <SophiaMark size={14} glowing />
+                  </div>
+                  <button
+                    onClick={() => setShowBuddyModal(false)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.08)] transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[var(--ce-text-tertiary)]" />
+                  </button>
+                </div>
+
+                {/* Sophia message */}
+                <div className="px-5 pt-4 pb-2">
+                  <p
+                    className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    Based on your goals, here are people at a similar career stage.
+                  </p>
+                </div>
+
+                {/* Match cards */}
+                <div className="px-5 py-3 flex flex-col gap-2.5">
+                  {BUDDY_MATCHES.map((buddy, i) => (
+                    <motion.div
+                      key={buddy.name}
+                      className="flex items-center gap-3 p-3 rounded-xl"
+                      style={{
+                        background: "rgba(var(--ce-glass-tint),0.04)",
+                        border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                      }}
+                      initial={{ opacity: 0, x: -8 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.25, ease: EASE, delay: i * 0.06 }}
+                    >
+                      <div
+                        className="w-9 h-9 rounded-full flex items-center justify-center flex-shrink-0"
+                        style={{ background: buddy.avatarColor }}
+                      >
+                        <span className="text-[11px] text-white" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                          {buddy.initial}
+                        </span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <span
+                          className="text-[12px] text-[var(--ce-text-primary)] block truncate"
+                          style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
+                        >
+                          {buddy.name}
+                        </span>
+                        <span
+                          className="text-[10px] text-[var(--ce-text-tertiary)]"
+                          style={{ fontFamily: "var(--font-body)" }}
+                        >
+                          {buddy.role}
+                        </span>
+                      </div>
+                      <span
+                        className="text-[10px] px-2 py-0.5 rounded-full flex-shrink-0"
+                        style={{
+                          background: "rgba(var(--ce-lime-rgb),0.08)",
+                          color: "var(--ce-lime)",
+                          fontFamily: "var(--font-body)",
+                        }}
+                      >
+                        {buddy.match}% match
+                      </span>
+                      <button
+                        onClick={() => {
+                          toast.success("Request sent", "You'll hear back within 24 hours.");
+                          setShowBuddyModal(false);
+                        }}
+                        className="px-3 py-1.5 rounded-lg text-[10px] cursor-pointer transition-all active:scale-[0.97] flex-shrink-0"
+                        style={{
+                          background: "rgba(var(--ce-cyan-rgb),0.1)",
+                          border: "1px solid rgba(var(--ce-cyan-rgb),0.2)",
+                          color: accent,
+                          fontFamily: "var(--font-display)",
+                          fontWeight: 500,
+                        }}
+                      >
+                        Connect
+                      </button>
+                    </motion.div>
+                  ))}
+                </div>
+
+                <div className="h-4" />
+              </motion.div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+        {/* ─── Comment Drawer ─────────────────────────────────────────── */}
+        <AnimatePresence>
+          {commentingPost && (
+            <motion.div
+              className="fixed inset-0 z-50 flex justify-end"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2, ease: EASE }}
+            >
+              <div
+                className="absolute inset-0"
+                style={{ background: "rgba(0,0,0,0.4)" }}
+                onClick={() => setCommentingPost(null)}
+              />
+              <motion.div
+                className="relative w-full max-w-[400px] h-full flex flex-col"
+                style={{
+                  background: "rgba(var(--ce-glass-tint),0.03)",
+                  backdropFilter: "blur(32px)",
+                  WebkitBackdropFilter: "blur(32px)",
+                  borderLeft: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                }}
+                initial={{ x: "100%" }}
+                animate={{ x: 0 }}
+                exit={{ x: "100%" }}
+                transition={{ duration: 0.3, ease: EASE }}
+              >
+                {/* Drawer header */}
+                <div className="flex items-center justify-between px-5 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                  <h3
+                    className="text-[14px] text-[var(--ce-text-primary)]"
+                    style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
+                  >
+                    Comments
+                  </h3>
+                  <button
+                    onClick={() => setCommentingPost(null)}
+                    className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.08)] transition-colors"
+                  >
+                    <X className="w-4 h-4 text-[var(--ce-text-tertiary)]" />
+                  </button>
+                </div>
+
+                {/* Original post summary */}
+                <div className="px-5 py-3 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <div
+                      className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0"
+                      style={{ background: commentingPost.author.avatarColor }}
+                    >
+                      <span className="text-[9px] text-white" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                        {commentingPost.author.initial}
+                      </span>
+                    </div>
+                    <span
+                      className="text-[11px] text-[var(--ce-text-primary)]"
+                      style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
+                    >
+                      {commentingPost.author.name}
+                    </span>
+                  </div>
+                  <p
+                    className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed line-clamp-2"
+                    style={{ fontFamily: "var(--font-body)" }}
+                  >
+                    {commentingPost.content}
+                  </p>
+                </div>
+
+                {/* Comments list */}
+                <div className="flex-1 overflow-y-auto px-5 py-3">
+                  {(postComments[commentingPost.id] || []).length === 0 ? (
+                    <p
+                      className="text-[11px] text-[var(--ce-text-quaternary)] text-center py-8"
+                      style={{ fontFamily: "var(--font-body)" }}
+                    >
+                      No comments yet. Be the first!
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-3">
+                      {(postComments[commentingPost.id] || []).map((comment, i) => (
+                        <motion.div
+                          key={comment.id}
+                          className="flex gap-2.5"
+                          initial={{ opacity: 0, y: 6 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ duration: 0.2, ease: EASE, delay: i * 0.04 }}
+                        >
+                          <div
+                            className="w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                            style={{ background: comment.author.avatarColor }}
+                          >
+                            <span className="text-[9px] text-white" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                              {comment.author.initial}
+                            </span>
+                          </div>
+                          <div className="flex-1 min-w-0">
+                            <div className="flex items-center gap-2 mb-0.5">
+                              <span
+                                className="text-[11px] text-[var(--ce-text-primary)]"
+                                style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}
+                              >
+                                {comment.author.name}
+                              </span>
+                              <span
+                                className="text-[9px] text-[var(--ce-text-quaternary)]"
+                                style={{ fontFamily: "var(--font-body)" }}
+                              >
+                                {comment.timestamp}
+                              </span>
+                            </div>
+                            <p
+                              className="text-[11px] text-[var(--ce-text-secondary)] leading-relaxed"
+                              style={{ fontFamily: "var(--font-body)" }}
+                            >
+                              {comment.text}
+                            </p>
+                          </div>
+                        </motion.div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Comment input */}
+                <div className="px-5 py-3 flex-shrink-0" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="text"
+                      value={newCommentText}
+                      onChange={e => setNewCommentText(e.target.value)}
+                      onKeyDown={e => { if (e.key === "Enter" && newCommentText.trim()) handleAddComment(); }}
+                      placeholder="Write a comment..."
+                      className="flex-1 px-3 py-2 rounded-lg text-[11px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                      style={{
+                        background: "rgba(var(--ce-glass-tint),0.04)",
+                        border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                        fontFamily: "var(--font-body)",
+                      }}
+                    />
+                    <button
+                      onClick={handleAddComment}
+                      disabled={!newCommentText.trim()}
+                      className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer transition-all active:scale-[0.95] disabled:opacity-70 disabled:cursor-default"
+                      style={{
+                        background: newCommentText.trim() ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)",
+                        border: `1px solid ${newCommentText.trim() ? "rgba(var(--ce-cyan-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.08)"}`,
+                      }}
+                    >
+                      <Send className="w-3.5 h-3.5" style={{ color: newCommentText.trim() ? accent : "var(--ce-text-quaternary)" }} />
+                    </button>
+                  </div>
+                </div>
+              </motion.div>
             </motion.div>
           )}
         </AnimatePresence>

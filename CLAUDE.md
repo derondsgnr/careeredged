@@ -23,6 +23,9 @@ Every feature MUST have clear entry points (how users get there) and exit points
 ### No Dead Ends
 After implementing any feature, verify: every button does something, every nav item routes somewhere, every action has feedback. If parts need more scoping, document them explicitly and raise them — don't leave silent dead ends.
 
+### No Stubs, No "Coming Soon"
+When told to build a surface or feature, BUILD IT FULLY. Never stub interactions with toast messages like "coming soon" or "not yet available." Every button, drawer, modal, form, and action must be functionally complete with real UI behavior — not placeholder text. If a feature genuinely can't be built without external dependencies, raise it BEFORE building and get explicit approval. Stubbing wastes time and creates technical debt that has to be revisited.
+
 ## Design & UX Rules
 
 ### Reuse Patterns, Don't Reinvent

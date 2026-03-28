@@ -21,6 +21,7 @@ import {
   FileText, FilePlus, FolderOpen, Search, Share2, Pencil,
   Trash2, Plus, ChevronRight, ArrowRight, Sparkles, BookOpen,
   Briefcase, Globe, User, Check, X, Copy, ExternalLink, Circle,
+  Filter,
 } from "lucide-react";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -44,6 +45,7 @@ interface UserDocument {
   status: "draft" | "final" | "shared";
   lastEdited: string;
   shareLink?: string;
+  needsUpdate?: boolean;
 }
 
 interface Workspace {
@@ -95,10 +97,10 @@ const TEMPLATES: Template[] = [
 // ─── Mock User Documents ─────────────────────────────────────────────────────
 
 const MOCK_DOCUMENTS: UserDocument[] = [
-  { id: "d1", title: "Software Engineer Resume \u2014 v3", templateId: "t1", status: "final", lastEdited: "Mar 26, 2026" },
+  { id: "d1", title: "Software Engineer Resume \u2014 v3", templateId: "t1", status: "final", lastEdited: "Mar 26, 2026", needsUpdate: true },
   { id: "d2", title: "TechCorp Cover Letter", templateId: "t2", status: "draft", lastEdited: "Mar 25, 2026" },
-  { id: "d3", title: "Q1 Consulting Proposal", templateId: "t7", status: "shared", lastEdited: "Mar 22, 2026", shareLink: "https://ce.link/q1proposal" },
-  { id: "d4", title: "Personal Statement \u2014 Grad School", templateId: "t10", status: "draft", lastEdited: "Mar 20, 2026" },
+  { id: "d3", title: "Q1 Consulting Proposal", templateId: "t7", status: "shared", lastEdited: "Mar 22, 2026", shareLink: "https://ce.link/q1proposal", needsUpdate: true },
+  { id: "d4", title: "Personal Statement \u2014 Grad School", templateId: "t10", status: "draft", lastEdited: "Mar 20, 2026", needsUpdate: true },
 ];
 
 // ─── Mock Workspaces ─────────────────────────────────────────────────────────
@@ -106,6 +108,25 @@ const MOCK_DOCUMENTS: UserDocument[] = [
 const MOCK_WORKSPACES: Workspace[] = [
   { id: "w1", name: "Job Applications", docCount: 3, lastActivity: "Mar 26, 2026", color: "var(--ce-role-edgestar)" },
   { id: "w2", name: "Freelance Clients", docCount: 2, lastActivity: "Mar 22, 2026", color: "var(--ce-status-warning)" },
+];
+
+// ─── Mock Document Content by template type ─────────────────────────────────
+
+const MOCK_CONTENT: Record<string, string> = {
+  t1: "Professional Summary\n\nResults-driven software engineer with 6+ years of experience building scalable web applications and distributed systems.\n\nExperience\n- Senior Software Engineer at TechCorp (2023-Present)\n  Led migration of monolithic API to microservices architecture\n- Software Engineer at StartupCo (2020-2023)\n  Built real-time data pipeline processing 2M events/day\n\nEducation\n- B.S. Computer Science, State University\n\nSkills\n- TypeScript, React, Node.js, Python, AWS, PostgreSQL",
+  t2: "Dear Hiring Manager,\n\nI am writing to express my strong interest in the Senior Software Engineer position at TechCorp. With over 6 years of experience building production systems at scale, I am confident I can contribute meaningfully to your engineering team.\n\nIn my current role, I led the migration of a monolithic API to a microservices architecture, reducing latency by 40% and improving deployment frequency by 3x.\n\nI would welcome the opportunity to discuss how my experience aligns with your team's goals.\n\nBest regards,\n[Your Name]",
+  t3: "Subject: Thank you for the interview\n\nDear [Interviewer],\n\nThank you for taking the time to discuss the [Role] position. I enjoyed learning about the team's approach to [specific topic discussed].\n\nOur conversation reinforced my enthusiasm for contributing to [Company]'s mission.\n\nBest regards,\n[Your Name]",
+  t7: "PROJECT OVERVIEW\n\nThis proposal outlines the scope, timeline, and investment for the Q1 consulting engagement.\n\nScope of Work\n- Phase 1: Discovery & audit (2 weeks)\n- Phase 2: Strategy development (3 weeks)\n- Phase 3: Implementation support (4 weeks)\n\nDeliverables\n- Comprehensive audit report\n- Strategic roadmap document\n- Implementation playbook\n\nTimeline: 9 weeks\nInvestment: $45,000",
+  t10: "Opening\n\nGrowing up between two cultures shaped my understanding of how education transforms lives across borders.\n\nAcademic Journey\n\nMy undergraduate research in computational linguistics revealed the power of technology to bridge communication gaps.\n\nWhy This Program\n\nThe interdisciplinary approach at [University] uniquely combines my interests in AI and social impact.\n\nFuture Goals\n\nI aim to develop accessible language learning tools for immigrant communities.",
+};
+
+const DEFAULT_CONTENT = "Document content goes here.\n\nStart editing to customize this document for your needs.\n\nSection 1\n- Key point one\n- Key point two\n\nSection 2\n- Additional details\n- Supporting information";
+
+const WORKSPACE_COLORS = [
+  { name: "Blue", value: "var(--ce-role-edgestar)" },
+  { name: "Amber", value: "var(--ce-status-warning)" },
+  { name: "Green", value: "var(--ce-status-success)" },
+  { name: "Purple", value: "var(--ce-role-parent)" },
 ];
 
 // ─── Empty State ─────────────────────────────────────────────────────────────
@@ -409,6 +430,14 @@ function DocumentRow({ doc, onEdit, onShare, onDelete }: { doc: UserDocument; on
       </div>
 
       <div className="flex items-center gap-2">
+        {doc.needsUpdate && (
+          <span
+            className="text-[9px] px-1.5 py-0.5 rounded-full flex items-center gap-1"
+            style={{ background: "rgba(var(--ce-status-warning-rgb, 234,179,8),0.1)", color: "var(--ce-status-warning)", border: "1px solid rgba(var(--ce-status-warning-rgb, 234,179,8),0.2)", fontFamily: "var(--font-body)" }}
+          >
+            <Sparkles className="w-2.5 h-2.5" /> Update
+          </span>
+        )}
         <span
           className="text-[9px] px-2 py-0.5 rounded-full"
           style={{ background: `${status.color}10`, color: status.color, border: `1px solid ${status.color}20`, fontFamily: "var(--font-body)" }}
@@ -466,6 +495,111 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
   const [categoryFilter, setCategoryFilter] = useState<TemplateCategory | "all">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [documents, setDocuments] = useState<UserDocument[]>(MOCK_DOCUMENTS);
+  const [workspaces, setWorkspaces] = useState<Workspace[]>(MOCK_WORKSPACES);
+
+  // Stub 1: Document editor panel
+  const [editingDoc, setEditingDoc] = useState<UserDocument | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [editStatus, setEditStatus] = useState<UserDocument["status"]>("draft");
+  const [editContent, setEditContent] = useState("");
+
+  // Stub 2: New workspace form
+  const [showNewWorkspace, setShowNewWorkspace] = useState(false);
+  const [newWsName, setNewWsName] = useState("");
+  const [newWsColor, setNewWsColor] = useState(WORKSPACE_COLORS[0].value);
+
+  // Stub 3: Workspace detail panel
+  const [selectedWorkspace, setSelectedWorkspace] = useState<Workspace | null>(null);
+  const [renamingWorkspace, setRenamingWorkspace] = useState(false);
+  const [wsRenameValue, setWsRenameValue] = useState("");
+  const [confirmDeleteWs, setConfirmDeleteWs] = useState(false);
+
+  // Stub 4: Filter flagged docs
+  const [showFlaggedOnly, setShowFlaggedOnly] = useState(false);
+
+  const openDocEditor = (doc: UserDocument) => {
+    setEditingDoc(doc);
+    setEditTitle(doc.title);
+    setEditStatus(doc.status);
+    setEditContent(MOCK_CONTENT[doc.templateId] || DEFAULT_CONTENT);
+  };
+
+  const saveDoc = () => {
+    if (!editingDoc) return;
+    setDocuments((prev) =>
+      prev.map((d) =>
+        d.id === editingDoc.id
+          ? { ...d, title: editTitle, status: editStatus, lastEdited: "Just now" }
+          : d
+      )
+    );
+    setEditingDoc(null);
+    toast.success("Document saved", `"${editTitle}" has been updated.`);
+  };
+
+  const shareDoc = () => {
+    if (!editingDoc) return;
+    const link = `https://ce.link/${editingDoc.id}-${Date.now().toString(36)}`;
+    navigator.clipboard?.writeText(link);
+    setDocuments((prev) =>
+      prev.map((d) =>
+        d.id === editingDoc.id
+          ? { ...d, status: "shared" as const, shareLink: link, lastEdited: "Just now" }
+          : d
+      )
+    );
+    setEditStatus("shared");
+    toast.success("Share link copied", link);
+  };
+
+  const createWorkspace = () => {
+    if (!newWsName.trim()) return;
+    const ws: Workspace = {
+      id: `w${Date.now()}`,
+      name: newWsName.trim(),
+      docCount: 0,
+      lastActivity: "Just now",
+      color: newWsColor,
+    };
+    setWorkspaces((prev) => [ws, ...prev]);
+    setNewWsName("");
+    setNewWsColor(WORKSPACE_COLORS[0].value);
+    setShowNewWorkspace(false);
+    toast.success("Workspace created", `"${ws.name}" is ready.`);
+  };
+
+  const openWorkspaceDetail = (ws: Workspace) => {
+    setSelectedWorkspace(ws);
+    setWsRenameValue(ws.name);
+    setRenamingWorkspace(false);
+    setConfirmDeleteWs(false);
+  };
+
+  const renameWorkspace = () => {
+    if (!selectedWorkspace || !wsRenameValue.trim()) return;
+    setWorkspaces((prev) =>
+      prev.map((w) => (w.id === selectedWorkspace.id ? { ...w, name: wsRenameValue.trim() } : w))
+    );
+    setSelectedWorkspace((prev) => (prev ? { ...prev, name: wsRenameValue.trim() } : null));
+    setRenamingWorkspace(false);
+    toast.success("Workspace renamed", `Now called "${wsRenameValue.trim()}".`);
+  };
+
+  const deleteWorkspace = () => {
+    if (!selectedWorkspace) return;
+    const name = selectedWorkspace.name;
+    setWorkspaces((prev) => prev.filter((w) => w.id !== selectedWorkspace.id));
+    setSelectedWorkspace(null);
+    toast.success("Workspace deleted", `"${name}" has been removed.`);
+  };
+
+  // Mock docs for workspace detail panel
+  const getWorkspaceDocs = (ws: Workspace): UserDocument[] => {
+    // Return a subset of docs as if belonging to this workspace
+    if (ws.id === "w1") return documents.filter((d) => ["d1", "d2"].includes(d.id));
+    if (ws.id === "w2") return documents.filter((d) => ["d3"].includes(d.id));
+    return documents.slice(0, Math.min(2, documents.length));
+  };
 
   const filteredTemplates = TEMPLATES.filter((t) => {
     if (categoryFilter !== "all" && t.category !== categoryFilter) return false;
@@ -616,9 +750,21 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
             transition={{ duration: 0.2, ease: EASE }}
           >
             <div className="flex items-center justify-between mb-4">
-              <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
-                {documents.length} document{documents.length !== 1 ? "s" : ""}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
+                  {documents.length} document{documents.length !== 1 ? "s" : ""}
+                </span>
+                {showFlaggedOnly && (
+                  <button
+                    onClick={() => setShowFlaggedOnly(false)}
+                    className="flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px] cursor-pointer transition-colors"
+                    style={{ background: "rgba(var(--ce-status-warning-rgb, 234,179,8),0.1)", border: "1px solid rgba(var(--ce-status-warning-rgb, 234,179,8),0.2)", color: "var(--ce-status-warning)", fontFamily: "var(--font-body)" }}
+                  >
+                    <Filter className="w-3 h-3" /> Needs attention
+                    <X className="w-3 h-3 ml-1" />
+                  </button>
+                )}
+              </div>
               <button
                 onClick={() => { setActiveTab("templates"); toast.info("Pick a template to create a new document."); }}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all active:scale-[0.97]"
@@ -630,7 +776,7 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
 
             {documents.length > 0 ? (
               <div className="flex flex-col gap-2">
-                {documents.map((doc, i) => (
+                {documents.filter((d) => !showFlaggedOnly || d.needsUpdate).map((doc, i) => (
                   <motion.div
                     key={doc.id}
                     initial={{ opacity: 0, y: 8 }}
@@ -639,7 +785,7 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
                   >
                     <DocumentRow
                       doc={doc}
-                      onEdit={() => toast.info(`Editing "${doc.title}"`, "Document editor opening...")}
+                      onEdit={() => openDocEditor(doc)}
                       onShare={() => {
                         if (doc.shareLink) {
                           navigator.clipboard?.writeText(doc.shareLink);
@@ -681,10 +827,10 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
           >
             <div className="flex items-center justify-between mb-4">
               <span className="text-[11px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
-                {MOCK_WORKSPACES.length} workspace{MOCK_WORKSPACES.length !== 1 ? "s" : ""}
+                {workspaces.length} workspace{workspaces.length !== 1 ? "s" : ""}
               </span>
               <button
-                onClick={() => toast.info("New workspace", "Workspace creation coming soon.")}
+                onClick={() => setShowNewWorkspace(true)}
                 className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all active:scale-[0.97]"
                 style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
@@ -692,8 +838,75 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
               </button>
             </div>
 
+            {/* New Workspace inline form */}
+            <AnimatePresence>
+              {showNewWorkspace && (
+                <motion.div
+                  initial={{ opacity: 0, height: 0 }}
+                  animate={{ opacity: 1, height: "auto" }}
+                  exit={{ opacity: 0, height: 0 }}
+                  transition={{ duration: 0.25, ease: EASE }}
+                  className="overflow-hidden mb-4"
+                >
+                  <div
+                    className="p-4 rounded-xl"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.1)" }}
+                  >
+                    <span className="text-[12px] text-[var(--ce-text-primary)] block mb-3" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      New Workspace
+                    </span>
+                    <input
+                      type="text"
+                      value={newWsName}
+                      onChange={(e) => setNewWsName(e.target.value)}
+                      placeholder="Workspace name"
+                      className="w-full px-3 py-2 rounded-lg text-[12px] mb-3 outline-none"
+                      style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}
+                      autoFocus
+                      onKeyDown={(e) => { if (e.key === "Enter") createWorkspace(); }}
+                    />
+                    <div className="flex items-center gap-2 mb-4">
+                      <span className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>Color:</span>
+                      {WORKSPACE_COLORS.map((c) => (
+                        <button
+                          key={c.name}
+                          onClick={() => setNewWsColor(c.value)}
+                          className="w-6 h-6 rounded-full cursor-pointer transition-all flex items-center justify-center"
+                          style={{
+                            background: c.value,
+                            opacity: newWsColor === c.value ? 1 : 0.4,
+                            boxShadow: newWsColor === c.value ? `0 0 0 2px rgba(var(--ce-glass-tint),0.15), 0 0 0 3px ${c.value}` : "none",
+                          }}
+                          aria-label={c.name}
+                        >
+                          {newWsColor === c.value && <Check className="w-3 h-3 text-white" />}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => { setShowNewWorkspace(false); setNewWsName(""); }}
+                        className="px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
+                        style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={createWorkspace}
+                        disabled={!newWsName.trim()}
+                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all disabled:opacity-70 disabled:cursor-not-allowed"
+                        style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                      >
+                        <Plus className="w-3 h-3" /> Create
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
+              )}
+            </AnimatePresence>
+
             <div className="flex flex-col gap-2 mb-6">
-              {MOCK_WORKSPACES.map((ws, i) => (
+              {workspaces.map((ws, i) => (
                 <motion.div
                   key={ws.id}
                   initial={{ opacity: 0, y: 8 }}
@@ -702,7 +915,7 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
                 >
                   <WorkspaceCard
                     workspace={ws}
-                    onClick={() => toast.info(`${ws.name}`, "Workspace detail coming soon.")}
+                    onClick={() => openWorkspaceDetail(ws)}
                   />
                 </motion.div>
               ))}
@@ -713,9 +926,311 @@ function ActiveState({ role, onNavigate }: { role?: string; onNavigate?: (t: str
               variant="inline"
               message="3 documents could use updating based on your latest EdgePath progress."
               actionLabel="Review updates"
-              onAction={() => toast.info("Reviewing document updates...")}
+              onAction={() => {
+                setShowFlaggedOnly(true);
+                setActiveTab("documents");
+                toast.info("Showing documents that need attention");
+              }}
             />
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Document Editor Panel (slide-in from right) ─────────────────── */}
+      <AnimatePresence>
+        {editingDoc && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40"
+              style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+              onClick={() => setEditingDoc(null)}
+            />
+            {/* Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: EASE }}
+              className="fixed top-0 right-0 h-full z-50 flex flex-col"
+              style={{
+                width: "min(480px, 100vw)",
+                background: "var(--ce-surface-primary, var(--background))",
+                borderLeft: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                boxShadow: "-8px 0 32px rgba(0,0,0,0.2)",
+              }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}>
+                  Edit Document
+                </span>
+                <button
+                  onClick={() => setEditingDoc(null)}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.08)]"
+                  aria-label="Close editor"
+                >
+                  <X className="w-4 h-4 text-[var(--ce-text-tertiary)]" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto px-5 py-4 flex flex-col gap-4">
+                {/* Title */}
+                <div>
+                  <label className="text-[11px] text-[var(--ce-text-tertiary)] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>
+                    Title
+                  </label>
+                  <input
+                    type="text"
+                    value={editTitle}
+                    onChange={(e) => setEditTitle(e.target.value)}
+                    className="w-full px-3 py-2 rounded-lg text-[13px] outline-none"
+                    style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.1)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                  />
+                </div>
+
+                {/* Status */}
+                <div>
+                  <label className="text-[11px] text-[var(--ce-text-tertiary)] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>
+                    Status
+                  </label>
+                  <div className="flex items-center gap-2">
+                    {(["draft", "final", "shared"] as const).map((s) => {
+                      const cfg = STATUS_CONFIG[s];
+                      return (
+                        <button
+                          key={s}
+                          onClick={() => setEditStatus(s)}
+                          className="px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all"
+                          style={{
+                            background: editStatus === s ? `${cfg.color}15` : "rgba(var(--ce-glass-tint),0.03)",
+                            border: `1px solid ${editStatus === s ? `${cfg.color}30` : "rgba(var(--ce-glass-tint),0.08)"}`,
+                            color: editStatus === s ? cfg.color : "var(--ce-text-tertiary)",
+                            fontFamily: "var(--font-body)",
+                          }}
+                        >
+                          {cfg.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Content area */}
+                <div className="flex-1 flex flex-col">
+                  <label className="text-[11px] text-[var(--ce-text-tertiary)] block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>
+                    Content
+                  </label>
+                  <textarea
+                    value={editContent}
+                    onChange={(e) => setEditContent(e.target.value)}
+                    className="flex-1 min-h-[280px] w-full px-3 py-3 rounded-lg text-[12px] leading-relaxed outline-none resize-none"
+                    style={{
+                      background: "rgba(var(--ce-glass-tint),0.03)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                      color: "var(--ce-text-secondary)",
+                      fontFamily: "var(--font-body)",
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Footer */}
+              <div className="flex items-center gap-2 px-5 py-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                <button
+                  onClick={shareDoc}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all active:scale-[0.97]"
+                  style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.1)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                >
+                  <Share2 className="w-3.5 h-3.5" /> Share
+                </button>
+                <div className="flex-1" />
+                <button
+                  onClick={saveDoc}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all active:scale-[0.97]"
+                  style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                >
+                  <Check className="w-3.5 h-3.5" /> Save
+                </button>
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* ─── Workspace Detail Panel (slide-in from right) ────────────────── */}
+      <AnimatePresence>
+        {selectedWorkspace && (
+          <>
+            {/* Backdrop */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              className="fixed inset-0 z-40"
+              style={{ background: "rgba(0,0,0,0.4)", backdropFilter: "blur(4px)" }}
+              onClick={() => setSelectedWorkspace(null)}
+            />
+            {/* Panel */}
+            <motion.div
+              initial={{ x: "100%" }}
+              animate={{ x: 0 }}
+              exit={{ x: "100%" }}
+              transition={{ duration: 0.3, ease: EASE }}
+              className="fixed top-0 right-0 h-full z-50 flex flex-col"
+              style={{
+                width: "min(400px, 100vw)",
+                background: "var(--ce-surface-primary, var(--background))",
+                borderLeft: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                boxShadow: "-8px 0 32px rgba(0,0,0,0.2)",
+              }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-3 h-3 rounded-full" style={{ background: selectedWorkspace.color }} />
+                  {renamingWorkspace ? (
+                    <input
+                      type="text"
+                      value={wsRenameValue}
+                      onChange={(e) => setWsRenameValue(e.target.value)}
+                      onKeyDown={(e) => { if (e.key === "Enter") renameWorkspace(); if (e.key === "Escape") setRenamingWorkspace(false); }}
+                      className="text-[14px] bg-transparent outline-none px-1 py-0.5 rounded"
+                      style={{ color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 600, border: "1px solid rgba(var(--ce-glass-tint),0.15)" }}
+                      autoFocus
+                    />
+                  ) : (
+                    <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}>
+                      {selectedWorkspace.name}
+                    </span>
+                  )}
+                </div>
+                <button
+                  onClick={() => setSelectedWorkspace(null)}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.08)]"
+                  aria-label="Close workspace panel"
+                >
+                  <X className="w-4 h-4 text-[var(--ce-text-tertiary)]" />
+                </button>
+              </div>
+
+              {/* Body */}
+              <div className="flex-1 overflow-y-auto px-5 py-4">
+                {/* Documents in workspace */}
+                <span className="text-[11px] text-[var(--ce-text-tertiary)] block mb-3" style={{ fontFamily: "var(--font-body)" }}>
+                  Documents
+                </span>
+                <div className="flex flex-col gap-2 mb-6">
+                  {getWorkspaceDocs(selectedWorkspace).map((doc) => {
+                    const status = STATUS_CONFIG[doc.status];
+                    return (
+                      <div
+                        key={doc.id}
+                        className="flex items-center gap-3 px-3 py-2.5 rounded-lg"
+                        style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
+                      >
+                        <FileText className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] flex-shrink-0" />
+                        <span className="text-[12px] text-[var(--ce-text-primary)] flex-1 truncate" style={{ fontFamily: "var(--font-body)" }}>
+                          {doc.title}
+                        </span>
+                        <span
+                          className="text-[9px] px-1.5 py-0.5 rounded-full flex-shrink-0"
+                          style={{ background: `${status.color}10`, color: status.color, border: `1px solid ${status.color}20`, fontFamily: "var(--font-body)" }}
+                        >
+                          {status.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                  {getWorkspaceDocs(selectedWorkspace).length === 0 && (
+                    <span className="text-[11px] text-[var(--ce-text-quaternary)] block py-4 text-center" style={{ fontFamily: "var(--font-body)" }}>
+                      No documents in this workspace yet.
+                    </span>
+                  )}
+                </div>
+
+                {/* Add document */}
+                <button
+                  onClick={() => { setSelectedWorkspace(null); setActiveTab("templates"); }}
+                  className="w-full flex items-center justify-center gap-1.5 py-2.5 rounded-lg text-[11px] cursor-pointer transition-all active:scale-[0.97] mb-6"
+                  style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.06)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                >
+                  <FilePlus className="w-3.5 h-3.5" /> Add Document
+                </button>
+
+                {/* Actions */}
+                <span className="text-[11px] text-[var(--ce-text-tertiary)] block mb-3" style={{ fontFamily: "var(--font-body)" }}>
+                  Actions
+                </span>
+                <div className="flex flex-col gap-2">
+                  {renamingWorkspace ? (
+                    <div className="flex items-center gap-2">
+                      <button
+                        onClick={() => setRenamingWorkspace(false)}
+                        className="flex-1 py-2 rounded-lg text-[11px] cursor-pointer transition-colors"
+                        style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={renameWorkspace}
+                        className="flex-1 py-2 rounded-lg text-[11px] cursor-pointer transition-colors"
+                        style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                      >
+                        Save Name
+                      </button>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setRenamingWorkspace(true)}
+                      className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[11px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.04)]"
+                      style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                    >
+                      <Pencil className="w-3.5 h-3.5" /> Rename Workspace
+                    </button>
+                  )}
+
+                  {confirmDeleteWs ? (
+                    <div className="p-3 rounded-lg" style={{ background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.06)", border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)" }}>
+                      <span className="text-[11px] text-[var(--ce-text-secondary)] block mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                        Delete "{selectedWorkspace.name}"? This cannot be undone.
+                      </span>
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setConfirmDeleteWs(false)}
+                          className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
+                          style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={deleteWorkspace}
+                          className="flex-1 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
+                          style={{ background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.2)", color: "var(--ce-status-error)", fontFamily: "var(--font-body)", fontWeight: 500 }}
+                        >
+                          Delete
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <button
+                      onClick={() => setConfirmDeleteWs(true)}
+                      className="flex items-center gap-2 w-full px-3 py-2.5 rounded-lg text-[11px] cursor-pointer transition-colors hover:bg-[rgba(var(--ce-status-error-rgb, 239,68,68),0.04)]"
+                      style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-status-error)", fontFamily: "var(--font-body)" }}
+                    >
+                      <Trash2 className="w-3.5 h-3.5" /> Delete Workspace
+                    </button>
+                  )}
+                </div>
+              </div>
+            </motion.div>
+          </>
         )}
       </AnimatePresence>
     </div>

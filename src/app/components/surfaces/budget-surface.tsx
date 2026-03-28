@@ -162,9 +162,17 @@ export function BudgetSurface({ role, onNavigate }: { role?: string; onNavigate?
   const [selectedCategories, setSelectedCategories] = useState<SpendCategory[]>([]);
 
   // Active state
-  const [budget] = useState<BudgetProfile>(MOCK_BUDGET);
+  const [budget, setBudget] = useState<BudgetProfile>(MOCK_BUDGET);
   const [sortNewest, setSortNewest] = useState(true);
   const [showAllTx, setShowAllTx] = useState(false);
+
+  // Add transaction modal
+  const [showAddTransaction, setShowAddTransaction] = useState(false);
+  const [txItem, setTxItem] = useState("");
+  const [txCategory, setTxCategory] = useState<SpendCategory>("courses");
+  const [txAmount, setTxAmount] = useState("");
+  const [txDate, setTxDate] = useState(new Date().toISOString().slice(0, 10));
+  const [txNote, setTxNote] = useState("");
 
   const accent = "var(--ce-cyan)";
   const budgetUsedPct = Math.round((budget.totalSpent / budget.totalBudget) * 100);
@@ -213,7 +221,47 @@ export function BudgetSurface({ role, onNavigate }: { role?: string; onNavigate?
   };
 
   const handleAddTransaction = () => {
-    toast("Transaction tracking coming soon", "You'll be able to log expenses directly.");
+    setTxItem("");
+    setTxCategory("courses");
+    setTxAmount("");
+    setTxDate(new Date().toISOString().slice(0, 10));
+    setTxNote("");
+    setShowAddTransaction(true);
+  };
+
+  const handleSubmitTransaction = () => {
+    const amount = parseFloat(txAmount);
+    if (!txItem.trim()) { toast.error("Enter an item name"); return; }
+    if (isNaN(amount) || amount <= 0) { toast.error("Enter a valid amount"); return; }
+
+    const newTx: Transaction = {
+      id: `t${Date.now()}`,
+      item: txItem.trim(),
+      category: txCategory,
+      amount,
+      date: new Date(txDate).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" }),
+      note: txNote.trim() || undefined,
+    };
+
+    setBudget(prev => {
+      const updated = {
+        ...prev,
+        transactions: [newTx, ...prev.transactions],
+        totalSpent: prev.totalSpent + amount,
+        categories: { ...prev.categories, [txCategory]: (prev.categories[txCategory] || 0) + amount },
+      };
+      // Recalculate monthly spend (transactions in current month)
+      const now = new Date();
+      const currentMonth = now.getMonth();
+      const currentYear = now.getFullYear();
+      updated.monthlySpend = updated.transactions
+        .filter(t => { const d = new Date(t.date); return d.getMonth() === currentMonth && d.getFullYear() === currentYear; })
+        .reduce((s, t) => s + t.amount, 0);
+      return updated;
+    });
+
+    toast.success("Transaction added", `$${amount} for "${txItem.trim()}"`);
+    setShowAddTransaction(false);
   };
 
   // Sort transactions
@@ -759,6 +807,233 @@ export function BudgetSurface({ role, onNavigate }: { role?: string; onNavigate?
           <Plus className="w-5 h-5" />
         </motion.button>
       </div>
+
+      {/* ─── Add Transaction Modal ──────────────────────────────────── */}
+      <AnimatePresence>
+        {showAddTransaction && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: EASE }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)" }}
+              onClick={() => setShowAddTransaction(false)}
+            />
+            <motion.div
+              className="relative w-full rounded-2xl overflow-hidden"
+              style={{
+                maxWidth: 440,
+                background: "rgba(var(--ce-glass-tint),0.06)",
+                backdropFilter: "blur(24px)",
+                border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                boxShadow: "0 24px 48px rgba(0,0,0,0.3)",
+              }}
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 16 }}
+              transition={{ duration: 0.25, ease: EASE }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 pt-5 pb-3">
+                <h3
+                  className="text-[15px]"
+                  style={{ fontFamily: "var(--font-display)", fontWeight: 600, color: "var(--ce-text-primary)" }}
+                >
+                  Add Transaction
+                </h3>
+                <button
+                  onClick={() => setShowAddTransaction(false)}
+                  className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer transition-all hover:bg-[rgba(var(--ce-glass-tint),0.08)]"
+                  style={{ color: "var(--ce-text-tertiary)" }}
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              </div>
+
+              {/* Form */}
+              <div className="px-5 pb-5 space-y-4">
+                {/* Item name */}
+                <div>
+                  <label
+                    className="block text-[11px] mb-1.5"
+                    style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                  >
+                    Item
+                  </label>
+                  <input
+                    type="text"
+                    value={txItem}
+                    onChange={e => setTxItem(e.target.value)}
+                    placeholder="e.g., UX Research Course"
+                    className="w-full px-3 py-2 rounded-lg text-[13px] outline-none transition-all"
+                    style={{
+                      background: "rgba(var(--ce-glass-tint),0.04)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                      color: "var(--ce-text-primary)",
+                      fontFamily: "var(--font-body)",
+                    }}
+                    onFocus={e => (e.target.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)")}
+                    onBlur={e => (e.target.style.borderColor = "rgba(var(--ce-glass-tint),0.1)")}
+                  />
+                </div>
+
+                {/* Category pills */}
+                <div>
+                  <label
+                    className="block text-[11px] mb-1.5"
+                    style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                  >
+                    Category
+                  </label>
+                  <div className="flex flex-wrap gap-2">
+                    {(Object.keys(CATEGORY_CONFIG) as SpendCategory[]).map(cat => {
+                      const cfg = CATEGORY_CONFIG[cat];
+                      const selected = txCategory === cat;
+                      return (
+                        <button
+                          key={cat}
+                          onClick={() => setTxCategory(cat)}
+                          className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all"
+                          style={{
+                            background: selected ? `rgba(${cfg.color === accent ? "var(--ce-cyan-rgb)" : "var(--ce-glass-tint)"}, ${selected ? 0.15 : 0.04})` : "rgba(var(--ce-glass-tint),0.04)",
+                            border: `1px solid ${selected ? cfg.color : "rgba(var(--ce-glass-tint),0.08)"}`,
+                            color: selected ? cfg.color : "var(--ce-text-tertiary)",
+                            fontFamily: "var(--font-body)",
+                            fontWeight: selected ? 500 : 400,
+                          }}
+                        >
+                          {cfg.icon}
+                          {cfg.label}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Amount + Date row */}
+                <div className="flex gap-3">
+                  <div className="flex-1">
+                    <label
+                      className="block text-[11px] mb-1.5"
+                      style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                    >
+                      Amount
+                    </label>
+                    <div className="relative">
+                      <span
+                        className="absolute left-3 top-1/2 -translate-y-1/2 text-[13px]"
+                        style={{ color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}
+                      >
+                        $
+                      </span>
+                      <input
+                        type="number"
+                        value={txAmount}
+                        onChange={e => setTxAmount(e.target.value)}
+                        placeholder="0"
+                        min="0"
+                        step="0.01"
+                        className="w-full pl-7 pr-3 py-2 rounded-lg text-[13px] outline-none transition-all"
+                        style={{
+                          background: "rgba(var(--ce-glass-tint),0.04)",
+                          border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                          color: "var(--ce-text-primary)",
+                          fontFamily: "var(--font-body)",
+                        }}
+                        onFocus={e => (e.target.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)")}
+                        onBlur={e => (e.target.style.borderColor = "rgba(var(--ce-glass-tint),0.1)")}
+                      />
+                    </div>
+                  </div>
+                  <div className="flex-1">
+                    <label
+                      className="block text-[11px] mb-1.5"
+                      style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                    >
+                      Date
+                    </label>
+                    <input
+                      type="date"
+                      value={txDate}
+                      onChange={e => setTxDate(e.target.value)}
+                      className="w-full px-3 py-2 rounded-lg text-[13px] outline-none transition-all"
+                      style={{
+                        background: "rgba(var(--ce-glass-tint),0.04)",
+                        border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                        color: "var(--ce-text-primary)",
+                        fontFamily: "var(--font-body)",
+                        colorScheme: "dark",
+                      }}
+                      onFocus={e => (e.target.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)")}
+                      onBlur={e => (e.target.style.borderColor = "rgba(var(--ce-glass-tint),0.1)")}
+                    />
+                  </div>
+                </div>
+
+                {/* Note */}
+                <div>
+                  <label
+                    className="block text-[11px] mb-1.5"
+                    style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                  >
+                    Note <span style={{ color: "var(--ce-text-quaternary)" }}>(optional)</span>
+                  </label>
+                  <textarea
+                    value={txNote}
+                    onChange={e => setTxNote(e.target.value)}
+                    rows={2}
+                    placeholder="Add a note..."
+                    className="w-full px-3 py-2 rounded-lg text-[13px] outline-none transition-all resize-none"
+                    style={{
+                      background: "rgba(var(--ce-glass-tint),0.04)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                      color: "var(--ce-text-primary)",
+                      fontFamily: "var(--font-body)",
+                    }}
+                    onFocus={e => (e.target.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)")}
+                    onBlur={e => (e.target.style.borderColor = "rgba(var(--ce-glass-tint),0.1)")}
+                  />
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-3 pt-1">
+                  <button
+                    onClick={handleSubmitTransaction}
+                    className="flex-1 flex items-center justify-center gap-1.5 px-4 py-2.5 rounded-lg text-[13px] cursor-pointer transition-all hover:brightness-110"
+                    style={{
+                      background: "rgba(var(--ce-cyan-rgb),0.15)",
+                      border: "1px solid rgba(var(--ce-cyan-rgb),0.25)",
+                      color: accent,
+                      fontFamily: "var(--font-body)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    Add
+                  </button>
+                  <button
+                    onClick={() => setShowAddTransaction(false)}
+                    className="px-4 py-2.5 rounded-lg text-[13px] cursor-pointer transition-all hover:bg-[rgba(var(--ce-glass-tint),0.06)]"
+                    style={{
+                      background: "rgba(var(--ce-glass-tint),0.04)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                      color: "var(--ce-text-tertiary)",
+                      fontFamily: "var(--font-body)",
+                      fontWeight: 500,
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </RoleShell>
   );
 }

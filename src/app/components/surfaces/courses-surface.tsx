@@ -561,6 +561,7 @@ export function CoursesSurface({ role, onNavigate }: { role?: string; onNavigate
   const [browseFilter, setBrowseFilter] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
+  const [showCertificate, setShowCertificate] = useState<Course | null>(null);
 
   const accent = "var(--ce-cyan)";
 
@@ -1033,7 +1034,7 @@ export function CoursesSurface({ role, onNavigate }: { role?: string; onNavigate
 
                               <button
                                 onClick={() => {
-                                  if (isComplete) { toast.success("Certificate view coming soon!"); }
+                                  if (isComplete) { setShowCertificate(c); }
                                   else { setSelectedCourse(c); }
                                 }}
                                 className="flex items-center gap-1 px-2.5 py-1.5 rounded-lg text-[10px] cursor-pointer transition-all flex-shrink-0 hover:bg-[rgba(var(--ce-cyan-rgb),0.12)]"
@@ -1094,6 +1095,237 @@ export function CoursesSurface({ role, onNavigate }: { role?: string; onNavigate
             onEnroll={handleEnroll}
             onNavigate={handleNavigate}
           />
+        )}
+      </AnimatePresence>
+
+      {/* ─── Certificate Modal ─────────────────────────────────────── */}
+      <AnimatePresence>
+        {showCertificate && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center p-4"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2, ease: EASE }}
+          >
+            <div
+              className="absolute inset-0"
+              style={{ background: "rgba(0,0,0,0.6)", backdropFilter: "blur(6px)" }}
+              onClick={() => setShowCertificate(null)}
+            />
+            <motion.div
+              className="relative w-full"
+              style={{ maxWidth: 500 }}
+              initial={{ opacity: 0, scale: 0.92, y: 16 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.92, y: 16 }}
+              transition={{ duration: 0.25, ease: EASE }}
+            >
+              {/* Certificate Card */}
+              <div
+                className="rounded-2xl overflow-hidden"
+                style={{
+                  background: "rgba(var(--ce-glass-tint),0.06)",
+                  backdropFilter: "blur(24px)",
+                  border: "2px solid rgba(var(--ce-cyan-rgb),0.2)",
+                  boxShadow: "0 0 0 1px rgba(var(--ce-cyan-rgb),0.08), 0 24px 48px rgba(0,0,0,0.3)",
+                }}
+              >
+                {/* Inner decorative border */}
+                <div
+                  className="m-3 rounded-xl p-8 text-center"
+                  style={{
+                    border: "1px solid rgba(var(--ce-cyan-rgb),0.12)",
+                    background: "rgba(var(--ce-glass-tint),0.03)",
+                  }}
+                >
+                  {/* Header */}
+                  <div className="flex items-center justify-center gap-2 mb-6">
+                    <Award className="w-5 h-5" style={{ color: accent }} />
+                    <h2
+                      className="text-[20px] tracking-tight"
+                      style={{
+                        fontFamily: "var(--font-display)",
+                        fontWeight: 600,
+                        color: "var(--ce-text-primary)",
+                      }}
+                    >
+                      Certificate of Completion
+                    </h2>
+                  </div>
+
+                  {/* Decorative line */}
+                  <div
+                    className="mx-auto mb-6 rounded-full"
+                    style={{
+                      width: 80,
+                      height: 2,
+                      background: `linear-gradient(90deg, transparent, rgba(var(--ce-cyan-rgb),0.5), transparent)`,
+                    }}
+                  />
+
+                  {/* Body */}
+                  <p
+                    className="text-[12px] mb-1"
+                    style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                  >
+                    This certifies that
+                  </p>
+                  <p
+                    className="text-[18px] mb-3"
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontWeight: 600,
+                      color: "var(--ce-text-primary)",
+                    }}
+                  >
+                    You
+                  </p>
+                  <p
+                    className="text-[12px] mb-1"
+                    style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}
+                  >
+                    has successfully completed
+                  </p>
+                  <p
+                    className="text-[16px] mb-4"
+                    style={{
+                      fontFamily: "var(--font-display)",
+                      fontWeight: 700,
+                      color: "var(--ce-text-primary)",
+                    }}
+                  >
+                    {showCertificate.title}
+                  </p>
+                  <p
+                    className="text-[12px] mb-5"
+                    style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-secondary)" }}
+                  >
+                    {showCertificate.provider}
+                  </p>
+
+                  {/* Decorative line */}
+                  <div
+                    className="mx-auto mb-5 rounded-full"
+                    style={{
+                      width: 80,
+                      height: 2,
+                      background: `linear-gradient(90deg, transparent, rgba(var(--ce-cyan-rgb),0.5), transparent)`,
+                    }}
+                  />
+
+                  {/* Meta */}
+                  <div className="flex items-center justify-center gap-6 mb-5">
+                    <div>
+                      <p
+                        className="text-[10px] mb-0.5"
+                        style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-quaternary)" }}
+                      >
+                        Completion Date
+                      </p>
+                      <p
+                        className="text-[12px]"
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontWeight: 500,
+                          color: "var(--ce-text-secondary)",
+                        }}
+                      >
+                        {new Date().toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
+                      </p>
+                    </div>
+                    <div
+                      style={{
+                        width: 1,
+                        height: 24,
+                        background: "rgba(var(--ce-glass-tint),0.1)",
+                      }}
+                    />
+                    <div>
+                      <p
+                        className="text-[10px] mb-0.5"
+                        style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-quaternary)" }}
+                      >
+                        Certificate ID
+                      </p>
+                      <p
+                        className="text-[12px]"
+                        style={{
+                          fontFamily: "var(--font-body)",
+                          fontWeight: 500,
+                          color: "var(--ce-text-secondary)",
+                        }}
+                      >
+                        CE-{showCertificate.id.toUpperCase()}-2026
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Sophia mark */}
+                  <div className="flex items-center justify-center gap-1.5 opacity-40">
+                    <SophiaMark size={14} />
+                    <span
+                      className="text-[10px]"
+                      style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-quaternary)" }}
+                    >
+                      Verified by CareerEdge
+                    </span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Action row */}
+              <div className="flex items-center justify-center gap-3 mt-4">
+                <button
+                  onClick={() => {
+                    toast.success("Certificate downloaded");
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:brightness-110"
+                  style={{
+                    background: "rgba(var(--ce-cyan-rgb),0.12)",
+                    border: "1px solid rgba(var(--ce-cyan-rgb),0.2)",
+                    color: accent,
+                    fontFamily: "var(--font-body)",
+                    fontWeight: 500,
+                  }}
+                >
+                  <ArrowRight className="w-3.5 h-3.5" />
+                  Download PDF
+                </button>
+                <button
+                  onClick={() => {
+                    navigator.clipboard.writeText(`https://careeredge.com/certificates/CE-${showCertificate.id.toUpperCase()}-2026`);
+                    toast.success("Certificate link copied");
+                  }}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:brightness-110"
+                  style={{
+                    background: "rgba(var(--ce-glass-tint),0.06)",
+                    border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                    color: "var(--ce-text-secondary)",
+                    fontFamily: "var(--font-body)",
+                    fontWeight: 500,
+                  }}
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  Share
+                </button>
+                <button
+                  onClick={() => setShowCertificate(null)}
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:brightness-110"
+                  style={{
+                    background: "rgba(var(--ce-glass-tint),0.06)",
+                    border: "1px solid rgba(var(--ce-glass-tint),0.1)",
+                    color: "var(--ce-text-tertiary)",
+                    fontFamily: "var(--font-body)",
+                    fontWeight: 500,
+                  }}
+                >
+                  <X className="w-3.5 h-3.5" />
+                  Close
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
         )}
       </AnimatePresence>
     </RoleShell>
