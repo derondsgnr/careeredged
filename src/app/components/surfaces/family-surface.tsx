@@ -19,6 +19,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { RoleShell, GlassCard } from "../role-shell";
 import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
+import { useSophia } from "../sophia-context";
 import { QRModal } from "../shared-patterns";
 import {
   Heart, Check, ChevronRight, ChevronDown, ChevronUp,
@@ -819,6 +820,7 @@ function ActivityFeed({ activity }: { activity: ActivityItem[] }) {
 export function FamilySurface() {
   const { role: roleParam } = useParams<{ role: string }>();
   const navigate = useNavigate();
+  const { openSophia } = useSophia();
   const role = "parent" as const;
 
   const [selectedChildId,   setSelectedChildId  ] = useState<string>(CHILDREN[0].id);
@@ -1025,7 +1027,7 @@ export function FamilySurface() {
                 <SophiaInsight
                   message={activeChild.sophiaMessage}
                   actionLabel={`Ask Sophia about ${activeChild.name}`}
-                  onAction={() => {}}
+                  onAction={() => openSophia(`How is my child ${activeChild.name} doing in their career roadmap, and what's the best way I can support them right now?`)}
                   actionPrompt={`How is my child ${activeChild.name} doing in their career roadmap, and what's the best way I can support them right now?`}
                   delay={0.4}
                 />

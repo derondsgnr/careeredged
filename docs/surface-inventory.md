@@ -188,7 +188,7 @@ From PRD + production app. All 7 tools need building.
 | **EdgeGas Economy** | UI indicators only | **PARTIAL** — display only, no earn/spend logic |
 | **QR System (infrastructure)** | Patterns in child-link + buddy-pair | **BUILT** |
 | **Notifications** | — | **NOT BUILT** |
-| **Settings/Preferences** | — | **NOT BUILT** |
+| **Settings/Preferences** | `settings.tsx` (SettingsPanel) | **BUILT** | 8 sections, all 8 roles, reusable Toggle + SettingRow primitives, slide-out panel via avatar in role-shell |
 
 ---
 

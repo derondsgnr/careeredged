@@ -572,7 +572,7 @@ export function ClientsSurface() {
             <SophiaInsight
               message="Yolanda has her Stripe final round on March 25. Your March 22 session is 3 days before — perfect timing for a full mock interview. Sophia has a prep deck ready."
               actionLabel="View prep deck"
-              onAction={() => {}}
+              onAction={() => openSophia("Help me prepare for Yolanda's Stripe final round interview session — she has the interview on March 25 and I want to run a full mock with her on March 22")}
               actionPrompt="Help me prepare for Yolanda's Stripe final round interview session — she has the interview on March 25 and I want to run a full mock with her on March 22"
               delay={0.4}
             />
