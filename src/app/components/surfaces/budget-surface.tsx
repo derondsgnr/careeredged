@@ -12,7 +12,7 @@ import { EASE } from "../tokens";
  * - Category breakdown (progress bars)
  * - Transaction history (scrollable list)
  * - Sophia spending insight
- * - Add transaction CTA (placeholder)
+ * - Add transaction modal (full form)
  */
 
 import { useState } from "react";

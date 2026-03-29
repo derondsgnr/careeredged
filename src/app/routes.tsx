@@ -69,6 +69,7 @@ import { CommunitySurface } from "./components/surfaces/community-surface";
 import { EdgeMarketSurface } from "./components/surfaces/edgemarket-surface";
 import { CoursesSurface } from "./components/surfaces/courses-surface";
 import { BudgetSurface } from "./components/surfaces/budget-surface";
+import { CoachesSurface } from "./components/surfaces/coaches-surface";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -165,6 +166,7 @@ function useRoleNavigation(): {
       market:    `/${role}/market`,
       courses:   `/${role}/courses`,
       budget:    `/${role}/budget`,
+      coaches:   `/${role}/coaches`,
       // Global
       landing:   "/",
     };
@@ -307,6 +309,11 @@ function CoursesPage() {
 function BudgetPage() {
   const { role, onNavigate } = useRoleNavigation();
   return <BudgetSurface role={role} onNavigate={onNavigate} />;
+}
+
+function CoachesPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <CoachesSurface role={role} onNavigate={onNavigate} />;
 }
 
 // ─── Archive wrappers ───────────────────────────────────────────────
@@ -504,6 +511,7 @@ export const router = createBrowserRouter([
       { path: ":role/market",                   Component: MarketPage },
       { path: ":role/courses",                  Component: CoursesPage },
       { path: ":role/budget",                   Component: BudgetPage },
+      { path: ":role/coaches",                  Component: CoachesPage },
       { path: ":role/careers",                  Component: CareerDiscovery },
       { path: "careers",                        Component: CareerDiscovery },
 
