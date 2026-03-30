@@ -68,7 +68,7 @@ export function LandingV6C({ onNavigate }: LandingV6CProps) {
                 <h1 className="text-[40px] sm:text-[52px] lg:text-[64px] xl:text-[80px] font-bold leading-[0.92] tracking-[-0.04em] mb-6" style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}>
                   Direction,
                   <br />
-                  not <span className="italic font-light" style={{ color: "var(--ce-lime)" }}>listings.</span>
+                  not <span className="italic font-light" style={{ color: "var(--ce-cyan)" }}>listings.</span>
                 </h1>
               </Reveal>
 
@@ -81,7 +81,7 @@ export function LandingV6C({ onNavigate }: LandingV6CProps) {
               </Reveal>
 
               <Reveal delay={0.14}>
-                <button onClick={() => onNavigate("signup")} className="px-6 py-3.5 rounded-sm text-[13px] font-semibold flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-3.5" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-lime)", color: "#08090C" }}>
+                <button onClick={() => onNavigate("signup")} className="px-6 py-3.5 rounded-sm text-[13px] font-semibold flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-3.5" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-cyan)", color: "#08090C" }}>
                   Start Free <ArrowRight size={14} />
                 </button>
               </Reveal>
@@ -278,10 +278,10 @@ export function LandingV6C({ onNavigate }: LandingV6CProps) {
               { name: "Edge Pro", price: "$39", period: "/month", features: ["Unlimited tools", "Premium templates", "Full platform access", "35 monthly credits"], hl: false },
             ].map((p) => (
               <Reveal key={p.name}>
-                <div className="p-8 h-full flex flex-col" style={{ background: p.hl ? "rgba(var(--ce-lime-rgb), 0.02)" : "var(--ce-surface-bg)" }}>
+                <div className="p-8 h-full flex flex-col" style={{ background: p.hl ? "rgba(var(--ce-cyan-rgb), 0.02)" : "var(--ce-surface-bg)" }}>
                   <div className="flex items-center gap-2 mb-6">
                     <span className="text-[12px] font-mono tracking-[0.04em]" style={{ color: "var(--ce-text-quaternary)" }}>{p.name}</span>
-                    {p.hl && <span className="text-[9px] font-mono tracking-[0.08em] px-2 py-0.5 rounded-sm" style={{ background: "rgba(var(--ce-lime-rgb), 0.12)", color: "var(--ce-lime)" }}>POPULAR</span>}
+                    {p.hl && <span className="text-[9px] font-mono tracking-[0.08em] px-2 py-0.5 rounded-sm" style={{ background: "rgba(var(--ce-cyan-rgb), 0.12)", color: "var(--ce-cyan)" }}>POPULAR</span>}
                   </div>
                   <div className="flex items-baseline gap-1 mb-8">
                     <span className="text-[44px] font-bold tracking-[-0.03em]" style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}>{p.price}</span>
@@ -290,12 +290,12 @@ export function LandingV6C({ onNavigate }: LandingV6CProps) {
                   <div className="flex flex-col gap-3 flex-1 mb-8">
                     {p.features.map((f) => (
                       <div key={f} className="flex items-center gap-2.5">
-                        <div className="w-1 h-1 rounded-full" style={{ background: p.hl ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }} />
+                        <div className="w-1 h-1 rounded-full" style={{ background: p.hl ? "var(--ce-cyan)" : "var(--ce-text-quaternary)" }} />
                         <span className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>{f}</span>
                       </div>
                     ))}
                   </div>
-                  <button onClick={() => onNavigate("signup")} className="w-full py-3 rounded-sm text-[12px] font-mono tracking-[0.04em] cursor-pointer transition-all duration-200" style={{ background: p.hl ? "var(--ce-lime)" : "transparent", color: p.hl ? "#08090C" : "var(--ce-text-secondary)", border: p.hl ? "none" : "1px solid rgba(var(--ce-glass-tint), 0.08)" }}>
+                  <button onClick={() => onNavigate("signup")} className="w-full py-3 rounded-sm text-[12px] font-mono tracking-[0.04em] cursor-pointer transition-all duration-200" style={{ background: p.hl ? "var(--ce-cyan)" : "transparent", color: p.hl ? "#08090C" : "var(--ce-text-secondary)", border: p.hl ? "none" : "1px solid rgba(var(--ce-glass-tint), 0.08)" }}>
                     {p.price === "$0" ? "START FREE" : "GET STARTED"}
                   </button>
                 </div>
@@ -325,13 +325,13 @@ export function LandingV6C({ onNavigate }: LandingV6CProps) {
                 <h2 className="text-[36px] sm:text-[48px] lg:text-[64px] font-bold leading-[0.95] tracking-[-0.04em]" style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}>
                   See the path.
                   <br />
-                  <span style={{ color: "var(--ce-lime)" }}>Walk the path.</span>
+                  <span style={{ color: "var(--ce-cyan)" }}>Walk the path.</span>
                 </h2>
               </Reveal>
             </div>
             <div className="lg:col-span-3 lg:col-start-10">
               <Reveal delay={0.08}>
-                <button onClick={() => onNavigate("signup")} className="px-8 py-4 rounded-sm text-[13px] font-semibold flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-lime)", color: "#08090C" }}>
+                <button onClick={() => onNavigate("signup")} className="px-8 py-4 rounded-sm text-[13px] font-semibold flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-cyan)", color: "#08090C" }}>
                   Start Free <ArrowUpRight size={15} />
                 </button>
               </Reveal>

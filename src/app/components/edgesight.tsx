@@ -312,9 +312,9 @@ function DateRangeBar({ selected, onChange }: { selected: string; onChange: (v: 
           key={p} onClick={() => onChange(p)}
           className="px-3 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
           style={{
-            background: selected === p ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)",
-            color: selected === p ? "var(--ce-lime)" : "var(--ce-text-tertiary)",
-            border: selected === p ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
+            background: selected === p ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)",
+            color: selected === p ? "var(--ce-cyan)" : "var(--ce-text-tertiary)",
+            border: selected === p ? "1px solid rgba(var(--ce-cyan-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
             fontFamily: "var(--font-body)",
           }}
         >{p}</button>
@@ -445,16 +445,16 @@ function PremiumGate({ title, onUpgrade }: { title: string; onUpgrade: () => voi
   return (
     <motion.div
       className="absolute inset-0 z-10 flex flex-col items-center justify-center rounded-xl"
-      style={{ background: "rgba(8,9,12,0.82)", backdropFilter: "blur(6px)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}
+      style={{ background: "rgba(8,9,12,0.82)", backdropFilter: "blur(6px)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
       initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.25 }}
     >
-      <div className="w-10 h-10 rounded-full flex items-center justify-center mb-3" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)" }}>
-        <Lock className="w-4 h-4 text-ce-lime" />
+      <div className="w-10 h-10 rounded-full flex items-center justify-center mb-3" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)" }}>
+        <Lock className="w-4 h-4 text-ce-cyan" />
       </div>
       <p className="text-[12px] text-ce-text-primary mb-1 text-center px-6" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{title}</p>
       <p className="text-[10px] text-ce-text-tertiary text-center px-8 mb-3" style={{ fontFamily: "var(--font-body)" }}>Unlock with EdgePrime — includes salary benchmarking, predictive timelines &amp; deep market intel.</p>
       <button onClick={onUpgrade} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer text-[11px]"
-        style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-lime-rgb),0.2)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        style={{ background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-cyan-rgb),0.2)", color: "var(--ce-cyan)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
         <Sparkles className="w-3.5 h-3.5" /> Upgrade to EdgePrime
       </button>
     </motion.div>
@@ -484,17 +484,17 @@ function UpgradeModal({ onClose, onConfirm }: { onClose: () => void; onConfirm: 
         <div className="p-6 grid grid-cols-3 gap-4">
           {plans.map((plan) => (
             <div key={plan.name} className="rounded-xl p-4 flex flex-col" style={{
-              background: plan.name === "EdgePrime" ? "linear-gradient(145deg, rgba(var(--ce-lime-rgb),0.05), rgba(var(--ce-role-edgestar-rgb),0.03))" : "rgba(var(--ce-glass-tint),0.02)",
-              border: plan.name === "EdgePrime" ? "1px solid rgba(var(--ce-lime-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)",
+              background: plan.name === "EdgePrime" ? "linear-gradient(145deg, rgba(var(--ce-cyan-rgb),0.05), rgba(var(--ce-role-edgestar-rgb),0.03))" : "rgba(var(--ce-glass-tint),0.02)",
+              border: plan.name === "EdgePrime" ? "1px solid rgba(var(--ce-cyan-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)",
             }}>
               <div className="mb-3">
                 <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{plan.name}</span>
-                <span className="text-[20px] tabular-nums" style={{ color: plan.name === "EdgePrime" ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{plan.price}</span>
+                <span className="text-[20px] tabular-nums" style={{ color: plan.name === "EdgePrime" ? "var(--ce-cyan)" : "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{plan.price}</span>
               </div>
               <ul className="flex flex-col gap-1.5 flex-1 mb-4">
                 {plan.features.map(f => (
                   <li key={f} className="flex items-start gap-1.5">
-                    <span className="text-ce-lime text-[11px] mt-0.5">✓</span>
+                    <span className="text-ce-cyan text-[11px] mt-0.5">✓</span>
                     <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{f}</span>
                   </li>
                 ))}
@@ -503,9 +503,9 @@ function UpgradeModal({ onClose, onConfirm }: { onClose: () => void; onConfirm: 
                 onClick={() => { if (!plan.ctaDisabled) { onConfirm(); onClose(); } }}
                 className="w-full py-2.5 rounded-xl text-[11px] cursor-pointer transition-colors"
                 style={{
-                  background: plan.ctaDisabled ? "rgba(var(--ce-glass-tint),0.02)" : plan.name === "EdgePrime" ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)",
-                  border: plan.ctaDisabled ? "1px solid rgba(var(--ce-glass-tint),0.05)" : plan.name === "EdgePrime" ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.07)",
-                  color: plan.ctaDisabled ? "var(--ce-text-quaternary)" : plan.name === "EdgePrime" ? "var(--ce-lime)" : "var(--ce-text-secondary)",
+                  background: plan.ctaDisabled ? "rgba(var(--ce-glass-tint),0.02)" : plan.name === "EdgePrime" ? "rgba(var(--ce-cyan-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)",
+                  border: plan.ctaDisabled ? "1px solid rgba(var(--ce-glass-tint),0.05)" : plan.name === "EdgePrime" ? "1px solid rgba(var(--ce-cyan-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.07)",
+                  color: plan.ctaDisabled ? "var(--ce-text-quaternary)" : plan.name === "EdgePrime" ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
                   fontFamily: "var(--font-display)", fontWeight: 500,
                   cursor: plan.ctaDisabled ? "default" : "pointer",
                 }}
@@ -601,7 +601,7 @@ function EdgeBoard({ role, onNavigate }: { role: RoleId; onNavigate?: NavigateFn
             <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
               {(["free", "prime"] as const).map(t => (
                 <button key={t} onClick={() => setTier(t)} className="px-2.5 py-1 rounded-md text-[10px] cursor-pointer"
-                  style={{ background: tier === t ? (t === "prime" ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)") : "transparent", color: tier === t ? (t === "prime" ? "var(--ce-lime)" : "var(--ce-text-primary)") : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
+                  style={{ background: tier === t ? (t === "prime" ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)") : "transparent", color: tier === t ? (t === "prime" ? "var(--ce-cyan)" : "var(--ce-text-primary)") : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                   {t === "prime" ? "⚡ EdgePrime" : "EdgeFree"}
                 </button>
               ))}

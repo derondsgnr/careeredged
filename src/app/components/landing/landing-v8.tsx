@@ -168,11 +168,11 @@ export function LandingV8({ onNavigate }: LandingV8Props) {
       <Statement>
         <div
           className="text-[10px] uppercase tracking-[0.3em] mb-8"
-          style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-lime)" }}
+          style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-cyan)" }}
         >
           What if
         </div>
-        <H color="var(--ce-lime)">
+        <H color="var(--ce-cyan)">
           Someone
           <br />
           actually
@@ -323,7 +323,7 @@ export function LandingV8({ onNavigate }: LandingV8Props) {
         <H>
           Your career
           <br />
-          has a <span style={{ color: "var(--ce-lime)" }}>structure.</span>
+          has a <span style={{ color: "var(--ce-cyan)" }}>structure.</span>
         </H>
         <div className="mt-12">
           <button
@@ -331,7 +331,7 @@ export function LandingV8({ onNavigate }: LandingV8Props) {
             className="px-10 py-5 rounded-lg text-[15px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto"
             style={{
               fontFamily: "'Satoshi', sans-serif",
-              background: "var(--ce-lime)",
+              background: "var(--ce-cyan)",
               color: "#08090C",
             }}
           >

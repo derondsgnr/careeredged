@@ -74,7 +74,7 @@ export function LandingV6B({ onNavigate }: LandingV6BProps) {
             </Reveal>
 
             <Reveal delay={0.16}>
-              <button onClick={() => onNavigate("signup")} className="px-7 py-4 rounded-sm text-[14px] font-semibold flex items-center gap-2.5 cursor-pointer transition-all duration-300 hover:gap-4" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-lime)", color: "#08090C" }}>
+              <button onClick={() => onNavigate("signup")} className="px-7 py-4 rounded-sm text-[14px] font-semibold flex items-center gap-2.5 cursor-pointer transition-all duration-300 hover:gap-4" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-cyan)", color: "#08090C" }}>
                 Get Your Edge <ArrowRight size={15} />
               </button>
             </Reveal>
@@ -278,7 +278,7 @@ export function LandingV6B({ onNavigate }: LandingV6BProps) {
             </p>
           </Reveal>
           <Reveal delay={0.08}>
-            <button onClick={() => onNavigate("signup")} className="px-8 py-4 rounded-sm text-[14px] font-semibold flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-lime)", color: "#08090C" }}>
+            <button onClick={() => onNavigate("signup")} className="px-8 py-4 rounded-sm text-[14px] font-semibold flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-cyan)", color: "#08090C" }}>
               Get Your Edge <ArrowRight size={16} />
             </button>
           </Reveal>

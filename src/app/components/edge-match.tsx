@@ -363,7 +363,7 @@ function NativeApplyModal({ job, onClose, onSubmit }: { job: Job; onClose: () =>
             <div className="flex gap-2">
               <button onClick={() => { setStep("done"); onSubmit(); }}
                 className="flex-1 py-3 rounded-xl text-[13px] cursor-pointer"
-                style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                 Submit Application →
               </button>
               <button onClick={onClose}
@@ -505,7 +505,7 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
 
         {/* Sophia's take */}
         <div className="rounded-xl p-3.5" style={{
-          background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))",
+          background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-cyan-rgb),0.015))",
           border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)",
         }}>
           <div className="flex items-center gap-1.5 mb-1.5">
@@ -541,10 +541,10 @@ function JobDetailPanel({ job, onClose, onToggleSave, onApply, onNavigate, onWit
           <div className="flex gap-2">
             <button
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
-              style={{ background: "rgba(var(--ce-lime-rgb),0.1)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ background: "rgba(var(--ce-cyan-rgb),0.1)", border: "1px solid rgba(var(--ce-cyan-rgb),0.2)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               onClick={() => setShowNativeApply(true)}
             >
-              <Send className="w-3.5 h-3.5 text-ce-lime" /> Apply natively
+              <Send className="w-3.5 h-3.5 text-ce-cyan" /> Apply natively
             </button>
             <button
               className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
@@ -1059,7 +1059,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
               <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>Adding "remote-friendly" and specific tool requirements (e.g., "Figma, design systems") to your description could increase qualified applications by ~20%.</p>
             </div>
             <div className="flex gap-3 pt-2">
-              <button onClick={() => { setViewMode("listings"); toast.success("Listing updated successfully"); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>Save Changes</button>
+              <button onClick={() => { setViewMode("listings"); toast.success("Listing updated successfully"); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>Save Changes</button>
               <button onClick={() => setViewMode("listings")} className="px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>Cancel</button>
             </div>
           </motion.div>
@@ -1077,7 +1077,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
             <h1 className="text-[20px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{surfaceLabel}</h1>
             <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{POSTED_JOBS.length} active listings · {POSTED_JOBS.reduce((s, j) => s + j.newApplicants, 0)} new applicants</span>
           </div>
-          <button onClick={() => setShowPostForm(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <button onClick={() => setShowPostForm(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <Plus className="w-4 h-4" /> {postLabel}
           </button>
         </motion.div>
@@ -1194,7 +1194,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                   <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Salary Range</label><input type="text" placeholder="e.g. $120K – $160K" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
                   <div><label className="text-[11px] text-ce-text-tertiary block mb-1.5" style={{ fontFamily: "var(--font-body)" }}>Description</label><textarea placeholder="Describe the role, responsibilities, and requirements..." rows={3} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-ce-text-primary placeholder:text-[var(--ce-text-quaternary)] outline-none resize-none" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }} /></div>
                   <div className="flex gap-3 pt-2">
-                    <button onClick={() => { setShowPostForm(false); toast.success("Job posted successfully", { description: "Sophia will start matching candidates immediately." }); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", color: "var(--ce-void)", fontFamily: "var(--font-display)", fontWeight: 500 }}><Sparkles className="w-3.5 h-3.5" /> Publish Listing</button>
+                    <button onClick={() => { setShowPostForm(false); toast.success("Job posted successfully", { description: "Sophia will start matching candidates immediately." }); }} className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", color: "var(--ce-void)", fontFamily: "var(--font-display)", fontWeight: 500 }}><Sparkles className="w-3.5 h-3.5" /> Publish Listing</button>
                     <button onClick={() => setShowPostForm(false)} className="px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>Cancel</button>
                   </div>
                 </div>

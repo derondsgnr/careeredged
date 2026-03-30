@@ -294,8 +294,8 @@ function TopNav({ role, active, userName, userInitial, edgeGas, onOpenSophia, on
     >
       {/* Logo + Role Badge */}
       <div className="flex items-center gap-3">
-        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
-          <Sparkles className="w-3.5 h-3.5 text-ce-lime" />
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)" }}>
+          <Sparkles className="w-3.5 h-3.5 text-ce-cyan" />
         </div>
         <span className="text-[14px] tracking-tight" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>CareerEdge</span>
         <RoleBadge role={role} />
@@ -325,7 +325,7 @@ function TopNav({ role, active, userName, userInitial, edgeGas, onOpenSophia, on
           <div className="absolute top-0.5 right-0.5 w-2 h-2 rounded-full bg-[var(--ce-role-edgestar)]" />
         </button>
 
-        <button onClick={onProfileClick} className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: `linear-gradient(135deg, ${ROLE_COLORS[role]}25, rgba(var(--ce-lime-rgb),0.1))`, border: `1.5px solid rgba(var(--ce-glass-tint),0.08)` }}>
+        <button onClick={onProfileClick} className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: `linear-gradient(135deg, ${ROLE_COLORS[role]}25, rgba(var(--ce-cyan-rgb),0.1))`, border: `1.5px solid rgba(var(--ce-glass-tint),0.08)` }}>
           <span className="text-[12px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>{userInitial}</span>
         </button>
       </div>
@@ -401,7 +401,7 @@ export function GlassCard({
       style={
         gradient
           ? {
-              background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+              background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-cyan-rgb),0.02))",
               border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
             }
           : {

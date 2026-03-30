@@ -176,7 +176,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
             >
               Career
               <br />
-              <span className="italic font-light" style={{ color: "var(--ce-lime)" }}>Edged.</span>
+              <span className="italic font-light" style={{ color: "var(--ce-cyan)" }}>Edged.</span>
             </h1>
           </Reveal>
 
@@ -195,7 +195,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                 className="px-6 py-3 rounded-full text-[13px] font-medium flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-4 w-fit"
                 style={{
                   fontFamily: "'Satoshi', sans-serif",
-                  background: "var(--ce-lime)",
+                  background: "var(--ce-cyan)",
                   color: "#08090C",
                 }}
               >
@@ -267,7 +267,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                 <div
                   className="flex-1 min-h-[160px] rounded-xl flex items-center justify-center p-8"
                   style={{
-                    background: "var(--ce-lime)",
+                    background: "var(--ce-cyan)",
                   }}
                 >
                   <p
@@ -489,7 +489,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
             >
               Your next move,
               <br />
-              <span className="italic font-light" style={{ color: "var(--ce-lime)" }}>mapped.</span>
+              <span className="italic font-light" style={{ color: "var(--ce-cyan)" }}>mapped.</span>
             </h2>
           </Reveal>
 
@@ -499,7 +499,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
               className="px-8 py-4 rounded-full text-[14px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto"
               style={{
                 fontFamily: "'Satoshi', sans-serif",
-                background: "var(--ce-lime)",
+                background: "var(--ce-cyan)",
                 color: "#08090C",
               }}
             >

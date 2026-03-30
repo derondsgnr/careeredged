@@ -29,9 +29,9 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
           {/* Logo */}
           <button onClick={() => onNavigate("home")} className="flex items-center gap-2.5 mb-12 cursor-pointer group">
             <svg width="24" height="32" viewBox="0 0 133 180" fill="none" className="transition-transform duration-300 group-hover:scale-105">
-              <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="var(--ce-lime)"/>
-              <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="var(--ce-lime)"/>
-              <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="var(--ce-lime)"/>
+              <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="var(--ce-cyan)"/>
+              <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="var(--ce-cyan)"/>
+              <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="var(--ce-cyan)"/>
             </svg>
             <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 600, fontSize: "16px", color: "var(--ce-text-primary)" }}>
               CareerEdged
@@ -110,7 +110,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                     border: "1px solid rgba(var(--ce-glass-tint),0.06)",
                     color: "var(--ce-text-primary)",
                   }}
-                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.3)"; }}
+                  onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)"; }}
                   onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.06)"; }}
                 />
               </div>
@@ -130,7 +130,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                   border: "1px solid rgba(var(--ce-glass-tint),0.06)",
                   color: "var(--ce-text-primary)",
                 }}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.3)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)"; }}
                 onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.06)"; }}
               />
             </div>
@@ -149,7 +149,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
                   border: "1px solid rgba(var(--ce-glass-tint),0.06)",
                   color: "var(--ce-text-primary)",
                 }}
-                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.3)"; }}
+                onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-cyan-rgb),0.3)"; }}
                 onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.06)"; }}
               />
               <button
@@ -184,10 +184,10 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
               style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 600,
-                background: "var(--ce-lime)",
+                background: "var(--ce-cyan)",
                 color: "var(--ce-surface-0)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(var(--ce-lime-rgb),0.15)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-1px)"; e.currentTarget.style.boxShadow = "0 6px 20px rgba(var(--ce-cyan-rgb),0.15)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               {isLogin ? "Log in" : "Create account"}
@@ -201,9 +201,9 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
             <button
               onClick={() => onNavigate(isLogin ? "signup" : "login")}
               className="cursor-pointer transition-colors duration-200"
-              style={{ color: "var(--ce-lime)", fontWeight: 500 }}
-              onMouseEnter={(e) => { e.currentTarget.style.color = "#c4ff6a"; }}
-              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-lime)"; }}
+              style={{ color: "var(--ce-cyan)", fontWeight: 500 }}
+              onMouseEnter={(e) => { e.currentTarget.style.color = "#45e0f0"; }}
+              onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-cyan)"; }}
             >
               {isLogin ? "Sign up" : "Log in"}
             </button>
@@ -222,7 +222,7 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
         <div
           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] pointer-events-none"
           style={{
-            background: "radial-gradient(circle at center, rgba(var(--ce-lime-rgb),0.05) 0%, transparent 60%)",
+            background: "radial-gradient(circle at center, rgba(var(--ce-cyan-rgb),0.05) 0%, transparent 60%)",
             filter: "blur(80px)",
           }}
         />
@@ -230,9 +230,9 @@ export function AuthPage({ mode, onNavigate, onAuth }: AuthPageProps) {
         <div className="relative z-10 text-center max-w-[360px]">
           {/* Large monogram */}
           <svg width="80" height="108" viewBox="0 0 133 180" fill="none" className="mx-auto mb-8">
-            <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="rgba(var(--ce-lime-rgb),0.15)"/>
-            <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="rgba(var(--ce-lime-rgb),0.15)"/>
-            <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="rgba(var(--ce-lime-rgb),0.15)"/>
+            <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="rgba(var(--ce-cyan-rgb),0.15)"/>
+            <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="rgba(var(--ce-cyan-rgb),0.15)"/>
+            <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="rgba(var(--ce-cyan-rgb),0.15)"/>
           </svg>
 
           <p

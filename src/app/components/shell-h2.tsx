@@ -101,7 +101,7 @@ function TopNav({ active, onNav }: { active: string; onNav: (id: string) => void
         </button>
 
         {/* Avatar */}
-        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-lime-rgb),0.1))", border: "1.5px solid rgba(var(--ce-glass-tint),0.08)" }}>
+        <div className="w-9 h-9 rounded-full flex items-center justify-center cursor-pointer" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-cyan-rgb),0.1))", border: "1.5px solid rgba(var(--ce-glass-tint),0.08)" }}>
           <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
         </div>
       </div>
@@ -211,7 +211,7 @@ function HeroRoadmapCard() {
     <motion.div
       className="rounded-2xl p-6 h-full"
       style={{
-        background: "linear-gradient(165deg, rgba(var(--ce-role-edgestar-rgb),0.06) 0%, rgba(var(--ce-glass-tint),0.02) 40%, rgba(var(--ce-lime-rgb),0.03) 100%)",
+        background: "linear-gradient(165deg, rgba(var(--ce-role-edgestar-rgb),0.06) 0%, rgba(var(--ce-glass-tint),0.02) 40%, rgba(var(--ce-cyan-rgb),0.03) 100%)",
         border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
         boxShadow: "inset 0 1px 1px rgba(var(--ce-glass-tint),0.03)",
       }}
@@ -291,7 +291,7 @@ function NextActionCard() {
       <button
         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]"
         style={{
-          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-lime-rgb),0.06))",
+          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-cyan-rgb),0.06))",
           border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
           color: "var(--ce-text-primary)",
           fontFamily: "var(--font-display)",
@@ -346,7 +346,7 @@ function TopJobMatchCard() {
         <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-ce-text-primary" style={{ background: "rgba(var(--ce-glass-tint),0.06)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }}>
           View details
         </button>
-        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-[var(--ce-void)]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <button className="flex-1 flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg cursor-pointer text-[12px] text-[var(--ce-void)]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500 }}>
           Quick apply
         </button>
       </div>
@@ -403,7 +403,7 @@ export function ShellH2() {
     <div className="min-h-screen w-full" style={{ backgroundColor: "var(--ce-void)" }}>
       {/* Ambient gradient wash */}
       <div className="fixed inset-0 pointer-events-none" style={{
-        background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(var(--ce-role-edgestar-rgb),0.03) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 70% 60%, rgba(var(--ce-lime-rgb),0.02) 0%, transparent 50%)",
+        background: "radial-gradient(ellipse 80% 50% at 50% 30%, rgba(var(--ce-role-edgestar-rgb),0.03) 0%, transparent 60%), radial-gradient(ellipse 60% 40% at 70% 60%, rgba(var(--ce-cyan-rgb),0.02) 0%, transparent 50%)",
       }} />
 
       <TopNav active={activeNav} onNav={setActiveNav} />

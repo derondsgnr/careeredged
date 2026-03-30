@@ -115,7 +115,7 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
         <div
           className="absolute top-1/3 left-1/2 -translate-x-1/2 w-[1000px] h-[600px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(4,44,1,0.15) 0%, rgba(var(--ce-lime-rgb),0.03) 30%, transparent 65%)",
+            background: "radial-gradient(ellipse at center, rgba(1,33,44,0.15) 0%, rgba(var(--ce-cyan-rgb),0.03) 30%, transparent 65%)",
             filter: "blur(100px)",
           }}
         />
@@ -129,9 +129,9 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
             className="mb-10"
           >
             <svg width="52" height="70" viewBox="0 0 133 180" fill="none" className="mx-auto">
-              <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="rgba(var(--ce-lime-rgb),0.3)"/>
-              <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="rgba(var(--ce-lime-rgb),0.3)"/>
-              <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="rgba(var(--ce-lime-rgb),0.3)"/>
+              <path d="M132.41 131.992H99.5417V88.8695L93.0906 80.7536L52.8237 80.6843L52.8815 47.8164L108.964 47.932L132.41 77.3894V131.992Z" fill="rgba(var(--ce-cyan-rgb),0.3)"/>
+              <path d="M88.0699 72.3383L50.8918 102.975L71.7866 128.331L108.965 97.6947L88.0699 72.3383Z" fill="rgba(var(--ce-cyan-rgb),0.3)"/>
+              <path d="M132.905 179.507H35.3766L0 135.379V36.6021L36.4633 0H132.905V32.8679H50.1169L32.8563 50.1747V123.83L51.1458 146.651H132.905V179.507Z" fill="rgba(var(--ce-cyan-rgb),0.3)"/>
             </svg>
           </motion.div>
 
@@ -173,8 +173,8 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
             <button
               onClick={() => onNavigate("signup")}
               className="group inline-flex items-center gap-2 px-8 py-4 rounded-lg text-[15px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-cyan)", color: "var(--ce-surface-0)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-cyan-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Map your career
@@ -261,7 +261,7 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
               color: "var(--ce-text-primary)",
             }}>
               Career<br />
-              <span style={{ color: "var(--ce-lime)" }}>intelligence</span>
+              <span style={{ color: "var(--ce-cyan)" }}>intelligence</span>
             </h2>
           </Reveal>
 
@@ -300,7 +300,7 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
                     background: "rgba(var(--ce-glass-tint),0.02)",
                     border: "1px solid rgba(var(--ce-glass-tint),0.04)",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-lime-rgb),0.1)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-cyan-rgb),0.1)"; }}
                   onMouseLeave={(e) => { e.currentTarget.style.borderColor = "rgba(var(--ce-glass-tint),0.04)"; }}
                 >
                   <div className="flex items-center gap-3 mb-5">
@@ -429,7 +429,7 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
       </section>
 
       {/* ═══ CH.5: THE NUMBERS — LIME SECTION ═══ */}
-      <section className="py-24 lg:py-28 px-6" style={{ background: "var(--ce-lime)" }}>
+      <section className="py-24 lg:py-28 px-6" style={{ background: "var(--ce-cyan)" }}>
         <div className="max-w-[1000px] mx-auto">
           <Reveal>
             <span className="text-[11px] uppercase tracking-[0.12em] block mb-6" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "rgba(10,12,16,0.4)" }}>
@@ -522,7 +522,7 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
       <section className="relative py-32 lg:py-40 px-6 overflow-hidden" style={{ background: "var(--ce-surface-0)" }}>
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[900px] h-[450px] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.04) 0%, transparent 55%)", filter: "blur(100px)" }}
+          style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.04) 0%, transparent 55%)", filter: "blur(100px)" }}
         />
 
         <div className="max-w-[700px] mx-auto text-center relative z-10">
@@ -537,7 +537,7 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
             }}>
               The next chapter
               <br />
-              <span style={{ color: "var(--ce-lime)" }}>starts here</span>
+              <span style={{ color: "var(--ce-cyan)" }}>starts here</span>
             </h2>
           </Reveal>
 
@@ -551,8 +551,8 @@ export function LandingV3({ onNavigate }: LandingV3Props) {
             <button
               onClick={() => onNavigate("signup")}
               className="group inline-flex items-center gap-2 px-9 py-4.5 rounded-lg text-[16px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(var(--ce-lime-rgb),0.2)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-cyan)", color: "var(--ce-surface-0)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 12px 40px rgba(var(--ce-cyan-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Get Your Edge
