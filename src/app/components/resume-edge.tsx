@@ -242,11 +242,11 @@ function ParseConfirmState({ onConfirm, onBack }: { onConfirm: () => void; onBac
         >
           <button
             className="flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-colors hover:brightness-110"
-            style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)" }}
+            style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)" }}
             onClick={onConfirm}
           >
-            <Check className="w-4 h-4 text-ce-lime" />
-            <span className="text-[13px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Check className="w-4 h-4 text-ce-cyan" />
+            <span className="text-[13px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
               Looks right — analyze it
             </span>
           </button>
@@ -1057,7 +1057,7 @@ function ScoreBar({ score, breakdown, verdicts, onSectionClick, onNavigate }: {
         <div className="flex items-center gap-2 flex-shrink-0">
           <button
             className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[10px] cursor-pointer transition-colors"
-            style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+            style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.12)", color: "var(--ce-cyan)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             onClick={(e) => { e.stopPropagation(); }}
           >
             <Download className="w-3 h-3" /> Save
@@ -1185,7 +1185,7 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                       </button>
                       <button
                         className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-110"
-                        style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                        style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.12)", color: "var(--ce-cyan)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                         onClick={() => onNavigate("edgepath")}
                       >
                         <Compass className="w-3 h-3" /> Back to roadmap
@@ -1201,7 +1201,7 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                   {msg.promptAction && onStartSuggestions && (
                     <motion.button
                       className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[11px] cursor-pointer transition-colors hover:brightness-110 mt-1"
-                      style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                      style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.12)", color: "var(--ce-cyan)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                       onClick={onStartSuggestions}
                       initial={{ opacity: 0, y: 4 }}
                       animate={{ opacity: 1, y: 0 }}
@@ -1238,7 +1238,7 @@ function SophiaCoachingChat({ messages, onSend, onAccept, onReject, onUndo, onSt
                           <div className="flex gap-2">
                             <button
                               className="flex-1 flex items-center justify-center gap-1 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer transition-colors"
-                              style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}
+                              style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.12)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}
                               onClick={() => onAccept(msg.suggestion!.id)}
                             >
                               <Check className="w-3 h-3" /> Accept

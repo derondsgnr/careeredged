@@ -58,7 +58,7 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
         <defs>
           <linearGradient id="sophia-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
             <stop offset="0%" stopColor="var(--ce-role-edgestar)" />
-            <stop offset="100%" stopColor="var(--ce-lime)" />
+            <stop offset="100%" stopColor="var(--ce-cyan)" />
           </linearGradient>
           <filter id="sophia-glow">
             <feGaussianBlur stdDeviation="2" result="blur" />
@@ -111,7 +111,7 @@ export function SophiaMark({ size = 64, glowing = true }: { size?: number; glowi
             cx={p.x}
             cy={p.y}
             r={dotR * 0.8}
-            fill="var(--ce-lime)"
+            fill="var(--ce-cyan)"
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 0.8 }}
             transition={{ duration: 0.3, delay: 1.2 + i * 0.1 }}

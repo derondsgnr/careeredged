@@ -197,9 +197,9 @@ function ChoiceBubbles({
           className="px-4 py-2.5 rounded-full text-[13px] cursor-pointer transition-all duration-300"
           style={{
             fontFamily: "'Satoshi', sans-serif",
-            background: selected === choice ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint), 0.03)",
+            background: selected === choice ? "var(--ce-cyan)" : "rgba(var(--ce-glass-tint), 0.03)",
             color: selected === choice ? "#08090C" : "var(--ce-text-secondary)",
-            border: selected === choice ? "1px solid var(--ce-lime)" : "1px solid rgba(var(--ce-glass-tint), 0.06)",
+            border: selected === choice ? "1px solid var(--ce-cyan)" : "1px solid rgba(var(--ce-glass-tint), 0.06)",
             fontWeight: selected === choice ? 600 : 400,
           }}
         >
@@ -533,7 +533,7 @@ export function LandingV5({ onNavigate }: LandingV5Props) {
                 <div key={tool.name}>
                   <div
                     className="text-[13px] font-semibold mb-0.5"
-                    style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-lime)" }}
+                    style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-cyan)" }}
                   >
                     {tool.name}
                   </div>
@@ -615,7 +615,7 @@ export function LandingV5({ onNavigate }: LandingV5Props) {
             className="px-8 py-4 rounded-full text-[15px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto"
             style={{
               fontFamily: "'Satoshi', sans-serif",
-              background: "var(--ce-lime)",
+              background: "var(--ce-cyan)",
               color: "#08090C",
             }}
           >

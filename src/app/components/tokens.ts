@@ -19,7 +19,7 @@ export const SPRING = { stiffness: 160, damping: 24 } as const;
 /** Spring config for snappy UI feedback (tabs, pills, toggles). */
 export const SPRING_SNAPPY = { stiffness: 400, damping: 30 } as const;
 
-/** Delight pulse spring — lime only, 400ms, gone in under a second. */
+/** Delight pulse spring — accent only, 400ms, gone in under a second. */
 export const SPRING_DELIGHT = { stiffness: 380, damping: 22 } as const;
 
 // ─── Role Types ──────────────────────────────────────────────────────────────

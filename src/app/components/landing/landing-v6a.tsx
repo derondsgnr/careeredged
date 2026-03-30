@@ -55,15 +55,15 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
 
       {/* HERO */}
       <section ref={heroRef} className="relative min-h-screen flex items-center pt-[72px] overflow-hidden">
-        <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(var(--ce-lime-rgb), 0.05) 0%, transparent 70%)", transform: "translateY(-50%)" }} />
+        <div className="absolute top-1/2 right-1/4 w-[600px] h-[600px] pointer-events-none" style={{ background: "radial-gradient(circle, rgba(var(--ce-cyan-rgb), 0.05) 0%, transparent 70%)", transform: "translateY(-50%)" }} />
 
         <motion.div className="max-w-[1400px] mx-auto px-6 lg:px-16 w-full" style={{ opacity: heroOpacity, y: heroY }}>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
             <div>
               <Reveal>
-                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm mb-8" style={{ background: "rgba(var(--ce-lime-rgb), 0.06)", border: "1px solid rgba(var(--ce-lime-rgb), 0.12)" }}>
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--ce-lime)" }} />
-                  <span className="text-[11px] tracking-[0.04em] font-medium" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-lime)" }}>Now in Beta</span>
+                <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm mb-8" style={{ background: "rgba(var(--ce-cyan-rgb), 0.06)", border: "1px solid rgba(var(--ce-cyan-rgb), 0.12)" }}>
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ background: "var(--ce-cyan)" }} />
+                  <span className="text-[11px] tracking-[0.04em] font-medium" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-cyan)" }}>Now in Beta</span>
                 </div>
               </Reveal>
 
@@ -73,7 +73,7 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
                   <br />
                   Not another
                   <br />
-                  <span className="italic font-light" style={{ color: "var(--ce-lime)" }}>job board.</span>
+                  <span className="italic font-light" style={{ color: "var(--ce-cyan)" }}>job board.</span>
                 </h1>
               </Reveal>
 
@@ -87,7 +87,7 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
 
               <Reveal delay={0.16}>
                 <div className="flex flex-wrap items-center gap-4">
-                  <button onClick={() => onNavigate("signup")} className="px-6 py-3.5 rounded-sm text-[13px] font-semibold flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-3.5" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-lime)", color: "#08090C" }}>
+                  <button onClick={() => onNavigate("signup")} className="px-6 py-3.5 rounded-sm text-[13px] font-semibold flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-3.5" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-cyan)", color: "#08090C" }}>
                     Get Your Edge <ArrowRight size={14} />
                   </button>
                   <button onClick={() => onNavigate("about")} className="px-6 py-3.5 rounded-sm text-[13px] font-medium flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-3.5" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint), 0.1)" }}>
@@ -99,7 +99,7 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
 
             <Reveal delay={0.2}>
               <div className="relative">
-                <div className="absolute -inset-8 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb), 0.06) 0%, transparent 70%)" }} />
+                <div className="absolute -inset-8 pointer-events-none" style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb), 0.06) 0%, transparent 70%)" }} />
                 <div className="relative rounded-sm overflow-hidden" style={{ border: "1px solid rgba(var(--ce-glass-tint), 0.06)", boxShadow: "0 40px 80px rgba(0,0,0,0.4)" }}>
                   <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80" alt="Career roadmap dashboard" className="w-full" />
                   <div className="absolute bottom-0 left-0 right-0 px-4 py-3" style={{ background: "rgba(8,9,12,0.85)", backdropFilter: "blur(12px)" }}>
@@ -321,10 +321,10 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
               { name: "Edge Pro", price: "$39", period: "/mo", features: ["Unlimited tools", "Premium templates", "Full platform access", "35 monthly credits"], hl: false },
             ].map((p) => (
               <Reveal key={p.name}>
-                <div className="p-8 h-full flex flex-col" style={{ background: p.hl ? "rgba(var(--ce-lime-rgb), 0.025)" : "var(--ce-surface-bg)" }}>
+                <div className="p-8 h-full flex flex-col" style={{ background: p.hl ? "rgba(var(--ce-cyan-rgb), 0.025)" : "var(--ce-surface-bg)" }}>
                   <div className="flex items-center gap-2 mb-6">
                     <span className="text-[12px] font-mono tracking-[0.04em]" style={{ color: "var(--ce-text-quaternary)" }}>{p.name}</span>
-                    {p.hl && <span className="text-[9px] font-mono tracking-[0.08em] px-2 py-0.5 rounded-sm" style={{ background: "rgba(var(--ce-lime-rgb), 0.12)", color: "var(--ce-lime)" }}>POPULAR</span>}
+                    {p.hl && <span className="text-[9px] font-mono tracking-[0.08em] px-2 py-0.5 rounded-sm" style={{ background: "rgba(var(--ce-cyan-rgb), 0.12)", color: "var(--ce-cyan)" }}>POPULAR</span>}
                   </div>
                   <div className="flex items-baseline gap-1 mb-8">
                     <span className="text-[40px] font-bold tracking-[-0.03em]" style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}>{p.price}</span>
@@ -333,12 +333,12 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
                   <div className="flex flex-col gap-3 flex-1 mb-8">
                     {p.features.map((f) => (
                       <div key={f} className="flex items-center gap-2.5">
-                        <div className="w-1 h-1 rounded-full" style={{ background: p.hl ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }} />
+                        <div className="w-1 h-1 rounded-full" style={{ background: p.hl ? "var(--ce-cyan)" : "var(--ce-text-quaternary)" }} />
                         <span className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>{f}</span>
                       </div>
                     ))}
                   </div>
-                  <button onClick={() => onNavigate("signup")} className="w-full py-3 rounded-sm text-[12px] font-semibold tracking-[0.02em] cursor-pointer transition-all duration-200" style={{ background: p.hl ? "var(--ce-lime)" : "transparent", color: p.hl ? "#08090C" : "var(--ce-text-secondary)", border: p.hl ? "none" : "1px solid rgba(var(--ce-glass-tint), 0.08)" }}>
+                  <button onClick={() => onNavigate("signup")} className="w-full py-3 rounded-sm text-[12px] font-semibold tracking-[0.02em] cursor-pointer transition-all duration-200" style={{ background: p.hl ? "var(--ce-cyan)" : "transparent", color: p.hl ? "#08090C" : "var(--ce-text-secondary)", border: p.hl ? "none" : "1px solid rgba(var(--ce-glass-tint), 0.08)" }}>
                     {p.price === "$0" ? "Start Free" : "Get Started"}
                   </button>
                 </div>
@@ -360,7 +360,7 @@ export function LandingV6A({ onNavigate }: LandingV6AProps) {
             </p>
           </Reveal>
           <Reveal delay={0.08}>
-            <button onClick={() => onNavigate("signup")} className="px-8 py-4 rounded-sm text-[14px] font-semibold flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-lime)", color: "#08090C" }}>
+            <button onClick={() => onNavigate("signup")} className="px-8 py-4 rounded-sm text-[14px] font-semibold flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto" style={{ fontFamily: "'Satoshi', sans-serif", background: "var(--ce-cyan)", color: "#08090C" }}>
               Get Your Edge <ArrowUpRight size={16} />
             </button>
           </Reveal>

@@ -307,7 +307,7 @@ export function LandingV7({ onNavigate }: LandingV7Props) {
             >
               Career intelligence
               <br />
-              in <span style={{ color: "var(--ce-lime)" }}>real time.</span>
+              in <span style={{ color: "var(--ce-cyan)" }}>real time.</span>
             </h1>
           </Reveal>
 
@@ -545,7 +545,7 @@ export function LandingV7({ onNavigate }: LandingV7Props) {
             >
               Your data point
               <br />
-              <span style={{ color: "var(--ce-lime)" }}>starts here.</span>
+              <span style={{ color: "var(--ce-cyan)" }}>starts here.</span>
             </h2>
             <p
               className="text-[14px] leading-[1.7] max-w-[420px] mx-auto mb-10"
@@ -562,7 +562,7 @@ export function LandingV7({ onNavigate }: LandingV7Props) {
               className="px-8 py-4 rounded-lg text-[14px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto"
               style={{
                 fontFamily: "'Satoshi', sans-serif",
-                background: "var(--ce-lime)",
+                background: "var(--ce-cyan)",
                 color: "#08090C",
               }}
             >

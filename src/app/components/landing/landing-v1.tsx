@@ -76,7 +76,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
         <div
           className="absolute top-1/2 left-1/2 w-[900px] h-[600px] -translate-x-1/2 -translate-y-1/3 pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.06) 0%, rgba(4,44,1,0.03) 40%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.06) 0%, rgba(1,33,44,0.03) 40%, transparent 70%)",
             filter: "blur(80px)",
           }}
         />
@@ -91,14 +91,14 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           <div
             className="flex items-center gap-2 px-4 py-2 rounded-full"
             style={{
-              background: "rgba(var(--ce-lime-rgb),0.06)",
-              border: "1px solid rgba(var(--ce-lime-rgb),0.12)",
+              background: "rgba(var(--ce-cyan-rgb),0.06)",
+              border: "1px solid rgba(var(--ce-cyan-rgb),0.12)",
             }}
           >
-            <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)] animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-cyan)] animate-pulse" />
             <span
               className="text-[12px] tracking-[0.02em]"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-lime)" }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-cyan)" }}
             >
               Now in beta
             </span>
@@ -130,7 +130,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           From where you are{" "}
           <br className="hidden sm:block" />
           to where you{" "}
-          <span style={{ color: "var(--ce-lime)" }}>belong</span>
+          <span style={{ color: "var(--ce-cyan)" }}>belong</span>
         </motion.h1>
 
         {/* Subtext */}
@@ -164,10 +164,10 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             style={{
               fontFamily: "'Satoshi', sans-serif",
               fontWeight: 600,
-              background: "var(--ce-lime)",
+              background: "var(--ce-cyan)",
               color: "var(--ce-surface-0)",
             }}
-            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
+            onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-cyan-rgb),0.2)"; }}
             onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
           >
             Get Your Edge
@@ -201,7 +201,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
           <div
             className="absolute -bottom-20 left-1/2 -translate-x-1/2 w-[80%] h-[200px] pointer-events-none"
             style={{
-              background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.08) 0%, transparent 70%)",
+              background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.08) 0%, transparent 70%)",
               filter: "blur(60px)",
             }}
           />
@@ -322,7 +322,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                     fontWeight: 700,
                     fontSize: "48px",
                     letterSpacing: "-0.03em",
-                    color: "var(--ce-lime)",
+                    color: "var(--ce-cyan)",
                     lineHeight: 1,
                   }}
                 >
@@ -412,22 +412,22 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                   className="group rounded-xl p-6 lg:p-7 h-full transition-all duration-300"
                   style={{
                     background: feature.accent
-                      ? "rgba(var(--ce-lime-rgb),0.03)"
+                      ? "rgba(var(--ce-cyan-rgb),0.03)"
                       : "rgba(var(--ce-glass-tint),0.02)",
                     border: feature.accent
-                      ? "1px solid rgba(var(--ce-lime-rgb),0.1)"
+                      ? "1px solid rgba(var(--ce-cyan-rgb),0.1)"
                       : "1px solid rgba(var(--ce-glass-tint),0.04)",
                   }}
-                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(var(--ce-lime-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.08)"; }}
-                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"; }}
+                  onMouseEnter={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(var(--ce-cyan-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.08)"; }}
+                  onMouseLeave={(e) => { e.currentTarget.style.borderColor = feature.accent ? "rgba(var(--ce-cyan-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)"; }}
                 >
                   <div
                     className="w-9 h-9 rounded-lg flex items-center justify-center mb-5"
                     style={{
-                      background: feature.accent ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)",
+                      background: feature.accent ? "rgba(var(--ce-cyan-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)",
                     }}
                   >
-                    <feature.icon size={17} style={{ color: feature.accent ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }} />
+                    <feature.icon size={17} style={{ color: feature.accent ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }} />
                   </div>
                   <h3
                     className="mb-2"
@@ -512,9 +512,9 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
                   <button
                     onClick={() => onNavigate("signup")}
                     className="flex items-center gap-2 text-[13px] transition-colors duration-200 cursor-pointer"
-                    style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "var(--ce-lime)" }}
-                    onMouseEnter={(e) => { e.currentTarget.style.color = "#c4ff6a"; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-lime)"; }}
+                    style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, color: "var(--ce-cyan)" }}
+                    onMouseEnter={(e) => { e.currentTarget.style.color = "#45e0f0"; }}
+                    onMouseLeave={(e) => { e.currentTarget.style.color = "var(--ce-cyan)"; }}
                   >
                     {section.cta}
                     <ArrowRight size={14} />
@@ -661,7 +661,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.05) 0%, transparent 60%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.05) 0%, transparent 60%)",
             filter: "blur(80px)",
           }}
         />
@@ -680,7 +680,7 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
             >
               Your career has an edge.
               <br />
-              <span style={{ color: "var(--ce-lime)" }}>Find it.</span>
+              <span style={{ color: "var(--ce-cyan)" }}>Find it.</span>
             </h2>
             <p
               className="text-[15px] leading-[1.7] mb-8 max-w-[420px] mx-auto"
@@ -695,10 +695,10 @@ export function LandingV1({ onNavigate }: LandingV1Props) {
               style={{
                 fontFamily: "'Satoshi', sans-serif",
                 fontWeight: 600,
-                background: "var(--ce-lime)",
+                background: "var(--ce-cyan)",
                 color: "var(--ce-surface-0)",
               }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-cyan-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Get Your Edge
@@ -743,7 +743,7 @@ function FAQItem({ question, answer }: { question: string; answer: string }) {
         <span
           className="text-[18px] transition-transform duration-200 ml-4 shrink-0"
           style={{
-            color: open ? "var(--ce-lime)" : "var(--ce-text-quaternary)",
+            color: open ? "var(--ce-cyan)" : "var(--ce-text-quaternary)",
             transform: open ? "rotate(45deg)" : "rotate(0)",
           }}
         >

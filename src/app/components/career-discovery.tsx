@@ -339,7 +339,7 @@ function DetailPanel({ career, onClose, onNavigate, matchScore }: { career: Care
             <Briefcase className="w-3.5 h-3.5" /> See {career.title} jobs
           </button>
           <button onClick={() => onNavigate?.("edgepath")} className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all"
-            style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <Compass className="w-3.5 h-3.5" /> Build a roadmap
           </button>
         </div>

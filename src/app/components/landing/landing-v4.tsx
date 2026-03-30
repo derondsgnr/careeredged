@@ -51,7 +51,7 @@ function CursorGradient() {
         background: useTransform(
           [springX, springY],
           ([cx, cy]) =>
-            `radial-gradient(800px circle at ${cx}px ${cy}px, rgba(var(--ce-lime-rgb), 0.03), transparent 60%)`
+            `radial-gradient(800px circle at ${cx}px ${cy}px, rgba(var(--ce-cyan-rgb), 0.03), transparent 60%)`
         ),
       }}
     />
@@ -91,9 +91,9 @@ function BrandPatternBg() {
       <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
         <defs>
           <pattern id="dna-arrow" x="0" y="0" width="48" height="36" patternUnits="userSpaceOnUse">
-            <path d={arrowPath} fill="var(--ce-lime)" transform="translate(4, 3)" />
-            <path d={arrowPath} fill="var(--ce-lime)" transform="translate(28, 3) scale(-1, 1) translate(-20, 0)" />
-            <path d={arrowPath} fill="var(--ce-lime)" transform="translate(16, 18)" />
+            <path d={arrowPath} fill="var(--ce-cyan)" transform="translate(4, 3)" />
+            <path d={arrowPath} fill="var(--ce-cyan)" transform="translate(28, 3) scale(-1, 1) translate(-20, 0)" />
+            <path d={arrowPath} fill="var(--ce-cyan)" transform="translate(16, 18)" />
           </pattern>
         </defs>
         <rect width="100%" height="200%" fill="url(#dna-arrow)" />
@@ -160,7 +160,7 @@ function MetricBlock({ value, label, suffix = "" }: { value: string; label: stri
         style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}
       >
         {value}
-        <span style={{ color: "var(--ce-lime)", fontSize: "0.6em" }}>{suffix}</span>
+        <span style={{ color: "var(--ce-cyan)", fontSize: "0.6em" }}>{suffix}</span>
       </div>
       <div
         className="mt-2 text-[11px] uppercase tracking-[0.16em]"
@@ -170,7 +170,7 @@ function MetricBlock({ value, label, suffix = "" }: { value: string; label: stri
       </div>
       <div
         className="absolute -bottom-3 left-0 w-8 h-[2px] transition-all duration-500 group-hover:w-full"
-        style={{ background: "var(--ce-lime)" }}
+        style={{ background: "var(--ce-cyan)" }}
       />
     </div>
   );
@@ -182,7 +182,7 @@ function FeatureCell({
   title,
   description,
   span = "col-span-1",
-  accent = "var(--ce-lime)",
+  accent = "var(--ce-cyan)",
 }: {
   icon: React.ElementType;
   title: string;
@@ -301,7 +301,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
                 className="text-[10px] uppercase tracking-[0.2em] mb-6 flex items-center gap-3"
                 style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-quaternary)" }}
               >
-                <div className="w-8 h-[1px]" style={{ background: "var(--ce-lime)" }} />
+                <div className="w-8 h-[1px]" style={{ background: "var(--ce-cyan)" }} />
                 Career Intelligence Platform
               </div>
             </Reveal>
@@ -315,7 +315,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
                 <br />
                 direction for
                 <br />
-                <span style={{ color: "var(--ce-lime)" }}>every career.</span>
+                <span style={{ color: "var(--ce-cyan)" }}>every career.</span>
               </h1>
             </Reveal>
 
@@ -337,7 +337,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
                   className="px-7 py-3.5 rounded-lg text-[13px] font-medium flex items-center gap-2.5 cursor-pointer transition-all duration-300 hover:gap-4"
                   style={{
                     fontFamily: "'Satoshi', sans-serif",
-                    background: "var(--ce-lime)",
+                    background: "var(--ce-cyan)",
                     color: "#08090C",
                   }}
                 >
@@ -469,7 +469,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
                     {/* Orbiting particle */}
                     <motion.circle
                       r="3"
-                      fill="var(--ce-lime)"
+                      fill="var(--ce-cyan)"
                       initial={{ offsetDistance: "0%" }}
                       animate={{ offsetDistance: "100%" }}
                       transition={{ duration: 12, repeat: Infinity, ease: "linear" }}
@@ -519,7 +519,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
               <Reveal>
                 <div
                   className="text-[10px] uppercase tracking-[0.2em] mb-4"
-                  style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-lime)" }}
+                  style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-cyan)" }}
                 >
                   The System
                 </div>
@@ -606,7 +606,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
             <Reveal>
               <div
                 className="text-[10px] uppercase tracking-[0.2em] mb-4"
-                style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-lime)" }}
+                style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-cyan)" }}
               >
                 The Ecosystem
               </div>
@@ -804,7 +804,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
             >
               Your career has
               <br />
-              <span style={{ color: "var(--ce-lime)" }}>a structure.</span>
+              <span style={{ color: "var(--ce-cyan)" }}>a structure.</span>
             </h2>
             <p
               className="text-[15px] leading-[1.75] max-w-[460px] mx-auto mb-10"
@@ -822,7 +822,7 @@ export function LandingV4({ onNavigate }: LandingV4Props) {
                 className="px-8 py-4 rounded-lg text-[14px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5"
                 style={{
                   fontFamily: "'Satoshi', sans-serif",
-                  background: "var(--ce-lime)",
+                  background: "var(--ce-cyan)",
                   color: "#08090C",
                 }}
               >

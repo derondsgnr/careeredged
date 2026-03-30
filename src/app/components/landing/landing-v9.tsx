@@ -434,7 +434,7 @@ export function LandingV9({ onNavigate }: LandingV9Props) {
                 >
                   Six roles.
                   <br />
-                  <span style={{ color: "var(--ce-lime)" }}>One connected system.</span>
+                  <span style={{ color: "var(--ce-cyan)" }}>One connected system.</span>
                 </h1>
               </Reveal>
 
@@ -579,7 +579,7 @@ export function LandingV9({ onNavigate }: LandingV9Props) {
             >
               Find your place
               <br />
-              in the <span style={{ color: "var(--ce-lime)" }}>ecosystem.</span>
+              in the <span style={{ color: "var(--ce-cyan)" }}>ecosystem.</span>
             </h2>
             <p
               className="text-[15px] leading-[1.7] max-w-[480px] mx-auto mb-10"
@@ -597,7 +597,7 @@ export function LandingV9({ onNavigate }: LandingV9Props) {
                 className="px-8 py-4 rounded-lg text-[14px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5"
                 style={{
                   fontFamily: "'Satoshi', sans-serif",
-                  background: "var(--ce-lime)",
+                  background: "var(--ce-cyan)",
                   color: "#08090C",
                 }}
               >
