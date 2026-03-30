@@ -80,22 +80,28 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     icon: Compass, color: COLORS.cyan, surfaceId: "careers",
   });
 
-  // Workplace / Jobs — EdgeStar, EdgePreneur, Employer, NGO, Agency
+  // Jobs / EdgeMatch — EdgeStar, EdgePreneur, Employer, NGO, Agency
   if (["edgestar", "edgepreneur", "employer", "ngo", "agency"].includes(role)) {
-    const jobLabel = role === "employer" ? "Job Postings" : "EdgeWorkplace";
+    const jobLabel = role === "employer" ? "Job Postings" : "EdgeMatch";
     edgeTools.push({
       id: "jobs", label: jobLabel, description: role === "employer" ? "Post & manage positions" : "Job matches & applications",
       icon: Briefcase, color: COLORS.green, surfaceId: "jobs",
     });
   }
 
-  // Resources — EdgeStar, Edu, NGO
-  if (["edgestar", "edu", "ngo"].includes(role)) {
+  // EdgeWorkplace — EdgeStar only (documents, templates & workspaces)
+  if (role === "edgestar") {
     edgeTools.push({
-      id: "resources", label: "EdgeResources", description: "Learning materials & guides",
-      icon: BookOpen, color: COLORS.purple, surfaceId: "resources",
+      id: "workplace", label: "EdgeWorkplace", description: "Documents, templates & workspaces",
+      icon: FileText, color: COLORS.amber, surfaceId: "workplace",
     });
   }
+
+  // EdgeResources — All roles
+  edgeTools.push({
+    id: "resources", label: "EdgeResources", description: "Learning materials & guides",
+    icon: BookOpen, color: COLORS.purple, surfaceId: "resources",
+  });
 
   // Events — EdgeStar, Edu, NGO, Agency
   if (["edgestar", "edu", "ngo", "agency"].includes(role)) {
@@ -113,11 +119,19 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
-  // Sessions / Schedule — EdgeStar, EdgePreneur, Guide
+  // ScheduleEdge — EdgeStar, EdgePreneur, Guide, Employer, Edu
+  if (["edgestar", "edgepreneur", "guide", "employer", "edu"].includes(role)) {
+    edgeTools.push({
+      id: "schedule", label: "ScheduleEdge", description: "Calendar, availability & reminders",
+      icon: Calendar, color: COLORS.purple, surfaceId: "schedule",
+    });
+  }
+
+  // Sessions — EdgeStar, EdgePreneur, Guide
   if (["edgestar", "edgepreneur", "guide"].includes(role)) {
     edgeTools.push({
-      id: "sessions", label: "ScheduleEdge", description: role === "guide" ? "Manage client sessions" : "Book coaching sessions",
-      icon: Calendar, color: COLORS.purple, surfaceId: "sessions",
+      id: "sessions", label: "Sessions", description: role === "guide" ? "Manage client sessions" : "Book coaching sessions",
+      icon: Users, color: COLORS.cyan, surfaceId: "sessions",
     });
   }
 
@@ -178,15 +192,13 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
-  community.push({
-    id: "groups", label: "EdgeGroups", description: "Peer groups & accountability",
-    icon: Users, color: COLORS.cyan, surfaceId: "groups",
-  });
-
-  community.push({
-    id: "social", label: "SocialEdge", description: "Community feed & stories",
-    icon: MessageSquare, color: COLORS.lime, surfaceId: "social",
-  });
+  // CommunityEdge — All roles except Parent
+  if (role !== "parent") {
+    community.push({
+      id: "community", label: "CommunityEdge", description: "Feed, groups & events",
+      icon: Users, color: COLORS.cyan, surfaceId: "community",
+    });
+  }
 
   // ── Analytics ──────────────────────────────────────────────────────────
 

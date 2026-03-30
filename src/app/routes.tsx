@@ -62,6 +62,14 @@ import { EventsSurface }   from "./components/surfaces/events-surface";
 import { ProgramsSurface } from "./components/surfaces/programs-surface";
 import { ClientsSurface }  from "./components/surfaces/clients-surface";
 import { FundingSurface }  from "./components/surfaces/funding-surface";
+import { ScheduleSurface } from "./components/surfaces/schedule-surface";
+import { ResourcesSurface } from "./components/surfaces/resources-surface";
+import { WorkplaceSurface } from "./components/surfaces/workplace-surface";
+import { CommunitySurface } from "./components/surfaces/community-surface";
+import { EdgeMarketSurface } from "./components/surfaces/edgemarket-surface";
+import { CoursesSurface } from "./components/surfaces/courses-surface";
+import { BudgetSurface } from "./components/surfaces/budget-surface";
+import { CoachesSurface } from "./components/surfaces/coaches-surface";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -151,6 +159,14 @@ function useRoleNavigation(): {
       events:    `/${role}/events`,
       programs:  `/${role}/programs`,
       funding:   `/${role}/funding`,
+      workplace: `/${role}/workplace`,
+      resources: `/${role}/resources`,
+      schedule:  `/${role}/schedule`,
+      community: `/${role}/community`,
+      market:    `/${role}/market`,
+      courses:   `/${role}/courses`,
+      budget:    `/${role}/budget`,
+      coaches:   `/${role}/coaches`,
       // Global
       landing:   "/",
     };
@@ -258,6 +274,46 @@ function ProfilePage() {
 function ProductivityPage() {
   const { role, onNavigate } = useRoleNavigation();
   return <EdgeProd role={role} onNavigate={onNavigate} />;
+}
+
+function SchedulePage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <ScheduleSurface role={role} onNavigate={onNavigate} />;
+}
+
+function ResourcesPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <ResourcesSurface role={role} onNavigate={onNavigate} />;
+}
+
+function WorkplacePage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <WorkplaceSurface role={role} onNavigate={onNavigate} />;
+}
+
+function CommunityPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <CommunitySurface role={role} onNavigate={onNavigate} />;
+}
+
+function MarketPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeMarketSurface role={role} onNavigate={onNavigate} />;
+}
+
+function CoursesPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <CoursesSurface role={role} onNavigate={onNavigate} />;
+}
+
+function BudgetPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <BudgetSurface role={role} onNavigate={onNavigate} />;
+}
+
+function CoachesPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <CoachesSurface role={role} onNavigate={onNavigate} />;
 }
 
 // ─── Archive wrappers ───────────────────────────────────────────────
@@ -448,6 +504,14 @@ export const router = createBrowserRouter([
       { path: ":role/programs",                 Component: ProgramsSurface },
       { path: ":role/funding",                  Component: FundingSurface },
       { path: ":role/immigration",              Component: ImmigrationSurface },
+      { path: ":role/schedule",                 Component: SchedulePage },
+      { path: ":role/resources",                Component: ResourcesPage },
+      { path: ":role/workplace",                Component: WorkplacePage },
+      { path: ":role/community",                Component: CommunityPage },
+      { path: ":role/market",                   Component: MarketPage },
+      { path: ":role/courses",                  Component: CoursesPage },
+      { path: ":role/budget",                   Component: BudgetPage },
+      { path: ":role/coaches",                  Component: CoachesPage },
       { path: ":role/careers",                  Component: CareerDiscovery },
       { path: "careers",                        Component: CareerDiscovery },
 
