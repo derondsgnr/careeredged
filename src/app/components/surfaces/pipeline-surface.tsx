@@ -23,12 +23,25 @@ import { SophiaMark } from "../sophia-mark";
 import { useSophia } from "../sophia-context";
 import { toast } from "../ui/feedback";
 import { EmptyState } from "../ui/feedback";
+import {
+  Star, ArrowRight, Clock, Check, X, ChevronRight, ChevronDown,
+  ChevronUp, MessageSquare, Calendar, Search, Briefcase, FileText,
+  Kanban, List, UserPlus, XCircle, History,
+} from "lucide-react";
+
+const EMPLOYER_GREEN = "var(--ce-role-employer)";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 type Stage = "new" | "screening" | "interview" | "final" | "offer";
 type SortKey = "name" | "match" | "stage" | "applied" | "activity";
 type ViewMode = "kanban" | "list";
+
+interface HistoryEntry {
+  stage: Stage;
+  timestamp: string;
+  note: string;
+}
 
 interface Candidate {
   id: string;
@@ -44,6 +57,7 @@ interface Candidate {
   sophiaNote: string;
   starred: boolean;
   status: "active" | "hold" | "rejected";
+  history: HistoryEntry[];
 }
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -66,19 +80,19 @@ const STAGE_ORDER: Stage[] = ["new", "screening", "interview", "final", "offer"]
 
 const CANDIDATES: Candidate[] = [
   // Product Designer
-  { id: "c1",  name: "Sharon Lee",     initial: "S", role: "pd",      match: 94, stage: "interview", skills: ["Figma", "Design Systems", "User Research"],     appliedDate: "Mar 10", lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Strongest portfolio in the batch. Her Airbnb redesign case study is exactly what you asked for. Interview performance has been excellent.", starred: true,  status: "active" },
-  { id: "c2",  name: "Marcus Rivera",  initial: "M", role: "pd",      match: 89, stage: "interview", skills: ["Interaction Design", "Figma", "Prototyping"],    appliedDate: "Mar 11", lastActivity: "Yesterday", location: "New York, NY",      sophiaNote: "Strong interaction design background. Slightly weaker on systems thinking but compensates with velocity. Good culture fit signals.", starred: false, status: "active" },
-  { id: "c3",  name: "Aisha Patel",    initial: "A", role: "pd",      match: 86, stage: "screening", skills: ["UX Research", "Figma", "Accessibility"],          appliedDate: "Mar 12", lastActivity: "2 days ago", location: "Austin, TX",       sophiaNote: "Excellent research background. Accessibility specialization is rare. Consider for a research-heavy team.", starred: true,  status: "active" },
-  { id: "c4",  name: "James Park",     initial: "J", role: "pd",      match: 82, stage: "screening", skills: ["Product Design", "Sketch", "User Testing"],       appliedDate: "Mar 13", lastActivity: "3 days ago", location: "Seattle, WA",      sophiaNote: "Good generalist. Switch from Sketch to Figma is a minor concern — assess adaptability.", starred: false, status: "active" },
-  { id: "c5",  name: "Elena Russo",    initial: "E", role: "pd",      match: 78, stage: "new",       skills: ["UI Design", "Framer", "Motion Design"],            appliedDate: "Mar 14", lastActivity: "5 days ago", location: "Los Angeles, CA",  sophiaNote: "Motion design specialist — rare skill. Strong if your roadmap includes richer interactions. Needs review.", starred: false, status: "active" },
-  { id: "c6",  name: "David Kim",      initial: "D", role: "pd",      match: 75, stage: "new",       skills: ["Visual Design", "Figma", "Brand"],                  appliedDate: "Mar 15", lastActivity: "5 days ago", location: "Chicago, IL",      sophiaNote: "Heavy brand background. Needs assessment on product-specific experience.", starred: false, status: "active" },
-  { id: "c7",  name: "Nadia Chen",     initial: "N", role: "pd",      match: 91, stage: "final",     skills: ["Design Systems", "Figma", "React"],                 appliedDate: "Mar 8",  lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Top contender. Design systems depth + basic React is exactly the rare combo your team needs. Strong communicator in panel.", starred: true,  status: "active" },
-  { id: "c8",  name: "Tom Okafor",     initial: "T", role: "pd",      match: 72, stage: "new",       skills: ["UX Design", "Figma", "Usability Testing"],           appliedDate: "Mar 16", lastActivity: "Today",     location: "Remote",            sophiaNote: "Good fundamentals, limited senior-level impact quantification. Worth a screening call.", starred: false, status: "active" },
-  { id: "c9",  name: "Rachel Wong",    initial: "R", role: "pd",      match: 88, stage: "offer",     skills: ["Design Systems", "Figma", "Research"],              appliedDate: "Mar 5",  lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Offer extended. Competing with 2 other companies — Sophia recommends a founder call to accelerate decision.", starred: true,  status: "active" },
+  { id: "c1",  name: "Sharon Lee",     initial: "S", role: "pd",      match: 94, stage: "interview", skills: ["Figma", "Design Systems", "User Research"],     appliedDate: "Mar 10", lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Strongest portfolio in the batch. Her Airbnb redesign case study is exactly what you asked for. Interview performance has been excellent.", starred: true,  status: "active", history: [{ stage: "new", timestamp: "Mar 10, 9:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 12, 2:30 PM", note: "Passed initial portfolio review" }, { stage: "interview", timestamp: "Mar 15, 10:00 AM", note: "Advanced after strong screening call" }] },
+  { id: "c2",  name: "Marcus Rivera",  initial: "M", role: "pd",      match: 89, stage: "interview", skills: ["Interaction Design", "Figma", "Prototyping"],    appliedDate: "Mar 11", lastActivity: "Yesterday", location: "New York, NY",      sophiaNote: "Strong interaction design background. Slightly weaker on systems thinking but compensates with velocity. Good culture fit signals.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 11, 10:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 13, 3:00 PM", note: "Moved to screening" }, { stage: "interview", timestamp: "Mar 17, 11:00 AM", note: "Passed screening" }] },
+  { id: "c3",  name: "Aisha Patel",    initial: "A", role: "pd",      match: 86, stage: "screening", skills: ["UX Research", "Figma", "Accessibility"],          appliedDate: "Mar 12", lastActivity: "2 days ago", location: "Austin, TX",       sophiaNote: "Excellent research background. Accessibility specialization is rare. Consider for a research-heavy team.", starred: true,  status: "active", history: [{ stage: "new", timestamp: "Mar 12, 8:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 14, 1:00 PM", note: "Moved to screening — strong research background" }] },
+  { id: "c4",  name: "James Park",     initial: "J", role: "pd",      match: 82, stage: "screening", skills: ["Product Design", "Sketch", "User Testing"],       appliedDate: "Mar 13", lastActivity: "3 days ago", location: "Seattle, WA",      sophiaNote: "Good generalist. Switch from Sketch to Figma is a minor concern — assess adaptability.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 13, 9:30 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 15, 4:00 PM", note: "Moved to screening" }] },
+  { id: "c5",  name: "Elena Russo",    initial: "E", role: "pd",      match: 78, stage: "new",       skills: ["UI Design", "Framer", "Motion Design"],            appliedDate: "Mar 14", lastActivity: "5 days ago", location: "Los Angeles, CA",  sophiaNote: "Motion design specialist — rare skill. Strong if your roadmap includes richer interactions. Needs review.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 14, 11:00 AM", note: "Application received" }] },
+  { id: "c6",  name: "David Kim",      initial: "D", role: "pd",      match: 75, stage: "new",       skills: ["Visual Design", "Figma", "Brand"],                  appliedDate: "Mar 15", lastActivity: "5 days ago", location: "Chicago, IL",      sophiaNote: "Heavy brand background. Needs assessment on product-specific experience.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 15, 2:00 PM", note: "Application received" }] },
+  { id: "c7",  name: "Nadia Chen",     initial: "N", role: "pd",      match: 91, stage: "final",     skills: ["Design Systems", "Figma", "React"],                 appliedDate: "Mar 8",  lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Top contender. Design systems depth + basic React is exactly the rare combo your team needs. Strong communicator in panel.", starred: true,  status: "active", history: [{ stage: "new", timestamp: "Mar 8, 9:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 9, 11:00 AM", note: "Fast-tracked — strong profile" }, { stage: "interview", timestamp: "Mar 12, 2:00 PM", note: "Excellent screening performance" }, { stage: "final", timestamp: "Mar 18, 10:00 AM", note: "Advanced to final round — panel unanimous" }] },
+  { id: "c8",  name: "Tom Okafor",     initial: "T", role: "pd",      match: 72, stage: "new",       skills: ["UX Design", "Figma", "Usability Testing"],           appliedDate: "Mar 16", lastActivity: "Today",     location: "Remote",            sophiaNote: "Good fundamentals, limited senior-level impact quantification. Worth a screening call.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 16, 10:00 AM", note: "Application received" }] },
+  { id: "c9",  name: "Rachel Wong",    initial: "R", role: "pd",      match: 88, stage: "offer",     skills: ["Design Systems", "Figma", "Research"],              appliedDate: "Mar 5",  lastActivity: "Today",     location: "San Francisco, CA", sophiaNote: "Offer extended. Competing with 2 other companies — Sophia recommends a founder call to accelerate decision.", starred: true,  status: "active", history: [{ stage: "new", timestamp: "Mar 5, 9:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 6, 3:00 PM", note: "Priority candidate — moved quickly" }, { stage: "interview", timestamp: "Mar 10, 11:00 AM", note: "Strong interview performance" }, { stage: "final", timestamp: "Mar 14, 2:00 PM", note: "Final round passed" }, { stage: "offer", timestamp: "Mar 18, 4:00 PM", note: "Offer extended — $145k base" }] },
   // UX Lead
-  { id: "c10", name: "Luis Morales",   initial: "L", role: "ux-lead", match: 92, stage: "final",     skills: ["Design Leadership", "Figma", "Stakeholder Mgmt"], appliedDate: "Mar 9",  lastActivity: "Yesterday", location: "New York, NY",      sophiaNote: "Best leadership candidate so far. Has scaled a design team from 2 to 14. Panel gave unanimous strong hire signal.", starred: true,  status: "active" },
-  { id: "c11", name: "Priya Kapoor",   initial: "P", role: "ux-lead", match: 87, stage: "interview", skills: ["UX Strategy", "Design Systems", "Team Building"], appliedDate: "Mar 11", lastActivity: "2 days ago", location: "Remote",            sophiaNote: "Strong strategy background. Less hands-on than Luis but compensates with clear systems thinking.", starred: false, status: "active" },
-  { id: "c12", name: "Ben Nguyen",     initial: "B", role: "ux-lead", match: 79, stage: "screening", skills: ["Product Design", "Leadership", "Mentorship"],      appliedDate: "Mar 13", lastActivity: "4 days ago", location: "Austin, TX",       sophiaNote: "Growing into a lead role. Strong mentorship track record. May be slightly early for a VP-level scope.", starred: false, status: "active" },
+  { id: "c10", name: "Luis Morales",   initial: "L", role: "ux-lead", match: 92, stage: "final",     skills: ["Design Leadership", "Figma", "Stakeholder Mgmt"], appliedDate: "Mar 9",  lastActivity: "Yesterday", location: "New York, NY",      sophiaNote: "Best leadership candidate so far. Has scaled a design team from 2 to 14. Panel gave unanimous strong hire signal.", starred: true,  status: "active", history: [{ stage: "new", timestamp: "Mar 9, 8:30 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 10, 2:00 PM", note: "Moved to screening" }, { stage: "interview", timestamp: "Mar 13, 10:00 AM", note: "Passed screening — leadership depth" }, { stage: "final", timestamp: "Mar 17, 3:00 PM", note: "Panel unanimous strong hire" }] },
+  { id: "c11", name: "Priya Kapoor",   initial: "P", role: "ux-lead", match: 87, stage: "interview", skills: ["UX Strategy", "Design Systems", "Team Building"], appliedDate: "Mar 11", lastActivity: "2 days ago", location: "Remote",            sophiaNote: "Strong strategy background. Less hands-on than Luis but compensates with clear systems thinking.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 11, 11:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 13, 4:00 PM", note: "Moved to screening" }, { stage: "interview", timestamp: "Mar 16, 10:00 AM", note: "Passed screening" }] },
+  { id: "c12", name: "Ben Nguyen",     initial: "B", role: "ux-lead", match: 79, stage: "screening", skills: ["Product Design", "Leadership", "Mentorship"],      appliedDate: "Mar 13", lastActivity: "4 days ago", location: "Austin, TX",       sophiaNote: "Growing into a lead role. Strong mentorship track record. May be slightly early for a VP-level scope.", starred: false, status: "active", history: [{ stage: "new", timestamp: "Mar 13, 9:00 AM", note: "Application received" }, { stage: "screening", timestamp: "Mar 15, 2:00 PM", note: "Moved to screening" }] },
 ];
 
 // ─── Candidate Card (Kanban) ──────────────────────────────────────────────────
@@ -222,12 +236,14 @@ function CandidateDrawer({
   onClose,
   onAdvance,
   onStar,
+  onReject,
   onNavigate,
 }: {
   candidate: Candidate;
   onClose: () => void;
   onAdvance: (id: string) => void;
   onStar: (id: string) => void;
+  onReject: (c: Candidate) => void;
   onNavigate: (t: string) => void;
 }) {
   const { openSophia } = useSophia();
@@ -336,7 +352,7 @@ function CandidateDrawer({
         </div>
 
         {/* Meta */}
-        <div className="px-5 py-4">
+        <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
           <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>DETAILS</span>
           {[
             { label: "Applied",         value: candidate.appliedDate },
@@ -349,11 +365,46 @@ function CandidateDrawer({
             </div>
           ))}
         </div>
+
+        {/* Stage history timeline */}
+        {candidate.history.length > 0 && (
+          <div className="px-5 py-4">
+            <div className="flex items-center gap-1.5 mb-3">
+              <History className="w-3 h-3 text-[var(--ce-text-quaternary)]" />
+              <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>STAGE HISTORY</span>
+            </div>
+            <div className="flex flex-col">
+              {candidate.history.map((entry, i) => {
+                const entryStageInfo = STAGES.find(s => s.id === entry.stage);
+                const isLast = i === candidate.history.length - 1;
+                return (
+                  <div key={i} className="flex gap-3">
+                    {/* Timeline line + dot */}
+                    <div className="flex flex-col items-center flex-shrink-0">
+                      <div className="w-2 h-2 rounded-full mt-1" style={{ background: isLast ? (entryStageInfo?.color ?? "var(--ce-text-quaternary)") : `${EMPLOYER_GREEN}80`, border: isLast ? `2px solid ${entryStageInfo?.color ?? "var(--ce-text-quaternary)"}40` : "none" }} />
+                      {!isLast && <div className="w-px flex-1 my-1" style={{ background: "rgba(var(--ce-glass-tint),0.08)" }} />}
+                    </div>
+                    {/* Content */}
+                    <div className={`pb-3 ${isLast ? "" : ""}`}>
+                      <div className="flex items-center gap-2 mb-0.5">
+                        <span className="text-[11px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                          {entryStageInfo?.label ?? entry.stage}
+                        </span>
+                        <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{entry.timestamp}</span>
+                      </div>
+                      <p className="text-[11px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>{entry.note}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Drawer actions */}
       <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
-        {canAdvance && nextStage && (
+        {canAdvance && nextStage && candidate.status !== "rejected" && (
           <button
             onClick={() => { onAdvance(candidate.id); onClose(); }}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
@@ -390,6 +441,186 @@ function CandidateDrawer({
             <Star className="w-3.5 h-3.5" style={{ fill: candidate.starred ? "rgba(var(--ce-role-edgepreneur-rgb),0.3)" : "none" }} />
           </button>
         </div>
+        {candidate.status !== "rejected" && (
+          <button
+            onClick={() => { onReject(candidate); onClose(); }}
+            className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer transition-all hover:bg-[rgba(var(--ce-status-error-rgb),0.06)]"
+            style={{ border: "1px solid rgba(var(--ce-status-error-rgb),0.12)", color: "var(--ce-status-error)", fontFamily: "var(--font-body)" }}>
+            <XCircle className="w-3 h-3" /> Reject candidate
+          </button>
+        )}
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Reject Modal ────────────────────────────────────────────────────────────
+
+function RejectModal({
+  candidate,
+  onConfirm,
+  onClose,
+}: {
+  candidate: Candidate;
+  onConfirm: (reason: string) => void;
+  onClose: () => void;
+}) {
+  const [reason, setReason] = useState("");
+
+  return (
+    <motion.div className="fixed inset-0 z-[60] flex items-center justify-center"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.5)" }} onClick={onClose} />
+      <motion.div
+        className="relative w-[420px] rounded-2xl p-6 flex flex-col gap-4"
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", backdropFilter: "blur(20px)" }}
+        initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.2 }}
+      >
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <XCircle className="w-4 h-4 text-[var(--ce-status-error)]" />
+            <span className="text-[15px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Reject {candidate.name}</span>
+          </div>
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+          </button>
+        </div>
+        <p className="text-[12px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>
+          This will move {candidate.name} out of the active pipeline. Please provide a reason for the rejection.
+        </p>
+        <textarea
+          value={reason}
+          onChange={(e) => setReason(e.target.value)}
+          placeholder="Reason for rejection (e.g., not enough senior experience, culture fit concerns)..."
+          className="w-full h-28 rounded-xl px-4 py-3 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none resize-none"
+          style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }}
+        />
+        <div className="flex gap-2 justify-end">
+          <button onClick={onClose}
+            className="px-4 py-2 rounded-xl text-[12px] cursor-pointer transition-colors"
+            style={{ color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }}>
+            Cancel
+          </button>
+          <button
+            onClick={() => { if (reason.trim()) onConfirm(reason.trim()); }}
+            disabled={!reason.trim()}
+            className="px-4 py-2 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+            style={{ background: "rgba(var(--ce-status-error-rgb),0.12)", border: "1px solid rgba(var(--ce-status-error-rgb),0.25)", color: "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            Confirm rejection
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Add Candidate Panel ─────────────────────────────────────────────────────
+
+function AddCandidatePanel({
+  onSubmit,
+  onClose,
+}: {
+  onSubmit: (data: { name: string; role: string; source: string; notes: string }) => void;
+  onClose: () => void;
+}) {
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("pd");
+  const [source, setSource] = useState("direct");
+  const [notes, setNotes] = useState("");
+
+  const canSubmit = name.trim().length > 0;
+
+  return (
+    <motion.div
+      className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+      initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }}
+      transition={{ duration: 0.35, ease: EASE }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <div className="flex items-center gap-2">
+          <UserPlus className="w-4 h-4" style={{ color: EMPLOYER_GREEN }} />
+          <span className="text-[15px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Add candidate</span>
+        </div>
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+        </button>
+      </div>
+
+      {/* Form */}
+      <div className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-5">
+        {/* Name */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>FULL NAME</label>
+          <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Jane Doe"
+            className="w-full px-3.5 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none"
+            style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+        </div>
+
+        {/* Role */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ROLE APPLIED FOR</label>
+          <div className="flex gap-2">
+            {JOBS.filter(j => j.id !== "all").map((j) => (
+              <button key={j.id} onClick={() => setRole(j.id)}
+                className="flex-1 px-3 py-2 rounded-xl text-[11px] cursor-pointer transition-all"
+                style={{
+                  background: role === j.id ? `${EMPLOYER_GREEN}12` : "rgba(var(--ce-glass-tint),0.03)",
+                  border: `1px solid ${role === j.id ? `${EMPLOYER_GREEN}30` : "rgba(var(--ce-glass-tint),0.08)"}`,
+                  color: role === j.id ? EMPLOYER_GREEN : "var(--ce-text-secondary)",
+                  fontFamily: "var(--font-body)",
+                }}>
+                {j.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Source */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOURCE</label>
+          <div className="flex gap-2">
+            {[
+              { id: "referral", label: "Referral" },
+              { id: "linkedin", label: "LinkedIn" },
+              { id: "direct", label: "Direct" },
+            ].map((s) => (
+              <button key={s.id} onClick={() => setSource(s.id)}
+                className="flex-1 px-3 py-2 rounded-xl text-[11px] cursor-pointer transition-all"
+                style={{
+                  background: source === s.id ? `${EMPLOYER_GREEN}12` : "rgba(var(--ce-glass-tint),0.03)",
+                  border: `1px solid ${source === s.id ? `${EMPLOYER_GREEN}30` : "rgba(var(--ce-glass-tint),0.08)"}`,
+                  color: source === s.id ? EMPLOYER_GREEN : "var(--ce-text-secondary)",
+                  fontFamily: "var(--font-body)",
+                }}>
+                {s.label}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Notes */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NOTES</label>
+          <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
+            placeholder="Initial notes about this candidate..."
+            className="w-full h-24 rounded-xl px-3.5 py-3 text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none resize-none"
+            style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+        </div>
+      </div>
+
+      {/* Submit */}
+      <div className="px-5 py-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <button
+          onClick={() => { if (canSubmit) onSubmit({ name: name.trim(), role, source, notes: notes.trim() }); }}
+          disabled={!canSubmit}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+          style={{ background: `${EMPLOYER_GREEN}12`, border: `1px solid ${EMPLOYER_GREEN}25`, color: EMPLOYER_GREEN, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          <UserPlus className="w-3.5 h-3.5" />
+          Add to pipeline
+        </button>
       </div>
     </motion.div>
   );
@@ -559,6 +790,8 @@ export function PipelineSurface() {
   const [search, setSearch] = useState("");
   const [selectedCandidate, setSelectedCandidate] = useState<Candidate | null>(null);
   const [jobDropOpen, setJobDropOpen] = useState(false);
+  const [rejectTarget, setRejectTarget] = useState<Candidate | null>(null);
+  const [addPanelOpen, setAddPanelOpen] = useState(false);
 
   const handleNavigate = useCallback((target: string) => {
     const paths: Record<string, string> = {
@@ -573,15 +806,82 @@ export function PipelineSurface() {
     setCandidates((prev) =>
       prev.map((c) => {
         if (c.id !== id) return c;
+        if (c.status === "rejected") return c;
         const idx = STAGE_ORDER.indexOf(c.stage);
+        if (idx >= STAGE_ORDER.length - 1) return c; // Already at offer — can't advance
         const next = STAGE_ORDER[idx + 1];
         if (!next) return c;
+        // Validate sequential progression — no skipping
+        const expectedNext = STAGE_ORDER[idx + 1];
+        if (next !== expectedNext) return c;
         const nextLabel = STAGES.find(s => s.id === next)?.label ?? next;
-        toast.success(`Moved to ${nextLabel}`, `${candidates.find(c2 => c2.id === id)?.name ?? "Candidate"} advanced`);
-        return { ...c, stage: next };
+        const now = new Date();
+        const timestamp = now.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + ", " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+        toast.success(`Moved to ${nextLabel}`, `${c.name} advanced`);
+        return {
+          ...c,
+          stage: next,
+          lastActivity: "Today",
+          history: [...c.history, { stage: next, timestamp, note: `Advanced to ${nextLabel}` }],
+        };
       })
     );
-  }, [candidates]);
+    // Sync drawer if same candidate
+    setSelectedCandidate((prev) => {
+      if (!prev || prev.id !== id) return prev;
+      const idx = STAGE_ORDER.indexOf(prev.stage);
+      if (idx >= STAGE_ORDER.length - 1 || prev.status === "rejected") return prev;
+      const next = STAGE_ORDER[idx + 1];
+      if (!next) return prev;
+      const nextLabel = STAGES.find(s => s.id === next)?.label ?? next;
+      const now = new Date();
+      const timestamp = now.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + ", " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+      return { ...prev, stage: next, lastActivity: "Today", history: [...prev.history, { stage: next, timestamp, note: `Advanced to ${nextLabel}` }] };
+    });
+  }, []);
+
+  const handleReject = useCallback((id: string, reason: string) => {
+    setCandidates((prev) =>
+      prev.map((c) => {
+        if (c.id !== id) return c;
+        const now = new Date();
+        const timestamp = now.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + ", " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+        toast.info("Candidate rejected", c.name);
+        return {
+          ...c,
+          status: "rejected" as const,
+          lastActivity: "Today",
+          history: [...c.history, { stage: c.stage, timestamp, note: `Rejected: ${reason}` }],
+        };
+      })
+    );
+    setRejectTarget(null);
+  }, []);
+
+  const handleAddCandidate = useCallback((data: { name: string; role: string; source: string; notes: string }) => {
+    const now = new Date();
+    const timestamp = now.toLocaleDateString("en-US", { month: "short", day: "numeric" }) + ", " + now.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    const dateStr = now.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const newCandidate: Candidate = {
+      id: `c${Date.now()}`,
+      name: data.name,
+      initial: data.name.charAt(0).toUpperCase(),
+      role: data.role,
+      match: Math.floor(Math.random() * 20) + 65, // 65-85 initial match
+      stage: "new",
+      skills: [],
+      appliedDate: dateStr,
+      lastActivity: "Today",
+      location: "—",
+      sophiaNote: data.notes || "New candidate — Sophia will generate an assessment after profile review.",
+      starred: false,
+      status: "active",
+      history: [{ stage: "new", timestamp, note: `Added via ${data.source}${data.notes ? `. ${data.notes}` : ""}` }],
+    };
+    setCandidates((prev) => [newCandidate, ...prev]);
+    setAddPanelOpen(false);
+    toast.success("Candidate added", `${data.name} added to pipeline`);
+  }, []);
 
   const handleStar = useCallback((id: string) => {
     setCandidates((prev) => prev.map((c) => {
@@ -594,6 +894,7 @@ export function PipelineSurface() {
   }, []);
 
   const filtered = candidates.filter((c) => {
+    if (c.status === "rejected") return false; // Hide rejected from active pipeline
     const matchesJob = selectedJob === "all" || c.role === selectedJob;
     const matchesSearch = !search || c.name.toLowerCase().includes(search.toLowerCase()) || c.skills.some((s) => s.toLowerCase().includes(search.toLowerCase()));
     return matchesJob && matchesSearch;
@@ -634,23 +935,30 @@ export function PipelineSurface() {
             </p>
           </div>
 
-          {/* View toggle */}
-          <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
-            {(["kanban", "list"] as ViewMode[]).map((v) => (
-              <button
-                key={v}
-                onClick={() => setView(v)}
-                className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all"
-                style={{
-                  background: view === v ? "rgba(var(--ce-glass-tint),0.08)" : "transparent",
-                  color: view === v ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
-                  fontFamily: "var(--font-body)",
-                }}
-              >
-                {v === "kanban" ? <Kanban className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
-                {v.charAt(0).toUpperCase() + v.slice(1)}
-              </button>
-            ))}
+          <div className="flex items-center gap-3">
+            <button onClick={() => setAddPanelOpen(true)}
+              className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+              style={{ background: `${EMPLOYER_GREEN}12`, border: `1px solid ${EMPLOYER_GREEN}25`, color: EMPLOYER_GREEN, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <UserPlus className="w-3.5 h-3.5" /> Add candidate
+            </button>
+            {/* View toggle */}
+            <div className="flex items-center gap-1 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+              {(["kanban", "list"] as ViewMode[]).map((v) => (
+                <button
+                  key={v}
+                  onClick={() => setView(v)}
+                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all"
+                  style={{
+                    background: view === v ? "rgba(var(--ce-glass-tint),0.08)" : "transparent",
+                    color: view === v ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
+                    fontFamily: "var(--font-body)",
+                  }}
+                >
+                  {v === "kanban" ? <Kanban className="w-3.5 h-3.5" /> : <List className="w-3.5 h-3.5" />}
+                  {v.charAt(0).toUpperCase() + v.slice(1)}
+                </button>
+              ))}
+            </div>
           </div>
         </motion.div>
 

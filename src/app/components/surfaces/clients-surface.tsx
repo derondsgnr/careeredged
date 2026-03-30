@@ -21,11 +21,12 @@ import { RoleShell, GlassCard } from "../role-shell";
 import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
 import { useSophia } from "../sophia-context";
+import { toast } from "../ui/feedback";
 import {
   Users, Calendar, Star, Check, ChevronRight, X,
   MessageSquare, Clock, TrendingUp, Target, Zap,
   AlertCircle, CheckCircle2, ArrowRight, Briefcase,
-  BookOpen, Search, Filter,
+  BookOpen, Search, Filter, Plus, Archive,
 } from "lucide-react";
 
 const GUIDE_PURPLE = "var(--ce-role-guide)";
@@ -209,16 +210,377 @@ const HEALTH_CONFIG: Record<ClientHealth, { label: string; color: string; dot: s
   inactive: { label: "Inactive",  color: "var(--ce-status-error)", dot: "var(--ce-status-error)" },
 };
 
+// ─── Star Rating Component ──────────────────────────────────────────────────
+
+function StarRating({ value, onChange }: { value: number; onChange: (v: number) => void }) {
+  const [hover, setHover] = useState(0);
+  return (
+    <div className="flex items-center gap-1">
+      {[1, 2, 3, 4, 5].map((i) => (
+        <button
+          key={i}
+          type="button"
+          className="cursor-pointer p-0.5 transition-transform hover:scale-110"
+          onMouseEnter={() => setHover(i)}
+          onMouseLeave={() => setHover(0)}
+          onClick={() => onChange(i)}
+        >
+          <Star
+            className="w-5 h-5 transition-colors"
+            style={{
+              color: i <= (hover || value) ? "var(--ce-lime)" : "var(--ce-text-quaternary)",
+              fill: i <= (hover || value) ? "var(--ce-lime)" : "transparent",
+            }}
+          />
+        </button>
+      ))}
+    </div>
+  );
+}
+
+// ─── Add Client Panel ───────────────────────────────────────────────────────
+
+function AddClientPanel({
+  onClose,
+  onAdd,
+}: {
+  onClose: () => void;
+  onAdd: (client: Client) => void;
+}) {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [specialty, setSpecialty] = useState("");
+  const [phase, setPhase] = useState<string>("Discovery");
+
+  const phaseMap: Record<string, { num: number; label: string }> = {
+    Discovery: { num: 1, label: "Discover & Position" },
+    "Skill Bridge": { num: 2, label: "Build & Apply" },
+    Build: { num: 2, label: "Build & Apply" },
+    Interview: { num: 3, label: "Interview & Close" },
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!name.trim()) return;
+    const phaseInfo = phaseMap[phase];
+    const newClient: Client = {
+      id: `c-${Date.now()}`,
+      name: name.trim(),
+      initial: name.trim().charAt(0).toUpperCase(),
+      role: "EdgeStar",
+      goal: specialty.trim() || "Career transition",
+      phase: phaseInfo.num,
+      phaseLabel: phaseInfo.label,
+      progress: 0,
+      readiness: 10,
+      health: "on_track",
+      lastSession: "Not yet",
+      nextSession: undefined,
+      sessionsCompleted: 0,
+      milestonesDone: 0,
+      totalMilestones: 10,
+      earnings: 0,
+      sophiaNote: `${name.trim()} is a new client. Schedule an introductory session to assess their goals and build their initial roadmap.`,
+      tags: ["New"],
+      recentSessions: [],
+      upcomingMilestone: "Complete intake assessment",
+      lastActive: "Today",
+    };
+    onAdd(newClient);
+    toast.success(`${name.trim()} added to your client roster`);
+    onClose();
+  };
+
+  return (
+    <motion.div
+      className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+      initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }}
+      transition={{ duration: 0.35, ease: EASE }}
+    >
+      {/* Header */}
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <span className="text-[15px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Add client</span>
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+        </button>
+      </div>
+
+      {/* Form */}
+      <form onSubmit={handleSubmit} className="flex-1 overflow-y-auto px-5 py-5 flex flex-col gap-4">
+        {/* Name */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NAME</label>
+          <input
+            value={name} onChange={(e) => setName(e.target.value)}
+            placeholder="Full name"
+            required
+            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none transition-colors focus:ring-1"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.1)", background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}
+          />
+        </div>
+
+        {/* Email */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EMAIL</label>
+          <input
+            value={email} onChange={(e) => setEmail(e.target.value)}
+            placeholder="client@email.com"
+            type="email"
+            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none transition-colors focus:ring-1"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.1)", background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}
+          />
+        </div>
+
+        {/* Specialty */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SPECIALTY / GOAL</label>
+          <input
+            value={specialty} onChange={(e) => setSpecialty(e.target.value)}
+            placeholder="e.g., Product Designer at a FAANG"
+            className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none transition-colors focus:ring-1"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.1)", background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}
+          />
+        </div>
+
+        {/* Phase */}
+        <div>
+          <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>INITIAL PHASE</label>
+          <div className="flex gap-2 flex-wrap">
+            {["Discovery", "Skill Bridge", "Build", "Interview"].map((p) => (
+              <button
+                key={p} type="button"
+                onClick={() => setPhase(p)}
+                className="px-3 py-2 rounded-xl text-[11px] cursor-pointer transition-all"
+                style={{
+                  background: phase === p ? "rgba(var(--ce-role-guide-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.02)",
+                  border: phase === p ? "1px solid rgba(var(--ce-role-guide-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.08)",
+                  color: phase === p ? GUIDE_PURPLE : "var(--ce-text-secondary)",
+                  fontFamily: "var(--font-body)",
+                }}
+              >
+                {p}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* Sophia note */}
+        <div className="mt-2 rounded-xl p-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+          <div className="flex items-center gap-1.5 mb-1.5">
+            <SophiaMark size={12} glowing={false} />
+            <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia</span>
+          </div>
+          <p className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+            A new client will start with an intake assessment. Sophia will generate a personalized roadmap after the first session.
+          </p>
+        </div>
+
+        {/* Spacer */}
+        <div className="flex-1" />
+      </form>
+
+      {/* Submit */}
+      <div className="px-5 py-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <button
+          type="button"
+          onClick={() => {
+            if (!name.trim()) return;
+            const phaseInfo = phaseMap[phase];
+            const newClient: Client = {
+              id: `c-${Date.now()}`,
+              name: name.trim(),
+              initial: name.trim().charAt(0).toUpperCase(),
+              role: "EdgeStar",
+              goal: specialty.trim() || "Career transition",
+              phase: phaseInfo.num,
+              phaseLabel: phaseInfo.label,
+              progress: 0,
+              readiness: 10,
+              health: "on_track",
+              lastSession: "Not yet",
+              nextSession: undefined,
+              sessionsCompleted: 0,
+              milestonesDone: 0,
+              totalMilestones: 10,
+              earnings: 0,
+              sophiaNote: `${name.trim()} is a new client. Schedule an introductory session to assess their goals and build their initial roadmap.`,
+              tags: ["New"],
+              recentSessions: [],
+              upcomingMilestone: "Complete intake assessment",
+              lastActive: "Today",
+            };
+            onAdd(newClient);
+            toast.success(`${name.trim()} added to your client roster`);
+            onClose();
+          }}
+          disabled={!name.trim()}
+          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+          style={{ background: "rgba(var(--ce-role-guide-rgb),0.15)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.3)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}
+        >
+          <Plus className="w-3.5 h-3.5" /> Add client
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Log Outcome Modal ──────────────────────────────────────────────────────
+
+function LogOutcomeModal({
+  client,
+  onClose,
+  onSave,
+}: {
+  client: Client;
+  onClose: () => void;
+  onSave: (data: { rating: number; notes: string; nextSteps: string }) => void;
+}) {
+  const [rating, setRating] = useState(0);
+  const [notes, setNotes] = useState("");
+  const [nextSteps, setNextSteps] = useState("");
+
+  const handleSave = () => {
+    if (rating === 0) return;
+    onSave({ rating, notes, nextSteps });
+  };
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-[60] flex items-center justify-center"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+    >
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.5)" }} onClick={onClose} />
+      <motion.div
+        className="relative w-[420px] max-h-[80vh] rounded-2xl overflow-hidden flex flex-col"
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", backdropFilter: "blur(20px)" }}
+        initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.25, ease: EASE }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+          <div>
+            <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Log session outcome</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{client.name}</span>
+          </div>
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+          </button>
+        </div>
+
+        {/* Content */}
+        <div className="px-5 py-4 flex flex-col gap-4 overflow-y-auto">
+          {/* Rating */}
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SESSION RATING</label>
+            <StarRating value={rating} onChange={setRating} />
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SESSION NOTES</label>
+            <textarea
+              value={notes} onChange={(e) => setNotes(e.target.value)}
+              placeholder="Key takeaways, progress made, blockers discussed..."
+              rows={4}
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none resize-none"
+              style={{ border: "1px solid rgba(var(--ce-glass-tint),0.1)", background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}
+            />
+          </div>
+
+          {/* Next steps */}
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-quaternary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>NEXT STEPS</label>
+            <input
+              value={nextSteps} onChange={(e) => setNextSteps(e.target.value)}
+              placeholder="Action items for the client before next session"
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] bg-transparent outline-none"
+              style={{ border: "1px solid rgba(var(--ce-glass-tint),0.1)", background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}
+            />
+          </div>
+        </div>
+
+        {/* Actions */}
+        <div className="flex gap-2 px-5 py-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
+            Cancel
+          </button>
+          <button
+            onClick={handleSave}
+            disabled={rating === 0}
+            className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+            style={{ background: "rgba(var(--ce-role-guide-rgb),0.15)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.3)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}
+          >
+            Save outcome
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Archive Confirmation Dialog ────────────────────────────────────────────
+
+function ArchiveDialog({
+  clientName,
+  onClose,
+  onConfirm,
+}: {
+  clientName: string;
+  onClose: () => void;
+  onConfirm: () => void;
+}) {
+  return (
+    <motion.div
+      className="fixed inset-0 z-[60] flex items-center justify-center"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+    >
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.5)" }} onClick={onClose} />
+      <motion.div
+        className="relative w-[360px] rounded-2xl overflow-hidden"
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", backdropFilter: "blur(20px)" }}
+        initial={{ scale: 0.95, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.95, opacity: 0 }}
+        transition={{ duration: 0.25, ease: EASE }}
+      >
+        <div className="px-5 py-5">
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-3" style={{ background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)" }}>
+            <Archive className="w-5 h-5" style={{ color: "var(--ce-status-error)" }} />
+          </div>
+          <span className="text-[14px] text-[var(--ce-text-primary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Archive client</span>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+            Are you sure you want to archive {clientName}? They will be removed from your active client list.
+          </p>
+        </div>
+        <div className="flex gap-2 px-5 pb-5">
+          <button onClick={onClose} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer transition-colors"
+            style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}>
+            Cancel
+          </button>
+          <button onClick={onConfirm} className="flex-1 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+            style={{ background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.15)", border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.25)", color: "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            Archive
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // ─── Client Detail Drawer ────────────────────────────────────────────────────
 
 function ClientDrawer({
   client,
   onClose,
   onNavigate,
+  onLogOutcome,
+  onArchive,
 }: {
   client: Client;
   onClose: () => void;
   onNavigate: (t: string) => void;
+  onLogOutcome: () => void;
+  onArchive: () => void;
 }) {
   const { openSophia } = useSophia();
   const [tab, setTab] = useState<"overview" | "sessions">("overview");
@@ -356,12 +718,20 @@ function ClientDrawer({
 
       {/* Actions */}
       <div className="px-5 py-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
-        <button
-          onClick={() => onNavigate("sessions")}
-          className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-          style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
-          <Calendar className="w-3.5 h-3.5" /> Book session
-        </button>
+        <div className="flex gap-2">
+          <button
+            onClick={() => onNavigate("sessions")}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+            style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Calendar className="w-3.5 h-3.5" /> Book session
+          </button>
+          <button
+            onClick={onLogOutcome}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+            style={{ background: "rgba(var(--ce-lime-rgb, 179,255,59),0.08)", border: "1px solid rgba(var(--ce-lime-rgb, 179,255,59),0.18)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <CheckCircle2 className="w-3.5 h-3.5" /> Log outcome
+          </button>
+        </div>
         <div className="flex gap-2">
           <button onClick={() => onNavigate("messages")} className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] transition-colors" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-body)" }}>
             <MessageSquare className="w-3 h-3" /> Message
@@ -373,6 +743,12 @@ function ClientDrawer({
             <Target className="w-3 h-3" /> View roadmap
           </button>
         </div>
+        <button
+          onClick={onArchive}
+          className="w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-status-error-rgb,239,68,68),0.06)] transition-colors"
+          style={{ background: "transparent", border: "1px solid rgba(var(--ce-glass-tint),0.05)", color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>
+          <Archive className="w-3 h-3" /> Archive client
+        </button>
       </div>
     </motion.div>
   );
@@ -445,10 +821,68 @@ export function ClientsSurface() {
   const navigate = useNavigate();
   const role = "guide" as const;
 
-  const [clients] = useState<Client[]>(CLIENTS);
+  const [clients, setClients] = useState<Client[]>(CLIENTS);
   const [selectedClient, setSelectedClient] = useState<Client | null>(null);
   const [filter, setFilter] = useState<"all" | ClientHealth>("all");
   const [search, setSearch] = useState("");
+  const [showAddPanel, setShowAddPanel] = useState(false);
+  const [showLogOutcome, setShowLogOutcome] = useState(false);
+  const [showArchiveConfirm, setShowArchiveConfirm] = useState(false);
+
+  const handleAddClient = (newClient: Client) => {
+    setClients((prev) => [newClient, ...prev]);
+  };
+
+  const handleLogOutcome = (data: { rating: number; notes: string; nextSteps: string }) => {
+    if (!selectedClient) return;
+    const today = new Date();
+    const dateStr = today.toLocaleDateString("en-US", { month: "short", day: "numeric" });
+    const newSession: Session = {
+      id: `s-${Date.now()}`,
+      date: dateStr,
+      topic: `Session outcome (${data.rating}/5)`,
+      outcome: [data.notes, data.nextSteps ? `Next steps: ${data.nextSteps}` : ""].filter(Boolean).join(". "),
+      duration: "—",
+    };
+    setClients((prev) =>
+      prev.map((c) =>
+        c.id === selectedClient.id
+          ? {
+              ...c,
+              recentSessions: [newSession, ...c.recentSessions],
+              sessionsCompleted: c.sessionsCompleted + 1,
+              milestonesDone: Math.min(c.milestonesDone + 1, c.totalMilestones),
+              lastSession: dateStr,
+              lastActive: "Today",
+            }
+          : c
+      )
+    );
+    // Update selected client in-place for the drawer
+    setSelectedClient((prev) =>
+      prev && prev.id === selectedClient.id
+        ? {
+            ...prev,
+            recentSessions: [newSession, ...prev.recentSessions],
+            sessionsCompleted: prev.sessionsCompleted + 1,
+            milestonesDone: Math.min(prev.milestonesDone + 1, prev.totalMilestones),
+            lastSession: dateStr,
+            lastActive: "Today",
+          }
+        : prev
+    );
+    setShowLogOutcome(false);
+    toast.success(`Session outcome logged for ${selectedClient.name}`);
+  };
+
+  const handleArchive = () => {
+    if (!selectedClient) return;
+    const name = selectedClient.name;
+    setClients((prev) => prev.filter((c) => c.id !== selectedClient.id));
+    setSelectedClient(null);
+    setShowArchiveConfirm(false);
+    toast.success(`${name} has been archived`);
+  };
 
   const handleNavigate = (target: string) => {
     const paths: Record<string, string> = {
@@ -496,10 +930,16 @@ export function ClientsSurface() {
               {clients.length} active clients · {atRisk.length} need attention
             </p>
           </div>
-          <button onClick={() => handleNavigate("sessions")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all"
-            style={{ background: "rgba(var(--ce-role-guide-rgb),0.1)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.2)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
-            <Calendar className="w-3.5 h-3.5" /> Manage sessions
-          </button>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setShowAddPanel(true)} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+              style={{ background: "rgba(var(--ce-role-guide-rgb),0.15)", border: "1px solid rgba(var(--ce-role-guide-rgb),0.3)", color: GUIDE_PURPLE, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <Plus className="w-3.5 h-3.5" /> Add client
+            </button>
+            <button onClick={() => handleNavigate("sessions")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              <Calendar className="w-3.5 h-3.5" /> Manage sessions
+            </button>
+          </div>
         </motion.div>
 
         {/* KPI strip */}
@@ -624,8 +1064,48 @@ export function ClientsSurface() {
             <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setSelectedClient(null)} />
-            <ClientDrawer client={selectedClient} onClose={() => setSelectedClient(null)} onNavigate={handleNavigate} />
+            <ClientDrawer
+              client={selectedClient}
+              onClose={() => setSelectedClient(null)}
+              onNavigate={handleNavigate}
+              onLogOutcome={() => setShowLogOutcome(true)}
+              onArchive={() => setShowArchiveConfirm(true)}
+            />
           </>
+        )}
+      </AnimatePresence>
+
+      {/* Add client panel */}
+      <AnimatePresence>
+        {showAddPanel && (
+          <>
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setShowAddPanel(false)} />
+            <AddClientPanel onClose={() => setShowAddPanel(false)} onAdd={handleAddClient} />
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Log outcome modal */}
+      <AnimatePresence>
+        {showLogOutcome && selectedClient && (
+          <LogOutcomeModal
+            client={selectedClient}
+            onClose={() => setShowLogOutcome(false)}
+            onSave={handleLogOutcome}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Archive confirmation */}
+      <AnimatePresence>
+        {showArchiveConfirm && selectedClient && (
+          <ArchiveDialog
+            clientName={selectedClient.name}
+            onClose={() => setShowArchiveConfirm(false)}
+            onConfirm={handleArchive}
+          />
         )}
       </AnimatePresence>
     </RoleShell>

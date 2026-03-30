@@ -20,6 +20,7 @@ import { RoleShell, GlassCard } from "../role-shell";
 import { SophiaInsight } from "../sophia-patterns";
 import { SophiaMark } from "../sophia-mark";
 import { QRModal } from "../shared-patterns";
+import { toast } from "../ui/feedback";
 import {
   Heart, Check, ChevronRight, ChevronDown, ChevronUp,
   MessageSquare, Calendar, Sparkles, Clock, Lock,
@@ -637,11 +638,13 @@ function PhaseSection({
   milestones,
   selectedMilestoneId,
   onSelectMilestone,
+  onToggleMilestone,
 }: {
   phase: Phase;
   milestones: Milestone[];
   selectedMilestoneId: string | null;
   onSelectMilestone: (id: string | null) => void;
+  onToggleMilestone: (id: string) => void;
 }) {
   const [collapsed, setCollapsed] = useState(phase.status === "locked");
   const isLocked   = phase.status === "locked";
@@ -738,11 +741,17 @@ function PhaseSection({
                       }}
                       onClick={() => onSelectMilestone(isSelected ? null : m.id)}
                     >
-                      <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{
-                        background: isDoneM ? "rgba(var(--ce-lime-rgb),0.1)" : isCurrent ? "rgba(var(--ce-role-parent-rgb),0.1)" : "transparent",
-                        border: `1.5px solid ${isDoneM ? "var(--ce-lime)" : isCurrent ? "var(--ce-role-parent)" : "rgba(var(--ce-glass-tint),0.1)"}`,
-                        boxShadow: isCurrent ? "0 0 6px rgba(var(--ce-role-parent-rgb),0.3)" : "none",
-                      }}>
+                      <div
+                        className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0 cursor-pointer hover:scale-110 transition-transform"
+                        style={{
+                          background: isDoneM ? "rgba(var(--ce-lime-rgb),0.1)" : isCurrent ? "rgba(var(--ce-role-parent-rgb),0.1)" : "transparent",
+                          border: `1.5px solid ${isDoneM ? "var(--ce-lime)" : isCurrent ? "var(--ce-role-parent)" : "rgba(var(--ce-glass-tint),0.1)"}`,
+                          boxShadow: isCurrent ? "0 0 6px rgba(var(--ce-role-parent-rgb),0.3)" : "none",
+                        }}
+                        onClick={(e) => { e.stopPropagation(); if (m.status !== "locked") onToggleMilestone(m.id); }}
+                        role="button"
+                        aria-label={`Toggle ${m.label} status`}
+                      >
                         {isDoneM && <Check className="w-2 h-2 text-ce-lime" />}
                       </div>
 
@@ -821,15 +830,38 @@ export function FamilySurface() {
   const navigate = useNavigate();
   const role = "parent" as const;
 
+  const [children, setChildren] = useState<ChildData[]>(CHILDREN);
   const [selectedChildId,   setSelectedChildId  ] = useState<string>(CHILDREN[0].id);
   const [showAddChild,      setShowAddChild      ] = useState(false);
   const [selectedMilestoneId, setSelectedMilestoneId] = useState<string | null>(null);
-  const [milestonesByChild, setMilestonesByChild ] = useState<Record<string, Milestone[]>>(
-    () => Object.fromEntries(CHILDREN.map((c) => [c.id, c.milestones]))
+
+  // Load notes from localStorage on mount
+  const [milestonesByChild, setMilestonesByChild ] = useState<Record<string, Milestone[]>>(() => {
+    const base = Object.fromEntries(CHILDREN.map((c) => [c.id, c.milestones]));
+    try {
+      const saved = localStorage.getItem("ce-family-notes");
+      if (saved) {
+        const noteMap: Record<string, Record<string, ParentNote[]>> = JSON.parse(saved);
+        for (const childId of Object.keys(noteMap)) {
+          if (base[childId]) {
+            base[childId] = base[childId].map((m) =>
+              noteMap[childId]?.[m.id] ? { ...m, notes: [...m.notes, ...noteMap[childId][m.id]] } : m
+            );
+          }
+        }
+      }
+    } catch { /* ignore parse errors */ }
+    return base;
+  });
+
+  // Mutable phases per child — recalculated from milestones
+  const [phasesByChild, setPhasesByChild] = useState<Record<string, Phase[]>>(
+    () => Object.fromEntries(CHILDREN.map((c) => [c.id, c.phases]))
   );
 
-  const activeChild = CHILDREN.find((c) => c.id === selectedChildId) ?? CHILDREN[0];
+  const activeChild = children.find((c) => c.id === selectedChildId) ?? children[0];
   const milestones  = milestonesByChild[selectedChildId] ?? [];
+  const phases      = phasesByChild[selectedChildId] ?? activeChild.phases;
   const selectedMilestone = milestones.find((m) => m.id === selectedMilestoneId) ?? null;
 
   // Reset note composer when switching children
@@ -846,15 +878,136 @@ export function FamilySurface() {
     navigate(paths[target] ?? `/${role}`);
   };
 
+  // Persist notes to localStorage whenever milestones change
+  const persistNotes = (updated: Record<string, Milestone[]>) => {
+    try {
+      const noteMap: Record<string, Record<string, ParentNote[]>> = {};
+      for (const [childId, ms] of Object.entries(updated)) {
+        noteMap[childId] = {};
+        for (const m of ms) {
+          // Only persist user-added notes (those with "Just now" or later timestamps, i.e. those added at runtime)
+          const userNotes = m.notes.filter((n) => !CHILDREN.flatMap((c) => c.milestones).flatMap((cm) => cm.notes).some((orig) => orig.id === n.id));
+          if (userNotes.length > 0) noteMap[childId][m.id] = userNotes;
+        }
+      }
+      localStorage.setItem("ce-family-notes", JSON.stringify(noteMap));
+    } catch { /* ignore storage errors */ }
+  };
+
   const handleAddNote = (milestoneId: string, text: string, type: ParentNote["type"]) => {
-    setMilestonesByChild((prev) => ({
-      ...prev,
-      [selectedChildId]: (prev[selectedChildId] ?? []).map((m) =>
-        m.id === milestoneId
-          ? { ...m, notes: [...m.notes, { id: `n${Date.now()}`, text, timestamp: "Just now", type }] }
-          : m
-      ),
-    }));
+    setMilestonesByChild((prev) => {
+      const updated = {
+        ...prev,
+        [selectedChildId]: (prev[selectedChildId] ?? []).map((m) =>
+          m.id === milestoneId
+            ? { ...m, notes: [...m.notes, { id: `n${Date.now()}`, text, timestamp: "Just now", type }] }
+            : m
+        ),
+      };
+      persistNotes(updated);
+      return updated;
+    });
+  };
+
+  // Toggle milestone status: done <-> current <-> upcoming, then recalculate phase progress
+  const handleToggleMilestone = (milestoneId: string) => {
+    setMilestonesByChild((prev) => {
+      const childMilestones = prev[selectedChildId] ?? [];
+      const updated = {
+        ...prev,
+        [selectedChildId]: childMilestones.map((m) => {
+          if (m.id !== milestoneId) return m;
+          // Cycle: upcoming -> current -> done -> upcoming
+          const nextStatus: Record<string, "done" | "current" | "upcoming"> = {
+            upcoming: "current",
+            current: "done",
+            done: "upcoming",
+          };
+          const newStatus = m.status === "locked" ? m.status : (nextStatus[m.status] ?? m.status);
+          return {
+            ...m,
+            status: newStatus,
+            completedDate: newStatus === "done" ? "Just now" : undefined,
+          };
+        }),
+      };
+
+      // Recalculate phases from milestones
+      const newMilestones = updated[selectedChildId];
+      setPhasesByChild((prevPhases) => ({
+        ...prevPhases,
+        [selectedChildId]: (prevPhases[selectedChildId] ?? []).map((phase) => {
+          const phaseMilestones = newMilestones.filter((m) => m.phase === phase.id);
+          const doneCount = phaseMilestones.filter((m) => m.status === "done").length;
+          const total = phaseMilestones.length;
+          const progress = total > 0 ? doneCount / total : 0;
+          // Determine phase status based on milestone composition
+          let status = phase.status;
+          if (phase.status !== "locked") {
+            if (doneCount === total && total > 0) status = "done";
+            else if (doneCount > 0 || phaseMilestones.some((m) => m.status === "current")) status = "active";
+            else status = "upcoming";
+          }
+          return { ...phase, doneCount, milestoneCount: total, progress, status };
+        }),
+      }));
+
+      return updated;
+    });
+  };
+
+  // Add a new child entry
+  const handleAddChild = () => {
+    const childNum = children.length + 1;
+    const names = ["Sam", "River", "Morgan", "Quinn", "Avery", "Casey"];
+    const name = names[(childNum - 1) % names.length];
+    const newChild: ChildData = {
+      id: `child-${Date.now()}`,
+      name,
+      initial: name[0],
+      goal: "Exploring careers",
+      startDate: "Today",
+      streak: 0,
+      daysActive: 0,
+      phases: [
+        { id: 1, title: "Explore & Clarify",  subtitle: "Interests, strengths, and direction", status: "upcoming", progress: 0, milestoneCount: 3, doneCount: 0 },
+        { id: 2, title: "Skills & Portfolio",  subtitle: "Building skills and proof of work",   status: "locked",   progress: 0, milestoneCount: 3, doneCount: 0 },
+        { id: 3, title: "Apply & Interview",   subtitle: "Targeting opportunities",              status: "locked",   progress: 0, milestoneCount: 3, doneCount: 0 },
+        { id: 4, title: "Start & Reflect",     subtitle: "Making the most of it",                status: "locked",   progress: 0, milestoneCount: 2, doneCount: 0 },
+      ],
+      milestones: [
+        { id: `${name.toLowerCase()}-m1`, label: "Career interest discovery exercise", phase: 1, status: "upcoming", time: "1h", category: "action", notes: [] },
+        { id: `${name.toLowerCase()}-m2`, label: "Strengths self-assessment",          phase: 1, status: "upcoming", time: "1h", category: "resource", notes: [] },
+        { id: `${name.toLowerCase()}-m3`, label: "Set goals with Sophia",             phase: 1, status: "upcoming", time: "30min", category: "skill", notes: [] },
+        { id: `${name.toLowerCase()}-m4`, label: "Skill-building module",             phase: 2, status: "locked", time: "4h", category: "skill", notes: [] },
+        { id: `${name.toLowerCase()}-m5`, label: "Build portfolio piece",             phase: 2, status: "locked", time: "6h", category: "action", notes: [] },
+        { id: `${name.toLowerCase()}-m6`, label: "Get mentor session",                phase: 2, status: "locked", time: "1h", category: "resource", notes: [] },
+        { id: `${name.toLowerCase()}-m7`, label: "Send applications",                 phase: 3, status: "locked", time: "3h", category: "action", notes: [] },
+        { id: `${name.toLowerCase()}-m8`, label: "Mock interview",                    phase: 3, status: "locked", time: "2h", category: "skill", notes: [] },
+        { id: `${name.toLowerCase()}-m9`, label: "Offer review",                      phase: 3, status: "locked", time: "1h", category: "action", notes: [] },
+        { id: `${name.toLowerCase()}-m10`, label: "First week check-in",              phase: 4, status: "locked", time: "30min", category: "action", notes: [] },
+        { id: `${name.toLowerCase()}-m11`, label: "Reflection & portfolio update",    phase: 4, status: "locked", time: "2h", category: "resource", notes: [] },
+      ],
+      activity: [
+        { label: `Joined CareerEdge — account linked`, time: "Today", type: "session" },
+      ],
+      budgetPhases: [
+        { id: 1, title: "Explore & Clarify",  status: "upcoming", spent: 0, estimated: 100, items: ["Tools & subscriptions: $50", "Portfolio site: $50"] },
+        { id: 2, title: "Skills & Portfolio",  status: "upcoming", spent: 0, estimated: 200, items: ["Course: $100", "Mentor: $50", "Tools: $50"] },
+        { id: 3, title: "Apply & Interview",   status: "upcoming", spent: 0, estimated: 150, items: ["Travel: $100", "Attire: $50"] },
+        { id: 4, title: "Start & Reflect",     status: "upcoming", spent: 0, estimated: 50,  items: ["First-week expenses: $50"] },
+      ],
+      upcoming: [
+        { text: "Complete career interest exercise", date: "This week", color: "var(--ce-role-parent)" },
+      ],
+      sophiaMessage: `${name} just linked their account. Sophia will begin building their personalized roadmap once they complete the first milestone. A warm welcome message would be a great start.`,
+    };
+    setChildren((prev) => [...prev, newChild]);
+    setMilestonesByChild((prev) => ({ ...prev, [newChild.id]: newChild.milestones }));
+    setPhasesByChild((prev) => ({ ...prev, [newChild.id]: newChild.phases }));
+    setSelectedChildId(newChild.id);
+    setShowAddChild(false);
+    toast.success(`${name}'s account linked`, "You can now track their journey");
   };
 
   const sophiaOverride = {
@@ -889,7 +1042,7 @@ export function FamilySurface() {
           transition={{ delay: 0.08, duration: 0.35, ease: EASE }}
         >
           <ChildSelector
-            children={CHILDREN}
+            children={children}
             selectedId={selectedChildId}
             onSelect={setSelectedChildId}
             onAddChild={() => setShowAddChild(true)}
@@ -947,7 +1100,7 @@ export function FamilySurface() {
 
             {/* Phase progress bar strip */}
             <div className="flex gap-2 mb-6">
-              {activeChild.phases.map((phase) => {
+              {phases.map((phase) => {
                 const color = phase.status === "done" ? "var(--ce-lime)" : phase.status === "active" ? "var(--ce-role-parent)" : "rgba(var(--ce-glass-tint),0.06)";
                 return (
                   <div key={phase.id} className="flex-1">
@@ -973,13 +1126,14 @@ export function FamilySurface() {
 
               {/* Left: Roadmap phases */}
               <div className="flex flex-col gap-3">
-                {activeChild.phases.map((phase) => (
+                {phases.map((phase) => (
                   <PhaseSection
                     key={`${activeChild.id}-${phase.id}`}
                     phase={phase}
                     milestones={milestones.filter((m) => m.phase === phase.id)}
                     selectedMilestoneId={selectedMilestoneId}
                     onSelectMilestone={setSelectedMilestoneId}
+                    onToggleMilestone={handleToggleMilestone}
                   />
                 ))}
               </div>
@@ -1089,7 +1243,7 @@ export function FamilySurface() {
         scanDescription="Scan the QR code shown in your child's CareerEdge app"
         roleColor="var(--ce-role-parent)"
         identifier="PARENT-CE"
-        onScanComplete={() => setShowAddChild(false)}
+        onScanComplete={handleAddChild}
       />
     </RoleShell>
   );

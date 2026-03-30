@@ -14,7 +14,7 @@ import { EASE } from "../tokens";
  * - Sophia funding strategy insight
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { RoleShell, GlassCard } from "../role-shell";
@@ -27,7 +27,7 @@ import {
   TrendingUp, DollarSign, Calendar, ChevronRight, X, Star,
   Zap, Target, Clock, Check, ArrowRight, Users,
   Rocket, Globe, Award, BookOpen, Filter, Search,
-  Sparkles, FileText,
+  Sparkles, FileText, Edit3, Send, Loader2, AlertTriangle,
 } from "lucide-react";
 
 const PRENEUR_GOLD = "var(--ce-role-edgepreneur)";
@@ -198,10 +198,12 @@ function OpportunityDrawer({
   opp,
   onClose,
   onStar,
+  onApply,
 }: {
   opp: FundingOpp;
   onClose: () => void;
   onStar: (id: string) => void;
+  onApply: (opp: FundingOpp) => void;
 }) {
   const { openSophia } = useSophia();
   const typeCfg = TYPE_CONFIG[opp.type];
@@ -309,20 +311,19 @@ function OpportunityDrawer({
 
       {/* Actions */}
       <div className="px-5 py-4 flex flex-col gap-2.5" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
-        {opp.appStatus === "not_started" && (
+        {(opp.appStatus === "not_started" || opp.appStatus === "in_progress") && (
           <button
-            onClick={() => openSophia(`Help me start my application for "${opp.name}". It's a ${opp.type} offering ${opp.amount}${opp.equity ? ` for ${opp.equity} equity` : ""}. Deadline: ${opp.deadline}. My match score: ${opp.match}%. Requirements: ${opp.requirements.join(", ")}. Sophia noted: ${opp.sophiaNote}`)}
+            onClick={() => onApply(opp)}
             className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-            style={{ background: `${PRENEUR_GOLD}12`, border: `1px solid ${PRENEUR_GOLD}25`, color: PRENEUR_GOLD, fontFamily: "var(--font-display)", fontWeight: 500 }}>
-            <Rocket className="w-3.5 h-3.5" /> Start application
-          </button>
-        )}
-        {opp.appStatus === "in_progress" && (
-          <button
-            onClick={() => openSophia(`Help me continue my in-progress application for "${opp.name}". Deadline: ${opp.deadline}. ${opp.sophiaNote} What are the 3 most important things to add or improve?`)}
-            className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
-            style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.1)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.2)", color: "var(--ce-role-edgestar)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
-            <FileText className="w-3.5 h-3.5" /> Continue application
+            style={{
+              background: opp.appStatus === "not_started" ? `${PRENEUR_GOLD}12` : "rgba(var(--ce-role-edgestar-rgb),0.1)",
+              border: `1px solid ${opp.appStatus === "not_started" ? `${PRENEUR_GOLD}25` : "rgba(var(--ce-role-edgestar-rgb),0.2)"}`,
+              color: opp.appStatus === "not_started" ? PRENEUR_GOLD : "var(--ce-role-edgestar)",
+              fontFamily: "var(--font-display)", fontWeight: 500,
+            }}>
+            {opp.appStatus === "not_started"
+              ? <><Rocket className="w-3.5 h-3.5" /> Start application</>
+              : <><FileText className="w-3.5 h-3.5" /> Continue application</>}
           </button>
         )}
         {opp.appStatus === "submitted" && (
@@ -336,6 +337,264 @@ function OpportunityDrawer({
           className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-lime-rgb),0.06)] transition-colors"
           style={{ background: "rgba(var(--ce-lime-rgb),0.03)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>
           <Sparkles className="w-3.5 h-3.5" /> Prep pitch with Sophia
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Application Panel (3-step slide-in) ─────────────────────────────────────
+
+const DRAFT_KEY = "ce-funding-drafts";
+
+interface AppFormData {
+  orgName: string;
+  contactEmail: string;
+  amountRequesting: string;
+  projectDescription: string;
+  impactStatement: string;
+}
+
+const EMPTY_FORM: AppFormData = {
+  orgName: "",
+  contactEmail: "",
+  amountRequesting: "",
+  projectDescription: "",
+  impactStatement: "",
+};
+
+function loadDraft(oppId: string): AppFormData {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return EMPTY_FORM;
+    const drafts = JSON.parse(raw);
+    return drafts[oppId] ?? EMPTY_FORM;
+  } catch {
+    return EMPTY_FORM;
+  }
+}
+
+function saveDraft(oppId: string, data: AppFormData) {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    const drafts = raw ? JSON.parse(raw) : {};
+    drafts[oppId] = data;
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts));
+  } catch {
+    // silent — localStorage may be full
+  }
+}
+
+function clearDraft(oppId: string) {
+  try {
+    const raw = localStorage.getItem(DRAFT_KEY);
+    if (!raw) return;
+    const drafts = JSON.parse(raw);
+    delete drafts[oppId];
+    localStorage.setItem(DRAFT_KEY, JSON.stringify(drafts));
+  } catch {
+    // silent
+  }
+}
+
+function ApplicationPanel({
+  opp,
+  onClose,
+  onSubmitted,
+}: {
+  opp: FundingOpp;
+  onClose: () => void;
+  onSubmitted: (oppId: string) => void;
+}) {
+  const [step, setStep] = useState(0);
+  const [form, setForm] = useState<AppFormData>(() => loadDraft(opp.id));
+  const [submitting, setSubmitting] = useState(false);
+
+  const steps = ["Basic info", "Narrative", "Review & submit"];
+
+  // Auto-save draft on form change
+  useEffect(() => {
+    saveDraft(opp.id, form);
+  }, [form, opp.id]);
+
+  const canAdvanceStep0 = form.orgName.trim() && form.contactEmail.trim() && form.amountRequesting.trim();
+  const canAdvanceStep1 = form.projectDescription.trim() && form.impactStatement.trim();
+
+  const handleSubmit = () => {
+    setSubmitting(true);
+    // Simulate network delay
+    setTimeout(() => {
+      clearDraft(opp.id);
+      onSubmitted(opp.id);
+      setSubmitting(false);
+      onClose();
+      toast.success("Application submitted", `Your application for ${opp.name} has been sent`);
+    }, 1200);
+  };
+
+  const inputStyle = {
+    background: "rgba(var(--ce-glass-tint),0.04)",
+    border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+    fontFamily: "var(--font-body)",
+  } as const;
+
+  return (
+    <motion.div
+      className="fixed top-0 right-0 bottom-0 w-[400px] z-50 flex flex-col"
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+      initial={{ x: 400 }} animate={{ x: 0 }} exit={{ x: 400 }}
+      transition={{ duration: 0.35, ease: EASE }}
+    >
+      {/* Header */}
+      <div className="px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            Apply — {opp.name}
+          </span>
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+          </button>
+        </div>
+        {/* Segmented progress bar */}
+        <div className="flex gap-1.5">
+          {steps.map((s, i) => (
+            <div key={i} className="flex-1 flex flex-col gap-1">
+              <div className="h-1 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
+                <motion.div
+                  className="h-full rounded-full"
+                  style={{ background: i <= step ? PRENEUR_GOLD : "transparent" }}
+                  initial={{ width: 0 }}
+                  animate={{ width: i <= step ? "100%" : "0%" }}
+                  transition={{ duration: 0.3, ease: EASE }}
+                />
+              </div>
+              <span className="text-[9px]" style={{
+                color: i === step ? PRENEUR_GOLD : i < step ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)",
+                fontFamily: "var(--font-body)",
+              }}>{s}</span>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Step content */}
+      <div className="flex-1 overflow-y-auto px-5 py-5">
+        <AnimatePresence mode="wait">
+          {step === 0 && (
+            <motion.div key="app-s0" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-4">
+              <div>
+                <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ORGANIZATION NAME</label>
+                <input value={form.orgName} onChange={(e) => setForm({ ...form, orgName: e.target.value })}
+                  placeholder="e.g. EdgeTech Inc." className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                  style={inputStyle} />
+              </div>
+              <div>
+                <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CONTACT EMAIL</label>
+                <input type="email" value={form.contactEmail} onChange={(e) => setForm({ ...form, contactEmail: e.target.value })}
+                  placeholder="you@company.com" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                  style={inputStyle} />
+              </div>
+              <div>
+                <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>AMOUNT REQUESTING</label>
+                <FormattedNumberInput value={form.amountRequesting} onChange={(v) => setForm({ ...form, amountRequesting: v })}
+                  placeholder="e.g. 250000" className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+                  style={inputStyle} />
+                <span className="text-[10px] text-[var(--ce-text-quaternary)] mt-1 block" style={{ fontFamily: "var(--font-body)" }}>
+                  {opp.name} offers {opp.amount}{opp.amountMax ? ` – ${opp.amountMax}` : ""}
+                </span>
+              </div>
+            </motion.div>
+          )}
+          {step === 1 && (
+            <motion.div key="app-s1" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-4">
+              <div>
+                <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROJECT DESCRIPTION</label>
+                <textarea value={form.projectDescription} onChange={(e) => setForm({ ...form, projectDescription: e.target.value })}
+                  placeholder="Describe your project, what problem it solves, and your current traction..."
+                  rows={5} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none resize-none leading-relaxed"
+                  style={inputStyle} />
+              </div>
+              <div>
+                <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>IMPACT STATEMENT</label>
+                <textarea value={form.impactStatement} onChange={(e) => setForm({ ...form, impactStatement: e.target.value })}
+                  placeholder="How will this funding accelerate your growth and create impact?"
+                  rows={4} className="w-full px-3 py-2.5 rounded-xl text-[13px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none resize-none leading-relaxed"
+                  style={inputStyle} />
+              </div>
+              <div className="rounded-xl p-3" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.04)", border: "1px solid rgba(var(--ce-role-edgepreneur-rgb),0.1)" }}>
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <SophiaMark size={12} glowing={false} />
+                  <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Sophia's tip</span>
+                </div>
+                <p className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+                  Be specific about metrics. Mention your MRR, user count, or pilot results. Quantified traction outperforms general narratives in competitive applications.
+                </p>
+              </div>
+            </motion.div>
+          )}
+          {step === 2 && (
+            <motion.div key="app-s2" initial={{ opacity: 0, x: 8 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -8 }} className="flex flex-col gap-3">
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                {[
+                  { label: "Opportunity",       value: opp.name },
+                  { label: "Organization",      value: form.orgName || "(empty)" },
+                  { label: "Contact email",     value: form.contactEmail || "(empty)" },
+                  { label: "Amount requesting", value: form.amountRequesting ? `$${Number(form.amountRequesting).toLocaleString()}` : "(empty)" },
+                ].map((row, i) => (
+                  <div key={i} className="flex items-center justify-between py-1.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                    <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{row.label}</span>
+                    <span className="text-[11px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-body)" }}>{row.value}</span>
+                  </div>
+                ))}
+              </div>
+
+              {/* Narrative preview */}
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROJECT DESCRIPTION</span>
+                <p className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed line-clamp-4" style={{ fontFamily: "var(--font-body)" }}>
+                  {form.projectDescription || "(empty)"}
+                </p>
+              </div>
+              <div className="rounded-xl p-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                <span className="text-[10px] text-[var(--ce-text-quaternary)] block mb-2" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>IMPACT STATEMENT</span>
+                <p className="text-[11px] text-[var(--ce-text-tertiary)] leading-relaxed line-clamp-4" style={{ fontFamily: "var(--font-body)" }}>
+                  {form.impactStatement || "(empty)"}
+                </p>
+              </div>
+
+              <p className="text-[11px] text-[var(--ce-text-secondary)] leading-relaxed mt-1" style={{ fontFamily: "var(--font-body)" }}>
+                Once submitted, you can track your application status on this surface. Sophia will notify you of any updates.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+
+      {/* Footer */}
+      <div className="flex gap-2 px-5 py-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        {step > 0 && (
+          <button onClick={() => setStep(step - 1)} className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
+            Back
+          </button>
+        )}
+        <button
+          onClick={step < 2 ? () => setStep(step + 1) : handleSubmit}
+          disabled={(step === 0 && !canAdvanceStep0) || (step === 1 && !canAdvanceStep1) || submitting}
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-70 disabled:cursor-not-allowed"
+          style={{
+            background: `${PRENEUR_GOLD}12`,
+            border: `1px solid ${PRENEUR_GOLD}25`,
+            color: PRENEUR_GOLD,
+            fontFamily: "var(--font-display)",
+            fontWeight: 500,
+          }}
+        >
+          {submitting
+            ? <><Loader2 className="w-3.5 h-3.5 animate-spin" /> Submitting...</>
+            : step < 2
+              ? <><ArrowRight className="w-3.5 h-3.5" /> Continue</>
+              : <><Send className="w-3.5 h-3.5" /> Submit application</>}
         </button>
       </div>
     </motion.div>
@@ -372,11 +631,22 @@ function OppCard({ opp, onSelect, onStar }: { opp: FundingOpp; onSelect: (o: Fun
                 {statusCfg.label}
               </span>
             )}
-            {opp.daysUntil !== undefined && opp.daysUntil <= 14 && (
-              <span className="text-[9px] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-status-error-rgb),0.08)", color: "var(--ce-status-error)", border: "1px solid rgba(var(--ce-status-error-rgb),0.15)", fontFamily: "var(--font-body)" }}>
-                {opp.daysUntil}d left
-              </span>
-            )}
+            {opp.daysUntil !== undefined && opp.daysUntil <= 30 && (() => {
+              const urgent = opp.daysUntil! < 3;
+              const warn = !urgent && opp.daysUntil! < 7;
+              const badgeColor = urgent ? "var(--ce-status-error)" : warn ? "var(--ce-status-warning)" : "var(--ce-text-secondary)";
+              const badgeBgRgb = urgent ? "var(--ce-status-error-rgb)" : warn ? "var(--ce-status-warning-rgb)" : "var(--ce-glass-tint)";
+              return (
+                <span className="text-[9px] px-1.5 py-0.5 rounded-full tabular-nums" style={{
+                  background: `rgba(${badgeBgRgb},${urgent ? 0.12 : warn ? 0.1 : 0.04})`,
+                  color: badgeColor,
+                  border: `1px solid rgba(${badgeBgRgb},${urgent ? 0.25 : warn ? 0.2 : 0.08})`,
+                  fontFamily: "var(--font-body)",
+                }}>
+                  {opp.daysUntil}d left
+                </span>
+              );
+            })()}
           </div>
           <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{opp.name}</span>
         </div>
@@ -427,9 +697,20 @@ export function FundingSurface() {
 
   const [opps, setOpps] = useState<FundingOpp[]>(OPPORTUNITIES);
   const [selectedOpp, setSelectedOpp] = useState<FundingOpp | null>(null);
+  const [applyingOpp, setApplyingOpp] = useState<FundingOpp | null>(null);
   const [typeFilter, setTypeFilter] = useState<FundingType | "all">("all");
   const [stageFilter, setStageFilter] = useState<VentureStage | "all">("all");
   const [search, setSearch] = useState("");
+
+  // Keep selectedOpp in sync with mutable opps state
+  useEffect(() => {
+    if (selectedOpp) {
+      const fresh = opps.find((o) => o.id === selectedOpp.id);
+      if (fresh && (fresh.appStatus !== selectedOpp.appStatus || fresh.starred !== selectedOpp.starred)) {
+        setSelectedOpp(fresh);
+      }
+    }
+  }, [opps, selectedOpp]);
 
   const handleNavigate = (target: string) => {
     const paths: Record<string, string> = {
@@ -447,6 +728,18 @@ export function FundingSurface() {
       return { ...o, starred: nowStarred };
     }));
     setSelectedOpp((prev) => prev?.id === id ? { ...prev, starred: !prev.starred } : prev);
+  };
+
+  const handleApply = (opp: FundingOpp) => {
+    // Set status to in_progress when opening application
+    setOpps((prev) => prev.map((o) => o.id === opp.id && o.appStatus === "not_started" ? { ...o, appStatus: "in_progress" as AppStatus } : o));
+    setSelectedOpp(null);
+    setApplyingOpp(opp);
+  };
+
+  const handleSubmitted = (oppId: string) => {
+    setOpps((prev) => prev.map((o) => o.id === oppId ? { ...o, appStatus: "submitted" as AppStatus } : o));
+    setSelectedOpp((prev) => prev?.id === oppId ? { ...prev, appStatus: "submitted" as AppStatus } : prev);
   };
 
   const filtered = opps.filter((o) => {
@@ -626,7 +919,19 @@ export function FundingSurface() {
             <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setSelectedOpp(null)} />
-            <OpportunityDrawer opp={selectedOpp} onClose={() => setSelectedOpp(null)} onStar={handleStar} />
+            <OpportunityDrawer opp={selectedOpp} onClose={() => setSelectedOpp(null)} onStar={handleStar} onApply={handleApply} />
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Application panel */}
+      <AnimatePresence>
+        {applyingOpp && (
+          <>
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setApplyingOpp(null)} />
+            <ApplicationPanel opp={applyingOpp} onClose={() => setApplyingOpp(null)} onSubmitted={handleSubmitted} />
           </>
         )}
       </AnimatePresence>
