@@ -700,7 +700,7 @@ export function ProgramsSurface() {
             <SophiaInsight
               message="Your Q1 2025 program had a 79% placement rate — 7 points above the national average. Sophia has drafted the outcomes narrative for your WIOA renewal."
               actionLabel="Review draft"
-              onAction={() => {}}
+              onAction={() => openSophia("Help me complete the WIOA grant application — draft the 24-month outcomes narrative using our Q1 placement data")}
               actionPrompt="Help me complete the WIOA grant application — draft the 24-month outcomes narrative using our Q1 placement data"
               delay={0.4}
             />

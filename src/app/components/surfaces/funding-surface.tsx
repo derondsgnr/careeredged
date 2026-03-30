@@ -551,7 +551,7 @@ export function FundingSurface() {
             <SophiaInsight
               message="Apply to YC, Backstage Capital, and Google for Startups in parallel. Non-dilutive (Google) + equity (YC) + underrepresented (Backstage) is the optimal stack for your stage."
               actionLabel="Build my plan"
-              onAction={() => {}}
+              onAction={() => openSophia("Build me a prioritized funding strategy — which opportunities should I apply to in what order, and what's the optimal stack for my current venture stage?")}
               actionPrompt="Build me a prioritized funding strategy — which opportunities should I apply to in what order, and what's the optimal stack for my current venture stage?"
               delay={0.4}
             />

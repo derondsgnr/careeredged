@@ -921,7 +921,7 @@ export function EventsSurface() {
             <SophiaInsight
               message="The Spring Career Fair has the strongest registration pace in 3 years. Send a day-before reminder to recover an estimated 18 additional attendees."
               actionLabel="Draft reminder"
-              onAction={() => {}}
+              onAction={() => openSophia("Draft a reminder message for students registered for the Spring Career Fair — it's in 17 days and I want to improve show rate")}
               actionPrompt="Draft a reminder message for students registered for the Spring Career Fair — it's in 17 days and I want to improve show rate"
               delay={0.4}
             />
