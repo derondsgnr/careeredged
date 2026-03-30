@@ -1,6 +1,6 @@
 # Surface Inventory — Single Source of Truth
 
-> **Last updated:** 2026-03-26
+> **Last updated:** 2026-03-29
 > **Purpose:** Complete inventory of every surface, feature, and sub-feature in CareerEdge. This is the ONE document to check before building anything.
 > **Rule:** If it's not in this doc, it doesn't exist in our scope. If it IS in this doc and marked NOT BUILT, it needs building.
 
@@ -27,17 +27,17 @@ These are the nav items visible in the production app's sidebar. Each must have 
 | **Dashboard** | `shell-synthesis.tsx` + `dashboards/*-dashboard.tsx` (8 roles) | **BUILT** | — |
 | **EdgePathway** | `edgepath-option-a.tsx`, `edgepath-option-b.tsx`, `edgepath-option-c.tsx` | **PARTIAL** | Missing 8 of 12 sub-tabs (see Section 3) |
 | **EdgeCareer** | `career-discovery.tsx` | **BUILT** | 30+ careers, 11 industries, archetype assessment |
-| **Edge Productivity** | — | **NOT BUILT** | 7 tools: Sprint, Focus, Streak, Goals, Matrix, Intent, Retro |
-| **EdgeWorkplace** | — | **NOT BUILT** | Not in our PRD. Needs scoping from production app. |
-| **EdgeResources** | — | **NOT BUILT** | Learning/resource library. Not in our PRD. Needs scoping. |
+| **Edge Productivity** | `edge-prod.tsx` | **BUILT** | "Your Day" unified surface: tasks, focus timer, goals panel, retro panel, streak, intent, matrix view |
+| **EdgeWorkplace** | `surfaces/workplace-surface.tsx` | **BUILT** | Templates (12), documents (CRUD), workspaces (create/rename/delete), doc editor drawer. EdgeStar only. |
+| **EdgeResources** | `surfaces/resources-surface.tsx` | **BUILT** | 4 tabs: For You, Browse, Saved, Paths. 18 resources, 4 learning paths. All 8 roles. |
 | **ImmigrationEdge** | `surfaces/immigration-surface.tsx` | **BUILT** | Questionnaire → roadmap |
-| **ScheduleEdge** | — | **NOT BUILT** | Calendar/scheduling surface. Not in our PRD. Needs scoping. |
+| **ScheduleEdge** | `surfaces/schedule-surface.tsx` | **BUILT** | 3 views: Timeline, Week, Availability. Event create/detail panels. 5 roles. |
 
 ### Marketplace Section (collapsed in sidebar)
 
 | Nav Item | Our Component | Status | Gap |
 |----------|--------------|--------|-----|
-| **Coach/Mentor Browse** | `sessions.tsx` (Picks + Browse views) | **PARTIAL** | Browse exists within Sessions, not as standalone Marketplace surface |
+| **Coach/Mentor Browse** | `surfaces/coaches-surface.tsx` + `sessions.tsx` | **BUILT** | Standalone discovery marketplace (8 coaches, profiles, reviews, compare, message) + Sessions for booking |
 | **Program Directory** | `surfaces/programs-surface.tsx` | **PARTIAL** | List exists, enrollment flow not built |
 | **Grant Directory** | `surfaces/funding-surface.tsx` | **PARTIAL** | Browse exists, application flow not built |
 
@@ -45,9 +45,8 @@ These are the nav items visible in the production app's sidebar. Each must have 
 
 | Nav Item | Our Component | Status | Gap |
 |----------|--------------|--------|-----|
-| **Community Feed** | — | **NOT BUILT** | Social/community features. Not in our PRD. |
+| **CommunityEdge** | `surfaces/community-surface.tsx` | **BUILT** | 3 tabs: Feed (compose, comments, share), Groups (join/discover), Events (RSVP). 7 roles (not Parent). |
 | **Events** | `surfaces/events-surface.tsx` | **PARTIAL** | QR check-in UI, attendance not persisted |
-| **Groups/Forums** | — | **NOT BUILT** | Not scoped |
 
 ### Always-Present Nav
 
@@ -77,12 +76,15 @@ These are the nav items visible in the production app's sidebar. Each must have 
 | 12 | **ImmigrationEdge** | `surfaces/immigration-surface.tsx` | **BUILT** | Questionnaire → roadmap |
 | 13 | **Career Discovery** | `career-discovery.tsx` | **BUILT** | 30+ careers, archetype assessment |
 | 14 | **Guide Profile** | `guide-profile-edit.tsx`, `guide-profile-modal.tsx` | **BUILT** | Portfolio, rates, availability |
-| 15 | **Edge Productivity** | — | **NOT BUILT** | 7 tools (see Section 4) |
-| 16 | **EdgeWorkplace** | — | **NOT BUILT** | Needs scoping from production |
-| 17 | **EdgeResources** | — | **NOT BUILT** | Needs scoping from production |
-| 18 | **ScheduleEdge** | — | **NOT BUILT** | Needs scoping from production |
-| 19 | **CommunityEdge** | — | **NOT BUILT** | Needs scoping from production |
-| 20 | **Marketplace** | — (partial in `sessions.tsx`) | **NOT BUILT** | Needs dedicated surface |
+| 15 | **Edge Productivity** | `edge-prod.tsx` | **BUILT** | "Your Day" — tasks, focus timer, goals, retro, streak, intent, matrix |
+| 16 | **EdgeWorkplace** | `surfaces/workplace-surface.tsx` | **BUILT** | Templates, documents, workspaces. EdgeStar only. |
+| 17 | **EdgeResources** | `surfaces/resources-surface.tsx` | **BUILT** | For You, Browse, Saved, Paths. All 8 roles. |
+| 18 | **ScheduleEdge** | `surfaces/schedule-surface.tsx` | **BUILT** | Timeline, Week, Availability. 5 roles. |
+| 19 | **CommunityEdge** | `surfaces/community-surface.tsx` | **BUILT** | Feed, Groups, Events. 7 roles. |
+| 20 | **EdgeMarket** | `surfaces/edgemarket-surface.tsx` | **BUILT** | Opportunity marketplace: internships, jobs, scholarships, events, partnerships. |
+| 21 | **Courses** | `surfaces/courses-surface.tsx` | **BUILT** | Recommended, Browse, My Courses. Detail drawer + certificates. |
+| 22 | **Budget** | `surfaces/budget-surface.tsx` | **BUILT** | KPI row, spend chart, category breakdown, transaction history + add modal. |
+| 23 | **EdgeCoach & Mentor** | `surfaces/coaches-surface.tsx` | **BUILT** | Coach discovery: 8 coaches, profile drawer, reviews, compare, message. |
 
 ---
 
@@ -218,14 +220,14 @@ From PRD + production app. All 7 tools need building.
 
 | Role | Dashboard | Nav Pills | Surfaces | Sophia Scenarios | Overall |
 |------|-----------|-----------|----------|------------------|---------|
-| **EdgeStar** | BUILT | BUILT | 12/15 | 48 | 80% |
-| **EdgePreneur** | BUILT | BUILT | 4/6 | Partial | 65% |
-| **EdgeParent** | BUILT | BUILT | 3/4 | Partial | 75% |
-| **EdgeGuide** | BUILT | BUILT | 6/7 | Partial | 70% |
-| **EdgeEmployer** | BUILT | BUILT | 5/6 | Partial | 65% |
-| **EdgeEducation** | BUILT | BUILT | 7/8 | Partial | 65% |
-| **EdgeNGO** | BUILT | BUILT | 5/6 | Partial | 60% |
-| **EdgeAgency** | BUILT | BUILT | 4/5 | Partial | 55% |
+| **EdgeStar** | BUILT | BUILT | 21/23 | 48 | 92% |
+| **EdgePreneur** | BUILT | BUILT | 12/14 | Partial | 85% |
+| **EdgeParent** | BUILT | BUILT | 7/8 | Partial | 88% |
+| **EdgeGuide** | BUILT | BUILT | 10/11 | Partial | 90% |
+| **EdgeEmployer** | BUILT | BUILT | 8/9 | Partial | 85% |
+| **EdgeEducation** | BUILT | BUILT | 11/12 | Partial | 88% |
+| **EdgeNGO** | BUILT | BUILT | 9/10 | Partial | 85% |
+| **EdgeAgency** | BUILT | BUILT | 7/8 | Partial | 80% |
 
 ---
 
@@ -237,28 +239,31 @@ Priority: CRITICAL > HIGH > MEDIUM > LOW
 
 | # | Surface/Feature | Effort Est. | Depends On |
 |---|----------------|-------------|------------|
-| 1 | **Edge Productivity** (7 tools) | Large | Standalone surface |
-| 2 | **EdgePath sub-tabs** (Timeline, Quick Wins, Skills, Activity, Budget, Support, Insights) | Large | EdgePath architecture |
-| 3 | **EdgePath header actions** (Live toggle, Share, Export, Regenerate, fit tags, career card) | Medium | EdgePath |
+| 1 | ~~Edge Productivity~~ | ~~Large~~ | **DONE** — `edge-prod.tsx` |
+| 2 | **EdgePath sub-tabs** (Timeline/Gantt view) | Medium | EdgePath architecture |
+| 3 | **EdgePath header actions** (career narrative card polish) | Small | EdgePath |
 
 ### HIGH (production app has them)
 
 | # | Surface/Feature | Effort Est. | Depends On |
 |---|----------------|-------------|------------|
-| 4 | **EdgeWorkplace** | Unknown | Needs scoping from production |
-| 5 | **EdgeResources** | Unknown | Needs scoping from production |
-| 6 | **ScheduleEdge** | Medium | Calendar patterns |
-| 7 | **Marketplace** (dedicated surface) | Medium | Sessions browse exists |
-| 8 | **CommunityEdge** | Unknown | Needs scoping from production |
+| 4 | ~~EdgeWorkplace~~ | ~~Unknown~~ | **DONE** — `surfaces/workplace-surface.tsx` |
+| 5 | ~~EdgeResources~~ | ~~Unknown~~ | **DONE** — `surfaces/resources-surface.tsx` |
+| 6 | ~~ScheduleEdge~~ | ~~Medium~~ | **DONE** — `surfaces/schedule-surface.tsx` |
+| 7 | ~~Marketplace~~ | ~~Medium~~ | **DONE** — `surfaces/edgemarket-surface.tsx` |
+| 8 | ~~CommunityEdge~~ | ~~Unknown~~ | **DONE** — `surfaces/community-surface.tsx` |
+| 9 | ~~EdgeCoach & Mentor~~ | ~~Medium~~ | **DONE** — `surfaces/coaches-surface.tsx` |
+| 10 | ~~Courses~~ | ~~Medium~~ | **DONE** — `surfaces/courses-surface.tsx` |
+| 11 | ~~Budget~~ | ~~Medium~~ | **DONE** — `surfaces/budget-surface.tsx` |
 
 ### MEDIUM (polish & integration)
 
 | # | Surface/Feature | Effort Est. |
 |---|----------------|-------------|
-| 9 | **Notifications system** | Medium |
-| 10 | **Settings/Preferences** | Small |
-| 11 | **EdgeGas earn/spend logic** | Medium |
-| 12 | **Layer 3 surface workflows** (enrollment, application, state machines) | Medium |
+| 12 | **Notifications system** | Medium |
+| 13 | **Settings/Preferences** | Small |
+| 14 | **EdgeGas earn/spend logic** | Medium |
+| 15 | **Layer 3 surface workflows** (enrollment, application, state machines) | Medium |
 
 ---
 
@@ -267,3 +272,4 @@ Priority: CRITICAL > HIGH > MEDIUM > LOW
 | Date | Change | Author |
 |------|--------|--------|
 | 2026-03-26 | Created from production app screenshot audit + codebase validation | Claude |
+| 2026-03-29 | Marked BUILT: EdgeProd, EdgeWorkplace, EdgeResources, ScheduleEdge, CommunityEdge, EdgeMarket, Courses, Budget, EdgeCoach & Mentor. 9 surfaces added in one session. | Claude |
