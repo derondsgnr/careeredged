@@ -164,7 +164,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
               className="text-[10px] uppercase tracking-[0.3em] mb-4"
               style={{ fontFamily: "'Satoshi', sans-serif", color: "rgba(255,255,255,0.4)" }}
             >
-              Career Intelligence / Est. 2024
+              Now in Beta / Career Intelligence
             </div>
           </Reveal>
 
@@ -174,9 +174,11 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
               className="text-[48px] sm:text-[72px] lg:text-[96px] xl:text-[120px] font-bold leading-[0.88] tracking-[-0.04em] mb-6"
               style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}
             >
-              Career
+              Go Beyond
               <br />
-              <span className="italic font-light" style={{ color: "var(--ce-cyan)" }}>Edged.</span>
+              Job Searching.
+              <br />
+              <span className="italic font-light" style={{ color: "var(--ce-lime)" }}>Build Your Career.</span>
             </h1>
           </Reveal>
 
@@ -187,19 +189,19 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                 className="text-[15px] leading-[1.7] max-w-[340px]"
                 style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}
               >
-                The intersection of AI intelligence and human ambition.
-                Your career, mapped with precision.
+                Personalized guidance, smart tools, and a roadmap that
+                grows with you. From uncertainty to clear direction — in minutes.
               </p>
               <button
                 onClick={() => onNavigate("signup")}
                 className="px-6 py-3 rounded-full text-[13px] font-medium flex items-center gap-2 cursor-pointer transition-all duration-300 hover:gap-4 w-fit"
                 style={{
                   fontFamily: "'Satoshi', sans-serif",
-                  background: "var(--ce-cyan)",
+                  background: "var(--ce-lime)",
                   color: "#08090C",
                 }}
               >
-                Discover Your Archetype
+                Sign Up Free
                 <ArrowRight size={14} />
               </button>
             </div>
@@ -217,7 +219,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                   className="text-[10px] uppercase tracking-[0.2em] lg:sticky lg:top-32"
                   style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-quaternary)" }}
                 >
-                  01 / The Problem
+                  01 / The Promise
                 </div>
               </Reveal>
             </div>
@@ -227,11 +229,12 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                   className="text-[28px] sm:text-[36px] lg:text-[44px] font-light leading-[1.25] tracking-[-0.02em] mb-8"
                   style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}
                 >
-                  Career platforms treat you like a keyword.
+                  We don't just help you find jobs.
                   <br />
                   <span style={{ color: "var(--ce-text-tertiary)" }}>
-                    We treat you like a person with a specific archetype,
-                    a unique path, and goals that actually matter.
+                    We help you build a career that grows with you.
+                    A personalized roadmap, intelligent guidance, and tools
+                    that connect to move you forward.
                   </span>
                 </h2>
               </Reveal>
@@ -267,16 +270,18 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                 <div
                   className="flex-1 min-h-[160px] rounded-xl flex items-center justify-center p-8"
                   style={{
-                    background: "var(--ce-cyan)",
+                    background: "var(--ce-lime)",
                   }}
                 >
                   <p
                     className="text-[24px] lg:text-[28px] font-semibold leading-[1.1] tracking-[-0.02em] text-center"
                     style={{ fontFamily: "'Urbanist', sans-serif", color: "#08090C" }}
                   >
-                    18 archetypes.
+                    Navigate your career
                     <br />
-                    One is yours.
+                    with clarity and
+                    <br />
+                    confidence.
                   </p>
                 </div>
               </Reveal>
@@ -319,45 +324,45 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
           <div className="flex gap-6 px-6 lg:px-16 pb-6" style={{ width: "fit-content" }}>
             <GalleryCard
               number="01"
-              title="EdgePath"
-              description="15-question archetype assessment. Maps you to careers with salary, demand, and transition data."
+              title="Career Roadmap"
+              description="A personalized plan from where you are to where you want to be. Salary data, skill gaps, and clear next steps across 800+ careers."
               accent="var(--ce-lime)"
               image="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80"
             />
             <GalleryCard
               number="02"
-              title="Sophia"
-              description="AI guide who knows your archetype, remembers your constraints, and connects everything."
-              accent="var(--ce-cyan)"
-              image="https://images.unsplash.com/photo-1531746790095-e5cb57f5a9f8?w=600&q=80"
-            />
-            <GalleryCard
-              number="03"
-              title="ResumeEdge"
-              description="AI-enhanced resume builder with bullet optimization and intelligent formatting."
+              title="Resume Builder"
+              description="Smart optimization that knows what recruiters scan for. Average 20-point ATS improvement on your first pass."
               accent="#8B5CF6"
               image="https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&q=80"
             />
             <GalleryCard
+              number="03"
+              title="Job Matching"
+              description="Roles matched by career fit — not just keywords. Smarter targeting from day one."
+              accent="#10B981"
+              image="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80"
+            />
+            <GalleryCard
               number="04"
-              title="EdgeProd"
-              description="Productivity suite. SMART goals, Pomodoro focus, OKRs, and accountability pairing."
+              title="Productivity Suite"
+              description="Sprint timers, goal tracking, and streaks to keep you moving between milestones."
               accent="#F59E0B"
               image="https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?w=600&q=80"
             />
             <GalleryCard
               number="05"
-              title="EdgeMatch"
-              description="Job matching by archetype compatibility. 23 average matches on first profile."
-              accent="#10B981"
-              image="https://images.unsplash.com/photo-1521791136064-7986c2920216?w=600&q=80"
+              title="Global Mobility"
+              description="Visa timelines, cost estimates, and relocation pathways for international careers."
+              accent="#3B82F6"
+              image="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80"
             />
             <GalleryCard
               number="06"
-              title="ImmigrationEdge"
-              description="International career pathways. Visa timelines, cost calculators, and support networks."
-              accent="#3B82F6"
-              image="https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=600&q=80"
+              title="Accountability"
+              description="Paired with someone who checks in — not checks up. Build momentum together."
+              accent="var(--ce-cyan)"
+              image="https://images.unsplash.com/photo-1531746790095-e5cb57f5a9f8?w=600&q=80"
             />
           </div>
         </div>
@@ -383,10 +388,10 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
                   className="text-[28px] sm:text-[36px] lg:text-[44px] font-light leading-[1.25] tracking-[-0.02em]"
                   style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-text-primary)" }}
                 >
-                  Not just seekers.
+                  Built for everyone who takes
                   <br />
                   <span style={{ color: "var(--ce-text-tertiary)" }}>
-                    An entire ecosystem of people who care about careers.
+                    their career seriously.
                   </span>
                 </h2>
               </Reveal>
@@ -396,12 +401,12 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
           {/* Role grid — magazine layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-12">
             {[
-              { role: "Seekers", accent: "var(--ce-cyan)", sub: "AI-guided roadmaps & archetype matching" },
-              { role: "Mentors", accent: "#8B5CF6", sub: "Build your practice, grow your reputation" },
-              { role: "Parents", accent: "#EC4899", sub: "Support with visibility, not control" },
-              { role: "Institutions", accent: "#3B82F6", sub: "Track outcomes & manage career events" },
-              { role: "NGOs", accent: "#F97316", sub: "Scale career programs with impact data" },
-              { role: "Government", accent: "#6366F1", sub: "Fund workforce development with oversight" },
+              { role: "Career Seekers", accent: "var(--ce-cyan)", sub: "Personalized roadmaps, resume tools, and career-fit matching" },
+              { role: "Entrepreneurs", accent: "var(--ce-lime)", sub: "Business planning, market validation, and growth tracking" },
+              { role: "Coaches & Mentors", accent: "#8B5CF6", sub: "Build your practice and grow your reputation" },
+              { role: "Employers", accent: "#3B82F6", sub: "Find talent matched by career fit, not just keywords" },
+              { role: "Institutions", accent: "#F97316", sub: "Track student outcomes and manage career services" },
+              { role: "NGOs", accent: "#10B981", sub: "Scale career programs with measurable impact" },
             ].map((item, i) => (
               <Reveal key={item.role} delay={i * 0.06}>
                 <div className="group cursor-default">
@@ -489,7 +494,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
             >
               Your next move,
               <br />
-              <span className="italic font-light" style={{ color: "var(--ce-cyan)" }}>mapped.</span>
+              <span className="italic font-light" style={{ color: "var(--ce-lime)" }}>mapped.</span>
             </h2>
           </Reveal>
 
@@ -499,7 +504,7 @@ export function LandingV6({ onNavigate }: LandingV6Props) {
               className="px-8 py-4 rounded-full text-[14px] font-medium flex items-center gap-3 cursor-pointer transition-all duration-300 hover:gap-5 mx-auto"
               style={{
                 fontFamily: "'Satoshi', sans-serif",
-                background: "var(--ce-cyan)",
+                background: "var(--ce-lime)",
                 color: "#08090C",
               }}
             >

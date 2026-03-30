@@ -193,7 +193,7 @@ export function LandingNav({ onNavigate, currentPage = "home" }: LandingNavProps
               e.currentTarget.style.transform = "translateY(0)";
             }}
           >
-            Get Your Edge
+            Sign Up Free
           </button>
         </div>
       </div>

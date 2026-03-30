@@ -24,6 +24,7 @@ import { LandingV9 } from "./components/landing/landing-v9";
 import { LandingV6A } from "./components/landing/landing-v6a";
 import { LandingV6B } from "./components/landing/landing-v6b";
 import { LandingV6C } from "./components/landing/landing-v6c";
+import { LandingHomepage } from "./components/landing/landing-homepage";
 import { AuthPage } from "./components/landing/auth-page";
 import { EdgeProd } from "./components/edge-prod";
 import { OnboardingH1 } from "./components/onboarding-h1";
@@ -79,24 +80,40 @@ const ALL_ROLES: RoleId[] = ["edgestar", "edgepreneur", "parent", "guide", "empl
 
 // ─── Wrapper components (provide navigation to existing components) ─
 
-function LandingPage() {
+/** Shared website navigation handler — maps page IDs to sitemap routes */
+function useWebsiteNavigate() {
   const navigate = useNavigate();
-  const handleNavigate = useCallback((page: string) => {
-    if (page === "home") navigate("/");
-    else if (page === "login") navigate("/login");
-    else if (page === "signup") navigate("/signup");
-    else if (page === "careers") navigate("/careers");
+  return useCallback((page: string) => {
+    const routes: Record<string, string> = {
+      home: "/",
+      login: "/login",
+      signup: "/signup",
+      about: "/about",
+      careers: "/careers",
+      jobs: "/jobs",
+      edgepath: "/edgepath",
+      pricing: "/pricing",
+      "solutions-individuals": "/solutions/individuals",
+      "solutions-employers": "/solutions/employers",
+      "solutions-institutions": "/solutions/institutions",
+      "solutions-government": "/solutions/government",
+      "solutions-ngos": "/solutions/ngos",
+    };
+    const route = routes[page];
+    if (route) navigate(route);
+    else console.warn(`[nav] No route for page: "${page}"`);
   }, [navigate]);
-  return <LandingV1 onNavigate={handleNavigate} />;
+}
+
+function LandingPage() {
+  const handleNavigate = useWebsiteNavigate();
+  return <LandingHomepage onNavigate={handleNavigate} />;
 }
 
 function LoginPage() {
   const navigate = useNavigate();
-  return <AuthPage mode="login" onNavigate={(p: string) => {
-    if (p === "home") navigate("/");
-    else if (p === "login") navigate("/login");
-    else if (p === "signup") navigate("/signup");
-  }} onAuth={(action: "login" | "signup") => {
+  const handleNavigate = useWebsiteNavigate();
+  return <AuthPage mode="login" onNavigate={handleNavigate} onAuth={(action: "login" | "signup") => {
     if (action === "login") navigate("/edgestar");
     else navigate("/onboarding");
   }} />;
@@ -104,14 +121,17 @@ function LoginPage() {
 
 function SignupPage() {
   const navigate = useNavigate();
-  return <AuthPage mode="signup" onNavigate={(p: string) => {
-    if (p === "home") navigate("/");
-    else if (p === "login") navigate("/login");
-    else if (p === "signup") navigate("/signup");
-  }} onAuth={(action: "login" | "signup") => {
+  const handleNavigate = useWebsiteNavigate();
+  return <AuthPage mode="signup" onNavigate={handleNavigate} onAuth={(action: "login" | "signup") => {
     if (action === "login") navigate("/edgestar");
     else navigate("/onboarding");
   }} />;
+}
+
+/** Stub for website pages not yet built */
+function WebsiteStubPage() {
+  const handleNavigate = useWebsiteNavigate();
+  return <LandingHomepage onNavigate={handleNavigate} />;
 }
 
 function OnboardingPage() {
@@ -482,6 +502,17 @@ export const router = createBrowserRouter([
       { path: "login",      Component: LoginPage },
       { path: "signup",     Component: SignupPage },
       { path: "onboarding", Component: OnboardingPage },
+
+      // Website pages (sitemap) — stubs until built
+      { path: "about",                    Component: WebsiteStubPage },
+      { path: "jobs",                     Component: WebsiteStubPage },
+      { path: "edgepath",                 Component: WebsiteStubPage },
+      { path: "pricing",                  Component: WebsiteStubPage },
+      { path: "solutions/individuals",    Component: WebsiteStubPage },
+      { path: "solutions/employers",      Component: WebsiteStubPage },
+      { path: "solutions/institutions",   Component: WebsiteStubPage },
+      { path: "solutions/government",     Component: WebsiteStubPage },
+      { path: "solutions/ngos",           Component: WebsiteStubPage },
 
       // Role-based surfaces: /:role/*
       { path: ":role",                          Component: DashboardPage },
