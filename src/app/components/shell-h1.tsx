@@ -49,11 +49,11 @@ function SidebarRail({ active, onNav }: { active: string; onNav: (id: string) =>
       {/* Logo mark */}
       <motion.div
         className="w-8 h-8 rounded-lg flex items-center justify-center mb-6 cursor-pointer"
-        style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}
+        style={{ background: "rgba(var(--ce-cyan-rgb),0.08)" }}
         whileHover={{ scale: 1.05 }}
         whileTap={{ scale: 0.95 }}
       >
-        <Sparkles className="w-4 h-4 text-ce-lime" />
+        <Sparkles className="w-4 h-4 text-ce-cyan" />
       </motion.div>
 
       {/* Nav items */}
@@ -76,12 +76,12 @@ function SidebarRail({ active, onNav }: { active: string; onNav: (id: string) =>
               >
                 <Icon
                   className="w-[18px] h-[18px]"
-                  style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}
+                  style={{ color: isActive ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }}
                 />
                 {/* Active indicator — left bar */}
                 {isActive && (
                   <motion.div
-                    className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r-full bg-[var(--ce-lime)]"
+                    className="absolute left-0 top-2 bottom-2 w-[2px] rounded-r-full bg-[var(--ce-cyan)]"
                     layoutId="sidebar-active"
                     transition={{ type: "spring", stiffness: 400, damping: 30 }}
                   />
@@ -195,13 +195,13 @@ function HeaderBar({ onCommandOpen }: { onCommandOpen: () => void }) {
         </button>
 
         {/* Avatar */}
-        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-lime-rgb),0.1))", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-cyan-rgb),0.1))", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
           <span className="text-[11px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
         </div>
 
         {/* Role badge */}
-        <div className="px-2 py-1 rounded-md" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}>
-          <span className="text-[10px] text-ce-lime tracking-wider" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EDGESTAR</span>
+        <div className="px-2 py-1 rounded-md" style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}>
+          <span className="text-[10px] text-ce-cyan tracking-wider" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>EDGESTAR</span>
         </div>
       </div>
     </motion.header>
@@ -353,7 +353,7 @@ function SophiaInsightCard() {
     <motion.div
       className="rounded-xl p-5"
       style={{
-        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-lime-rgb),0.02))",
+        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-cyan-rgb),0.02))",
         border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
       }}
       initial={{ opacity: 0, y: 12 }}

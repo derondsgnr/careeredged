@@ -219,13 +219,13 @@ function DashboardSidebar({ visible, fillLevel }: { visible: boolean; fillLevel:
       animate={{ x: 0, opacity: 1 }}
       transition={{ type: "spring", ...SPRING }}>
       <motion.div className="w-7 h-7 rounded-lg mb-4 flex items-center justify-center"
-        animate={{ backgroundColor: fillLevel >= 1 ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)" }}
+        animate={{ backgroundColor: fillLevel >= 1 ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)" }}
         transition={{ duration: 0.6 }}>
-        {fillLevel >= 1 && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}><Sparkles className="w-3.5 h-3.5 text-ce-lime" /></motion.div>}
+        {fillLevel >= 1 && <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ type: "spring", stiffness: 300, damping: 20 }}><Sparkles className="w-3.5 h-3.5 text-ce-cyan" /></motion.div>}
       </motion.div>
       {items.map((item, i) => (
         <motion.div key={i}
-          className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${item.active && fillLevel >= 1 ? "bg-[rgba(var(--ce-glass-tint),0.06)] text-ce-lime" : "text-[var(--ce-text-quaternary)]"}`}
+          className={`w-9 h-9 rounded-lg flex items-center justify-center transition-colors ${item.active && fillLevel >= 1 ? "bg-[rgba(var(--ce-glass-tint),0.06)] text-ce-cyan" : "text-[var(--ce-text-quaternary)]"}`}
           initial={{ opacity: 0 }}
           animate={{ opacity: fillLevel >= 1 ? (item.active ? 1 : 0.4) : 0.15 }}
           transition={{ delay: 0.08 + i * 0.06, duration: 0.5 }}
@@ -502,7 +502,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
         initial={{ y: 50, opacity: 0, scale: 0.96 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", ...SPRING, delay: 0.2 }}>
-        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.2), rgba(var(--ce-lime-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))" }}>
+        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.2), rgba(var(--ce-cyan-rgb),0.1), rgba(var(--ce-role-edgestar-rgb),0.06))" }}>
           <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.08) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(var(--ce-shadow-tint),0.6), inset 0 1px 1px rgba(var(--ce-glass-tint),0.05)" }}>
             <div className="flex items-center gap-3">
               <SophiaMark size={28} glowing />
@@ -517,7 +517,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
             </button>
             <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /><span className="text-[11px] text-ce-text-tertiary">or</span><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /></div>
             <input type="email" placeholder="Where should I send this?" className="w-full px-3.5 py-2.5 rounded-xl bg-[rgba(var(--ce-glass-tint),0.03)] border border-[rgba(var(--ce-glass-tint),0.05)] text-ce-text-primary placeholder:text-ce-text-tertiary focus:outline-none focus:border-[rgba(var(--ce-role-edgestar-rgb),0.2)] text-[13px]" style={{ fontFamily: "var(--font-body)" }} />
-            <button onClick={onComplete} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
+            <button onClick={onComplete} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
               <Sparkles className="w-3.5 h-3.5" /> Save workspace
             </button>
             <p className="text-[11px] text-ce-text-tertiary text-center">Free. No catch.</p>
@@ -534,7 +534,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
 function PowerOnFlash() {
   return (
     <motion.div className="fixed inset-0 z-30 pointer-events-none"
-      style={{ background: "rgba(var(--ce-lime-rgb),0.03)" }}
+      style={{ background: "rgba(var(--ce-cyan-rgb),0.03)" }}
       initial={{ opacity: 0 }}
       animate={{ opacity: [0, 1, 0] }}
       transition={{ duration: 0.6, times: [0, 0.15, 1] }} />
@@ -823,7 +823,7 @@ export function OnboardingH2({ onComplete }: { onComplete?: (role?: string) => v
                   </div>
                   <motion.button onClick={() => setShowSignup(true)}
                     className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer"
-                    style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12)" }}
+                    style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12)" }}
                     initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, ease: EASE }}
                     whileTap={{ scale: 0.97 }}>
                     <Sparkles className="w-4 h-4" /> Enter workspace <ArrowRight className="w-4 h-4" />

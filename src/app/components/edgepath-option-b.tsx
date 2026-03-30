@@ -293,7 +293,7 @@ function SophiaInlineCard({ children, icon, delay = 0.5 }: { children: React.Rea
     <motion.div
       className="relative rounded-xl px-5 py-4 my-1"
       style={{
-        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.015) 60%, rgba(var(--ce-lime-rgb),0.02))",
+        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.015) 60%, rgba(var(--ce-cyan-rgb),0.02))",
         border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)",
       }}
       initial={{ opacity: 0, y: 8 }}
@@ -301,7 +301,7 @@ function SophiaInlineCard({ children, icon, delay = 0.5 }: { children: React.Rea
       transition={{ delay, duration: 0.4, ease: EASE }}
     >
       {/* Sophia accent line on left */}
-      <div className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full" style={{ background: "linear-gradient(180deg, var(--ce-role-edgestar), rgba(var(--ce-lime-rgb),0.3))" }} />
+      <div className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full" style={{ background: "linear-gradient(180deg, var(--ce-role-edgestar), rgba(var(--ce-cyan-rgb),0.3))" }} />
 
       <div className="flex items-start gap-3">
         <div className="flex-shrink-0 mt-0.5">

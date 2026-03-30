@@ -246,7 +246,7 @@ export function BuddyPairModal({ roleColor, roleRgb, onSuccess, onClose }: Buddy
                   onClick={handleStartScan}
                   className="w-full py-3 rounded-xl text-[13px] font-medium cursor-pointer transition-all duration-200 flex items-center justify-center gap-2"
                   style={{
-                    background: `linear-gradient(135deg, ${roleColor}, var(--ce-lime))`,
+                    background: `linear-gradient(135deg, ${roleColor}, var(--ce-cyan))`,
                     color: "var(--ce-void)",
                     fontFamily: "var(--font-display)",
                   }}
@@ -283,7 +283,7 @@ export function BuddyPairModal({ roleColor, roleRgb, onSuccess, onClose }: Buddy
                   onClick={handleConfirm}
                   className="w-full mt-4 py-3 rounded-xl text-[13px] font-medium cursor-pointer flex items-center justify-center gap-2"
                   style={{
-                    background: `linear-gradient(135deg, ${roleColor}, var(--ce-lime))`,
+                    background: `linear-gradient(135deg, ${roleColor}, var(--ce-cyan))`,
                     color: "var(--ce-void)",
                     fontFamily: "var(--font-display)",
                   }}

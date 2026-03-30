@@ -980,7 +980,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                       <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.resumeSummary}</p>
                     </div>
                     {/* Sophia take */}
-                    <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                    <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-cyan-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
                       <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S ASSESSMENT</span></div>
                       <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{selApplicant.sophiaTake}</p>
                     </div>
@@ -1054,7 +1054,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
               </div>
             </div>
             {/* Sophia optimization suggestion */}
-            <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+            <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-cyan-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
               <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S SUGGESTION</span></div>
               <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>Adding "remote-friendly" and specific tool requirements (e.g., "Figma, design systems") to your description could increase qualified applications by ~20%.</p>
             </div>
@@ -1145,7 +1145,7 @@ function EmployerPostingMode({ onNavigate, roleId }: { onNavigate: NavigateFn; r
                       return (<div key={stage} className="flex items-center gap-3 mb-2"><span className="text-[11px] text-ce-text-tertiary w-20" style={{ fontFamily: "var(--font-body)" }}>{labels[i]}</span><div className="flex-1 h-2 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}><motion.div className="h-full rounded-full" style={{ background: colors[i] }} initial={{ width: 0 }} animate={{ width: `${maxCount > 0 ? (count / maxCount) * 100 : 0}%` }} transition={{ delay: 0.3 + i * 0.1, duration: 0.5, ease: EASE }} /></div><span className="text-[12px] text-ce-text-primary tabular-nums w-6 text-right" style={{ fontFamily: "var(--font-body)" }}>{count}</span></div>);
                     })}
                   </div>
-                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-lime-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                  <div className="rounded-xl p-3.5" style={{ background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.03), rgba(var(--ce-cyan-rgb),0.015))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
                     <div className="flex items-center gap-1.5 mb-1.5"><SophiaMark size={14} glowing={false} /><span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>SOPHIA'S INSIGHT</span></div>
                     <p className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
                       {selected.newApplicants > 5 ? `Strong candidate flow — ${selected.newApplicants} new this week. Your ${selected.topMatch}% top match indicates well-targeted requirements.` : `View-to-apply rate of ${Math.round(selected.applicants / selected.views * 100)}% — I can suggest description optimizations to attract more qualified candidates.`}

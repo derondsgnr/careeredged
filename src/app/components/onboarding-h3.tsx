@@ -427,7 +427,7 @@ function UserBubble({ text, icon }: { text: string; icon?: React.ReactNode }) {
       transition={{ duration: 0.3, ease: EASE_CONTENT }}>
       <div className="inline-flex items-center gap-2 px-4 py-2.5 rounded-2xl rounded-tr-md"
         style={{
-          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-lime-rgb),0.06))",
+          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-cyan-rgb),0.06))",
           border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
         }}>
         {icon && <span className="text-ce-cyan">{icon}</span>}
@@ -643,7 +643,7 @@ function ConstellationView({ phases }: { phases: Phase[] }) {
         })}
         <defs>
           <linearGradient id="constellation-grad" x1="0%" y1="0%" x2="100%" y2="100%">
-            <stop offset="0%" stopColor="var(--ce-role-edgestar)" /><stop offset="100%" stopColor="var(--ce-lime)" />
+            <stop offset="0%" stopColor="var(--ce-role-edgestar)" /><stop offset="100%" stopColor="var(--ce-cyan)" />
           </linearGradient>
         </defs>
         {phases.map((p, i) => {
@@ -699,7 +699,7 @@ function TerrainView({ phases }: { phases: Phase[] }) {
           initial={{ opacity: 0 }} animate={{ opacity: 0.3 }} transition={{ delay: 1.5, duration: 0.8 }} />
         <defs>
           <linearGradient id="terrain-grad" x1="0%" y1="0%" x2="100%" y2="0%">
-            <stop offset="0%" stopColor="var(--ce-role-edgestar)" /><stop offset="100%" stopColor="var(--ce-lime)" />
+            <stop offset="0%" stopColor="var(--ce-role-edgestar)" /><stop offset="100%" stopColor="var(--ce-cyan)" />
           </linearGradient>
           <linearGradient id="terrain-fill" x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="rgba(var(--ce-role-edgestar-rgb),0.08)" /><stop offset="100%" stopColor="transparent" />
@@ -795,7 +795,7 @@ function RoadmapOverlay({ phases, target, onSave, onAdjust }: {
             <motion.div className="flex flex-col gap-3" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE_CONTENT }}>
               <div className="flex gap-2">
                 <motion.button onClick={onSave} className="flex items-center gap-2 px-5 py-3 rounded-xl cursor-pointer"
-                  style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12), 0 2px 8px rgba(var(--ce-shadow-tint),0.3)" }}
+                  style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12), 0 2px 8px rgba(var(--ce-shadow-tint),0.3)" }}
                   whileTap={{ scale: 0.97 }}><Sparkles className="w-3.5 h-3.5" /> Save my roadmap</motion.button>
                 <button className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer border border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors text-[13px]"
                   style={{ fontFamily: "var(--font-body)" }}>Tell me more</button>
@@ -847,7 +847,7 @@ function DashboardPreview({ pathConfig, target, level, onSave, onAdjust }: {
         <motion.div initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.4, ease: EASE_CONTENT }}>
           <h2 className="text-[18px] text-ce-text-primary mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{title}</h2>
-          <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(var(--ce-role-edgestar-rgb),0.2), rgba(var(--ce-lime-rgb),0.1), transparent)" }} />
+          <div className="h-px w-full" style={{ background: "linear-gradient(90deg, rgba(var(--ce-role-edgestar-rgb),0.2), rgba(var(--ce-cyan-rgb),0.1), transparent)" }} />
         </motion.div>
 
         {/* Cards grid */}
@@ -878,7 +878,7 @@ function DashboardPreview({ pathConfig, target, level, onSave, onAdjust }: {
             <motion.div className="flex flex-col gap-3" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE_CONTENT }}>
               <div className="flex gap-2">
                 <motion.button onClick={onSave} className="flex items-center gap-2 px-5 py-3 rounded-xl cursor-pointer"
-                  style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12), 0 2px 8px rgba(var(--ce-shadow-tint),0.3)" }}
+                  style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 24px rgba(var(--ce-role-edgestar-rgb),0.12), 0 2px 8px rgba(var(--ce-shadow-tint),0.3)" }}
                   whileTap={{ scale: 0.97 }}><Sparkles className="w-3.5 h-3.5" /> Get started</motion.button>
                 <button className="flex items-center gap-2 px-4 py-3 rounded-xl cursor-pointer border border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors text-[13px]"
                   style={{ fontFamily: "var(--font-body)" }}>Tell me more</button>
@@ -908,7 +908,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
         initial={{ y: 60, opacity: 0, scale: 0.96 }}
         animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 160, damping: 22, delay: 0.2 }}>
-        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.25), rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))" }}>
+        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.25), rgba(var(--ce-cyan-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))" }}>
           <div className="rounded-2xl p-6 flex flex-col gap-5"
             style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.1) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(var(--ce-shadow-tint),0.6), inset 0 1px 1px rgba(var(--ce-glass-tint),0.05)" }}>
             <div className="flex items-center gap-3">
@@ -924,7 +924,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
             </button>
             <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /><span className="text-[11px] text-ce-text-tertiary">or</span><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /></div>
             <input type="email" placeholder="Where should I send this?" className="w-full px-3.5 py-2.5 rounded-xl bg-[rgba(var(--ce-glass-tint),0.03)] border border-[rgba(var(--ce-glass-tint),0.05)] text-ce-text-primary placeholder:text-ce-text-tertiary focus:outline-none focus:border-[rgba(var(--ce-role-edgestar-rgb),0.2)] text-[13px]" style={{ fontFamily: "var(--font-body)" }} />
-            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
+            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]" style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
               <Sparkles className="w-3.5 h-3.5" /> Get started free
             </button>
             <p className="text-[11px] text-ce-text-tertiary text-center">Free. No catch.</p>

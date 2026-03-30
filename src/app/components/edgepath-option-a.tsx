@@ -270,8 +270,8 @@ function EmptyState({ role, onGenerate, onOpenSophia }: { role: RoleId; onGenera
               style={{
                 fontFamily: "var(--font-body)",
                 background: focused === "target" ? "rgba(var(--ce-glass-tint),0.04)" : "rgba(var(--ce-glass-tint),0.025)",
-                border: `1.5px solid ${focused === "target" ? "rgba(var(--ce-lime-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.06)"}`,
-                boxShadow: focused === "target" ? "0 0 20px rgba(var(--ce-lime-rgb),0.06)" : "none",
+                border: `1.5px solid ${focused === "target" ? "rgba(var(--ce-cyan-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                boxShadow: focused === "target" ? "0 0 20px rgba(var(--ce-cyan-rgb),0.06)" : "none",
               }}
             />
           </div>
@@ -284,11 +284,11 @@ function EmptyState({ role, onGenerate, onOpenSophia }: { role: RoleId; onGenera
             fontFamily: "var(--font-display)",
             fontWeight: 500,
             background: currentRole && targetRole
-              ? "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-lime-rgb),0.08))"
+              ? "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.12), rgba(var(--ce-cyan-rgb),0.08))"
               : "rgba(var(--ce-glass-tint),0.02)",
-            border: `1.5px solid ${currentRole && targetRole ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)"}`,
+            border: `1.5px solid ${currentRole && targetRole ? "rgba(var(--ce-cyan-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)"}`,
             color: currentRole && targetRole ? "var(--ce-text-primary)" : "var(--ce-text-quaternary)",
-            boxShadow: currentRole && targetRole ? "0 0 30px rgba(var(--ce-role-edgestar-rgb),0.08)" : "none",
+            boxShadow: currentRole && targetRole ? "0 0 30px rgba(var(--ce-cyan-rgb),0.08)" : "none",
           }}
           onClick={() => currentRole && targetRole && onGenerate(currentRole, targetRole)}
           initial={{ opacity: 0 }}
@@ -297,7 +297,7 @@ function EmptyState({ role, onGenerate, onOpenSophia }: { role: RoleId; onGenera
           whileHover={currentRole && targetRole ? { scale: 1.01 } : {}}
           whileTap={currentRole && targetRole ? { scale: 0.99 } : {}}
         >
-          <Compass className="w-4.5 h-4.5" style={{ color: currentRole && targetRole ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }} />
+          <Compass className="w-4.5 h-4.5" style={{ color: currentRole && targetRole ? "var(--ce-cyan)" : "var(--ce-text-quaternary)" }} />
           Generate Roadmap
         </motion.button>
 
@@ -644,8 +644,8 @@ function PhaseCompletionCelebration({ phaseTitle, nextPhaseTitle, onDismiss }: {
         <motion.button
           className="mt-6 w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer text-[13px] hover:brightness-110 transition-all"
           style={{
-            background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.06))",
-            border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)",
+            background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.12), rgba(var(--ce-cyan-rgb),0.06))",
+            border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
             color: "var(--ce-text-primary)",
             fontFamily: "var(--font-display)",
             fontWeight: 500,
@@ -1412,7 +1412,7 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
         <motion.div
           className="rounded-xl p-5"
           style={{
-            background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+            background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-cyan-rgb),0.02))",
             border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
           }}
           initial={{ opacity: 0, y: 12 }}
@@ -1429,8 +1429,8 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
           <button
             className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px] hover:brightness-110 transition-all"
             style={{
-              background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.05))",
-              border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)",
+              background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.1), rgba(var(--ce-cyan-rgb),0.05))",
+              border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
               color: "var(--ce-text-primary)",
               fontFamily: "var(--font-display)",
               fontWeight: 500,
@@ -1559,7 +1559,7 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
       <motion.div
         className="rounded-xl p-5"
         style={{
-          background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+          background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-cyan-rgb),0.02))",
           border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
         }}
         initial={{ opacity: 0, y: 12 }}
@@ -1577,8 +1577,8 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
         <button
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px] hover:brightness-110 transition-all"
           style={{
-            background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.05))",
-            border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)",
+            background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.1), rgba(var(--ce-cyan-rgb),0.05))",
+            border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
             color: "var(--ce-text-primary)",
             fontFamily: "var(--font-display)",
             fontWeight: 500,

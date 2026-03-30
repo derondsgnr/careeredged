@@ -70,7 +70,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
         <div
           className="absolute top-[30%] left-1/2 -translate-x-1/2 w-[1200px] h-[700px] pointer-events-none"
           style={{
-            background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.05) 0%, rgba(4,44,1,0.02) 45%, transparent 70%)",
+            background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.05) 0%, rgba(4,44,1,0.02) 45%, transparent 70%)",
             filter: "blur(100px)",
           }}
         />
@@ -85,10 +85,10 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
           >
             <div
               className="inline-flex items-center gap-2 px-4 py-2 rounded-full"
-              style={{ background: "rgba(var(--ce-lime-rgb),0.06)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)" }}
+              style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
             >
-              <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-lime)] animate-pulse" />
-              <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-lime)" }}>
+              <div className="w-1.5 h-1.5 rounded-full bg-[var(--ce-cyan)] animate-pulse" />
+              <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-cyan)" }}>
                 Free for career seekers
               </span>
             </div>
@@ -111,7 +111,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
           >
             Career clarity in
             <br />
-            <span style={{ color: "var(--ce-lime)" }}>minutes, not months</span>
+            <span style={{ color: "var(--ce-cyan)" }}>minutes, not months</span>
           </motion.h1>
 
           <motion.p
@@ -135,8 +135,8 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             <button
               onClick={() => onNavigate("signup")}
               className="group flex items-center gap-2 px-7 py-3.5 rounded-lg text-[14px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-cyan)", color: "var(--ce-surface-0)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-cyan-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Start free
@@ -163,7 +163,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             <div
               className="absolute -bottom-24 left-1/2 -translate-x-1/2 w-[90%] h-[250px] pointer-events-none"
               style={{
-                background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.07) 0%, transparent 65%)",
+                background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.07) 0%, transparent 65%)",
                 filter: "blur(70px)",
               }}
             />
@@ -301,7 +301,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
           ].map((s, i) => (
             <Reveal key={i} delay={i * 0.1}>
               <div ref={s.ref} className="text-center">
-                <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "44px", letterSpacing: "-0.03em", color: "var(--ce-lime)", lineHeight: 1 }}>
+                <span style={{ fontFamily: "'Urbanist', sans-serif", fontWeight: 700, fontSize: "44px", letterSpacing: "-0.03em", color: "var(--ce-cyan)", lineHeight: 1 }}>
                   {s.val}
                 </span>
                 <p className="mt-2 text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 500, color: "var(--ce-text-secondary)" }}>
@@ -397,7 +397,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                   <div className="flex flex-col gap-2">
                     {role.items.map((item, j) => (
                       <div key={j} className="flex items-center gap-2">
-                        <Check size={12} style={{ color: "var(--ce-lime)" }} />
+                        <Check size={12} style={{ color: "var(--ce-cyan)" }} />
                         <span className="text-[12px]" style={{ fontFamily: "'Satoshi', sans-serif", color: "var(--ce-text-secondary)" }}>
                           {item}
                         </span>
@@ -446,13 +446,13 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                   className="rounded-xl p-6 h-full flex flex-col relative"
                   style={{
                     background: tier.recommended ? "var(--ce-surface-0)" : "white",
-                    border: tier.recommended ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid var(--ce-text-ghost)",
+                    border: tier.recommended ? "1px solid rgba(var(--ce-cyan-rgb),0.2)" : "1px solid var(--ce-text-ghost)",
                   }}
                 >
                   {tier.recommended && (
                     <div
                       className="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-1 rounded-full text-[10px]"
-                      style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
+                      style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-cyan)", color: "var(--ce-surface-0)" }}
                     >
                       Recommended
                     </div>
@@ -471,7 +471,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                   <div className="flex flex-col gap-2.5 mb-6 flex-1">
                     {tier.features.map((f, j) => (
                       <div key={j} className="flex items-center gap-2">
-                        <Check size={13} style={{ color: tier.recommended ? "var(--ce-lime)" : "var(--ce-text-secondary)" }} />
+                        <Check size={13} style={{ color: tier.recommended ? "var(--ce-cyan)" : "var(--ce-text-secondary)" }} />
                         <span className="text-[13px]" style={{ fontFamily: "'Satoshi', sans-serif", color: tier.recommended ? "var(--ce-text-secondary)" : "var(--ce-text-tertiary)" }}>
                           {f}
                         </span>
@@ -484,7 +484,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
                     style={{
                       fontFamily: "'Satoshi', sans-serif",
                       fontWeight: 600,
-                      background: tier.recommended ? "var(--ce-lime)" : "transparent",
+                      background: tier.recommended ? "var(--ce-cyan)" : "transparent",
                       color: tier.recommended ? "var(--ce-surface-0)" : "var(--ce-surface-0)",
                       border: tier.recommended ? "none" : "1px solid var(--ce-text-ghost)",
                     }}
@@ -504,7 +504,7 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
       <section className="relative py-24 lg:py-32 px-6 overflow-hidden" style={{ background: "var(--ce-void)" }}>
         <div
           className="absolute bottom-0 left-1/2 -translate-x-1/2 w-[700px] h-[350px] pointer-events-none"
-          style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-lime-rgb),0.05) 0%, transparent 60%)", filter: "blur(80px)" }}
+          style={{ background: "radial-gradient(ellipse at center, rgba(var(--ce-cyan-rgb),0.05) 0%, transparent 60%)", filter: "blur(80px)" }}
         />
         <div className="max-w-[600px] mx-auto text-center relative z-10">
           <Reveal>
@@ -517,8 +517,8 @@ export function LandingV2({ onNavigate }: LandingV2Props) {
             <button
               onClick={() => onNavigate("signup")}
               className="group inline-flex items-center gap-2 px-8 py-4 rounded-lg text-[15px] cursor-pointer transition-all duration-200"
-              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-lime)", color: "var(--ce-surface-0)" }}
-              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-lime-rgb),0.2)"; }}
+              style={{ fontFamily: "'Satoshi', sans-serif", fontWeight: 600, background: "var(--ce-cyan)", color: "var(--ce-surface-0)" }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = "translateY(-2px)"; e.currentTarget.style.boxShadow = "0 8px 30px rgba(var(--ce-cyan-rgb),0.2)"; }}
               onMouseLeave={(e) => { e.currentTarget.style.transform = "translateY(0)"; e.currentTarget.style.boxShadow = "none"; }}
             >
               Get Your Edge

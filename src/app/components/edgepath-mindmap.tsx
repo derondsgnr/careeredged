@@ -283,8 +283,8 @@ function TaskRoomPanel({
           {isCurrent && (
             <button className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl cursor-pointer transition-all hover:brightness-110"
               style={{
-                background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.12), rgba(var(--ce-lime-rgb),0.06))",
-                border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)",
+                background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.12), rgba(var(--ce-cyan-rgb),0.06))",
+                border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
                 fontFamily: "var(--font-display)", fontWeight: 500,
               }}>
               <Play className="w-4 h-4 text-ce-cyan" />
@@ -567,9 +567,9 @@ function PathComparePanel({
                       <button
                         className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-[12px] cursor-pointer transition-all hover:brightness-110"
                         style={{
-                          background: path.recommended ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
-                          border: `1px solid ${path.recommended ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}`,
-                          color: path.recommended ? "var(--ce-lime)" : "var(--ce-text-secondary)",
+                          background: path.recommended ? "rgba(var(--ce-cyan-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
+                          border: `1px solid ${path.recommended ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                          color: path.recommended ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
                           fontFamily: "var(--font-display)", fontWeight: 500,
                         }}
                         onClick={() => handleChoose(path.id)}

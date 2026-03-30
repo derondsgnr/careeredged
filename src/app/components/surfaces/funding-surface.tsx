@@ -333,8 +333,8 @@ function OpportunityDrawer({
         )}
         <button
           onClick={() => openSophia(`Help me prepare my pitch for "${opp.name}". ${opp.sophiaNote} What should I emphasize, what are the judges looking for, and what are my biggest gaps?`)}
-          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-lime-rgb),0.06)] transition-colors"
-          style={{ background: "rgba(var(--ce-lime-rgb),0.03)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.06)] transition-colors"
+          style={{ background: "rgba(var(--ce-cyan-rgb),0.03)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}>
           <Sparkles className="w-3.5 h-3.5" /> Prep pitch with Sophia
         </button>
       </div>
@@ -490,7 +490,7 @@ export function FundingSurface() {
             </p>
           </div>
           <button className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer"
-            style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", color: "var(--ce-lime)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", color: "var(--ce-cyan)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <Sparkles className="w-3.5 h-3.5" /> Funding strategy
           </button>
         </motion.div>

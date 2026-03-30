@@ -57,8 +57,8 @@ function FullSidebar({ active, onNav }: { active: string; onNav: (id: string) =>
     >
       {/* Header */}
       <div className="flex items-center gap-3 px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
-        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
-          <Sparkles className="w-4 h-4 text-ce-lime" />
+        <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)" }}>
+          <Sparkles className="w-4 h-4 text-ce-cyan" />
         </div>
         <div>
           <span className="text-[14px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>CareerEdge</span>
@@ -67,8 +67,8 @@ function FullSidebar({ active, onNav }: { active: string; onNav: (id: string) =>
       </div>
 
       {/* Role badge */}
-      <div className="mx-4 mt-4 mb-3 flex items-center gap-3 px-3 py-2.5 rounded-xl" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.06), rgba(var(--ce-lime-rgb),0.04))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
-        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-lime-rgb),0.1))", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
+      <div className="mx-4 mt-4 mb-3 flex items-center gap-3 px-3 py-2.5 rounded-xl" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.06), rgba(var(--ce-cyan-rgb),0.04))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
+        <div className="w-8 h-8 rounded-full flex items-center justify-center" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-cyan-rgb),0.1))", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}>
           <span className="text-[11px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>S</span>
         </div>
         <div className="flex-1 min-w-0">
@@ -95,7 +95,7 @@ function FullSidebar({ active, onNav }: { active: string; onNav: (id: string) =>
                   className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg cursor-pointer transition-all mb-0.5 ${isActive ? "" : "hover:bg-[rgba(var(--ce-glass-tint),0.03)]"}`}
                   style={isActive ? { background: "rgba(var(--ce-glass-tint),0.06)", boxShadow: "inset 0 1px 1px rgba(var(--ce-glass-tint),0.03)" } : undefined}
                 >
-                  <Icon className="w-[16px] h-[16px]" style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }} />
+                  <Icon className="w-[16px] h-[16px]" style={{ color: isActive ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }} />
                   <span className={`text-[13px] flex-1 text-left ${isActive ? "text-ce-text-primary" : "text-ce-text-secondary"}`} style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
                   {item.badge && (
                     <span className="text-[10px] px-1.5 py-0.5 rounded-md tabular-nums" style={{
@@ -439,7 +439,7 @@ function SophiaInsightBanner() {
     <motion.div
       className="rounded-xl px-5 py-4 flex items-center gap-4"
       style={{
-        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-lime-rgb),0.02))",
+        background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-cyan-rgb),0.02))",
         border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
       }}
       initial={{ opacity: 0, y: 10 }}

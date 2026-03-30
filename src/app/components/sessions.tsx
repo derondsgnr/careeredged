@@ -449,7 +449,7 @@ function MentorCard({ mentor, onBook, compact = false }: {
         <button
           onClick={() => onBook(mentor)}
           className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-all"
-          style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+          style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
         >
           Book Session <ArrowRight className="w-3 h-3" />
         </button>
@@ -582,7 +582,7 @@ function MentorBrowseSection({ onBook }: { onBook: (mentor: Mentor) => void }) {
                             key={opt}
                             onClick={() => toggleFilter(cat, opt)}
                             className="text-[11px] px-2.5 py-1 rounded-md cursor-pointer transition-colors"
-                            style={{ background: active ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: active ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: active ? "var(--ce-lime)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                            style={{ background: active ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: active ? "1px solid rgba(var(--ce-cyan-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: active ? "var(--ce-cyan)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                           >
                             {opt}
                           </button>
@@ -635,7 +635,7 @@ function UpcomingSessionsStrip({ sessions, onOpenThread }: {
   return (
     <div>
       <div className="flex items-center gap-2 mb-3">
-        <Calendar className="w-4 h-4 text-ce-lime" />
+        <Calendar className="w-4 h-4 text-ce-cyan" />
         <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming Sessions</span>
         <span className="text-[10px] px-2 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", fontFamily: "var(--font-body)" }}>{sessions.length}</span>
       </div>
@@ -720,7 +720,7 @@ function PrepBriefCard({ session }: { session: UpcomingSession }) {
         ))}
       </ul>
       <div className="flex gap-2">
-        <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+        <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
           <Video className="w-3 h-3" /> Join Call
         </button>
         <button className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-glass-tint),0.04)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", fontFamily: "var(--font-body)" }}>
@@ -813,7 +813,7 @@ function SessionHistoryList({ items, onRateSession }: {
                       <p className="text-[11px] text-ce-cyan leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{item.sophiaFollowUp}</p>
                       {!item.tasksAdded && (
                         <div className="flex gap-2 mt-2">
-                          <button className="text-[10px] text-ce-lime px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", fontFamily: "var(--font-body)" }}>
+                          <button className="text-[10px] text-ce-cyan px-2 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                             Add to roadmap →
                           </button>
                           <button className="text-[10px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Dismiss</button>
@@ -896,7 +896,7 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
             <button
               onClick={() => myRating > 0 && setStep("notes")}
               className="w-full py-3 rounded-xl text-[13px] cursor-pointer transition-colors"
-              style={{ background: myRating > 0 ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.04)", color: myRating > 0 ? "var(--ce-surface-0)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ background: myRating > 0 ? "var(--ce-cyan)" : "rgba(var(--ce-glass-tint),0.04)", color: myRating > 0 ? "var(--ce-surface-0)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             >
               Continue
             </button>
@@ -918,7 +918,7 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
             <button
               onClick={() => setStep("followup")}
               className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
-              style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+              style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
             >
               Save Notes & Continue
             </button>
@@ -940,7 +940,7 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
                   I've drafted 2 new tasks for your roadmap: <span className="text-ce-text-primary">'Study distributed systems fundamentals'</span> and <span className="text-ce-text-primary">'Practice STAR format with 10 mock questions.'</span> Want me to add them?
                 </p>
                 <div className="flex gap-2">
-                  <button onClick={() => { setAcceptedTasks(true); setStep("done"); }} className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.1)", color: "var(--ce-lime)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)", fontFamily: "var(--font-body)" }}>
+                  <button onClick={() => { setAcceptedTasks(true); setStep("done"); }} className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", border: "1px solid rgba(var(--ce-cyan-rgb),0.2)", fontFamily: "var(--font-body)" }}>
                     <Check className="w-3 h-3" /> Yes, add them →
                   </button>
                   <button onClick={() => setStep("done")} className="px-3 py-1.5 text-[11px] text-ce-text-tertiary rounded-lg cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Review first</button>
@@ -954,7 +954,7 @@ function PostSessionModal({ item, onClose }: { item: SessionHistoryItem; onClose
                 <span className="text-ce-cyan">Sophia suggests:</span> James has availability next Thursday. A follow-up session focused on system design would help before your Google interview.
               </p>
               <div className="flex gap-2">
-                <button className="text-[11px] text-ce-lime px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", fontFamily: "var(--font-body)" }}>
+                <button className="text-[11px] text-ce-cyan px-3 py-1.5 rounded-lg cursor-pointer" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", fontFamily: "var(--font-body)" }}>
                   Book follow-up →
                 </button>
                 <button onClick={() => setStep("done")} className="text-[11px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Not now</button>
@@ -1114,7 +1114,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
             return (
               <div key={s} className="flex items-center gap-2">
                 <div className="flex items-center gap-1.5">
-                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style={{ background: isDone ? "var(--ce-lime)" : isActive ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)", color: isDone ? "var(--ce-surface-0)" : isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
+                  <div className="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style={{ background: isDone ? "var(--ce-cyan)" : isActive ? "rgba(var(--ce-cyan-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)", color: isDone ? "var(--ce-surface-0)" : isActive ? "var(--ce-cyan)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
                     {isDone ? <Check className="w-3 h-3" /> : i + 1}
                   </div>
                   <span className="text-[11px]" style={{ color: isActive ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
@@ -1142,10 +1142,10 @@ function BookingModal({ mentor, onClose, onComplete }: {
                     key={type}
                     onClick={() => { setSelectedType(type); setSelectedDuration(detail.durations[0]); }}
                     className="w-full text-left rounded-xl p-4 cursor-pointer transition-all"
-                    style={{ background: isSelected ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.025)", border: isSelected ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
+                    style={{ background: isSelected ? "rgba(var(--ce-cyan-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.025)", border: isSelected ? "1px solid rgba(var(--ce-cyan-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: isSelected ? "rgba(var(--ce-lime-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)", color: isSelected ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}>
+                      <div className="w-9 h-9 rounded-xl flex items-center justify-center flex-shrink-0 mt-0.5" style={{ background: isSelected ? "rgba(var(--ce-cyan-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)", color: isSelected ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }}>
                         {detail.icon}
                       </div>
                       <div className="flex-1">
@@ -1174,7 +1174,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                                 key={d}
                                 onClick={(e) => { e.stopPropagation(); setSelectedDuration(d); }}
                                 className="px-3 py-1 rounded-lg text-[11px] cursor-pointer"
-                                style={{ background: selectedDuration === d ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: selectedDuration === d ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: selectedDuration === d ? "var(--ce-lime)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
+                                style={{ background: selectedDuration === d ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)", border: selectedDuration === d ? "1px solid rgba(var(--ce-cyan-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: selectedDuration === d ? "var(--ce-cyan)" : "var(--ce-text-secondary)", fontFamily: "var(--font-body)" }}
                               >
                                 {d} min
                               </button>
@@ -1182,7 +1182,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                           </div>
                         )}
                       </div>
-                      {isSelected && <Check className="w-4 h-4 text-ce-lime flex-shrink-0 mt-0.5" />}
+                      {isSelected && <Check className="w-4 h-4 text-ce-cyan flex-shrink-0 mt-0.5" />}
                     </div>
                   </button>
                 );
@@ -1199,7 +1199,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
               <button
                 onClick={() => selectedType && setStep("time")}
                 className="w-full py-3 rounded-xl text-[13px] mt-2 cursor-pointer transition-colors"
-                style={{ background: selectedType ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.04)", color: selectedType ? "var(--ce-surface-0)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                style={{ background: selectedType ? "var(--ce-cyan)" : "rgba(var(--ce-glass-tint),0.04)", color: selectedType ? "var(--ce-surface-0)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
                 Continue →
               </button>
@@ -1272,10 +1272,10 @@ function BookingModal({ mentor, onClose, onComplete }: {
                             onClick={() => hasSlots && setSelectedDate(d)}
                             disabled={!hasSlots}
                             className="aspect-square flex flex-col items-center justify-center rounded-lg transition-all relative cursor-pointer"
-                            style={{ background: isSelected ? "rgba(var(--ce-lime-rgb),0.15)" : hasSlots ? "rgba(var(--ce-glass-tint),0.02)" : "transparent", border: isSelected ? "1px solid rgba(var(--ce-lime-rgb),0.3)" : "1px solid transparent", cursor: hasSlots ? "pointer" : "default" }}
+                            style={{ background: isSelected ? "rgba(var(--ce-cyan-rgb),0.15)" : hasSlots ? "rgba(var(--ce-glass-tint),0.02)" : "transparent", border: isSelected ? "1px solid rgba(var(--ce-cyan-rgb),0.3)" : "1px solid transparent", cursor: hasSlots ? "pointer" : "default" }}
                           >
-                            <span className="text-[12px]" style={{ color: isSelected ? "var(--ce-lime)" : hasSlots ? "var(--ce-text-primary)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>{day}</span>
-                            {hasSlots && !isSelected && <div className="w-1 h-1 rounded-full bg-[var(--ce-lime)] mt-0.5" />}
+                            <span className="text-[12px]" style={{ color: isSelected ? "var(--ce-cyan)" : hasSlots ? "var(--ce-text-primary)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>{day}</span>
+                            {hasSlots && !isSelected && <div className="w-1 h-1 rounded-full bg-[var(--ce-cyan)] mt-0.5" />}
                           </button>
                         );
                       })}
@@ -1297,7 +1297,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                               <button
                                 onClick={() => setExpandedSlot(isExpanded ? null : slot.id)}
                                 className="w-full px-3 py-2 rounded-xl text-[12px] text-left cursor-pointer transition-all"
-                                style={{ background: isExpanded ? "rgba(var(--ce-lime-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)", border: isExpanded ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: isExpanded ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}
+                                style={{ background: isExpanded ? "rgba(var(--ce-cyan-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.03)", border: isExpanded ? "1px solid rgba(var(--ce-cyan-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.06)", color: isExpanded ? "var(--ce-cyan)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}
                               >
                                 {slot.time}
                               </button>
@@ -1313,7 +1313,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                                       <button
                                         onClick={() => { setSelectedSlot(slot); isPaid ? setStep("payment") : setStep("confirm"); }}
                                         className="w-full py-1.5 rounded-lg text-[11px] cursor-pointer"
-                                        style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                                        style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                                       >
                                         Confirm
                                       </button>
@@ -1341,9 +1341,9 @@ function BookingModal({ mentor, onClose, onComplete }: {
                         <button
                           onClick={() => { setExpandedSlot(isExpanded ? null : slot.id); setSelectedSlot(slot); }}
                           className="w-full flex items-center justify-between px-4 py-3 rounded-xl cursor-pointer transition-all text-left"
-                          style={{ background: isExpanded ? "rgba(var(--ce-lime-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.025)", border: isExpanded ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
+                          style={{ background: isExpanded ? "rgba(var(--ce-cyan-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.025)", border: isExpanded ? "1px solid rgba(var(--ce-cyan-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                         >
-                          <span className="text-[12px]" style={{ color: isExpanded ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>{slot.displayDate}</span>
+                          <span className="text-[12px]" style={{ color: isExpanded ? "var(--ce-cyan)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>{slot.displayDate}</span>
                           <span className="text-[12px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{slot.time}</span>
                         </button>
                         <AnimatePresence>
@@ -1353,7 +1353,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                               transition={{ duration: 0.25 }}
                               className="overflow-hidden"
                             >
-                              <div className="flex items-center justify-between px-4 py-3 rounded-b-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", borderLeft: "1px solid rgba(var(--ce-lime-rgb),0.2)", borderRight: "1px solid rgba(var(--ce-lime-rgb),0.2)", borderBottom: "1px solid rgba(var(--ce-lime-rgb),0.2)" }}>
+                              <div className="flex items-center justify-between px-4 py-3 rounded-b-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", borderLeft: "1px solid rgba(var(--ce-cyan-rgb),0.2)", borderRight: "1px solid rgba(var(--ce-cyan-rgb),0.2)", borderBottom: "1px solid rgba(var(--ce-cyan-rgb),0.2)" }}>
                                 <div>
                                   <span className="text-[11px] text-ce-text-secondary block" style={{ fontFamily: "var(--font-body)" }}>{selectedType} · {selectedDuration} min</span>
                                   <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{slot.time}–{slot.endTime} · {mentor.timezoneDisplay}</span>
@@ -1361,7 +1361,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
                                 <button
                                   onClick={() => isPaid ? setStep("payment") : setStep("confirm")}
                                   className="px-4 py-1.5 rounded-lg text-[12px] cursor-pointer"
-                                  style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                                  style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
                                 >
                                   Confirm →
                                 </button>
@@ -1455,7 +1455,7 @@ function BookingModal({ mentor, onClose, onComplete }: {
               <button
                 onClick={() => setStep("confirm")}
                 className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
-                style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+                style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
               >
                 Confirm & Pay ${price} →
               </button>
@@ -1696,14 +1696,14 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
                 {/* CTA if no sessions */}
                 <GlassCard delay={0.3}>
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.12)" }}>
-                      <Plus className="w-5 h-5 text-ce-lime" />
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.12)" }}>
+                      <Plus className="w-5 h-5 text-ce-cyan" />
                     </div>
                     <div className="flex-1">
                       <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Book another session</span>
                       <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>Sophia has 4 mentor recommendations based on your current roadmap phase</span>
                     </div>
-                    <button onClick={() => { setTab("find"); setFindView("picks"); }} className="px-4 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                    <button onClick={() => { setTab("find"); setFindView("picks"); }} className="px-4 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                       Find mentors →
                     </button>
                   </div>
@@ -1757,7 +1757,7 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
                           <div>
                             <p className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>{h.sophiaFollowUp}</p>
                             <div className="flex gap-2 mt-2">
-                              <button className="text-[10px] text-ce-lime px-2.5 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", border: "1px solid rgba(var(--ce-lime-rgb),0.15)", fontFamily: "var(--font-body)" }}>Add to roadmap →</button>
+                              <button className="text-[10px] text-ce-cyan px-2.5 py-1 rounded-md cursor-pointer" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", fontFamily: "var(--font-body)" }}>Add to roadmap →</button>
                               <button className="text-[10px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Dismiss</button>
                             </div>
                           </div>
@@ -2103,8 +2103,8 @@ export function AvailabilityEditor({ onClose }: { onClose: () => void }) {
               {allTypes.map((type) => {
                 const enabled = enabledTypes.includes(type);
                 return (
-                  <div key={type} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: enabled ? "rgba(var(--ce-lime-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)", border: enabled ? "1px solid rgba(var(--ce-lime-rgb),0.12)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
-                    <button onClick={() => toggleType(type)} className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 cursor-pointer" style={{ background: enabled ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.06)", border: enabled ? "none" : "1px solid rgba(var(--ce-glass-tint),0.1)" }}>
+                  <div key={type} className="flex items-center gap-3 px-4 py-3 rounded-xl" style={{ background: enabled ? "rgba(var(--ce-cyan-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)", border: enabled ? "1px solid rgba(var(--ce-cyan-rgb),0.12)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+                    <button onClick={() => toggleType(type)} className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0 cursor-pointer" style={{ background: enabled ? "var(--ce-cyan)" : "rgba(var(--ce-glass-tint),0.06)", border: enabled ? "none" : "1px solid rgba(var(--ce-glass-tint),0.1)" }}>
                       {enabled && <Check className="w-3 h-3 text-[var(--ce-surface-0)]" />}
                     </button>
                     <span className="flex-1 text-[12px]" style={{ color: enabled ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>{type}</span>
@@ -2153,7 +2153,7 @@ export function AvailabilityEditor({ onClose }: { onClose: () => void }) {
             <button
               onClick={() => setRepeatWeekly(!repeatWeekly)}
               className="w-12 h-6 rounded-full relative transition-colors cursor-pointer"
-              style={{ background: repeatWeekly ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.1)" }}
+              style={{ background: repeatWeekly ? "var(--ce-cyan)" : "rgba(var(--ce-glass-tint),0.1)" }}
             >
               <div className="w-5 h-5 rounded-full bg-white absolute top-0.5 transition-all" style={{ left: repeatWeekly ? "calc(100% - 22px)" : "2px" }} />
             </button>
@@ -2168,10 +2168,10 @@ export function AvailabilityEditor({ onClose }: { onClose: () => void }) {
                   key={p}
                   onClick={() => setPolicy(p)}
                   className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-left"
-                  style={{ background: policy === p ? "rgba(var(--ce-lime-rgb),0.05)" : "rgba(var(--ce-glass-tint),0.02)", border: policy === p ? "1px solid rgba(var(--ce-lime-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
+                  style={{ background: policy === p ? "rgba(var(--ce-cyan-rgb),0.05)" : "rgba(var(--ce-glass-tint),0.02)", border: policy === p ? "1px solid rgba(var(--ce-cyan-rgb),0.15)" : "1px solid rgba(var(--ce-glass-tint),0.05)" }}
                 >
-                  <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: policy === p ? "var(--ce-lime)" : "rgba(var(--ce-glass-tint),0.2)" }}>
-                    {policy === p && <div className="w-2 h-2 rounded-full bg-[var(--ce-lime)]" />}
+                  <div className="w-4 h-4 rounded-full border-2 flex items-center justify-center flex-shrink-0" style={{ borderColor: policy === p ? "var(--ce-cyan)" : "rgba(var(--ce-glass-tint),0.2)" }}>
+                    {policy === p && <div className="w-2 h-2 rounded-full bg-[var(--ce-cyan)]" />}
                   </div>
                   <div>
                     <span className="text-[12px] capitalize" style={{ color: policy === p ? "var(--ce-text-primary)" : "var(--ce-text-secondary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{p}</span>
@@ -2185,7 +2185,7 @@ export function AvailabilityEditor({ onClose }: { onClose: () => void }) {
           <button
             onClick={() => { onClose(); toast.success("Availability settings saved"); }}
             className="w-full py-3 rounded-xl text-[13px] cursor-pointer"
-            style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
+            style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}
           >
             Save Settings
           </button>
@@ -2233,7 +2233,7 @@ function GuideUpcomingList() {
                     <p className="text-[11px] text-ce-cyan leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{s.sophiaContext}</p>
                   </div>
                   <div className="flex gap-2">
-                    <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                    <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
                       <Video className="w-3 h-3" /> Join Call
                     </button>
                     <button className="flex items-center gap-1.5 px-3 py-2 rounded-lg text-[12px] cursor-pointer" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", color: "var(--ce-role-edgestar)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.15)", fontFamily: "var(--font-body)" }}>
@@ -2325,7 +2325,7 @@ function EdgeGuideView({ onNavigate }: { onNavigate?: NavigateFn }) {
                   </div>
                   <div className="flex flex-wrap gap-2 mb-4">
                     {["1:1 Mentoring — $75", "Career Coaching — $100", "Mock Interview — Free"].map((t) => (
-                      <span key={t} className="text-[11px] px-3 py-1.5 rounded-lg" style={{ background: "rgba(var(--ce-lime-rgb),0.06)", color: "var(--ce-lime)", border: "1px solid rgba(var(--ce-lime-rgb),0.1)", fontFamily: "var(--font-body)" }}>{t}</span>
+                      <span key={t} className="text-[11px] px-3 py-1.5 rounded-lg" style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", color: "var(--ce-cyan)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", fontFamily: "var(--font-body)" }}>{t}</span>
                     ))}
                   </div>
                   <div className="flex items-center gap-6 text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
@@ -2462,14 +2462,14 @@ function OtherRolesView({ role, onNavigate }: { role: RoleId; onNavigate?: Navig
             <p className="text-[13px] text-ce-text-secondary mb-4" style={{ fontFamily: "var(--font-body)" }}>
               You have 3 sessions scheduled this week. No conflicts detected. One session starts in 4 hours.
             </p>
-            <button onClick={() => toast.success("Creating new session…")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "var(--ce-lime)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <button onClick={() => toast.success("Creating new session…")} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-[13px] cursor-pointer" style={{ background: "var(--ce-cyan)", color: "var(--ce-surface-0)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
               <Plus className="w-4 h-4" /> {config.cta}
             </button>
           </GlassCard>
 
           <GlassCard delay={0.35}>
             <div className="flex items-center gap-2 mb-4">
-              <Calendar className="w-4 h-4 text-ce-lime" />
+              <Calendar className="w-4 h-4 text-ce-cyan" />
               <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Upcoming</span>
             </div>
             <div className="flex flex-col gap-2">

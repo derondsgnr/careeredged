@@ -143,13 +143,13 @@ export function EdgeEmployerDashboard({ onNavigate }: { onNavigate?: NavigateFn 
           {/* Top candidates */}
           <GlassCard delay={0.65}>
             <div className="flex items-center gap-2 mb-3">
-              <Star className="w-3.5 h-3.5 text-ce-lime" />
+              <Star className="w-3.5 h-3.5 text-ce-cyan" />
               <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Top Candidates</span>
             </div>
             {TOP_CANDIDATES.map((candidate, i) => (
               <div key={i} onClick={() => onNavigate?.("pipeline")} className="flex items-center gap-3 py-2.5 cursor-pointer" style={{ borderBottom: i < TOP_CANDIDATES.length - 1 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
-                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}>
-                  <span className="text-[11px] text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.initial}</span>
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0" style={{ background: "rgba(var(--ce-cyan-rgb),0.08)" }}>
+                  <span className="text-[11px] text-ce-cyan" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{candidate.initial}</span>
                 </div>
                 <div className="flex-1 min-w-0">
                   <span className="text-[12px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{candidate.name}</span>
