@@ -95,7 +95,7 @@ function ScrollProgress() {
       className="fixed top-0 left-0 right-0 h-[2px] z-50 origin-left"
       style={{
         scaleX: scrollYProgress,
-        background: "var(--ce-lime)",
+        background: "var(--ce-cyan)",
       }}
     />
   );
@@ -245,7 +245,7 @@ export function LandingV8({ onNavigate }: LandingV8Props) {
                 >
                   <div
                     className="text-[48px] lg:text-[72px] font-bold tracking-[-0.04em] leading-none mb-2"
-                    style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-lime)" }}
+                    style={{ fontFamily: "'Urbanist', sans-serif", color: "var(--ce-cyan)" }}
                   >
                     {stat.value}
                   </div>

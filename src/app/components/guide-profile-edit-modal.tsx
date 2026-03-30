@@ -338,7 +338,7 @@ export function GuideProfileEditModal({ profile, onUpdate, onClose, onNavigate }
                     Your profile is looking strong. Next step — set your availability so clients can start booking.
                   </div>
                 )}
-                <button onClick={() => setShowAvailability(true)} className="w-full py-2.5 rounded-xl text-[12px] font-medium cursor-pointer flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, var(--ce-role-guide), var(--ce-lime))", color: "var(--ce-void)", fontFamily: "var(--font-display)" }}>
+                <button onClick={() => setShowAvailability(true)} className="w-full py-2.5 rounded-xl text-[12px] font-medium cursor-pointer flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, var(--ce-role-guide), var(--ce-cyan))", color: "var(--ce-void)", fontFamily: "var(--font-display)" }}>
                   Set your availability <ArrowRight className="w-4 h-4" />
                 </button>
                 <button onClick={onClose} className="w-full mt-2 text-center text-[11px] text-ce-text-tertiary cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>Done editing</button>

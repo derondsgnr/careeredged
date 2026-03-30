@@ -62,15 +62,26 @@ export function roleAccentBg(role: string, opacity: number): string {
 // Uses CSS vars so colors adapt to light/dark theme automatically.
 
 export const COLORS = {
-  cyan:   "var(--ce-role-edgestar)",   // Sophia primary / EdgeStar accent
-  lime:   "var(--ce-lime)",            // EdgeGas / delight moments / trend up
-  pink:   "var(--ce-role-parent)",     // Parent accent
-  purple: "var(--ce-role-guide)",      // Guide accent / secondary
-  amber:  "var(--ce-role-edgepreneur)",// EdgePreneur accent / warning
-  green:  "var(--ce-role-employer)",   // Employer accent / success
-  blue:   "var(--ce-role-edu)",        // Education accent
-  orange: "var(--ce-role-ngo)",        // NGO accent
-  indigo: "var(--ce-role-agency)",     // Agency accent
+  /** Primary brand color — use for CTAs, logos, primary buttons, heading accents. */
+  primary: "var(--ce-cyan)",
+  cyan:    "var(--ce-cyan)",           // Alias — primary brand / Sophia / EdgeStar
+  /** Delight only — EdgeGas, achievements, scores, trend-up, data viz. Never for CTAs or logos. */
+  lime:    "var(--ce-lime)",
+  pink:    "var(--ce-role-parent)",    // Parent accent
+  purple:  "var(--ce-role-guide)",     // Guide accent / secondary
+  amber:   "var(--ce-role-edgepreneur)",// EdgePreneur accent / warning
+  green:   "var(--ce-role-employer)",  // Employer accent / success
+  blue:    "var(--ce-role-edu)",       // Education accent
+  orange:  "var(--ce-role-ngo)",       // NGO accent
+  indigo:  "var(--ce-role-agency)",    // Agency accent
+} as const;
+
+// ─── Brand Identity ──────────────────────────────────────────────────────────
+// Logo and brand marks: ONLY white, black, or cyan. Never lime.
+export const BRAND = {
+  logo: "var(--ce-cyan)",
+  logoOnDark: "#FFFFFF",
+  logoOnLight: "#0A0C10",
 } as const;
 
 // ─── Status Colors ───────────────────────────────────────────────────────────

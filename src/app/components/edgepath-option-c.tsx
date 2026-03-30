@@ -396,7 +396,7 @@ function TaskRoomPanel({
         {milestone.status === "current" && (
           <div className="flex gap-2">
             <button className="flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[12px] hover:brightness-110 transition-all"
-              style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.05))", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+              style={{ background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.1), rgba(var(--ce-cyan-rgb),0.05))", border: "1px solid rgba(var(--ce-cyan-rgb),0.15)", color: "var(--ce-text-primary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
               <Sparkles className="w-3.5 h-3.5 text-ce-cyan" /> Start this milestone
             </button>
           </div>

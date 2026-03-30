@@ -83,7 +83,7 @@ function getRoleRoutes(role: string): RouteItem[] {
 const STATE_OPTIONS: { id: AppState; label: string; color: string }[] = [
   { id: "onboarding", label: "Onboarding", color: "var(--ce-role-edgestar)" },
   { id: "empty",      label: "Empty",      color: "var(--ce-text-secondary)" },
-  { id: "active",     label: "Active",     color: "var(--ce-lime)" },
+  { id: "active",     label: "Active",     color: "var(--ce-cyan)" },
 ];
 
 // ─── DevTools component ────────────────────────────────────────────────────
@@ -212,9 +212,9 @@ export function DevTools({ appState, onStateChange, familyVariation, onFamilyVar
           <div className="flex items-center gap-1.5 flex-1 min-w-0">
             <div
               className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0"
-              style={{ background: "rgba(var(--ce-lime-rgb),0.08)" }}
+              style={{ background: "rgba(var(--ce-cyan-rgb),0.08)" }}
             >
-              <Sparkles className="w-3 h-3 text-ce-lime" />
+              <Sparkles className="w-3 h-3 text-ce-cyan" />
             </div>
             <span
               className="text-[11px] text-ce-text-primary truncate"
@@ -578,17 +578,17 @@ export function DevTools({ appState, onStateChange, familyVariation, onFamilyVar
                               onClick={() => handleRouteClick(route.path)}
                               className="w-full flex items-center gap-2 px-3 py-1.5 cursor-pointer text-left transition-colors hover:bg-white/[0.03]"
                               style={{
-                                background: isActive ? "rgba(var(--ce-lime-rgb),0.06)" : "transparent",
+                                background: isActive ? "rgba(var(--ce-cyan-rgb),0.06)" : "transparent",
                               }}
                             >
                               <Icon
                                 className="w-3 h-3 flex-shrink-0"
-                                style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}
+                                style={{ color: isActive ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }}
                               />
                               <span
                                 className="text-[10px] flex-1 truncate"
                                 style={{
-                                  color: isActive ? "var(--ce-lime)" : "var(--ce-text-secondary)",
+                                  color: isActive ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
                                   fontFamily: "var(--font-body)",
                                   fontWeight: isActive ? 500 : 400,
                                 }}
@@ -626,17 +626,17 @@ export function DevTools({ appState, onStateChange, familyVariation, onFamilyVar
                               onClick={() => handleRouteClick(route.path)}
                               className="w-full flex items-center gap-2 px-3 py-1.5 cursor-pointer text-left transition-colors hover:bg-white/[0.03]"
                               style={{
-                                background: isActive ? "rgba(var(--ce-lime-rgb),0.06)" : "transparent",
+                                background: isActive ? "rgba(var(--ce-cyan-rgb),0.06)" : "transparent",
                               }}
                             >
                               <Icon
                                 className="w-3 h-3 flex-shrink-0"
-                                style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)" }}
+                                style={{ color: isActive ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }}
                               />
                               <span
                                 className="text-[10px] flex-1 truncate"
                                 style={{
-                                  color: isActive ? "var(--ce-lime)" : "var(--ce-text-secondary)",
+                                  color: isActive ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
                                   fontFamily: "var(--font-body)",
                                   fontWeight: isActive ? 500 : 400,
                                 }}

@@ -676,9 +676,9 @@ export function TaskRoom({ onNavigate, milestoneId = "m6", role = "edgestar" }: 
               <button
                 className="flex items-center gap-2 px-4 py-2 rounded-xl text-[12px] cursor-pointer transition-colors"
                 style={{
-                  background: "rgba(var(--ce-lime-rgb),0.08)",
-                  border: "1px solid rgba(var(--ce-lime-rgb),0.15)",
-                  color: "var(--ce-lime)",
+                  background: "rgba(var(--ce-cyan-rgb),0.08)",
+                  border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
+                  color: "var(--ce-cyan)",
                   fontFamily: "var(--font-display)", fontWeight: 500,
                 }}
                 onClick={() => onNavigate("edgepath")}

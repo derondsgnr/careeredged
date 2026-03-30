@@ -79,11 +79,11 @@ export function StateToggle({ state, onChange }: StateToggleProps) {
                 onClick={() => onChange(s)}
                 className="w-full px-3 py-2 rounded-lg cursor-pointer text-left transition-colors"
                 style={{
-                  background: isActive ? "rgba(var(--ce-lime-rgb),0.08)" : "transparent",
-                  border: isActive ? "1px solid rgba(var(--ce-lime-rgb),0.12)" : "1px solid transparent",
+                  background: isActive ? "rgba(var(--ce-cyan-rgb),0.08)" : "transparent",
+                  border: isActive ? "1px solid rgba(var(--ce-cyan-rgb),0.12)" : "1px solid transparent",
                 }}
               >
-                <span className="text-[11px] capitalize" style={{ color: isActive ? "var(--ce-lime)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)", fontWeight: isActive ? 500 : 400 }}>
+                <span className="text-[11px] capitalize" style={{ color: isActive ? "var(--ce-cyan)" : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)", fontWeight: isActive ? 500 : 400 }}>
                   {s}
                 </span>
               </button>

@@ -364,7 +364,7 @@ export function SectionCard({
         gradient
           ? {
               background:
-                "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+                "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.04), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-cyan-rgb),0.02))",
               border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.07)",
             }
           : {

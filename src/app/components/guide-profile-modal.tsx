@@ -75,7 +75,7 @@ export function GuideProfileModal({ onSuccess, onClose }: Props) {
   const gradientBtn = (label: string, icon: React.ReactNode, onClick: () => void, disabled = false) => (
     <button onClick={onClick} disabled={disabled}
       className="w-full py-3 rounded-xl text-[13px] font-medium cursor-pointer flex items-center justify-center gap-2 disabled:opacity-70 disabled:cursor-not-allowed"
-      style={{ background: disabled ? "rgba(var(--ce-glass-tint),0.06)" : "linear-gradient(135deg, var(--ce-role-guide), var(--ce-lime))", color: disabled ? "var(--ce-text-tertiary)" : "var(--ce-void)", fontFamily: "var(--font-display)" }}>
+      style={{ background: disabled ? "rgba(var(--ce-glass-tint),0.06)" : "linear-gradient(135deg, var(--ce-role-guide), var(--ce-cyan))", color: disabled ? "var(--ce-text-tertiary)" : "var(--ce-void)", fontFamily: "var(--font-display)" }}>
       {label} {icon}
     </button>
   );

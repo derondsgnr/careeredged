@@ -97,8 +97,10 @@ The current nav pills per role are FINAL. No new surfaces get added to the top n
 
 ## Brand & Visual
 - Dark mode base: #08090C (near-black)
-- Accents: Cyan #22D3EE (Sophia/EdgeStar), Lime #B3FF3B (EdgeGas/delight)
-- Light mode primary shifts: lime → #16A34A (green), cyan → #0891B2 (teal)
+- **Primary brand color: Cyan #22D3EE (dark) / #0891B2 (light)** — use for ALL CTAs, primary buttons, heading accents, logos, brand marks, nav CTA buttons, pricing recommended tiers, and primary action gradients
+- **Delight accent: Lime #B3FF3B (dark) / #16A34A (light)** — use ONLY for EdgeGas, achievements, completion states, scores/match%, trend-up arrows, data visualization, success checkmarks, streak counts, typing cursors, and delight pulse animations. NEVER for CTAs, logos, or primary buttons.
+- **Logo colors: white, black, or cyan ONLY** — never lime. Use `BRAND.logo` from tokens.ts.
+- Use `COLORS.primary` (cyan) for new CTAs. Use `COLORS.lime` only for delight/data.
 - Typography: Urbanist (display/headings), Satoshi (body)
 - Glassmorphism: subtle rgba backgrounds with blur, thin borders
 - Motion: 200-300ms transitions, spring physics for entrances

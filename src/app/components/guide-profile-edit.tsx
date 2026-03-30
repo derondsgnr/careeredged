@@ -319,7 +319,7 @@ export function GuideProfileEditSurface({ role, onNavigate }: Props) {
               {/* Exit: Set availability */}
               <div className="mt-6 pt-4" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
                 {allDone && <div className="text-[12px] text-ce-text-secondary mb-3 leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>Your profile is looking strong. Next step — set your availability so clients can start booking.</div>}
-                <button onClick={() => setShowAvailability(true)} className="w-full py-3 rounded-xl text-[13px] font-medium cursor-pointer flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, var(--ce-role-guide), var(--ce-lime))", color: "var(--ce-void)", fontFamily: "var(--font-display)" }}>
+                <button onClick={() => setShowAvailability(true)} className="w-full py-3 rounded-xl text-[13px] font-medium cursor-pointer flex items-center justify-center gap-2" style={{ background: "linear-gradient(135deg, var(--ce-role-guide), var(--ce-cyan))", color: "var(--ce-void)", fontFamily: "var(--font-display)" }}>
                   Set your availability <ArrowRight className="w-4 h-4" />
                 </button>
               </div>

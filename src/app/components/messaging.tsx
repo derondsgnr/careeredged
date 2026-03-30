@@ -764,9 +764,9 @@ function ConversationList({
             onClick={() => onFilterChange(f.id)}
             className="flex-shrink-0 px-2.5 py-1 rounded-md text-[10px] cursor-pointer transition-colors"
             style={{
-              background: activeFilter === f.id ? "rgba(var(--ce-lime-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)",
-              color: activeFilter === f.id ? "var(--ce-lime)" : "var(--ce-text-secondary)",
-              border: activeFilter === f.id ? "1px solid rgba(var(--ce-lime-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
+              background: activeFilter === f.id ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.03)",
+              color: activeFilter === f.id ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
+              border: activeFilter === f.id ? "1px solid rgba(var(--ce-cyan-rgb),0.2)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
               fontFamily: "var(--font-body)",
             }}
           >
@@ -802,7 +802,7 @@ function ConversationList({
               className="w-full flex items-start gap-3 px-3 py-3 cursor-pointer transition-colors text-left relative"
               style={{
                 background: isSelected ? "rgba(var(--ce-glass-tint),0.04)" : "transparent",
-                borderLeft: isSelected ? "2px solid var(--ce-lime)" : "2px solid transparent",
+                borderLeft: isSelected ? "2px solid var(--ce-cyan)" : "2px solid transparent",
               }}
             >
               {/* Unread dot */}
@@ -1351,7 +1351,7 @@ function ActiveThread({
         {newMsgPill && (
           <motion.button
             className="absolute top-16 left-1/2 -translate-x-1/2 flex items-center gap-1.5 px-3 py-1.5 rounded-full cursor-pointer z-10"
-            style={{ background: "rgba(14,16,20,0.95)", border: "1px solid rgba(var(--ce-lime-rgb),0.2)" }}
+            style={{ background: "rgba(14,16,20,0.95)", border: "1px solid rgba(var(--ce-cyan-rgb),0.2)" }}
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
@@ -1361,8 +1361,8 @@ function ActiveThread({
               setNewMsgPill(false);
             }}
           >
-            <ArrowDown className="w-3 h-3 text-ce-lime" />
-            <span className="text-[10px] text-ce-lime" style={{ fontFamily: "var(--font-body)" }}>New messages</span>
+            <ArrowDown className="w-3 h-3 text-ce-cyan" />
+            <span className="text-[10px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>New messages</span>
           </motion.button>
         )}
       </AnimatePresence>
@@ -1412,13 +1412,13 @@ function ActiveThread({
           onClick={() => handleSend(input)}
           className="w-9 h-9 rounded-lg flex items-center justify-center cursor-pointer flex-shrink-0"
           style={{
-            background: input.trim() ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.03)",
-            border: input.trim() ? "1px solid rgba(var(--ce-lime-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
+            background: input.trim() ? "rgba(var(--ce-cyan-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.03)",
+            border: input.trim() ? "1px solid rgba(var(--ce-cyan-rgb),0.25)" : "1px solid rgba(var(--ce-glass-tint),0.04)",
           }}
           whileTap={{ scale: 1.1 }}
           transition={{ duration: 0.2 }}
         >
-          <Send className="w-4 h-4" style={{ color: input.trim() ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }} />
+          <Send className="w-4 h-4" style={{ color: input.trim() ? "var(--ce-cyan)" : "var(--ce-text-quaternary)" }} />
         </motion.button>
       </div>
 
@@ -1602,9 +1602,9 @@ function VideoCallUI({ participantName, participantInitial, onEndCall }: {
             <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={micOn ? "var(--ce-text-primary)" : "var(--ce-status-error)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3Z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" x2="12" y1="19" y2="22"/></svg>
             <span className="text-[11px]" style={{ color: micOn ? "var(--ce-text-primary)" : "var(--ce-status-error)", fontFamily: "var(--font-body)" }}>{micOn ? "Mic" : "Muted"}</span>
           </button>
-          <button onClick={() => { setScreenSharing(!screenSharing); toast(screenSharing ? "Screen sharing stopped" : "Sharing screen"); }} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: screenSharing ? "rgba(var(--ce-lime-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${screenSharing ? "rgba(var(--ce-lime-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
-            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={screenSharing ? "var(--ce-lime)" : "var(--ce-text-primary)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
-            <span className="text-[11px]" style={{ color: screenSharing ? "var(--ce-lime)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>Screen</span>
+          <button onClick={() => { setScreenSharing(!screenSharing); toast(screenSharing ? "Screen sharing stopped" : "Sharing screen"); }} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: screenSharing ? "rgba(var(--ce-cyan-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${screenSharing ? "rgba(var(--ce-cyan-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+            <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke={screenSharing ? "var(--ce-cyan)" : "var(--ce-text-primary)"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="14" x="2" y="3" rx="2"/><line x1="8" x2="16" y1="21" y2="21"/><line x1="12" x2="12" y1="17" y2="21"/></svg>
+            <span className="text-[11px]" style={{ color: screenSharing ? "var(--ce-cyan)" : "var(--ce-text-primary)", fontFamily: "var(--font-body)" }}>Screen</span>
           </button>
           <button onClick={() => setChatOpen(!chatOpen)} className="flex items-center gap-2 px-4 py-2 rounded-xl cursor-pointer" style={{ background: chatOpen ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${chatOpen ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
             <MessageSquare className="w-4 h-4" style={{ color: chatOpen ? "var(--ce-role-edgestar)" : "var(--ce-text-primary)" }} />

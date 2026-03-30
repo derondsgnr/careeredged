@@ -296,7 +296,7 @@ function SophiaInsightCard({ onSophia }: { onSophia: (msg: string) => void }) {
     <motion.div
       className="rounded-xl p-5"
       style={{
-        background: `linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(${GLASS_TINT},0.02) 50%, rgba(var(--ce-lime-rgb),0.02))`,
+        background: `linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(${GLASS_TINT},0.02) 50%, rgba(var(--ce-cyan-rgb),0.02))`,
         border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
       }}
       initial={{ opacity: 0, y: 12 }}
@@ -314,7 +314,7 @@ function SophiaInsightCard({ onSophia }: { onSophia: (msg: string) => void }) {
         onClick={() => onSophia("Start interview prep")}
         className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl cursor-pointer text-[13px]"
         style={{
-          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.05))",
+          background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-cyan-rgb),0.05))",
           border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)",
           color: TEXT.primary,
           fontFamily: "var(--font-display)",
@@ -344,7 +344,7 @@ function TopJobsCompact({ onNav }: { onNav: (id: string) => void }) {
     >
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
-          <Star className="w-3.5 h-3.5 text-ce-lime" />
+          <Star className="w-3.5 h-3.5 text-ce-cyan" />
           <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Top Matches</span>
         </div>
         <button onClick={() => onNav("jobs")} className="text-[11px] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-tertiary)] cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>

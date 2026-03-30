@@ -313,10 +313,10 @@ function GlassCard({ children, selected, onClick, delay = 0, allSelected }: {
       style={{ willChange: "transform, opacity" }}>
       {/* Gradient border */}
       <div className={`absolute -inset-px rounded-2xl transition-opacity duration-300 ${selected ? "opacity-100" : "opacity-0 group-hover:opacity-40"}`}
-        style={{ background: selected ? "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.3), rgba(var(--ce-lime-rgb),0.15))" : "linear-gradient(135deg, rgba(var(--ce-glass-tint),0.08), rgba(var(--ce-glass-tint),0.02))", borderRadius: "16px" }} />
+        style={{ background: selected ? "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.3), rgba(var(--ce-cyan-rgb),0.15))" : "linear-gradient(135deg, rgba(var(--ce-glass-tint),0.08), rgba(var(--ce-glass-tint),0.02))", borderRadius: "16px" }} />
       {/* Lime pulse on selection */}
       {selected && (
-        <motion.div className="absolute -inset-px rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.2), rgba(var(--ce-role-edgestar-rgb),0.1))", borderRadius: "16px" }}
+        <motion.div className="absolute -inset-px rounded-2xl" style={{ background: "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.2), rgba(var(--ce-role-edgestar-rgb),0.1))", borderRadius: "16px" }}
           initial={{ opacity: 0.4 }} animate={{ opacity: 0 }} transition={{ duration: 0.5 }} />
       )}
       <div className={`relative rounded-2xl border transition-all duration-300 ${selected ? "bg-[rgba(var(--ce-role-edgestar-rgb),0.06)] border-transparent" : "bg-[rgba(var(--ce-glass-tint),0.03)] border-[rgba(var(--ce-glass-tint),0.05)] group-hover:bg-[rgba(var(--ce-glass-tint),0.05)]"}`}
@@ -397,7 +397,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                 <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 80" preserveAspectRatio="xMidYMid meet">
                   <defs>
                     <linearGradient id="conn-h1" x1="0%" y1="0%" x2="100%" y2="100%">
-                      <stop offset="0%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.4" /><stop offset="100%" stopColor="var(--ce-lime)" stopOpacity="0.2" />
+                      <stop offset="0%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.4" /><stop offset="100%" stopColor="var(--ce-cyan)" stopOpacity="0.2" />
                     </linearGradient>
                   </defs>
                   {dots.map((d, i) => {
@@ -406,7 +406,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                     const clustering = p > 80;
                     return (
                       <motion.circle key={i} r={d.size}
-                        fill={i % 6 === 0 ? "var(--ce-lime)" : i % 3 === 0 ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.3)"}
+                        fill={i % 6 === 0 ? "var(--ce-cyan)" : i % 3 === 0 ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.3)"}
                         animate={{
                           cx: migrating ? d.tx + (clustering ? Math.sin(i) * 1.5 : Math.sin(i) * 5) : d.sx + Math.sin(i * 0.8) * 2,
                           cy: migrating ? d.ty + (clustering ? Math.cos(i) * 1.5 : Math.cos(i) * 4) : d.sy + Math.cos(i * 0.8) * 1.5,
@@ -447,7 +447,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
               <svg className="absolute inset-0 w-full h-full" style={{ zIndex: 0 }}>
                 <defs>
                   <linearGradient id="road-conn" x1="0%" y1="0%" x2="100%" y2="100%">
-                    <stop offset="0%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.4" /><stop offset="50%" stopColor="var(--ce-lime)" stopOpacity="0.2" /><stop offset="100%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.1" />
+                    <stop offset="0%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.4" /><stop offset="50%" stopColor="var(--ce-cyan)" stopOpacity="0.2" /><stop offset="100%" stopColor="var(--ce-role-edgestar)" stopOpacity="0.1" />
                   </linearGradient>
                   <filter id="road-glow"><feGaussianBlur stdDeviation="2" result="b" /><feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge></filter>
                 </defs>
@@ -476,7 +476,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                     animate={{ opacity: 1, scale: l.scale, y: 0 }}
                     transition={{ duration: 0.6, delay: 0.3 + i * 0.18, ease: EASE }}>
                     <div className={`relative rounded-2xl ${isActive ? "p-px" : ""}`}
-                      style={isActive ? { background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.35), rgba(var(--ce-lime-rgb),0.2), rgba(var(--ce-role-edgestar-rgb),0.1))" } : {}}>
+                      style={isActive ? { background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.35), rgba(var(--ce-cyan-rgb),0.2), rgba(var(--ce-role-edgestar-rgb),0.1))" } : {}}>
                       <div className={`rounded-2xl p-5 ${isActive ? "" : ""}`}
                         style={{
                           background: isActive ? "linear-gradient(135deg, rgba(4,44,1,0.2) 0%, rgba(12,14,19,0.95) 50%, rgba(var(--ce-role-edgestar-rgb),0.03) 100%)" : "rgba(var(--ce-glass-tint),0.025)",
@@ -564,7 +564,7 @@ function GeneratingAndRoadmapOverlay({ target, phases, onSave, onAdjust }: {
                 <motion.div className="flex flex-col items-center gap-4"
                   initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.4, ease: EASE }}>
                   <motion.button onClick={onSave} className="group flex items-center gap-2.5 px-7 py-3.5 rounded-xl cursor-pointer"
-                    style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-lime))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 30px rgba(var(--ce-role-edgestar-rgb),0.15), 0 4px 12px rgba(var(--ce-shadow-tint),0.3)" }}
+                    style={{ background: "linear-gradient(135deg, var(--ce-role-edgestar), var(--ce-cyan))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)", boxShadow: "0 0 30px rgba(var(--ce-role-edgestar-rgb),0.15), 0 4px 12px rgba(var(--ce-shadow-tint),0.3)" }}
                     whileTap={{ scale: 0.97 }}>
                     <Sparkles className="w-4 h-4" /> Save my roadmap <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
                   </motion.button>
@@ -596,7 +596,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
       <motion.div className="relative z-10 w-full max-w-sm mx-4"
         initial={{ y: 50, opacity: 0, scale: 0.96 }} animate={{ y: 0, opacity: 1, scale: 1 }}
         transition={{ type: "spring", stiffness: 160, damping: 24, delay: 0.2 }}>
-        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.25), rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))" }}>
+        <div className="rounded-2xl p-px" style={{ background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.25), rgba(var(--ce-cyan-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))" }}>
           <div className="rounded-2xl p-6 flex flex-col gap-5" style={{ background: "linear-gradient(135deg, rgba(4,44,1,0.1) 0%, rgba(12,14,19,0.98) 30%)", boxShadow: "0 8px 60px rgba(var(--ce-shadow-tint),0.6), inset 0 1px 1px rgba(var(--ce-glass-tint),0.05)" }}>
             <div className="flex items-center gap-3">
               <SophiaMark size={28} glowing />
@@ -611,7 +611,7 @@ function SignupOverlay({ onDismiss, onComplete }: { onDismiss: () => void; onCom
             </button>
             <div className="flex items-center gap-3"><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /><span className="text-[11px] text-ce-text-tertiary">or</span><div className="flex-1 h-px bg-[rgba(var(--ce-glass-tint),0.05)]" /></div>
             <input type="email" placeholder="Where should I send this?" className="w-full px-4 py-3 rounded-xl border border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-primary placeholder:text-ce-text-tertiary focus:outline-none focus:border-[rgba(var(--ce-role-edgestar-rgb),0.3)] transition-colors" style={{ background: "rgba(var(--ce-glass-tint),0.03)", fontFamily: "var(--font-body)", fontSize: "14px" }} />
-            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer" style={{ background: "linear-gradient(135deg, var(--ce-lime), var(--ce-role-edgestar))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
+            <button onClick={() => onComplete?.()} className="w-full flex items-center justify-center gap-2 px-5 py-3 rounded-xl cursor-pointer" style={{ background: "linear-gradient(135deg, var(--ce-cyan), var(--ce-role-edgestar))", fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-void)" }}>
               <Sparkles className="w-4 h-4" /> Save my roadmap
             </button>
             <p className="text-[11px] text-ce-text-tertiary text-center">Free. No catch.</p>
@@ -695,7 +695,7 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
               </motion.div>
               <motion.div className="flex flex-col items-center gap-2" initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.8, duration: 0.5, ease: EASE }}>
                 <h1 className="text-ce-text-primary text-center" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: "32px" }}>
-                  Your world is about to<br /><span style={{ color: "var(--ce-lime)" }}>open up.</span>
+                  Your world is about to<br /><span style={{ color: "var(--ce-cyan)" }}>open up.</span>
                 </h1>
               </motion.div>
             </motion.div>
@@ -749,12 +749,12 @@ export function OnboardingH1({ onComplete }: { onComplete?: (role?: string) => v
               <div className="flex flex-wrap justify-center gap-3">
                 {(pathQ?.targetOpts || TARGETS).map((o, i) => (
                   <motion.button key={o.id} onClick={() => { setTarget(o.id); setTimeout(() => go("level"), 450); }}
-                    className={`flex items-center gap-2.5 pl-3 pr-4 py-3 rounded-xl cursor-pointer border transition-all duration-200 ${target === o.id ? "border-[rgba(var(--ce-lime-rgb),0.2)] text-ce-text-primary" : "border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:border-[rgba(var(--ce-glass-tint),0.1)] hover:text-ce-text-primary"}`}
-                    style={{ background: target === o.id ? "linear-gradient(135deg, rgba(var(--ce-lime-rgb),0.08), rgba(var(--ce-role-edgestar-rgb),0.04))" : "rgba(var(--ce-glass-tint),0.025)", fontFamily: "var(--font-body)", fontSize: "14px", willChange: "transform, opacity" }}
+                    className={`flex items-center gap-2.5 pl-3 pr-4 py-3 rounded-xl cursor-pointer border transition-all duration-200 ${target === o.id ? "border-[rgba(var(--ce-cyan-rgb),0.2)] text-ce-text-primary" : "border-[rgba(var(--ce-glass-tint),0.06)] text-ce-text-secondary hover:border-[rgba(var(--ce-glass-tint),0.1)] hover:text-ce-text-primary"}`}
+                    style={{ background: target === o.id ? "linear-gradient(135deg, rgba(var(--ce-cyan-rgb),0.08), rgba(var(--ce-role-edgestar-rgb),0.04))" : "rgba(var(--ce-glass-tint),0.025)", fontFamily: "var(--font-body)", fontSize: "14px", willChange: "transform, opacity" }}
                     initial={{ opacity: 0, scale: 0.88 }} animate={{ opacity: 1, scale: 1 }}
                     transition={{ delay: 0.5 + i * 0.05, duration: 0.35, ease: EASE }}
                     whileTap={{ scale: 0.96 }} whileHover={{ scale: 1.02 }}>
-                    <span className={target === o.id ? "text-ce-lime" : "text-ce-text-tertiary"}>{o.icon}</span>{o.label}
+                    <span className={target === o.id ? "text-ce-cyan" : "text-ce-text-tertiary"}>{o.icon}</span>{o.label}
                   </motion.button>
                 ))}
               </div>

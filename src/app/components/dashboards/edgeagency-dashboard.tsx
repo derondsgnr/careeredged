@@ -111,7 +111,7 @@ export function EdgeAgencyDashboard({ onNavigate }: { onNavigate?: NavigateFn })
           <GlassCard delay={0.6}>
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Briefcase className="w-4 h-4 text-ce-lime" />
+                <Briefcase className="w-4 h-4 text-ce-cyan" />
                 <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Workforce Opportunities</span>
               </div>
               <button onClick={() => onNavigate?.("programs")} className="text-[11px] text-ce-text-tertiary hover:text-ce-text-secondary cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>

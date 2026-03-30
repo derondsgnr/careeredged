@@ -68,7 +68,7 @@ function SophiaPanel({
     <motion.div
       className="rounded-xl p-5"
       style={{
-        background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-lime-rgb),0.02))",
+        background: "linear-gradient(145deg, rgba(var(--ce-role-edgestar-rgb),0.05), rgba(var(--ce-glass-tint),0.02) 50%, rgba(var(--ce-cyan-rgb),0.02))",
         border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)",
       }}
       initial={{ opacity: 0, y: 10 }}
@@ -94,7 +94,7 @@ function SophiaPanel({
           onClick={onAction}
           className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg cursor-pointer transition-all hover:brightness-110"
           style={{
-            background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-lime-rgb),0.05))",
+            background: "linear-gradient(135deg, rgba(var(--ce-role-edgestar-rgb),0.1), rgba(var(--ce-cyan-rgb),0.05))",
             border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)",
             color: COLORS.cyan,
             fontFamily: FONT.body,
@@ -366,11 +366,11 @@ export function SophiaBottomBar({
       {/* Voice entry */}
       <button
         onClick={onVoiceStart}
-        className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(var(--ce-lime-rgb),0.08)] group flex-shrink-0"
+        className="w-8 h-8 rounded-full flex items-center justify-center cursor-pointer transition-colors hover:bg-[rgba(var(--ce-cyan-rgb),0.08)] group flex-shrink-0"
         style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
         title="Talk to Sophia"
       >
-        <Mic className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] group-hover:text-ce-lime transition-colors" />
+        <Mic className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] group-hover:text-ce-cyan transition-colors" />
       </button>
 
       {/* Variation B: Chat | Explore segment toggle */}
