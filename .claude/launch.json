@@ -4,8 +4,8 @@
     {
       "name": "Careeredgde",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--port", "5191"],
-      "port": 5191
+      "runtimeArgs": ["vite"],
+      "autoPort": true
     }
   ]
 }
