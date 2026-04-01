@@ -154,8 +154,8 @@ const PHASE_2_MILESTONES: Milestone[] = [
 ];
 
 const CATEGORY_META = {
-  skill: { label: "Skills to Build", icon: GraduationCap, color: "var(--ce-role-edgestar)" },
-  action: { label: "Actions to Take", icon: Target, color: "var(--ce-lime)" },
+  skill: { label: "Skills to Build", icon: GraduationCap, color: "var(--ce-text-secondary)" },
+  action: { label: "Actions to Take", icon: Target, color: "var(--ce-text-secondary)" },
   resource: { label: "Resources to Complete", icon: BookOpen, color: "var(--ce-text-secondary)" },
 };
 

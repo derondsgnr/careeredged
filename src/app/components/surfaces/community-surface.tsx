@@ -78,10 +78,10 @@ type ActiveTab = "feed" | "groups" | "events";
 
 const POST_TYPE_CONFIG: Record<PostType, { label: string; color: string }> = {
   update:      { label: "Update",      color: "var(--ce-text-secondary)" },
-  article:     { label: "Article",     color: "var(--ce-cyan)" },
-  insight:     { label: "Insight",     color: "var(--ce-role-guide)" },
-  question:    { label: "Question",    color: "var(--ce-role-edgepreneur)" },
-  achievement: { label: "Achievement", color: "var(--ce-lime)" },
+  article:     { label: "Article",     color: "var(--ce-text-secondary)" },
+  insight:     { label: "Insight",     color: "var(--ce-text-secondary)" },
+  question:    { label: "Question",    color: "var(--ce-text-secondary)" },
+  achievement: { label: "Achievement", color: "var(--ce-text-secondary)" },
 };
 
 const ACTIVITY_CONFIG: Record<string, { label: string; color: string }> = {
@@ -95,7 +95,7 @@ const ACTIVITY_CONFIG: Record<string, { label: string; color: string }> = {
 const FEED_POSTS: FeedPost[] = [
   {
     id: "p1",
-    author: { name: "Sarah K.", initial: "S", role: "edgestar", avatarColor: "var(--ce-role-edgestar)" },
+    author: { name: "Sarah K.", initial: "S", role: "edgestar", avatarColor: "var(--ce-text-tertiary)" },
     type: "achievement",
     content: "Just landed my first tech role after 6 months on EdgePath! The resume workshops and mock interviews made all the difference. Thank you to this incredible community.",
     timestamp: "2h ago",
@@ -105,7 +105,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p2",
-    author: { name: "James L.", initial: "J", role: "edgestar", avatarColor: "var(--ce-role-edu)" },
+    author: { name: "James L.", initial: "J", role: "edgestar", avatarColor: "var(--ce-text-tertiary)" },
     type: "question",
     content: "Has anyone transitioned from marketing to product management? Looking for advice on how to position transferable skills and which certifications actually matter.",
     timestamp: "4h ago",
@@ -115,7 +115,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p3",
-    author: { name: "Priya M.", initial: "P", role: "edgepreneur", avatarColor: "var(--ce-role-edgepreneur)" },
+    author: { name: "Priya M.", initial: "P", role: "edgepreneur", avatarColor: "var(--ce-text-tertiary)" },
     type: "article",
     content: "5 Things I Wish I Knew Before My H-1B Interview — From document prep to the questions they actually ask, here's my honest breakdown after going through the process twice.",
     timestamp: "6h ago",
@@ -126,7 +126,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p4",
-    author: { name: "Alex T.", initial: "A", role: "edgestar", avatarColor: "var(--ce-role-ngo)" },
+    author: { name: "Alex T.", initial: "A", role: "edgestar", avatarColor: "var(--ce-text-tertiary)" },
     type: "update",
     content: "Starting my 30-day UX challenge today. Who's joining? I'll be posting daily progress and sharing resources in the UX/UI Designers group.",
     timestamp: "8h ago",
@@ -136,7 +136,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p5",
-    author: { name: "Coach Maria", initial: "M", role: "guide", avatarColor: "var(--ce-role-guide)" },
+    author: { name: "Coach Maria", initial: "M", role: "guide", avatarColor: "var(--ce-text-tertiary)" },
     type: "insight",
     content: "Remote salaries are converging globally — here's what I'm seeing in my coaching practice. Companies are moving toward location-agnostic bands, which changes the negotiation playbook entirely.",
     timestamp: "12h ago",
@@ -146,7 +146,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p6",
-    author: { name: "TechBridge Academy", initial: "T", role: "edu", avatarColor: "var(--ce-role-agency)" },
+    author: { name: "TechBridge Academy", initial: "T", role: "edu", avatarColor: "var(--ce-text-tertiary)" },
     type: "achievement",
     content: "Our bootcamp cohort just graduated 45 students with 89% placement rate! Proud of every single graduate. If your org is hiring junior devs, reach out.",
     timestamp: "1d ago",
@@ -156,7 +156,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p7",
-    author: { name: "David P.", initial: "D", role: "edgestar", avatarColor: "var(--ce-role-parent)" },
+    author: { name: "David P.", initial: "D", role: "edgestar", avatarColor: "var(--ce-text-tertiary)" },
     type: "question",
     content: "Best resources for learning system design? I have 2 months before my interviews at FAANG companies and want a structured approach.",
     timestamp: "1d ago",
@@ -166,7 +166,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p8",
-    author: { name: "Nina R.", initial: "N", role: "edgestar", avatarColor: "var(--ce-role-edgestar)" },
+    author: { name: "Nina R.", initial: "N", role: "edgestar", avatarColor: "var(--ce-text-tertiary)" },
     type: "update",
     content: "Grateful for this community. Got 3 referrals through EdgeGroups this month. Networking here actually works — people genuinely want to help.",
     timestamp: "1d ago",
@@ -176,7 +176,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p9",
-    author: { name: "Fatima A.", initial: "F", role: "edgestar", avatarColor: "var(--ce-role-ngo)" },
+    author: { name: "Fatima A.", initial: "F", role: "edgestar", avatarColor: "var(--ce-text-tertiary)" },
     type: "article",
     content: "How I negotiated a 40% salary increase as an immigrant professional. The key was data — I used EdgeMatch benchmarks to back every ask.",
     timestamp: "2d ago",
@@ -186,7 +186,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p10",
-    author: { name: "Coach Ben", initial: "B", role: "guide", avatarColor: "var(--ce-role-guide)" },
+    author: { name: "Coach Ben", initial: "B", role: "guide", avatarColor: "var(--ce-text-tertiary)" },
     type: "insight",
     content: "The #1 mistake I see in career changers: they try to hide the pivot instead of owning the narrative. Your unique path IS the selling point.",
     timestamp: "2d ago",
@@ -196,7 +196,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p11",
-    author: { name: "Raj S.", initial: "R", role: "edgepreneur", avatarColor: "var(--ce-role-edgepreneur)" },
+    author: { name: "Raj S.", initial: "R", role: "edgepreneur", avatarColor: "var(--ce-text-tertiary)" },
     type: "update",
     content: "Just shipped v1 of my portfolio site using the feedback from this group. The before/after is night and day. Sharing the case study soon.",
     timestamp: "3d ago",
@@ -206,7 +206,7 @@ const FEED_POSTS: FeedPost[] = [
   },
   {
     id: "p12",
-    author: { name: "Global Talent Hub", initial: "G", role: "ngo", avatarColor: "var(--ce-role-employer)" },
+    author: { name: "Global Talent Hub", initial: "G", role: "ngo", avatarColor: "var(--ce-text-tertiary)" },
     type: "achievement",
     content: "We just crossed 1,000 professionals matched through our international talent program. Each match represents a career transformed. Here's to the next thousand.",
     timestamp: "3d ago",
@@ -244,35 +244,35 @@ interface Comment {
 
 const MOCK_COMMENTS: Record<string, Comment[]> = {
   p1: [
-    { id: "c1a", author: { name: "James L.", initial: "J", avatarColor: "var(--ce-role-edu)" }, text: "Congrats Sarah! This is so inspiring. What was the biggest challenge during your job search?", timestamp: "1h ago" },
-    { id: "c1b", author: { name: "Coach Maria", initial: "M", avatarColor: "var(--ce-role-guide)" }, text: "So proud of you! The mock interviews really paid off.", timestamp: "45m ago" },
-    { id: "c1c", author: { name: "Nina R.", initial: "N", avatarColor: "var(--ce-role-edgestar)" }, text: "Amazing! Which EdgePath track were you on?", timestamp: "30m ago" },
+    { id: "c1a", author: { name: "James L.", initial: "J", avatarColor: "var(--ce-text-tertiary)" }, text: "Congrats Sarah! This is so inspiring. What was the biggest challenge during your job search?", timestamp: "1h ago" },
+    { id: "c1b", author: { name: "Coach Maria", initial: "M", avatarColor: "var(--ce-text-tertiary)" }, text: "So proud of you! The mock interviews really paid off.", timestamp: "45m ago" },
+    { id: "c1c", author: { name: "Nina R.", initial: "N", avatarColor: "var(--ce-text-tertiary)" }, text: "Amazing! Which EdgePath track were you on?", timestamp: "30m ago" },
   ],
   p2: [
-    { id: "c2a", author: { name: "Priya M.", initial: "P", avatarColor: "var(--ce-role-edgepreneur)" }, text: "I made this exact transition! Happy to chat about it. The product sense interviews were the hardest part.", timestamp: "3h ago" },
-    { id: "c2b", author: { name: "Alex T.", initial: "A", avatarColor: "var(--ce-role-ngo)" }, text: "Google's PM certificate on Coursera was genuinely useful. Skip the expensive bootcamps.", timestamp: "2h ago" },
-    { id: "c2c", author: { name: "Coach Ben", initial: "B", avatarColor: "var(--ce-role-guide)" }, text: "Your storytelling skills from marketing are a huge advantage in PM interviews. Lean into that.", timestamp: "1h ago" },
+    { id: "c2a", author: { name: "Priya M.", initial: "P", avatarColor: "var(--ce-text-tertiary)" }, text: "I made this exact transition! Happy to chat about it. The product sense interviews were the hardest part.", timestamp: "3h ago" },
+    { id: "c2b", author: { name: "Alex T.", initial: "A", avatarColor: "var(--ce-text-tertiary)" }, text: "Google's PM certificate on Coursera was genuinely useful. Skip the expensive bootcamps.", timestamp: "2h ago" },
+    { id: "c2c", author: { name: "Coach Ben", initial: "B", avatarColor: "var(--ce-text-tertiary)" }, text: "Your storytelling skills from marketing are a huge advantage in PM interviews. Lean into that.", timestamp: "1h ago" },
   ],
   p3: [
-    { id: "c3a", author: { name: "David P.", initial: "D", avatarColor: "var(--ce-role-parent)" }, text: "This is exactly what I needed. My interview is next month. Bookmarked!", timestamp: "5h ago" },
-    { id: "c3b", author: { name: "Fatima A.", initial: "F", avatarColor: "var(--ce-role-ngo)" }, text: "Can you share more about the document prep timeline? When did you start gathering everything?", timestamp: "4h ago" },
+    { id: "c3a", author: { name: "David P.", initial: "D", avatarColor: "var(--ce-text-tertiary)" }, text: "This is exactly what I needed. My interview is next month. Bookmarked!", timestamp: "5h ago" },
+    { id: "c3b", author: { name: "Fatima A.", initial: "F", avatarColor: "var(--ce-text-tertiary)" }, text: "Can you share more about the document prep timeline? When did you start gathering everything?", timestamp: "4h ago" },
   ],
   p4: [
-    { id: "c4a", author: { name: "Nina R.", initial: "N", avatarColor: "var(--ce-role-edgestar)" }, text: "Count me in! I've been wanting to build a daily design habit.", timestamp: "7h ago" },
-    { id: "c4b", author: { name: "Sarah K.", initial: "S", avatarColor: "var(--ce-role-edgestar)" }, text: "Great idea! I did a similar challenge last year and it transformed my portfolio.", timestamp: "6h ago" },
+    { id: "c4a", author: { name: "Nina R.", initial: "N", avatarColor: "var(--ce-text-tertiary)" }, text: "Count me in! I've been wanting to build a daily design habit.", timestamp: "7h ago" },
+    { id: "c4b", author: { name: "Sarah K.", initial: "S", avatarColor: "var(--ce-text-tertiary)" }, text: "Great idea! I did a similar challenge last year and it transformed my portfolio.", timestamp: "6h ago" },
   ],
   p5: [
-    { id: "c5a", author: { name: "James L.", initial: "J", avatarColor: "var(--ce-role-edu)" }, text: "This matches what I'm seeing in the market. Location-agnostic is the future.", timestamp: "10h ago" },
-    { id: "c5b", author: { name: "Raj S.", initial: "R", avatarColor: "var(--ce-role-edgepreneur)" }, text: "How does this affect negotiation strategy? Should we still anchor to local market rates?", timestamp: "8h ago" },
-    { id: "c5c", author: { name: "Priya M.", initial: "P", avatarColor: "var(--ce-role-edgepreneur)" }, text: "Would love a deep dive on this in your next coaching session!", timestamp: "6h ago" },
+    { id: "c5a", author: { name: "James L.", initial: "J", avatarColor: "var(--ce-text-tertiary)" }, text: "This matches what I'm seeing in the market. Location-agnostic is the future.", timestamp: "10h ago" },
+    { id: "c5b", author: { name: "Raj S.", initial: "R", avatarColor: "var(--ce-text-tertiary)" }, text: "How does this affect negotiation strategy? Should we still anchor to local market rates?", timestamp: "8h ago" },
+    { id: "c5c", author: { name: "Priya M.", initial: "P", avatarColor: "var(--ce-text-tertiary)" }, text: "Would love a deep dive on this in your next coaching session!", timestamp: "6h ago" },
   ],
 };
 
 const BUDDY_MATCHES = [
-  { name: "Lena K.", initial: "L", role: "UX Designer", avatarColor: "var(--ce-role-edgestar)", match: 92 },
-  { name: "Marcus W.", initial: "M", role: "Career Changer", avatarColor: "var(--ce-role-edu)", match: 87 },
-  { name: "Aisha N.", initial: "A", role: "Frontend Dev", avatarColor: "var(--ce-role-edgepreneur)", match: 85 },
-  { name: "Tom R.", initial: "T", role: "PM Aspirant", avatarColor: "var(--ce-role-ngo)", match: 81 },
+  { name: "Lena K.", initial: "L", role: "UX Designer", avatarColor: "var(--ce-text-tertiary)", match: 92 },
+  { name: "Marcus W.", initial: "M", role: "Career Changer", avatarColor: "var(--ce-text-tertiary)", match: 87 },
+  { name: "Aisha N.", initial: "A", role: "Frontend Dev", avatarColor: "var(--ce-text-tertiary)", match: 85 },
+  { name: "Tom R.", initial: "T", role: "PM Aspirant", avatarColor: "var(--ce-text-tertiary)", match: 81 },
 ];
 
 // ─── Building step config ────────────────────────────────────────────────────
@@ -776,9 +776,9 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
                         <span
                           className="text-[9px] px-1.5 py-0.5 rounded-full inline-block"
                           style={{
-                            background: `${POST_TYPE_CONFIG[post.type].color}12`,
-                            color: POST_TYPE_CONFIG[post.type].color,
-                            border: `1px solid ${POST_TYPE_CONFIG[post.type].color}20`,
+                            background: "rgba(var(--ce-glass-tint), 0.06)",
+                            color: "var(--ce-text-secondary)",
+                            border: "1px solid rgba(var(--ce-glass-tint), 0.06)",
                             fontFamily: "var(--font-body)",
                           }}
                         >
@@ -1158,9 +1158,9 @@ export function CommunitySurface({ role, onNavigate }: { role?: string; onNaviga
                         onClick={() => setComposeType(type)}
                         className="px-2.5 py-1 rounded-lg text-[10px] cursor-pointer transition-all"
                         style={{
-                          background: selected ? `${cfg.color}18` : "rgba(var(--ce-glass-tint),0.04)",
-                          border: selected ? `1px solid ${cfg.color}30` : "1px solid rgba(var(--ce-glass-tint),0.08)",
-                          color: selected ? cfg.color : "var(--ce-text-tertiary)",
+                          background: selected ? "rgba(var(--ce-glass-tint),0.08)" : "rgba(var(--ce-glass-tint),0.04)",
+                          border: selected ? "1px solid rgba(var(--ce-glass-tint),0.12)" : "1px solid rgba(var(--ce-glass-tint),0.08)",
+                          color: selected ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
                           fontFamily: "var(--font-body)",
                         }}
                       >

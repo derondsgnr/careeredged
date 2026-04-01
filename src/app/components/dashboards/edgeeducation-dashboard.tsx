@@ -15,16 +15,16 @@ import { SophiaInsight } from "../sophia-patterns";
 
 const KPIS = [
   { label: "Student Adoption", value: "72%", trend: "+8% this semester", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edu)", gauge: 0.72 },
-  { label: "Career Readiness", value: "68", trend: "+16 vs Fall '25", icon: <TrendingUp className="w-4 h-4" />, color: "var(--ce-lime)", gauge: 0.68 },
-  { label: "Employer Partners", value: "34", trend: "+6 new", icon: <Building2 className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
-  { label: "Events This Month", value: "5", trend: "2 career fairs", icon: <Calendar className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
+  { label: "Career Readiness", value: "68", trend: "+16 vs Fall '25", icon: <TrendingUp className="w-4 h-4" />, color: "var(--ce-role-edu)", gauge: 0.68 },
+  { label: "Employer Partners", value: "34", trend: "+6 new", icon: <Building2 className="w-4 h-4" />, color: "var(--ce-role-edu)", gauge: null },
+  { label: "Events This Month", value: "5", trend: "2 career fairs", icon: <Calendar className="w-4 h-4" />, color: "var(--ce-role-edu)", gauge: null },
 ];
 
 const OUTCOMES = [
   { label: "Career Knowledge & Skills", score: 74, target: 80, color: "var(--ce-role-edu)" },
-  { label: "Experiential Learning", score: 61, target: 75, color: "var(--ce-role-edgestar)" },
-  { label: "Employment Outcomes", score: 58, target: 70, color: "var(--ce-lime)" },
-  { label: "Employer Engagement", score: 82, target: 80, color: "var(--ce-role-employer)" },
+  { label: "Experiential Learning", score: 61, target: 75, color: "var(--ce-role-edu)" },
+  { label: "Employment Outcomes", score: 58, target: 70, color: "var(--ce-role-edu)" },
+  { label: "Employer Engagement", score: 82, target: 80, color: "var(--ce-role-edu)" },
 ];
 
 const COHORTS = [

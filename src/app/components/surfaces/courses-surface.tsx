@@ -55,9 +55,9 @@ interface Course {
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const DIFFICULTY_CONFIG: Record<DifficultyLevel, { label: string; color: string }> = {
-  beginner:     { label: "Beginner",     color: "var(--ce-status-success)" },
-  intermediate: { label: "Intermediate", color: "var(--ce-cyan)" },
-  advanced:     { label: "Advanced",     color: "var(--ce-role-edgepreneur)" },
+  beginner:     { label: "Beginner",     color: "var(--ce-text-secondary)" },
+  intermediate: { label: "Intermediate", color: "var(--ce-text-secondary)" },
+  advanced:     { label: "Advanced",     color: "var(--ce-text-secondary)" },
 };
 
 const FORMAT_CONFIG: Record<CourseFormat, { label: string; icon: React.ReactNode }> = {

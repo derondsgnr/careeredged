@@ -33,8 +33,8 @@ import { BuddyDashboardCard } from "./buddy-dashboard-card";
 const KPIS = [
   { label: "Career Score", value: "72", trend: "+4", icon: <Target className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: 0.72 },
   { label: "Applications", value: "12", trend: "+3 this week", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: null },
-  { label: "ATS Score", value: "87", trend: "Resume v3", icon: <FileText className="w-4 h-4" />, color: "var(--ce-lime)", gauge: 0.87 },
-  { label: "EdgeGas", value: "45", trend: "+15 earned", icon: <Zap className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "ATS Score", value: "87", trend: "Resume v3", icon: <FileText className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: 0.87 },
+  { label: "EdgeGas", value: "45", trend: "+15 earned", icon: <Zap className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: null },
 ];
 
 // ─── Roadmap Strip (from H1) ────────────────────────────────────────────────
@@ -77,16 +77,16 @@ function ActivityWidget({ onNav }: { onNav?: (id: string) => void }) {
 
   const activities = [
     { time: "2h ago", text: "Resume optimized — ATS score: 87", icon: <FileText className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-    { time: "5h ago", text: "Applied to Product Designer at Figma", icon: <ArrowUpRight className="w-3 h-3" />, color: "var(--ce-lime)" },
-    { time: "Yesterday", text: "Completed milestone: Portfolio review", icon: <Check className="w-3 h-3" />, color: "var(--ce-lime)" },
-    { time: "2 days ago", text: "New job match: UX Lead at Intercom", icon: <Search className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-    { time: "3 days ago", text: "Session with Alice Chen — Career Coaching", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-secondary)", target: "sessions" },
+    { time: "5h ago", text: "Applied to Product Designer at Figma", icon: <ArrowUpRight className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { time: "Yesterday", text: "Completed milestone: Portfolio review", icon: <Check className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { time: "2 days ago", text: "New job match: UX Lead at Intercom", icon: <Search className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { time: "3 days ago", text: "Session with Alice Chen — Career Coaching", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-tertiary)", target: "sessions" },
   ];
 
   const upcoming = [
-    { date: "Today 2:00 PM", text: "Session with Alice Chen — Career Coaching", icon: <Calendar className="w-3 h-3" />, color: "var(--ce-lime)", target: "sessions" },
-    { date: "Friday", text: "LinkedIn optimization due", icon: <Target className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-    { date: "Monday", text: "Mock interview with James Okafor", icon: <Users className="w-3 h-3" />, color: "var(--ce-role-guide)", target: "sessions" },
+    { date: "Today 2:00 PM", text: "Session with Alice Chen — Career Coaching", icon: <Calendar className="w-3 h-3" />, color: "var(--ce-role-edgestar)", target: "sessions" },
+    { date: "Friday", text: "LinkedIn optimization due", icon: <Target className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { date: "Monday", text: "Mock interview with James Okafor", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-tertiary)", target: "sessions" },
   ];
 
   const items = tab === "activity" ? activities : upcoming;

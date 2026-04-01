@@ -17,9 +17,9 @@ import { BuddyDashboardCard } from "../buddy-dashboard-card";
 
 const KPIS = [
   { label: "Business Score", value: "64", trend: "+8", icon: <Rocket className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: 0.64 },
-  { label: "EdgeGas", value: "38", trend: "+10 earned", icon: <Zap className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
-  { label: "Milestones", value: "7", trend: "3 this month", icon: <Target className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
-  { label: "Connections", value: "12", trend: "+4 advisors", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
+  { label: "EdgeGas", value: "38", trend: "+10 earned", icon: <Zap className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: null },
+  { label: "Milestones", value: "7", trend: "3 this month", icon: <Target className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: null },
+  { label: "Connections", value: "12", trend: "+4 advisors", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: null },
 ];
 
 const PHASES = [
@@ -40,9 +40,9 @@ const MILESTONES = [
 
 const ACTIVITIES = [
   { time: "3h ago", text: "Pitch deck section 3 completed", icon: <FileText className="w-3 h-3" />, color: "var(--ce-role-edgepreneur)" },
-  { time: "Yesterday", text: "Advisor session with Michael", icon: <Users className="w-3 h-3" />, color: "var(--ce-role-guide)" },
-  { time: "2 days ago", text: "Market validation survey sent", icon: <TrendingUp className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-  { time: "3 days ago", text: "Competitive landscape mapped", icon: <Lightbulb className="w-3 h-3" />, color: "var(--ce-lime)" },
+  { time: "Yesterday", text: "Advisor session with Michael", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+  { time: "2 days ago", text: "Market validation survey sent", icon: <TrendingUp className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+  { time: "3 days ago", text: "Competitive landscape mapped", icon: <Lightbulb className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
 ];
 
 export function EdgePreneurDashboard({ onNavigate }: { onNavigate?: NavigateFn }) {

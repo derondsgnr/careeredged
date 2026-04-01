@@ -15,8 +15,8 @@ import { SophiaInsight } from "../sophia-patterns";
 
 const KPIS = [
   { label: "Active Programs", value: "3", trend: "2 regions", icon: <Building2 className="w-4 h-4" />, color: "var(--ce-role-agency)", gauge: null },
-  { label: "Total Participants", value: "312", trend: "+47 this Q", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
-  { label: "Placements", value: "89", trend: "+21 this month", icon: <Briefcase className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "Total Participants", value: "312", trend: "+47 this Q", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-agency)", gauge: null },
+  { label: "Placements", value: "89", trend: "+21 this month", icon: <Briefcase className="w-4 h-4" />, color: "var(--ce-role-agency)", gauge: null },
   { label: "Budget Utilization", value: "78%", trend: "On target", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-role-agency)", gauge: 0.78 },
 ];
 

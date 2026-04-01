@@ -66,11 +66,11 @@ interface ScheduleSurfaceProps {
 // ─── Type config ─────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<EventType, { label: string; color: string }> = {
-  session:   { label: "Session",   color: "var(--ce-role-edgestar)" },
+  session:   { label: "Session",   color: "var(--ce-text-secondary)" },
   interview: { label: "Interview", color: "var(--ce-status-success)" },
-  event:     { label: "Event",     color: "var(--ce-role-edu)" },
+  event:     { label: "Event",     color: "var(--ce-text-secondary)" },
   deadline:  { label: "Deadline",  color: "var(--ce-status-warning)" },
-  reminder:  { label: "Reminder",  color: "var(--ce-role-guide)" },
+  reminder:  { label: "Reminder",  color: "var(--ce-text-secondary)" },
 };
 
 // ─── Mock data ───────────────────────────────────────────────────────────────

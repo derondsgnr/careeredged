@@ -15,15 +15,15 @@ import { SophiaInsight } from "../sophia-patterns";
 
 const KPIS = [
   { label: "Open Positions", value: "6", trend: "2 new this week", icon: <Briefcase className="w-4 h-4" />, color: "var(--ce-role-employer)", gauge: null },
-  { label: "Total Applicants", value: "142", trend: "+28 this week", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
-  { label: "Interview Pipeline", value: "18", trend: "5 scheduled", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
-  { label: "Avg Time-to-Hire", value: "23d", trend: "-4d vs last Q", icon: <Clock className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: null },
+  { label: "Total Applicants", value: "142", trend: "+28 this week", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-employer)", gauge: null },
+  { label: "Interview Pipeline", value: "18", trend: "5 scheduled", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-role-employer)", gauge: null },
+  { label: "Avg Time-to-Hire", value: "23d", trend: "-4d vs last Q", icon: <Clock className="w-4 h-4" />, color: "var(--ce-role-employer)", gauge: null },
 ];
 
 const FUNNEL_STAGES = [
-  { label: "Applied", count: 142, width: 100, color: "var(--ce-role-edgestar)" },
-  { label: "Screened", count: 67, width: 47, color: "var(--ce-role-guide)" },
-  { label: "Interview", count: 18, width: 13, color: "var(--ce-lime)" },
+  { label: "Applied", count: 142, width: 100, color: "var(--ce-role-employer)" },
+  { label: "Screened", count: 67, width: 47, color: "var(--ce-role-employer)" },
+  { label: "Interview", count: 18, width: 13, color: "var(--ce-role-employer)" },
   { label: "Offer", count: 3, width: 2, color: "var(--ce-role-employer)" },
 ];
 

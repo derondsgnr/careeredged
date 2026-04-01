@@ -56,12 +56,12 @@ interface LearningPath {
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<ResourceType, { label: string; color: string; icon: React.ReactNode }> = {
-  article:     { label: "Article",     color: "var(--ce-role-edgestar)",     icon: <FileText className="w-3 h-3" /> },
-  video:       { label: "Video",       color: "var(--ce-role-guide)",        icon: <Play className="w-3 h-3" /> },
-  tool:        { label: "Tool",        color: "var(--ce-lime)",              icon: <Wrench className="w-3 h-3" /> },
-  course:      { label: "Course",      color: "var(--ce-role-edu)",          icon: <GraduationCap className="w-3 h-3" /> },
-  scholarship: { label: "Scholarship", color: "var(--ce-role-edgepreneur)",  icon: <Award className="w-3 h-3" /> },
-  workshop:    { label: "Workshop",    color: "var(--ce-role-employer)",     icon: <Star className="w-3 h-3" /> },
+  article:     { label: "Article",     color: "var(--ce-text-secondary)",     icon: <FileText className="w-3 h-3" /> },
+  video:       { label: "Video",       color: "var(--ce-text-secondary)",    icon: <Play className="w-3 h-3" /> },
+  tool:        { label: "Tool",        color: "var(--ce-text-secondary)",    icon: <Wrench className="w-3 h-3" /> },
+  course:      { label: "Course",      color: "var(--ce-text-secondary)",    icon: <GraduationCap className="w-3 h-3" /> },
+  scholarship: { label: "Scholarship", color: "var(--ce-text-secondary)",    icon: <Award className="w-3 h-3" /> },
+  workshop:    { label: "Workshop",    color: "var(--ce-text-secondary)",    icon: <Star className="w-3 h-3" /> },
 };
 
 const FOCUS_PILLS = ["Technical Skills", "Industry Knowledge", "Soft Skills", "Certifications", "Job Search"] as const;

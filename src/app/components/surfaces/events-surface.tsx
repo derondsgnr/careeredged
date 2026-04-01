@@ -76,11 +76,11 @@ interface CareerEvent {
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<EventType, { label: string; color: string; icon: React.ReactNode }> = {
-  career_fair:    { label: "Career Fair",     color: "var(--ce-role-edu)", icon: <Star className="w-3 h-3" /> },
-  workshop:       { label: "Workshop",        color: "var(--ce-role-guide)", icon: <BookOpen className="w-3 h-3" /> },
-  employer_visit: { label: "Employer Visit",  color: "var(--ce-role-employer)", icon: <Zap className="w-3 h-3" /> },
-  info_session:   { label: "Info Session",    color: "var(--ce-role-edgepreneur)", icon: <Radio className="w-3 h-3" /> },
-  bootcamp:       { label: "Bootcamp",        color: "var(--ce-role-parent)", icon: <TrendingUp className="w-3 h-3" /> },
+  career_fair:    { label: "Career Fair",     color: "var(--ce-text-secondary)", icon: <Star className="w-3 h-3" /> },
+  workshop:       { label: "Workshop",        color: "var(--ce-text-secondary)", icon: <BookOpen className="w-3 h-3" /> },
+  employer_visit: { label: "Employer Visit",  color: "var(--ce-text-secondary)", icon: <Zap className="w-3 h-3" /> },
+  info_session:   { label: "Info Session",    color: "var(--ce-text-secondary)", icon: <Radio className="w-3 h-3" /> },
+  bootcamp:       { label: "Bootcamp",        color: "var(--ce-text-secondary)", icon: <TrendingUp className="w-3 h-3" /> },
 };
 
 const EVENTS: CareerEvent[] = [

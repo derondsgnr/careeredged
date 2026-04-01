@@ -61,11 +61,11 @@ interface FundingOpp {
 // ─── Config ───────────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<FundingType, { label: string; color: string; icon: React.ReactNode }> = {
-  accelerator:  { label: "Accelerator",   color: "var(--ce-role-edgepreneur)", icon: <Rocket className="w-3 h-3" /> },
-  grant:        { label: "Grant",         color: "var(--ce-lime)", icon: <Award className="w-3 h-3" /> },
-  angel:        { label: "Angel",         color: "var(--ce-role-edgestar)", icon: <Users className="w-3 h-3" /> },
-  vc:           { label: "VC",            color: "var(--ce-role-guide)", icon: <TrendingUp className="w-3 h-3" /> },
-  partnership:  { label: "Partnership",   color: "var(--ce-role-parent)", icon: <Globe className="w-3 h-3" /> },
+  accelerator:  { label: "Accelerator",   color: "var(--ce-text-secondary)", icon: <Rocket className="w-3 h-3" /> },
+  grant:        { label: "Grant",         color: "var(--ce-text-secondary)", icon: <Award className="w-3 h-3" /> },
+  angel:        { label: "Angel",         color: "var(--ce-text-secondary)", icon: <Users className="w-3 h-3" /> },
+  vc:           { label: "VC",            color: "var(--ce-text-secondary)", icon: <TrendingUp className="w-3 h-3" /> },
+  partnership:  { label: "Partnership",   color: "var(--ce-text-secondary)", icon: <Globe className="w-3 h-3" /> },
 };
 
 const STAGE_LABELS: Record<VentureStage, string> = {
@@ -76,12 +76,12 @@ const STAGE_LABELS: Record<VentureStage, string> = {
 };
 
 const APP_STATUS_CONFIG: Record<AppStatus, { label: string; color: string }> = {
-  not_started: { label: "Not started",  color: "var(--ce-text-quaternary)" },
-  in_progress: { label: "In progress",  color: "var(--ce-role-edgestar)" },
-  submitted:   { label: "Submitted",    color: "var(--ce-role-edgepreneur)" },
-  interview:   { label: "Interview",    color: "var(--ce-role-guide)" },
+  not_started: { label: "Not started",  color: "var(--ce-text-tertiary)" },
+  in_progress: { label: "In progress",  color: "var(--ce-text-secondary)" },
+  submitted:   { label: "Submitted",    color: "var(--ce-lime)" },
+  interview:   { label: "Interview",    color: "var(--ce-text-secondary)" },
   accepted:    { label: "Accepted",     color: "var(--ce-lime)" },
-  rejected:    { label: "Rejected",     color: "var(--ce-text-secondary)" },
+  rejected:    { label: "Rejected",     color: "var(--ce-status-error)" },
 };
 
 // ─── Data ────────────────────────────────────────────────────────────────────
@@ -793,8 +793,8 @@ export function FundingSurface() {
           initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2, duration: 0.35, ease: EASE }}>
           {[
             { label: "Opportunities matched",  value: opps.length,                                                      color: PRENEUR_GOLD },
-            { label: "Total available",         value: `$${(4645000).toLocaleString()}`,                                 color: "var(--ce-lime)"    },
-            { label: "Active applications",     value: activeApps.length,                                                color: "var(--ce-role-edgestar)"    },
+            { label: "Total available",         value: `$${(4645000).toLocaleString()}`,                                 color: "var(--ce-text-secondary)"    },
+            { label: "Active applications",     value: activeApps.length,                                                color: "var(--ce-text-secondary)"    },
             { label: "Urgent deadlines",        value: urgentDeadlines.length,                                           color: urgentDeadlines.length > 0 ? "var(--ce-status-error)" : "var(--ce-text-quaternary)" },
           ].map((stat) => (
             <div key={stat.label} className="rounded-xl px-4 py-3" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>

@@ -19,9 +19,9 @@ import { SophiaMark } from "../sophia-mark";
 
 const KPIS = [
   { label: "Sessions This Week", value: "8", trend: "+2 vs last week", icon: <Calendar className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
-  { label: "Monthly Earnings", value: "$1,240", trend: "+18%", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
-  { label: "Client Satisfaction", value: "4.9", trend: "23 reviews", icon: <Star className="w-4 h-4" />, color: "var(--ce-role-edgepreneur)", gauge: 0.98 },
-  { label: "Active Clients", value: "12", trend: "3 new this month", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
+  { label: "Monthly Earnings", value: "$1,240", trend: "+18%", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
+  { label: "Client Satisfaction", value: "4.9", trend: "23 reviews", icon: <Star className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: 0.98 },
+  { label: "Active Clients", value: "12", trend: "3 new this month", icon: <Users className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
 ];
 
 const TODAY_SESSIONS = [

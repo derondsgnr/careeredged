@@ -52,12 +52,12 @@ interface Opportunity {
 // ─── Config ──────────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<OpportunityType, { label: string; color: string; icon: React.ReactNode }> = {
-  internship:   { label: "Internship",   color: "var(--ce-role-edgestar)",    icon: <GraduationCap className="w-3 h-3" /> },
-  job:          { label: "Job",          color: "var(--ce-lime)",             icon: <Briefcase className="w-3 h-3" /> },
-  scholarship:  { label: "Scholarship",  color: "var(--ce-role-edgepreneur)", icon: <Star className="w-3 h-3" /> },
-  event:        { label: "Event",        color: "var(--ce-role-edu)",         icon: <Calendar className="w-3 h-3" /> },
-  partnership:  { label: "Partnership",  color: "var(--ce-role-guide)",       icon: <Users className="w-3 h-3" /> },
-  accelerator:  { label: "Accelerator",  color: "var(--ce-role-employer)",    icon: <TrendingUp className="w-3 h-3" /> },
+  internship:   { label: "Internship",   color: "var(--ce-text-secondary)",   icon: <GraduationCap className="w-3 h-3" /> },
+  job:          { label: "Job",          color: "var(--ce-text-secondary)",   icon: <Briefcase className="w-3 h-3" /> },
+  scholarship:  { label: "Scholarship",  color: "var(--ce-text-secondary)",  icon: <Star className="w-3 h-3" /> },
+  event:        { label: "Event",        color: "var(--ce-text-secondary)",   icon: <Calendar className="w-3 h-3" /> },
+  partnership:  { label: "Partnership",  color: "var(--ce-text-secondary)",   icon: <Users className="w-3 h-3" /> },
+  accelerator:  { label: "Accelerator",  color: "var(--ce-text-secondary)",   icon: <TrendingUp className="w-3 h-3" /> },
 };
 
 const INTEREST_PILLS = ["Internships", "Jobs", "Scholarships", "Events", "Partnerships", "Accelerators"] as const;
@@ -130,8 +130,8 @@ function OpportunityCard({
             <span
               className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md text-[10px]"
               style={{
-                background: `${cfg.color}12`,
-                border: `1px solid ${cfg.color}20`,
+                background: "rgba(var(--ce-glass-tint), 0.06)",
+                border: "1px solid rgba(var(--ce-glass-tint), 0.06)",
                 color: cfg.color,
                 fontFamily: "var(--font-body)",
               }}
@@ -278,8 +278,8 @@ function DetailDrawer({
           <span
             className="inline-flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] mb-4"
             style={{
-              background: `${cfg.color}12`,
-              border: `1px solid ${cfg.color}20`,
+              background: "rgba(var(--ce-glass-tint), 0.06)",
+              border: "1px solid rgba(var(--ce-glass-tint), 0.06)",
               color: cfg.color,
               fontFamily: "var(--font-body)",
             }}

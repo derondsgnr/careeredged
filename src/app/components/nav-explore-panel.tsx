@@ -397,9 +397,9 @@ export function NavExplorePanel({
                             >
                               <div
                                 className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 transition-colors group-hover:brightness-125"
-                                style={{ background: `${item.color}10` }}
+                                style={{ background: "rgba(var(--ce-glass-tint), 0.06)" }}
                               >
-                                <Icon className="w-4 h-4" style={{ color: item.color }} />
+                                <Icon className="w-4 h-4" style={{ color: "var(--ce-text-secondary)" }} />
                               </div>
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center gap-2">
