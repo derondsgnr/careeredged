@@ -373,15 +373,15 @@ export function ResourcesSurface({ role: roleProp, onNavigate }: { role?: string
       ? {
           message: "I'll curate learning resources matched to your goals.",
           chips: [
-            { label: "Open EdgePath", action: "Show me my EdgePath milestones and career roadmap" },
-            { label: "Book a session", action: "Help me book a coaching session" },
+            { label: "Open EdgePath", action: "edgepath" },
+            { label: "Book a session", action: "sessions" },
           ],
         }
       : {
           message: "Your learning library — curated for your career stage.",
           chips: [
-            { label: "Open EdgePath", action: "Show me my EdgePath milestones and career roadmap" },
-            { label: "Book a session", action: "Help me book a coaching session" },
+            { label: "Open EdgePath", action: "edgepath" },
+            { label: "Book a session", action: "sessions" },
           ],
         };
 

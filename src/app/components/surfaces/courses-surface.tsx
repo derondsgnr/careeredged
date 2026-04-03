@@ -617,8 +617,8 @@ export function CoursesSurface({ role, onNavigate }: { role?: string; onNavigate
   const enrolledCourses = courses.filter(c => c.enrolled);
 
   const sophiaOverride = surfaceState === "empty"
-    ? { message: "I'll match courses to your skill gaps and career goals.", chips: [{ label: "View roadmap", action: "Show my EdgePath roadmap" }, { label: "Track spending", action: "Open my budget tracker" }] }
-    : { message: "Your course library — aligned to your roadmap.", chips: [{ label: "View roadmap", action: "Show my EdgePath roadmap" }, { label: "Track spending", action: "Open my budget tracker" }] };
+    ? { message: "I'll match courses to your skill gaps and career goals.", chips: [{ label: "View roadmap", action: "edgepath" }, { label: "Track spending", action: "budget" }] }
+    : { message: "Your course library — aligned to your roadmap.", chips: [{ label: "View roadmap", action: "edgepath" }, { label: "Track spending", action: "budget" }] };
 
   const userName = resolvedRole === "edgestar" ? "Alex" : resolvedRole === "edgepreneur" ? "Jordan" : "User";
   const userInitial = userName[0];

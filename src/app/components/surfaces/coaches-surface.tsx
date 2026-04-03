@@ -589,7 +589,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
         {/* Sophia insight */}
         {activeTab === "recommended" && (
           <div className="mt-5">
-            <SophiaInsight variant="inline" title="Your coaching strategy" insight={`Based on your goals (${selectedGoals.length > 0 ? selectedGoals.join(", ") : "Career growth"}), I recommend starting with ${recommendedCoaches[0]?.name} for a focused 1:1 session. After that, ${recommendedCoaches[1]?.name}'s ${recommendedCoaches[1]?.isFree ? "free " : ""}sessions can complement with a different perspective.`} />
+            <SophiaInsight variant="inline" context="Your coaching strategy" message={`Based on your goals (${selectedGoals.length > 0 ? selectedGoals.join(", ") : "Career growth"}), I recommend starting with ${recommendedCoaches[0]?.name} for a focused 1:1 session. After that, ${recommendedCoaches[1]?.name}'s ${recommendedCoaches[1]?.isFree ? "free " : ""}sessions can complement with a different perspective.`} />
           </div>
         )}
       </div>

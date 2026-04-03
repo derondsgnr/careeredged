@@ -555,15 +555,15 @@ export function EdgeMarketSurface({ role: roleProp, onNavigate }: { role?: strin
       ? {
           message: "I'll find opportunities that match your career stage and goals.",
           chips: [
-            { label: "View roadmap", action: "Show me my EdgePath milestones and career roadmap" },
-            { label: "Prep resume", action: "Help me update my resume for job applications" },
+            { label: "View roadmap", action: "edgepath" },
+            { label: "Prep resume", action: "resume" },
           ],
         }
       : {
           message: "Your opportunity feed — matched to your roadmap.",
           chips: [
-            { label: "View roadmap", action: "Show me my EdgePath milestones and career roadmap" },
-            { label: "Prep resume", action: "Help me update my resume for job applications" },
+            { label: "View roadmap", action: "edgepath" },
+            { label: "Prep resume", action: "resume" },
           ],
         };
 

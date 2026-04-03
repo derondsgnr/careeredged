@@ -545,14 +545,22 @@ export function RoleShell({
   };
 
   const handleSophiaChipClick = (action: string) => {
-    // Try to navigate to the action as a nav pill
-    const pill = config.navPills.find((p) => p.id === action);
+    // 1. Try nav pill match (e.g., "home", "resume", "jobs")
+    const pill = config.navPills.find((p) => p.id === action || p.surfaceId === action);
     if (pill) {
       handleNavClick(action);
-    } else {
-      setInitialMessage(action);
-      setSophiaOpen(true);
+      return;
     }
+    // 2. Single-word actions → route via onNavigate (surface IDs + custom actions like "goals", "retro", "focus")
+    //    The receiving surface's onNavigate wrapper can intercept custom actions.
+    //    Multi-word actions → Sophia query (natural language like "Help me prep for my interview")
+    if (!action.includes(" ")) {
+      onNavigate?.(action);
+      return;
+    }
+    // 3. Multi-word: open Sophia with the action as a conversational query
+    setInitialMessage(action);
+    setSophiaOpen(true);
   };
 
   return (
