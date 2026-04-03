@@ -61,7 +61,7 @@ function RoadmapStrip({ onNav }: { onNav: (id: string) => void }) {
           <Compass className="w-4 h-4 text-ce-cyan" />
           <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Product Design Roadmap</span>
         </div>
-        <button onClick={() => onNav("roadmap")} className="flex items-center gap-1 text-[12px] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-tertiary)] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+        <button onClick={() => onNav("edgepath")} className="flex items-center gap-1 text-[12px] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-tertiary)] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
           View full roadmap <ChevronRight className="w-3 h-3" />
         </button>
       </div>
@@ -420,7 +420,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
   const handleNavClick = (id: string) => {
     // SharedTopNav handles routing internally via useNavigate.
     // This handler is only used by SophiaBottomBar chips.
-    if (id === "roadmap" && onNavigate) onNavigate("edgepath");
+    if (id === "edgepath" && onNavigate) onNavigate("edgepath");
     else if (id === "resume" && onNavigate) onNavigate("resume");
     else if (id === "jobs" && onNavigate) onNavigate("jobs");
     else if (id === "sessions" && onNavigate) onNavigate("sessions");
@@ -430,7 +430,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
 
   const handleSophiaChipAction = (action: string) => {
     // Try to navigate, or open Sophia
-    if (["sessions", "jobs", "roadmap", "resume", "analytics", "messages"].includes(action)) {
+    if (["sessions", "jobs", "edgepath", "resume", "analytics", "messages"].includes(action)) {
       handleNavClick(action);
     } else {
       handleChipClick(action);
@@ -452,7 +452,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
           chips: [
             { label: "View session", action: "sessions" },
             { label: "View matches", action: "jobs" },
-            { label: "Open roadmap", action: "roadmap" },
+            { label: "Open roadmap", action: "edgepath" },
           ],
         }}
         onAskSophia={handleAskSophia}

@@ -78,13 +78,13 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
     ],
     sophia: {
       message: "3 new job matches since yesterday — 2 are strong fits",
-      chips: [{ label: "View matches", action: "jobs" }, { label: "Open roadmap", action: "roadmap" }],
+      chips: [{ label: "View matches", action: "jobs" }, { label: "Open roadmap", action: "edgepath" }],
     },
     notifications: [
       { title: "3 new job matches today — Product Designer at Figma", time: "Just now", unread: true, target: "jobs" },
       { title: "Resume ATS score improved to 87 after your edits", time: "1 hr ago", unread: true, target: "resume" },
       { title: "Your coach Alice replied to your session request", time: "2 hrs ago", unread: false, target: "sessions" },
-      { title: "Phase 2 milestone due in 3 days", time: "Yesterday", unread: false, target: "roadmap" },
+      { title: "Phase 2 milestone due in 3 days", time: "Yesterday", unread: false, target: "edgepath" },
     ],
   },
   edgepreneur: {
@@ -99,7 +99,7 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
     ],
     sophia: {
       message: "2 accelerators match your current stage — applications close in 14 days",
-      chips: [{ label: "View funding", action: "funding" }, { label: "Open roadmap", action: "roadmap" }],
+      chips: [{ label: "View funding", action: "funding" }, { label: "Open roadmap", action: "edgepath" }],
     },
     notifications: [
       { title: "2 new funding opportunities match your venture stage", time: "Just now", unread: true, target: "funding" },
@@ -178,7 +178,7 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
     ],
     sophia: {
       message: "Spring 2026 cohort career readiness is up to 68% — 12 students need support",
-      chips: [{ label: "View outcomes", action: "outcomes" }, { label: "Manage events", action: "events" }],
+      chips: [{ label: "View outcomes", action: "analytics" }, { label: "Manage events", action: "events" }],
     },
     notifications: [
       { title: "Spring Career Fair: 42 students registered so far", time: "2 hrs ago", unread: true, target: "events" },
@@ -198,7 +198,7 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
     ],
     sophia: {
       message: "Grant deadline in 7 days — your Workforce Development application is 60% complete",
-      chips: [{ label: "Continue application", action: "programs" }, { label: "View impact", action: "impact" }],
+      chips: [{ label: "Continue application", action: "programs" }, { label: "View impact", action: "analytics" }],
     },
     notifications: [
       { title: "Workforce Development Grant deadline in 7 days", time: "1 hr ago", unread: true, target: "programs" },
@@ -218,7 +218,7 @@ export const ROLE_CONFIGS: Record<RoleId, Omit<RoleConfig, "userName" | "userIni
     ],
     sophia: {
       message: "Q1 placement targets are 78% achieved — 3 new NGO applications this week",
-      chips: [{ label: "Review applications", action: "programs" }, { label: "View metrics", action: "impact" }],
+      chips: [{ label: "Review applications", action: "programs" }, { label: "View metrics", action: "analytics" }],
     },
     notifications: [
       { title: "3 new NGO grant applications received this week", time: "2 hrs ago", unread: true, target: "programs" },
