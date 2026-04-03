@@ -3,9 +3,9 @@
   "configurations": [
     {
       "name": "Careeredgde",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite"],
-      "autoPort": true
+      "runtimeExecutable": "/usr/local/bin/node",
+      "runtimeArgs": ["node_modules/.bin/vite", "--port", "5193"],
+      "port": 5193
     }
   ]
 }
