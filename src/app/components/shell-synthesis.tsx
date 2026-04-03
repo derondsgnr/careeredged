@@ -635,40 +635,6 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
             </div>
           </div>
 
-          {/* Quick access cards — surfaces discoverable from dashboard */}
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-5">
-            {[
-              { label: "Schedule", desc: "2 sessions this week", icon: Calendar, target: "schedule" },
-              { label: "Community", desc: "5 new posts today", icon: MessageSquare, target: "community" },
-              { label: "Budget", desc: "$299 of $1,112 invested", icon: DollarSign, target: "budget" },
-              { label: "Resources", desc: "3 recommended for you", icon: BookOpen, target: "resources" },
-              { label: "Marketplace", desc: "12 opportunities matched", icon: ShoppingBag, target: "market" },
-              { label: "Coaches", desc: "97% match: Alice Chen", icon: Users, target: "coaches" },
-              { label: "Courses", desc: "1 course in progress", icon: BookOpen, target: "courses" },
-              { label: "Productivity", desc: "5 tasks today", icon: Clock, target: "productivity" },
-            ].map((card, i) => {
-              const Icon = card.icon;
-              return (
-                <motion.button
-                  key={card.target}
-                  onClick={() => onNavigate?.(card.target)}
-                  className="flex items-start gap-3 p-4 rounded-xl cursor-pointer text-left transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.04)]"
-                  style={{ background: `rgba(${GLASS_TINT},0.025)`, border: `1px solid rgba(${GLASS_TINT},0.05)` }}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 + i * 0.04, duration: 0.3, ease: EASE }}
-                >
-                  <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0" style={{ background: `rgba(${GLASS_TINT},0.06)` }}>
-                    <Icon className="w-4 h-4" style={{ color: TEXT.secondary }} />
-                  </div>
-                  <div className="min-w-0">
-                    <span className="text-[12px] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: TEXT.primary }}>{card.label}</span>
-                    <span className="text-[10px] block truncate" style={{ fontFamily: "var(--font-body)", color: TEXT.tertiary }}>{card.desc}</span>
-                  </div>
-                </motion.button>
-              );
-            })}
-          </div>
         </div>
       </main>
     </div>

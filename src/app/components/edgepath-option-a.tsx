@@ -25,7 +25,7 @@ import {
   Target, TrendingUp, Users, Briefcase, GraduationCap,
   ArrowRight, FileText, Calendar,
   List, Map, Lock, Trophy, Rocket, X, AlertCircle, Circle,
-  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe,
+  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe, DollarSign,
 } from "lucide-react";
 import { MindMapView } from "./edgepath-mindmap";
 import { getRoleContext, type EdgePathRoleContext } from "./edgepath-context";
@@ -1580,9 +1580,69 @@ function PhaseDetail({ milestones, onMilestoneCheck, onOpenRoom, onNavigate }: {
   );
 }
 
+// ─── Budget Widget (Right Column) ───────────────────────────────────────────
+
+function BudgetWidget({ phases, onNavigate }: { phases?: PhaseData[]; onNavigate?: (target: string) => void }) {
+  if (!phases || !phases.some(p => (p.estimatedCost ?? 0) > 0)) return null;
+
+  const totalEstimated = phases.reduce((s, p) => s + (p.estimatedCost ?? 0), 0);
+  const totalActual = phases.reduce((s, p) => s + (p.actualCost ?? 0), 0);
+  const pct = totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0;
+
+  return (
+    <motion.div
+      className="rounded-xl p-4"
+      style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.88, duration: 0.4, ease: EASE }}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <DollarSign className="w-3.5 h-3.5 text-ce-text-secondary" />
+          <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Career Investment</span>
+        </div>
+        <button onClick={() => onNavigate?.("budget")} className="text-[10px] text-ce-text-tertiary hover:text-ce-text-secondary cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+          View details →
+        </button>
+      </div>
+
+      <div className="flex items-baseline gap-2 mb-3">
+        <span className="text-[18px] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>
+          ${totalActual.toLocaleString()}
+        </span>
+        <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
+          of ${totalEstimated.toLocaleString()} estimated
+        </span>
+      </div>
+
+      <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
+        <motion.div
+          className="h-full rounded-full"
+          style={{ background: "var(--ce-lime)" }}
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(pct, 100)}%` }}
+          transition={{ delay: 1.0, duration: 0.6, ease: EASE }}
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        {phases.filter(p => (p.estimatedCost ?? 0) > 0).map(p => (
+          <div key={p.id} className="flex items-center justify-between">
+            <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{p.title}</span>
+            <span className="text-[10px] tabular-nums" style={{ fontFamily: "var(--font-body)", color: (p.actualCost ?? 0) > 0 ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }}>
+              ${(p.actualCost ?? 0).toLocaleString()} / ${(p.estimatedCost ?? 0).toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── Sophia Panel (Right Column) ────────────────────────────────────────────
 
-function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext; onNavigate?: (target: string) => void }) {
+function SophiaPanel({ onAskSophia, roleContext, onNavigate, phases }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext; onNavigate?: (target: string) => void; phases?: PhaseData[] }) {
   const panel = roleContext?.sophiaPanel;
 
   if (panel) {
@@ -1677,6 +1737,9 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
             </div>
           ))}
         </motion.div>
+
+        {/* Budget Widget — career investment tracking */}
+        <BudgetWidget phases={phases} onNavigate={onNavigate} />
 
         {/* Job Matches — rendered when showJobMatches: true and jobs data provided */}
         {panel.showJobMatches && panel.jobs && panel.jobs.length > 0 && (
@@ -2299,7 +2362,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
           {/* Two-Column: Milestones left, Sophia panel right */}
           <div className="grid grid-cols-[1fr_320px] gap-5">
             <PhaseDetail milestones={milestones} onMilestoneCheck={handleMilestoneCheck} onOpenRoom={onOpenTaskRoom} onNavigate={onNavigate} />
-            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} onNavigate={onNavigate} />
+            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} onNavigate={onNavigate} phases={phases} />
           </div>
 
           {/* State demo controls */}
