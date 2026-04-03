@@ -42,20 +42,13 @@ interface CalendarEvent {
   isVirtual: boolean;
 }
 
-interface TimeSlot {
-  day: "mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun";
-  morning: boolean;
-  afternoon: boolean;
-  evening: boolean;
-}
-
-interface AvailabilityBlock {
-  id: string;
-  label: string;
-  days: string[];
-  startTime: string;
-  endTime: string;
-  active: boolean;
+// Matches Sessions.tsx AvailBlock pattern — same data model for availability
+interface AvailBlock {
+  day: number; // 0=Mon, 6=Sun
+  start: number; // hour (24h), e.g. 9
+  end: number; // hour (24h), e.g. 12
+  type: "available" | "booked";
+  label?: string;
 }
 
 interface ScheduleSurfaceProps {
@@ -138,18 +131,39 @@ const MOCK_EVENTS: CalendarEvent[] = [
   },
 ];
 
-const MOCK_AVAILABILITY: AvailabilityBlock[] = [
-  { id: "a1", label: "Morning block", days: ["Mon", "Tue", "Wed", "Thu", "Fri"], startTime: "9:00 AM", endTime: "12:00 PM", active: true },
-  { id: "a2", label: "Afternoon block", days: ["Mon", "Wed", "Fri"], startTime: "1:00 PM", endTime: "3:00 PM", active: true },
-  { id: "a3", label: "Late afternoon", days: ["Tue", "Thu"], startTime: "3:00 PM", endTime: "5:00 PM", active: true },
-  { id: "a4", label: "Weekend morning", days: ["Sat"], startTime: "10:00 AM", endTime: "12:00 PM", active: false },
-  { id: "a5", label: "Evening prep", days: ["Mon", "Wed"], startTime: "6:00 PM", endTime: "8:00 PM", active: true },
-  { id: "a6", label: "Friday wrap-up", days: ["Fri"], startTime: "4:00 PM", endTime: "5:30 PM", active: false },
-];
+// Shared constants — same as Sessions.tsx
+const DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const DAY_KEYS = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"] as const;
+const HOURS = Array.from({ length: 13 }, (_, i) => i + 8); // 8am-8pm
 
-const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
-const DAY_KEYS: ("mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun")[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
+// Building state only — simplified picker for onboarding
 const TIME_PERIODS = ["Morning", "Afternoon", "Evening"] as const;
+
+interface BuildingSlot {
+  day: string;
+  morning: boolean;
+  afternoon: boolean;
+  evening: boolean;
+}
+
+// Availability blocks — same AvailBlock shape as Sessions.tsx
+const MOCK_AVAIL_BLOCKS: AvailBlock[] = [
+  { day: 0, start: 9, end: 12, type: "available", label: "Morning block" },
+  { day: 1, start: 9, end: 12, type: "available", label: "Morning block" },
+  { day: 2, start: 9, end: 12, type: "available", label: "Morning block" },
+  { day: 3, start: 9, end: 12, type: "available", label: "Morning block" },
+  { day: 4, start: 9, end: 12, type: "available", label: "Morning block" },
+  { day: 0, start: 13, end: 15, type: "available", label: "Afternoon" },
+  { day: 2, start: 13, end: 15, type: "available", label: "Afternoon" },
+  { day: 4, start: 13, end: 15, type: "available", label: "Afternoon" },
+  { day: 1, start: 15, end: 17, type: "available", label: "Late afternoon" },
+  { day: 3, start: 15, end: 17, type: "available", label: "Late afternoon" },
+  { day: 0, start: 18, end: 20, type: "available", label: "Evening prep" },
+  { day: 2, start: 18, end: 20, type: "available", label: "Evening prep" },
+  // Booked sessions (from mock events)
+  { day: 0, start: 14, end: 15, type: "booked", label: "1:1 with Marcus" },
+  { day: 1, start: 10, end: 11, type: "booked", label: "Frontend Interview" },
+];
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -203,14 +217,14 @@ export function ScheduleSurface({ role: roleProp, onNavigate: onNavProp }: Sched
   const [activeView, setActiveView] = useState<"timeline" | "week" | "availability">("timeline");
 
   // Building state: time slot toggles
-  const [timeSlots, setTimeSlots] = useState<TimeSlot[]>(
+  const [timeSlots, setTimeSlots] = useState<BuildingSlot[]>(
     DAY_KEYS.map((d) => ({ day: d, morning: false, afternoon: false, evening: false }))
   );
   const [importConfirmed, setImportConfirmed] = useState(false);
 
   // Active state data
   const [events, setEvents] = useState<CalendarEvent[]>(MOCK_EVENTS);
-  const [availability, setAvailability] = useState<AvailabilityBlock[]>(MOCK_AVAILABILITY);
+  const [availBlocks, setAvailBlocks] = useState<AvailBlock[]>(MOCK_AVAIL_BLOCKS);
 
   const toggleSlot = (dayIdx: number, period: "morning" | "afternoon" | "evening") => {
     setTimeSlots((prev) => prev.map((s, i) => i === dayIdx ? { ...s, [period]: !s[period] } : s));
@@ -222,8 +236,18 @@ export function ScheduleSurface({ role: roleProp, onNavigate: onNavProp }: Sched
     toast.success("Calendar set up", "Your schedule is ready.");
   };
 
-  const toggleAvailability = (id: string) => {
-    setAvailability((prev) => prev.map((b) => b.id === id ? { ...b, active: !b.active } : b));
+  const toggleAvailBlock = (day: number, hour: number) => {
+    setAvailBlocks(prev => {
+      const existing = prev.find(b => b.day === day && hour >= b.start && hour < b.end);
+      if (existing && existing.type === "available") {
+        // Remove block
+        return prev.filter(b => b !== existing);
+      } else if (!existing) {
+        // Add 1-hour available block
+        return [...prev, { day, start: hour, end: hour + 1, type: "available" as const, label: "" }];
+      }
+      return prev; // Don't toggle booked blocks
+    });
   };
 
   // Sophia override per state
@@ -262,8 +286,8 @@ export function ScheduleSurface({ role: roleProp, onNavigate: onNavProp }: Sched
               setActiveView={setActiveView}
               events={events}
               setEvents={setEvents}
-              availability={availability}
-              toggleAvailability={toggleAvailability}
+              availBlocks={availBlocks}
+              toggleAvailBlock={toggleAvailBlock}
               onNavigate={handleNavigate}
             />
           )}
@@ -312,7 +336,7 @@ function BuildingState({
   step, timeSlots, toggleSlot, onNext, onBack, importConfirmed, setImportConfirmed, onFinish,
 }: {
   step: number;
-  timeSlots: TimeSlot[];
+  timeSlots: BuildingSlot[];
   toggleSlot: (day: number, period: "morning" | "afternoon" | "evening") => void;
   onNext: () => void;
   onBack: () => void;
@@ -479,14 +503,14 @@ function BuildingState({
 // ─── Active State ────────────────────────────────────────────────────────────
 
 function ActiveState({
-  activeView, setActiveView, events, setEvents, availability, toggleAvailability, onNavigate,
+  activeView, setActiveView, events, setEvents, availBlocks, toggleAvailBlock, onNavigate,
 }: {
   activeView: "timeline" | "week" | "availability";
   setActiveView: (v: "timeline" | "week" | "availability") => void;
   events: CalendarEvent[];
   setEvents: React.Dispatch<React.SetStateAction<CalendarEvent[]>>;
-  availability: AvailabilityBlock[];
-  toggleAvailability: (id: string) => void;
+  availBlocks: AvailBlock[];
+  toggleAvailBlock: (day: number, hour: number) => void;
   onNavigate: (t: string) => void;
 }) {
   const views = ["timeline", "week", "availability"] as const;
@@ -590,8 +614,8 @@ function ActiveState({
       {/* View content */}
       <AnimatePresence mode="wait">
         {activeView === "timeline" && <TimelineView key="timeline" events={events} onNavigate={onNavigate} />}
-        {activeView === "week" && <WeekView key="week" events={events} onSelectEvent={setSelectedEvent} />}
-        {activeView === "availability" && <AvailabilityView key="availability" blocks={availability} toggle={toggleAvailability} />}
+        {activeView === "week" && <WeekView key="week" events={events} availBlocks={availBlocks} onSelectEvent={setSelectedEvent} />}
+        {activeView === "availability" && <AvailabilityView key="availability" blocks={availBlocks} onToggleBlock={toggleAvailBlock} />}
       </AnimatePresence>
 
       {/* ── Create Event Panel ── */}
@@ -1051,74 +1075,96 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
 
 // ─── Week View ───────────────────────────────────────────────────────────────
 
-function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelectEvent: (e: CalendarEvent) => void }) {
-  // Build columns: Mon–Sun
-  const columns: CalendarEvent[][] = Array.from({ length: 7 }, () => []);
-  events.forEach((e) => {
-    const dayIdx = getWeekDay(e.date);
-    if (dayIdx >= 0 && dayIdx < 7) columns[dayIdx].push(e);
-  });
+function WeekView({ events, availBlocks, onSelectEvent }: { events: CalendarEvent[]; availBlocks: AvailBlock[]; onSelectEvent: (e: CalendarEvent) => void }) {
+  // Map events to day/hour for grid overlay
+  const getEventForCell = (day: number, hour: number): CalendarEvent | null => {
+    return events.find(e => {
+      const dayIdx = getWeekDay(e.date);
+      const eventHour = parseInt(e.time);
+      const isPM = e.time.toLowerCase().includes("pm");
+      const h24 = isPM && eventHour !== 12 ? eventHour + 12 : !isPM && eventHour === 12 ? 0 : eventHour;
+      return dayIdx === day && h24 === hour;
+    }) || null;
+  };
+
+  const getBlockForCell = (day: number, hour: number): AvailBlock | null => {
+    return availBlocks.find(b => b.day === day && hour >= b.start && hour < b.end) || null;
+  };
 
   return (
     <motion.div
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
-      <div className="grid grid-cols-7 gap-1.5" style={{ minHeight: 320 }}>
-        {DAY_LABELS.map((day, idx) => (
-          <div key={day} className="flex flex-col gap-1">
-            {/* Day header */}
-            <div
-              className="text-center py-1.5 rounded-md mb-1"
-              style={{
-                fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 500,
-                color: idx < 5 ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)",
-                background: "rgba(var(--ce-glass-tint),0.03)",
-              }}
-            >
-              {day}
-            </div>
-            {/* Events in this day */}
-            {columns[idx].length === 0 && (
-              <div className="flex-1 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", minHeight: 48 }} />
-            )}
-            {columns[idx].map((event) => {
-              const cfg = TYPE_CONFIG[event.type];
-              return (
-                <button
-                  key={event.id}
-                  onClick={() => onSelectEvent(event)}
-                  className="text-left p-2 rounded-lg cursor-pointer transition-all hover:scale-[1.02]"
-                  style={{
-                    background: "rgba(var(--ce-glass-tint),0.04)",
-                    border: "1px solid rgba(var(--ce-glass-tint),0.06)",
-                    borderLeft: `2px solid ${cfg.color}`,
-                  }}
-                >
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 10, color: "var(--ce-text-primary)", fontWeight: 500 }} className="truncate mb-0.5">
-                    {event.title}
-                  </p>
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-quaternary)" }}>
-                    {event.time}
-                  </p>
-                </button>
-              );
-            })}
+      {/* Legend */}
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Week of March 28, 2026</span>
+        <div className="flex items-center gap-3 text-[10px] text-[var(--ce-text-tertiary)]" style={{ fontFamily: "var(--font-body)" }}>
+          <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(var(--ce-lime-rgb),0.25)" }} /> Available</div>
+          <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.3)" }} /> Booked</div>
+        </div>
+      </div>
+
+      {/* Hourly grid — same pattern as Sessions WeekCalendar */}
+      <div className="overflow-x-auto">
+        <div className="min-w-[640px]">
+          {/* Day headers */}
+          <div className="grid gap-px mb-px" style={{ gridTemplateColumns: "52px repeat(7, 1fr)" }}>
+            <div />
+            {DAYS.map((d, i) => (
+              <div key={d} className="text-center py-2">
+                <span className="text-[11px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-tertiary)" }}>{d}</span>
+                <div className="text-[13px] mt-0.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>{28 + i > 31 ? 28 + i - 31 : 28 + i}</div>
+              </div>
+            ))}
           </div>
-        ))}
+
+          {/* Time grid */}
+          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+            {HOURS.map((hour) => (
+              <div key={hour} className="grid gap-px" style={{ gridTemplateColumns: "52px repeat(7, 1fr)" }}>
+                <div className="flex items-center justify-end pr-2 text-[9px] py-2" style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-quaternary)" }}>
+                  {hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
+                </div>
+                {DAYS.map((_, dayIdx) => {
+                  const block = getBlockForCell(dayIdx, hour);
+                  const event = getEventForCell(dayIdx, hour);
+                  return (
+                    <button
+                      key={dayIdx}
+                      className="h-8 relative transition-colors cursor-pointer"
+                      style={{
+                        background: event ? "rgba(var(--ce-role-edgestar-rgb),0.25)"
+                          : block?.type === "booked" ? "rgba(var(--ce-role-edgestar-rgb),0.15)"
+                          : block?.type === "available" ? "rgba(var(--ce-lime-rgb),0.12)"
+                          : "rgba(var(--ce-glass-tint),0.01)",
+                        borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)",
+                        borderLeft: "1px solid rgba(var(--ce-glass-tint),0.03)",
+                      }}
+                      onClick={() => event && onSelectEvent(event)}
+                    >
+                      {event && (
+                        <span className="absolute inset-0 flex items-center justify-center text-[8px] truncate px-1" style={{ fontFamily: "var(--font-body)", color: "var(--ce-role-edgestar)" }}>
+                          {event.title.split(" ").slice(0, 2).join(" ")}
+                        </span>
+                      )}
+                      {!event && block?.label && hour === block.start && (
+                        <span className="absolute inset-0 flex items-center justify-center text-[8px]" style={{ fontFamily: "var(--font-body)", color: block.type === "booked" ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }}>
+                          {block.label}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Sophia insight */}
-      <motion.div
-        className="mt-5"
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3, ease: EASE }}
-      >
-        <SophiaInsight
-          variant="inline"
-          message="Your week is taking shape. 4 events across 5 days."
-        />
+      <motion.div className="mt-5" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.3, ease: EASE }}>
+        <SophiaInsight variant="inline" message="Your week is taking shape. 4 events across 5 days." />
       </motion.div>
     </motion.div>
   );
@@ -1126,13 +1172,15 @@ function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelect
 
 // ─── Availability View ───────────────────────────────────────────────────────
 
-function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; toggle: (id: string) => void }) {
-  const activeHours = blocks.filter((b) => b.active).reduce((acc, b) => {
-    const start = parseTime(b.startTime);
-    const end = parseTime(b.endTime);
-    return acc + (end - start) * b.days.length;
-  }, 0);
-  const activeDays = new Set(blocks.filter((b) => b.active).flatMap((b) => b.days)).size;
+function AvailabilityView({ blocks, onToggleBlock }: { blocks: AvailBlock[]; onToggleBlock: (day: number, start: number) => void }) {
+  // Calculate summary from blocks
+  const availableBlocks = blocks.filter(b => b.type === "available");
+  const totalHours = availableBlocks.reduce((s, b) => s + (b.end - b.start), 0);
+  const activeDays = new Set(availableBlocks.map(b => b.day)).size;
+
+  const getBlockForCell = (day: number, hour: number): AvailBlock | null => {
+    return blocks.find(b => b.day === day && hour >= b.start && hour < b.end) || null;
+  };
 
   return (
     <motion.div
@@ -1140,70 +1188,68 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
       transition={{ duration: 0.3, ease: EASE }}
     >
       {/* Summary */}
-      <div className="flex items-center gap-4 mb-5">
-        <div className="flex items-center gap-1.5">
-          <Clock className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
-          <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>
-            {activeHours}h / week
-          </span>
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5">
+            <Clock className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
+            <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>{totalHours}h / week</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <Calendar className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
+            <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>{activeDays} days</span>
+          </div>
         </div>
-        <div className="flex items-center gap-1.5">
-          <Calendar className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
-          <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-secondary)" }}>
-            {activeDays} days
-          </span>
+        <div className="flex items-center gap-3 text-[10px]" style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}>
+          <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(var(--ce-lime-rgb),0.25)" }} /> Available</div>
+          <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 rounded-sm" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.3)" }} /> Booked</div>
         </div>
       </div>
 
-      {/* Blocks */}
-      <div className="flex flex-col gap-2 mb-6">
-        {blocks.map((block, i) => (
-          <motion.div
-            key={block.id}
-            initial={{ opacity: 0, y: 6 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: i * 0.04, duration: 0.3, ease: EASE }}
-          >
-            <GlassCard
-              className="p-3.5 flex items-center gap-3 cursor-pointer transition-all hover:scale-[1.003]"
-              style={{
-                border: block.active ? "1px solid rgba(34,211,238,0.15)" : "1px solid rgba(var(--ce-glass-tint),0.06)",
-                opacity: block.active ? 1 : 0.7,
-              }}
-              onClick={() => toggle(block.id)}
-            >
-              {/* Toggle indicator */}
-              <div
-                className="w-8 h-4.5 rounded-full flex items-center transition-all flex-shrink-0 px-0.5"
-                style={{
-                  background: block.active ? "rgba(34,211,238,0.2)" : "rgba(var(--ce-glass-tint),0.08)",
-                }}
-              >
-                <motion.div
-                  className="w-3.5 h-3.5 rounded-full"
-                  animate={{ x: block.active ? 14 : 0 }}
-                  transition={{ duration: 0.2, ease: EASE }}
-                  style={{ background: block.active ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }}
-                />
+      {/* Hourly grid — same pattern as Sessions WeekCalendar */}
+      <div className="overflow-x-auto mb-5">
+        <div className="min-w-[640px]">
+          <div className="grid gap-px mb-px" style={{ gridTemplateColumns: "52px repeat(7, 1fr)" }}>
+            <div />
+            {DAYS.map((d) => (
+              <div key={d} className="text-center py-2">
+                <span className="text-[11px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-tertiary)" }}>{d}</span>
               </div>
+            ))}
+          </div>
 
-              {/* Block info */}
-              <div className="flex-1 min-w-0">
-                <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)", fontWeight: 500 }}>
-                  {block.label}
-                </p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-quaternary)" }}>
-                    {block.days.join(", ")}
-                  </span>
-                  <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-quaternary)" }}>
-                    {block.startTime} – {block.endTime}
-                  </span>
+          <div className="rounded-xl overflow-hidden" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
+            {HOURS.map((hour) => (
+              <div key={hour} className="grid gap-px" style={{ gridTemplateColumns: "52px repeat(7, 1fr)" }}>
+                <div className="flex items-center justify-end pr-2 text-[9px] py-2" style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-quaternary)" }}>
+                  {hour === 12 ? "12 PM" : hour > 12 ? `${hour - 12} PM` : `${hour} AM`}
                 </div>
+                {DAYS.map((_, dayIdx) => {
+                  const block = getBlockForCell(dayIdx, hour);
+                  return (
+                    <button
+                      key={dayIdx}
+                      className="h-8 relative transition-colors cursor-pointer"
+                      style={{
+                        background: block?.type === "booked" ? "rgba(var(--ce-role-edgestar-rgb),0.25)"
+                          : block?.type === "available" ? "rgba(var(--ce-lime-rgb),0.12)"
+                          : "rgba(var(--ce-glass-tint),0.01)",
+                        borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)",
+                        borderLeft: "1px solid rgba(var(--ce-glass-tint),0.03)",
+                      }}
+                      onClick={() => onToggleBlock(dayIdx, hour)}
+                    >
+                      {block?.label && hour === block.start && (
+                        <span className="absolute inset-0 flex items-center justify-center text-[8px]" style={{ fontFamily: "var(--font-body)", color: block.type === "booked" ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }}>
+                          {block.label}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
               </div>
-            </GlassCard>
-          </motion.div>
-        ))}
+            ))}
+          </div>
+        </div>
       </div>
 
       {/* Share button */}
@@ -1214,36 +1260,15 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
           toast.success("Link copied", "Your availability link is ready to share.");
         }}
         className="flex items-center gap-2 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02] w-fit"
-        style={{
-          fontFamily: "var(--font-body)", fontWeight: 500,
-          background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
-          border: "1px solid rgba(var(--ce-glass-tint),0.08)",
-        }}
+        style={{ fontFamily: "var(--font-body)", fontWeight: 500, background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
       >
         <Send className="w-3 h-3" /> Share Availability
       </button>
 
       {/* Sophia insight */}
-      <motion.div
-        className="mt-5"
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3, ease: EASE }}
-      >
-        <SophiaInsight
-          variant="inline"
-          message={`Your availability covers ${activeHours} hours per week across ${activeDays} days.`}
-        />
+      <motion.div className="mt-5" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4, duration: 0.3, ease: EASE }}>
+        <SophiaInsight variant="inline" message={`Your availability covers ${totalHours} hours per week across ${activeDays} days. Click any cell to toggle.`} />
       </motion.div>
     </motion.div>
   );
-}
-
-// ─── Utility ─────────────────────────────────────────────────────────────────
-
-function parseTime(t: string): number {
-  const [hm, ampm] = t.split(" ");
-  const [h, m] = hm.split(":").map(Number);
-  const hour = ampm === "PM" && h !== 12 ? h + 12 : ampm === "AM" && h === 12 ? 0 : h;
-  return hour + m / 60;
 }
