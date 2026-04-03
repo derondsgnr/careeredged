@@ -20,7 +20,7 @@ import { SharedTopNav } from "./role-shell";
 import { SophiaBottomBar as SharedSophiaBottomBar, type NavVariation } from "./sophia-patterns";
 import { NavExplorePanel } from "./nav-explore-panel";
 import {
-  DollarSign, FileText, Search, Compass,
+  Zap, DollarSign, FileText, Search, Compass,
   ChevronRight, Target, BarChart3,
   Check, Sparkles, ArrowUpRight, ArrowRight,
   Users, Calendar, Building2, Star, Sun, Moon,

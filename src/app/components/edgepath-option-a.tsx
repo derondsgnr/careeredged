@@ -1928,6 +1928,9 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate, phases }: { onAskSo
         ))}
       </motion.div>
 
+      {/* Budget Widget */}
+      <BudgetWidget phases={phases} onNavigate={onNavigate} />
+
       {/* Mentor Connection */}
       <motion.div
         className="rounded-xl p-4"
