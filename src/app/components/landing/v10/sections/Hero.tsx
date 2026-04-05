@@ -1,13 +1,15 @@
 import { Link } from "react-router";
 import { ScrollReveal } from "../animations/ScrollReveal";
 import { BtnText } from "../ui/BtnText";
+import patternHex from "../../../../../assets/pattern-hex.svg";
+import patternCe from "../../../../../assets/pattern-ce.svg";
 
 export function Hero() {
   return (
     <section className="section-hero bg-bg-primary relative overflow-hidden">
       {/* Hex grid pattern overlay (Scalient hero bg treatment) */}
       <img
-        src="/brand/pattern-hex.svg"
+        src={patternHex}
         alt=""
         className="absolute inset-0 w-full h-full object-cover opacity-[0.04] pointer-events-none"
       />
@@ -64,11 +66,11 @@ export function Hero() {
             <div className="aspect-[4/5] rounded-[var(--radius-lg)] overflow-hidden relative">
               {/* Lime green background */}
               <div className="absolute inset-0 bg-[#9FFF07]" />
-              {/* Arrow pattern overlay — brand motif like guidelines */}
+              {/* Arrow pattern overlay — brand motif */}
               <img
-                src="/brand/pattern-ce.svg"
+                src={patternCe}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-15"
+                className="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none"
                 style={{ filter: "brightness(0.4) saturate(0.5)" }}
               />
               {/* Content */}

@@ -10,6 +10,7 @@
  */
 
 import topoSvgPaths from "../../imports/svg-3bufurt997";
+import patternHex from "../../assets/pattern-hex.svg";
 
 const TOPO_PATHS = [
   { d: topoSvgPaths.p338f9380, color: "var(--ce-role-edgestar)" },
@@ -73,6 +74,16 @@ export function CorridorBackground() {
         </g>
       </svg>
 
+      {/* Hex grid pattern */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: `url(${patternHex})`,
+        backgroundSize: "600px auto",
+        backgroundRepeat: "repeat",
+        opacity: 0.025,
+        maskImage: "radial-gradient(ellipse 70% 60% at 55% 45%, black 15%, transparent 65%)",
+        WebkitMaskImage: "radial-gradient(ellipse 70% 60% at 55% 45%, black 15%, transparent 65%)",
+      }} />
+
       {/* Noise texture */}
       <div className="absolute inset-0 opacity-[0.015]" style={{
         backgroundImage: NOISE_URL,
@@ -117,6 +128,16 @@ export function SophiaForwardBackground() {
           ))}
         </g>
       </svg>
+
+      {/* Hex grid pattern — subtle geometric structure under content */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: `url(${patternHex})`,
+        backgroundSize: "600px auto",
+        backgroundRepeat: "repeat",
+        opacity: 0.03,
+        maskImage: "radial-gradient(ellipse 80% 70% at 50% 40%, black 10%, transparent 70%)",
+        WebkitMaskImage: "radial-gradient(ellipse 80% 70% at 50% 40%, black 10%, transparent 70%)",
+      }} />
 
       {/* Cyan accent glow — top center, very soft, where Sophia's greeting lives */}
       <div className="absolute rounded-full"
@@ -198,6 +219,14 @@ export function MissionControlBackground() {
         backgroundSize: "16px 16px",
         maskImage: "linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%)",
         WebkitMaskImage: "linear-gradient(180deg, transparent 0%, black 15%, black 85%, transparent 100%)",
+      }} />
+
+      {/* Hex grid pattern */}
+      <div className="absolute inset-0" style={{
+        backgroundImage: `url(${patternHex})`,
+        backgroundSize: "500px auto",
+        backgroundRepeat: "repeat",
+        opacity: 0.02,
       }} />
 
       {/* Noise — slightly more visible for texture */}

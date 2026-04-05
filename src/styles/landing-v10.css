@@ -176,7 +176,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: url("/brand/pattern-ce.svg") repeat;
+  background-image: url("../assets/pattern-ce.svg");
   background-size: 600px auto;
   opacity: 0.03;
   pointer-events: none;
@@ -667,6 +667,26 @@
 .landing-v10.lv10-light .surface-glass {
   background: rgba(0, 0, 0, 0.03);
   border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ─── CTA Particle Trail ─── */
+@keyframes cta-particle-fade {
+  0% {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+  15% {
+    opacity: 1;
+    transform: translate(-50%, calc(-50% - 6px)) scale(1.1);
+  }
+  50% {
+    opacity: 0.6;
+    transform: translate(-50%, calc(-50% - 18px)) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% - 36px)) scale(0.7);
+  }
 }
 
 /* ─── Responsive ─── */

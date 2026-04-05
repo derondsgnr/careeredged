@@ -1,6 +1,7 @@
 import { Link } from "react-router";
 import { ScrollReveal } from "../animations/ScrollReveal";
 import { BtnText } from "../ui/BtnText";
+import patternCe from "../../../../../assets/pattern-ce.svg";
 
 interface ProofStat {
   value: string;
@@ -86,9 +87,9 @@ export function SolutionHero({
             <div className="absolute -bottom-4 -right-4 w-[45%] h-[65%] rounded-[var(--radius-xl)] overflow-hidden -z-10">
               <div className="absolute inset-0 bg-[#9FFF07]" />
               <img
-                src="/brand/pattern-ce.svg"
+                src={patternCe}
                 alt=""
-                className="absolute inset-0 w-full h-full object-cover opacity-15"
+                className="absolute inset-0 w-full h-full object-cover opacity-15 pointer-events-none"
                 style={{ filter: "brightness(0.4) saturate(0.5)" }}
               />
             </div>
