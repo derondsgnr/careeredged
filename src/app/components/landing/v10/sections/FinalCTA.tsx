@@ -18,7 +18,7 @@ interface Particle {
 /** Small brand-pattern SVG shapes */
 function BrandShape({ shape, className }: { shape: number; className?: string }) {
   const color = "var(--ce-cyan)";
-  const lime = "var(--ce-lime, #9FFF07)";
+  const lime = "var(--ce-lime, #B3FF3B)";
 
   switch (shape % 6) {
     case 0: // CE monogram arrow
@@ -108,16 +108,13 @@ export function FinalCTA() {
     return () => clearTimeout(timer);
   }, [particles]);
 
-  // Attach mouse listener to section
-  useEffect(() => {
-    const el = sectionRef.current;
-    if (!el) return;
-    el.addEventListener("mousemove", handleMouseMove);
-    return () => el.removeEventListener("mousemove", handleMouseMove);
-  }, [handleMouseMove]);
-
   return (
-    <section ref={sectionRef} className="section section-dark surface-glow-blue relative overflow-hidden" style={{ cursor: "default" }}>
+    <section
+      ref={sectionRef}
+      className="section section-dark surface-glow-blue relative overflow-hidden"
+      style={{ cursor: "default" }}
+      onMouseMove={handleMouseMove as unknown as React.MouseEventHandler}
+    >
       {/* Cursor-trail particles */}
       <div className="absolute inset-0 pointer-events-none z-0">
         {particles.map((p) => (
@@ -170,7 +167,7 @@ export function FinalCTA() {
 
         <ScrollReveal delay={3}>
           <p className="text-small opacity-40 mt-6 inline-flex items-center gap-2">
-            <span className="w-1.5 h-1.5 rounded-full bg-[#9FFF07] inline-block" />
+            <span className="w-1.5 h-1.5 rounded-full bg-[#B3FF3B] inline-block" />
             Free. No credit card. Takes 4 minutes.
           </p>
         </ScrollReveal>

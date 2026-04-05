@@ -14,9 +14,9 @@
   --text-on-dark: #12110E;
   --text-on-dark-muted: rgba(18, 17, 14, 0.7);
 
-  --accent: #009EFA;
-  --accent-hover: #0084D4;
-  --accent-lime: #9FFF07;
+  --accent: #14A9FF;
+  --accent-hover: #0D8AD4;
+  --accent-lime: #B3FF3B;
 
   --border-light: #2A2A2E;
   --border-medium: #3A3A3E;
@@ -39,7 +39,7 @@
 /* Light mode */
 .landing-v10.lv10-light {
   --bg-primary: #F2F2F4;
-  --bg-dark: #070B0E;
+  --bg-dark: #00253A;
   --bg-darker-gray: #E4E4E7;
   --bg-card: #FFFFFF;
   --bg-card-alt: #F8F8FA;
@@ -49,9 +49,9 @@
   --text-on-dark: #FFFFFF;
   --text-on-dark-muted: rgba(255, 255, 255, 0.7);
 
-  --accent: #009EFA;
-  --accent-hover: #0084D4;
-  --accent-lime: #9FFF07;
+  --accent: #14A9FF;
+  --accent-hover: #0D8AD4;
+  --accent-lime: #B3FF3B;
 
   --border-light: #E4E4E7;
   --border-medium: #D6D6DA;
@@ -142,11 +142,11 @@
 }
 
 .landing-v10 .text-btn {
-  font-size: 12px;
-  line-height: 13.8px;
-  letter-spacing: 0.6px;
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -0.01em;
   font-weight: 600;
-  text-transform: uppercase;
+  text-transform: none;
 }
 
 .landing-v10 .text-stat {
@@ -166,7 +166,7 @@
 }
 
 .landing-v10 .section-dark {
-  background: #070B0E;
+  background: #00253A;
   color: #FFFFFF;
   position: relative;
   overflow: hidden;
@@ -344,7 +344,7 @@
 }
 
 .landing-v10 .cta-band-lime {
-  background: #9FFF07;
+  background: #B3FF3B;
   color: #12110E;
   transform: rotate(-4deg);
   margin: 0 -40px;
@@ -382,13 +382,13 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 16px 28px;
-  border-radius: 9999px;
-  font-size: 12px;
-  line-height: 13.8px;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 14px;
+  line-height: 1;
   font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.6px;
+  text-transform: none;
+  letter-spacing: -0.01em;
   transition: background-color 0.5s ease, color 0.5s ease, border-color 0.5s ease;
   cursor: pointer;
   text-decoration: none;
@@ -478,7 +478,7 @@
 }
 
 .landing-v10.lv10-light .btn-inverted {
-  background: #070B0E;
+  background: #00253A;
   color: #F2F2F4;
 }
 

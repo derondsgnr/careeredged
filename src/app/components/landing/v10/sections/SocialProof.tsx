@@ -17,7 +17,7 @@ const stats = [
     label: "Roadmaps built",
     description:
       "Real career roadmaps built for professionals, students, and career changers across 190 countries.",
-    bg: "#9FFF07",
+    bg: "#B3FF3B",
     textColor: "#12110E",
     mutedColor: "rgba(18, 17, 14, 0.6)",
     chartStroke: "#12110E",
@@ -35,8 +35,8 @@ const stats = [
     bg: "#FFFFFF",
     textColor: "#12110E",
     mutedColor: "rgba(18, 17, 14, 0.65)",
-    chartStroke: "#009EFA",
-    chartFill: "#009EFA",
+    chartStroke: "#14A9FF",
+    chartFill: "#14A9FF",
     gradientId: "grad_b",
   },
   {
@@ -45,7 +45,7 @@ const stats = [
     label: "Countries",
     description:
       "Global reach means your roadmap understands your market, wherever you are.",
-    bg: "#009EFA",
+    bg: "#14A9FF",
     textColor: "#FFFFFF",
     mutedColor: "rgba(255, 255, 255, 0.6)",
     chartStroke: "#FFFFFF",

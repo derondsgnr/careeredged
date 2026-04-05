@@ -16,7 +16,7 @@ interface FeatureBeatsProps {
   accentColor?: string;
 }
 
-export function FeatureBeats({ eyebrow, headline, beats, accentColor = "#009EFA" }: FeatureBeatsProps) {
+export function FeatureBeats({ eyebrow, headline, beats, accentColor = "#14A9FF" }: FeatureBeatsProps) {
   const [active, setActive] = useState(0);
 
   return (

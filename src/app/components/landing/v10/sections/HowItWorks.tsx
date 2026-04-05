@@ -100,7 +100,7 @@ function WindingPath({ drawProgress }: { drawProgress: number }) {
               cx={x}
               cy={DOT_Y[i]}
               r={isReached ? 7 : 4}
-              fill={isReached ? "#9FFF07" : "rgba(255,255,255,0.12)"}
+              fill={isReached ? "#B3FF3B" : "rgba(255,255,255,0.12)"}
               style={{
                 transition: "all 0.6s cubic-bezier(0.165, 0.84, 0.44, 1)",
                 filter: isReached

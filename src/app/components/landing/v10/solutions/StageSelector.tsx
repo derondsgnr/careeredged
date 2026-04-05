@@ -16,7 +16,7 @@ interface StageSelectorProps {
   accentColor?: string;
 }
 
-export function StageSelector({ eyebrow, headline, stages, accentColor = "#009EFA" }: StageSelectorProps) {
+export function StageSelector({ eyebrow, headline, stages, accentColor = "#14A9FF" }: StageSelectorProps) {
   const [active, setActive] = useState(0);
 
   return (

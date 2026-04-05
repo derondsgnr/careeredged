@@ -9,7 +9,7 @@ interface SolutionCTAProps {
   patternColor?: string;
 }
 
-export function SolutionCTA({ headline, body, cta, patternColor = "#009EFA" }: SolutionCTAProps) {
+export function SolutionCTA({ headline, body, cta, patternColor = "#14A9FF" }: SolutionCTAProps) {
   return (
     <section className="section section-dark">
       <div className="container-main">

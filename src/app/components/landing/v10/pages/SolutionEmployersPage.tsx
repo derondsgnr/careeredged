@@ -19,7 +19,7 @@ export function SolutionEmployersPage() {
         primaryCTA={{ label: "Request a demo", href: "#contact" }}
         secondaryCTA={{ label: "See how it works", href: "#features" }}
         image="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=800&q=80"
-        patternColor="#009EFA"
+        patternColor="#14A9FF"
       />
 
       <StatsBar
@@ -28,7 +28,7 @@ export function SolutionEmployersPage() {
           { value: "12", label: "Actually qualified candidates (out of 250)" },
           { value: "3×", label: "More relevant applications with CareerEdge", note: "Because candidates have mapped their career intent" },
         ]}
-        accentColor="#009EFA"
+        accentColor="#14A9FF"
       />
 
       <FeatureBeats
@@ -52,21 +52,21 @@ export function SolutionEmployersPage() {
             image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80",
           },
         ]}
-        accentColor="#009EFA"
+        accentColor="#14A9FF"
       />
 
       <Testimonial
         quote="We used to spend three weeks screening before finding a qualified shortlist. With CareerEdge, we had 12 genuine candidates in the first 48 hours. The quality difference was obvious."
         name="Marcus T."
         context="Head of Talent, Series B startup"
-        accentColor="#009EFA"
+        accentColor="#14A9FF"
       />
 
       <SolutionCTA
         headline="The right hire starts with the right match."
         body="Stop paying for volume. Start hiring for fit."
         cta={{ label: "Request a demo", href: "#contact" }}
-        patternColor="#009EFA"
+        patternColor="#14A9FF"
       />
       </main>
       <Footer />

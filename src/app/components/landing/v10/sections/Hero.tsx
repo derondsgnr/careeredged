@@ -65,7 +65,7 @@ export function Hero() {
           <ScrollReveal variant="sm" delay={2}>
             <div className="aspect-[4/5] rounded-[var(--radius-lg)] overflow-hidden relative">
               {/* Lime green background */}
-              <div className="absolute inset-0 bg-[#9FFF07]" />
+              <div className="absolute inset-0 bg-[#B3FF3B]" />
               {/* Arrow pattern overlay — brand motif */}
               <img
                 src={patternCe}

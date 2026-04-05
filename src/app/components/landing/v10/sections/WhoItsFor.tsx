@@ -338,12 +338,7 @@ function RolePanel({ roleKey }: { roleKey: RoleKey }) {
       <div className="flex flex-wrap items-center gap-6">
         <Link
           to={role.ctaHref}
-          className="px-6 py-3 rounded-lg text-[13px] font-medium flex items-center gap-2 transition-all duration-300 hover:gap-4"
-          style={{
-            fontFamily: "'Satoshi', sans-serif",
-            background: role.accent,
-            color: "#fff",
-          }}
+          className="btn btn-primary flex items-center gap-2"
         >
           {role.cta}
           <ArrowRight size={14} />

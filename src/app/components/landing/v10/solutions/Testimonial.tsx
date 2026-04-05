@@ -7,7 +7,7 @@ interface TestimonialProps {
   accentColor?: string;
 }
 
-export function Testimonial({ quote, name, context, accentColor = "#009EFA" }: TestimonialProps) {
+export function Testimonial({ quote, name, context, accentColor = "#14A9FF" }: TestimonialProps) {
   return (
     <section className="section bg-bg-darker-gray">
       <div className="container-main max-w-4xl mx-auto">

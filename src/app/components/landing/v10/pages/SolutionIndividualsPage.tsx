@@ -25,13 +25,13 @@ export function SolutionIndividualsPage() {
         ]}
         floatingCard={{ value: "23", label: "roles matched to your profile", cta: "View matches →" }}
         image="https://images.unsplash.com/photo-1573497019940-1c28c88b4f3e?w=800&q=80"
-        patternColor="#9FFF07"
+        patternColor="#B3FF3B"
       />
 
       <StageSelector
         eyebrow="Where you are"
         headline="Built for wherever you are in your career."
-        accentColor="#9FFF07"
+        accentColor="#B3FF3B"
         stages={[
           {
             title: "Students & New Grads",
@@ -81,21 +81,21 @@ export function SolutionIndividualsPage() {
             image: "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=700&q=80",
           },
         ]}
-        accentColor="#9FFF07"
+        accentColor="#B3FF3B"
       />
 
       <Testimonial
         quote="I spent months scrolling job listings feeling overwhelmed. CareerEdge gave me a structure I actually understood. I went from 'applying everywhere' to knowing the exact 3 roles I should be targeting. Three months later, I'm in one of them."
         name="Amara K."
         context="Career changer, now in product operations"
-        accentColor="#9FFF07"
+        accentColor="#B3FF3B"
       />
 
       <SolutionCTA
         headline="Every week without a plan is a week of guessing."
         body="The roadmap takes 4 minutes. The clarity lasts."
         cta={{ label: "Get Your Roadmap", href: "/signup" }}
-        patternColor="#9FFF07"
+        patternColor="#B3FF3B"
       />
       </main>
       <Footer />

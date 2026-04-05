@@ -18,13 +18,13 @@ export function SolutionInstitutionsPage() {
         primaryCTA={{ label: "Talk to us", href: "#contact" }}
         secondaryCTA={{ label: "See how it works", href: "#features" }}
         image="https://images.unsplash.com/photo-1524178232363-1fb2b075b655?w=800&q=80"
-        patternColor="#9FFF07"
+        patternColor="#B3FF3B"
       />
 
       <HowItWorksSteps
         eyebrow="How it works"
         headline="Outcome tracking, end to end."
-        accentColor="#9FFF07"
+        accentColor="#B3FF3B"
         steps={[
           {
             title: "Enroll your students",
@@ -62,14 +62,14 @@ export function SolutionInstitutionsPage() {
             image: "https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=700&q=80",
           },
         ]}
-        accentColor="#9FFF07"
+        accentColor="#B3FF3B"
       />
 
       <SolutionCTA
         headline="Better outcomes for every student."
         body="Turn career services into a true competitive advantage for your institution."
         cta={{ label: "Talk to us", href: "#contact" }}
-        patternColor="#9FFF07"
+        patternColor="#B3FF3B"
       />
       </main>
       <Footer />

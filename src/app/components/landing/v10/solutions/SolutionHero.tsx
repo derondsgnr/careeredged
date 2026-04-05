@@ -29,7 +29,7 @@ export function SolutionHero({
   proofStats,
   floatingCard,
   image,
-  patternColor = "#009EFA",
+  patternColor = "#14A9FF",
 }: SolutionHeroProps) {
   return (
     <section className="section-hero section-dark">
@@ -81,11 +81,11 @@ export function SolutionHero({
           <ScrollReveal delay={2} className="relative">
             <div className="aspect-[4/3] rounded-[var(--radius-xl)] overflow-hidden relative">
               <img src={image} alt="" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#070B0E]/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#00253A]/40 to-transparent" />
             </div>
             {/* Lime green pattern card behind image */}
             <div className="absolute -bottom-4 -right-4 w-[45%] h-[65%] rounded-[var(--radius-xl)] overflow-hidden -z-10">
-              <div className="absolute inset-0 bg-[#9FFF07]" />
+              <div className="absolute inset-0 bg-[#B3FF3B]" />
               <img
                 src={patternCe}
                 alt=""

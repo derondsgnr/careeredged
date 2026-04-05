@@ -44,8 +44,18 @@ function FooterLinkColumn({ title, links }: { title: string; links: { label: str
 
 export function Footer() {
   return (
-    <footer className="section-dark">
-      <div className="section">
+    <footer className="section-dark relative overflow-hidden">
+      {/* Cyan gradient wash — ambient glow rising from bottom */}
+      <div className="absolute inset-0 pointer-events-none" style={{ zIndex: 1 }}>
+        <div
+          className="absolute inset-x-0 bottom-0"
+          style={{
+            height: "70%",
+            background: "linear-gradient(to top, rgba(0, 158, 250, 0.35) 0%, rgba(0, 158, 250, 0.15) 30%, rgba(0, 158, 250, 0.04) 60%, transparent 100%)",
+          }}
+        />
+      </div>
+      <div className="section relative z-10">
         <div className="container-main">
           <div className="grid lg:grid-cols-2 gap-12 items-start pb-16 border-b border-current/10">
             <div>

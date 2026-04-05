@@ -48,8 +48,8 @@
   --ce-surface-3: #22252E;
   --ce-lime: #B3FF3B;
   --ce-lime-muted: rgba(179, 255, 59, 0.15);
-  --ce-cyan: #22D3EE;
-  --ce-cyan-muted: rgba(34, 211, 238, 0.12);
+  --ce-cyan: #14A9FF;
+  --ce-cyan-muted: rgba(20, 169, 255, 0.12);
   --ce-forest: #042C01;
   --ce-text-primary: #E8E8ED;
   --ce-text-secondary: #9CA3AF;
@@ -82,8 +82,8 @@
   --ce-gauge-track: rgba(255, 255, 255, 0.06);
 
   /* Role accent colors — dark mode */
-  --ce-role-edgestar: #22D3EE;
-  --ce-role-edgestar-rgb: 34, 211, 238;
+  --ce-role-edgestar: #14A9FF;
+  --ce-role-edgestar-rgb: 20, 169, 255;
   --ce-role-edgepreneur: #F59E0B;
   --ce-role-edgepreneur-rgb: 245, 158, 11;
   --ce-role-parent: #EC4899;
@@ -115,7 +115,7 @@
 
   /* Lime/Cyan RGB triplets for rgba() composition */
   --ce-lime-rgb: 179, 255, 59;
-  --ce-cyan-rgb: 34, 211, 238;
+  --ce-cyan-rgb: 20, 169, 255;
 
   /* Dark mode shadows — subtle */
   --ce-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.2);
@@ -164,8 +164,8 @@
   --ce-surface-3: #E8EBF0;
   --ce-lime: #16A34A;
   --ce-lime-muted: rgba(22, 163, 74, 0.1);
-  --ce-cyan: #0891B2;
-  --ce-cyan-muted: rgba(8, 145, 178, 0.08);
+  --ce-cyan: #0D8AD4;
+  --ce-cyan-muted: rgba(13, 138, 212, 0.08);
   --ce-forest: #DCFCE7;
   --ce-text-primary: #1A1D24;
   --ce-text-secondary: #4B5563;
@@ -201,8 +201,8 @@
   --ce-gauge-track: rgba(0, 0, 0, 0.06);
 
   /* Role accent colors — light mode */
-  --ce-role-edgestar: #0891B2;
-  --ce-role-edgestar-rgb: 8, 145, 178;
+  --ce-role-edgestar: #0D8AD4;
+  --ce-role-edgestar-rgb: 13, 138, 212;
   --ce-role-edgepreneur: #D97706;
   --ce-role-edgepreneur-rgb: 217, 119, 6;
   --ce-role-parent: #DB2777;
@@ -234,7 +234,7 @@
 
   /* Lime/Cyan RGB triplets — light mode */
   --ce-lime-rgb: 22, 163, 74;
-  --ce-cyan-rgb: 8, 145, 178;
+  --ce-cyan-rgb: 13, 138, 212;
 
   /* Light mode shadows for depth */
   --ce-shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 1px 2px rgba(0, 0, 0, 0.06);

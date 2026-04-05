@@ -84,7 +84,7 @@ export function Pricing() {
               <div
                 className={`rounded-[var(--radius-lg)] p-6 h-full flex flex-col border ${
                   plan.featured
-                    ? "bg-[#070B0E] text-white border-[#070B0E] dark:bg-white dark:text-[#12110E] dark:border-white"
+                    ? "bg-[#00253A] text-white border-[#00253A] dark:bg-white dark:text-[#12110E] dark:border-white"
                     : "bg-bg-card text-text-primary border-border-light"
                 }`}
               >
@@ -92,7 +92,7 @@ export function Pricing() {
                 <div className="flex items-center justify-between mb-6">
                   <span className="text-sm font-medium tracking-[-0.2px]">{plan.name}</span>
                   {plan.featured && (
-                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full border border-[#9FFF07] text-[#9FFF07]">
+                    <span className="text-[10px] font-semibold uppercase tracking-wider px-2.5 py-1 rounded-full border border-[#B3FF3B] text-[#B3FF3B]">
                       Popular
                     </span>
                   )}

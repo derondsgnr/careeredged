@@ -103,7 +103,7 @@ export function Navbar() {
           <Link to="/login" className="text-nav text-text-primary hover:text-accent transition-colors">
             Log in
           </Link>
-          <Link to="/signup" className="btn btn-primary !py-3 !px-5 text-[11px]">
+          <Link to="/signup" className="btn btn-primary !py-2.5 !px-5 !text-[13px]">
             <BtnText>Get Your Roadmap</BtnText>
           </Link>
         </div>

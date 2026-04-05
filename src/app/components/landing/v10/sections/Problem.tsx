@@ -37,7 +37,7 @@ export function Problem() {
             {painPoints.map((point, i) => (
               <ScrollReveal key={i} variant="sm" delay={i + 1}>
                 <div className="card-fill-hover flex gap-4 items-start p-4 rounded-[var(--radius-lg)] surface-glass group cursor-default">
-                  <div className="w-1 h-full min-h-[24px] opacity-20 bg-current rounded-full group-hover:bg-[#9FFF07] group-hover:opacity-100 transition-all duration-500 shrink-0 mt-1" />
+                  <div className="w-1 h-full min-h-[24px] opacity-20 bg-current rounded-full group-hover:bg-[#B3FF3B] group-hover:opacity-100 transition-all duration-500 shrink-0 mt-1" />
                   <p className="text-body opacity-80 group-hover:opacity-100 transition-opacity duration-500 relative z-[1]">
                     {point}
                   </p>

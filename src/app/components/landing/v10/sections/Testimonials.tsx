@@ -98,7 +98,7 @@ export function Testimonials() {
 
   return (
     <section className="section section-darker-gray overflow-hidden">
-      <div className="container-main mb-20">
+      <div className="container-main" style={{ marginBottom: "112px" }}>
         <ScrollReveal variant="sm">
           <p className="text-eyebrow text-accent mb-8">What they say</p>
         </ScrollReveal>

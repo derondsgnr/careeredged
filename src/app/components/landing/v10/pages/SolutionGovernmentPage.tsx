@@ -23,13 +23,13 @@ export function SolutionGovernmentPage() {
           { value: "60%", label: "less admin overhead" },
         ]}
         image="https://images.unsplash.com/photo-1577962917302-cd874c4e31d2?w=800&q=80"
-        patternColor="#009EFA"
+        patternColor="#14A9FF"
       />
 
       <ProgramTypes
         eyebrow="Program types"
         headline="Built for the programs you run."
-        accentColor="#009EFA"
+        accentColor="#14A9FF"
         programs={[
           {
             title: "Workforce Reentry",
@@ -50,7 +50,7 @@ export function SolutionGovernmentPage() {
       <HowItWorksSteps
         eyebrow="How it works"
         headline="From enrollment to outcome report."
-        accentColor="#009EFA"
+        accentColor="#14A9FF"
         steps={[
           {
             title: "Enroll participants",
@@ -71,7 +71,7 @@ export function SolutionGovernmentPage() {
         headline="Career programs that create lasting change."
         body="Connect your agency with the tools to deliver real career outcomes for the communities you serve."
         cta={{ label: "Get in touch", href: "#contact" }}
-        patternColor="#009EFA"
+        patternColor="#14A9FF"
       />
       </main>
       <Footer />

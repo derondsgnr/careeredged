@@ -14,7 +14,7 @@ interface ProgramTypesProps {
   accentColor?: string;
 }
 
-export function ProgramTypes({ eyebrow, headline, programs, accentColor = "#9FFF07" }: ProgramTypesProps) {
+export function ProgramTypes({ eyebrow, headline, programs, accentColor = "#B3FF3B" }: ProgramTypesProps) {
   return (
     <section className="section bg-bg-primary">
       <div className="container-main">
@@ -31,7 +31,7 @@ export function ProgramTypes({ eyebrow, headline, programs, accentColor = "#9FFF
               <div
                 className={`rounded-[var(--radius-lg)] p-8 h-full border transition-colors duration-500 ${
                   p.featured
-                    ? "bg-[#070B0E] text-white border-[#070B0E]"
+                    ? "bg-[#00253A] text-white border-[#00253A]"
                     : "bg-bg-card text-text-primary border-border-light"
                 }`}
               >

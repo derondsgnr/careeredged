@@ -47,7 +47,7 @@ function BandContent() {
 
 export function CTABand() {
   return (
-    <div className="bg-[#9FFF07] text-[#12110E] overflow-hidden py-5">
+    <div className="bg-[#B3FF3B] text-[#12110E] overflow-hidden py-5">
       <div className="marquee-track flex items-center whitespace-nowrap text-[20px] font-medium tracking-[-0.3px]">
         <BandContent />
         <BandContent />

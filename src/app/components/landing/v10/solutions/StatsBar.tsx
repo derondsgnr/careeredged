@@ -12,7 +12,7 @@ interface StatsBarProps {
   accentColor?: string;
 }
 
-export function StatsBar({ stats, variant = "light", accentColor = "#9FFF07" }: StatsBarProps) {
+export function StatsBar({ stats, variant = "light", accentColor = "#B3FF3B" }: StatsBarProps) {
   const isDark = variant === "dark";
 
   return (

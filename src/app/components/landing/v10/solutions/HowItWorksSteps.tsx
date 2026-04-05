@@ -12,7 +12,7 @@ interface HowItWorksStepsProps {
   accentColor?: string;
 }
 
-export function HowItWorksSteps({ eyebrow, headline, steps, accentColor = "#009EFA" }: HowItWorksStepsProps) {
+export function HowItWorksSteps({ eyebrow, headline, steps, accentColor = "#14A9FF" }: HowItWorksStepsProps) {
   return (
     <section className="section section-dark">
       <div className="container-main">
