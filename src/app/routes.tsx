@@ -20,6 +20,8 @@ import { SolutionEmployersPage as V10SolutionEmployersPage } from "./components/
 import { SolutionInstitutionsPage as V10SolutionInstitutionsPage } from "./components/landing/v10/pages/SolutionInstitutionsPage";
 import { SolutionGovernmentPage as V10SolutionGovernmentPage } from "./components/landing/v10/pages/SolutionGovernmentPage";
 import { SolutionNGOsPage as V10SolutionNGOsPage } from "./components/landing/v10/pages/SolutionNGOsPage";
+import { EdgeJobsPage as V10EdgeJobsPage } from "./components/landing/v10/pages/EdgeJobsPage";
+import { ExploreCareersPage as V10ExploreCareersPage } from "./components/landing/v10/pages/ExploreCareersPage";
 
 // ─── Archive landing variations (dev-only) ──────────────────────────
 
@@ -145,6 +147,8 @@ function NewSolutionEmployersPage() { return <V10SolutionEmployersPage />; }
 function NewSolutionInstitutionsPage() { return <V10SolutionInstitutionsPage />; }
 function NewSolutionGovernmentPage() { return <V10SolutionGovernmentPage />; }
 function NewSolutionNGOsPage() { return <V10SolutionNGOsPage />; }
+function NewEdgeJobsPage() { return <V10EdgeJobsPage />; }
+function NewExploreCareersPage() { return <V10ExploreCareersPage />; }
 
 function OnboardingPage() {
   const navigate = useNavigate();
@@ -525,6 +529,8 @@ export const router = createBrowserRouter([
       { path: "solutions/institutions",   Component: NewSolutionInstitutionsPage },
       { path: "solutions/government",     Component: NewSolutionGovernmentPage },
       { path: "solutions/ngos",           Component: NewSolutionNGOsPage },
+      { path: "edgejobs",                 Component: NewEdgeJobsPage },
+      { path: "explore",                  Component: NewExploreCareersPage },
 
       // Role-based surfaces: /:role/*
       { path: ":role",                          Component: DashboardPage },
