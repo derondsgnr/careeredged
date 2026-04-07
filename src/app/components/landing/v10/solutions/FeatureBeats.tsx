@@ -40,8 +40,8 @@ export function FeatureBeats({ eyebrow, headline, beats, accentColor = "#14A9FF"
               <ScrollReveal key={beat.tag} variant="sm" delay={i + 1}>
                 <button
                   onClick={() => setActive(i)}
-                  className={`w-full text-left flex gap-5 p-5 rounded-[var(--radius-lg)] transition-all duration-500 ${
-                    active === i ? "bg-bg-card" : "bg-transparent hover:bg-bg-card/50"
+                  className={`w-full text-left flex gap-5 p-5 rounded-[var(--radius-lg)] cursor-pointer transition-all duration-500 ${
+                    active === i ? "bg-bg-card opacity-100" : "bg-transparent opacity-50 hover:opacity-75"
                   }`}
                 >
                   <div className="w-[100px] h-[100px] rounded-[var(--radius-lg)] overflow-hidden shrink-0">

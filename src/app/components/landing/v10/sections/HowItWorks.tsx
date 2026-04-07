@@ -15,7 +15,7 @@ const steps = [
     headline: "Then we build your roadmap.",
     body: "A personalized career plan with clear phases, skill milestones, and a timeline that fits your life. See which careers match your profile, what they pay, and exactly what it takes to get there.",
     image:
-      "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=600&q=80",
+      "https://images.unsplash.com/photo-1716840646010-e5622fd6683d?w=600&q=80",
   },
   {
     num: "03",
@@ -23,7 +23,7 @@ const steps = [
     headline: "We get your resume ready.",
     body: "Upload your resume and get it scored instantly. See exactly where it falls short, what to fix, and how to make it speak the language that hiring systems and real humans want to read.",
     image:
-      "https://images.unsplash.com/photo-1586281380349-632531db7ed4?w=600&q=80",
+      "https://images.unsplash.com/photo-1698047681432-006d2449c631?w=600&q=80",
   },
   {
     num: "04",

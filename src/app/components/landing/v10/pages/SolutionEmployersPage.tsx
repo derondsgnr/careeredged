@@ -49,7 +49,7 @@ export function SolutionEmployersPage() {
             tag: "Hiring Analytics",
             headline: "Understand your pipeline, finally.",
             body: "Visibility into pipeline quality, candidate conversion, and hire-to-match accuracy. Understand your employer brand from the candidate side. Know what draws them to you — and what doesn't.",
-            image: "https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=700&q=80",
+            image: "https://images.unsplash.com/photo-1659019722197-8ec84ff3df8a?w=700&q=80",
           },
         ]}
         accentColor="#14A9FF"
