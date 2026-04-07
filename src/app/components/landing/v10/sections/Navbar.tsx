@@ -8,8 +8,7 @@ const navLinks = [
   { label: "About", href: "/about" },
   { label: "EdgeJobs", href: "/edgejobs" },
   { label: "Explore Careers", href: "/explore" },
-  { label: "EdgePath", href: "/edgepath" },
-  { label: "Pricing", href: "/pricing" },
+  { label: "EdgePath", href: "/signup" },
 ];
 
 const solutionsLinks = [

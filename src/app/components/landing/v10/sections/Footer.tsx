@@ -3,7 +3,7 @@ import { Logo } from "../ui/Logo";
 import { BtnText } from "../ui/BtnText";
 
 const productLinks = [
-  { label: "EdgePath", href: "/edgepath" },
+  { label: "EdgePath", href: "/signup" },
   { label: "EdgeJobs", href: "/edgejobs" },
   { label: "Explore Careers", href: "/explore" },
   { label: "ResumeEdge", href: "#" },
@@ -20,6 +20,7 @@ const solutionLinks = [
 
 const companyLinks = [
   { label: "About", href: "/about" },
+  { label: "Pricing", href: "/pricing" },
   { label: "Careers", href: "#" },
   { label: "Privacy", href: "#" },
   { label: "Terms", href: "#" },
