@@ -3,9 +3,10 @@
   "configurations": [
     {
       "name": "Careeredgde",
-      "runtimeExecutable": "npx",
-      "runtimeArgs": ["vite", "--port", "5191"],
-      "port": 5191
+      "runtimeExecutable": "/usr/local/bin/npx",
+      "runtimeArgs": ["vite", "--port", "5192"],
+      "port": 5192,
+      "env": { "PATH": "/usr/local/bin:/usr/bin:/bin" }
     }
   ]
 }
