@@ -1963,7 +1963,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
   const [edgePathState, setEdgePathState] = useState<EdgePathState>(data ? "active" : "active");
   const initialActivePhase = data?.phases?.find(p => p.status === "active")?.id ?? 2;
   const [activePhase, setActivePhase] = useState(initialActivePhase);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const [viewMode, setViewMode] = useState<"list" | "map">("map");
   const [phases, setPhases] = useState<PhaseData[]>(data?.phases ?? INITIAL_PHASES);
   const [milestones, setMilestones] = useState<Milestone[]>(
     data ? (data.milestones[initialActivePhase] ?? []) : PHASE_2_MILESTONES
@@ -2135,7 +2135,6 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
           <div className="flex items-center gap-3">
             <LiveToggle />
             <ActionBarButton icon={RefreshCw} label="Check Now" onClick={() => handleAskSophia("Check my roadmap for any updates or changes")} />
-            <RoadmapNotificationBell onAskSophia={handleAskSophia} />
 
             <div className="w-px h-5" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }} />
 
@@ -2155,6 +2154,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
               </button>
             </div>
             <OverflowMenu />
+            <RoadmapNotificationBell onAskSophia={handleAskSophia} />
           </div>
         </motion.div>
 
@@ -2257,10 +2257,11 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                 </button>
               </div>
               <OverflowMenu />
+              <RoadmapNotificationBell onAskSophia={handleAskSophia} />
             </div>
           </motion.div>
 
-          {/* Action Bar — Row 2: Live toggle, Check Now, Notification bell */}
+          {/* Action Bar — Row 2: Live toggle, Check Now */}
           <motion.div
             className="flex items-center gap-3 pb-4"
             initial={{ opacity: 0, y: 4 }}
@@ -2269,7 +2270,6 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
           >
             <LiveToggle />
             <ActionBarButton icon={RefreshCw} label="Check Now" onClick={() => handleAskSophia("Check my roadmap for any updates or changes")} />
-            <RoadmapNotificationBell onAskSophia={handleAskSophia} />
           </motion.div>
 
           {/* Stale Return Bar */}
