@@ -20,6 +20,9 @@ import {
   GitBranch, ArrowRight, ZoomIn, ZoomOut, Maximize2,
   ChevronDown, Star, FileText, MessageSquare,
   Play, CheckCircle2, Circle, Send, Trophy,
+  Map, Zap, BarChart3, TrendingUp, Heart,
+  DollarSign, Activity, Lightbulb, CalendarClock,
+  Plus, Receipt,
 } from "lucide-react";
 
 const EASE = [0.32, 0.72, 0, 1] as const;
@@ -43,6 +46,9 @@ interface MilestoneNode {
   resources?: { label: string; type: string }[];
   crossSurface?: { surface: string; note: string; icon: string; action: string }[];
   subTasks?: SubTask[];
+  estimatedCost?: number;
+  actualCost?: number;
+  costNote?: string;
 }
 
 interface PathOption {
@@ -94,13 +100,14 @@ const ROADMAP_DATA: PhaseNode[] = [
         id: "p2a", label: "Accelerated Bootcamp", matchPct: 95, recommended: true,
         sophiaReason: "Matches your hybrid study preference and moderate budget. Builds on your Fine Arts degree with practical software skills.",
         milestones: [
-          { id: "p2m1", label: "Figma fundamentals", status: "done", time: "8h", category: "skill" },
-          { id: "p2m2", label: "Design systems", status: "done", time: "6h", category: "skill" },
-          { id: "p2m3", label: "UX research", status: "done", time: "10h", category: "skill" },
-          { id: "p2m4", label: "Case study #1", status: "done", time: "12h", category: "action" },
-          { id: "p2m5", label: "Mentor feedback", status: "done", time: "2h", category: "action" },
+          { id: "p2m1", label: "Figma fundamentals", status: "done", time: "8h", category: "skill", estimatedCost: 0 },
+          { id: "p2m2", label: "Design systems", status: "done", time: "6h", category: "skill", estimatedCost: 0 },
+          { id: "p2m3", label: "UX research", status: "done", time: "10h", category: "skill", estimatedCost: 149, actualCost: 149, costNote: "IDF Membership" },
+          { id: "p2m4", label: "Case study #1", status: "done", time: "12h", category: "action", estimatedCost: 0 },
+          { id: "p2m5", label: "Mentor feedback", status: "done", time: "2h", category: "action", estimatedCost: 150, actualCost: 150, costNote: "Session with Alice" },
           {
             id: "p2m6", label: "Interaction design", status: "current", time: "8h", category: "skill",
+            estimatedCost: 299, costNote: "Coursera UX Certificate",
             sophiaNote: "6 of 8 target companies require this skill.",
             sophiaCoaching: "Start with Chapter 3 of the IDF course — it covers the patterns your target companies use most. Then try the daily challenge. About 2 hours total.",
             resources: [
@@ -122,6 +129,7 @@ const ROADMAP_DATA: PhaseNode[] = [
           },
           {
             id: "p2m7", label: "Case study #2", status: "upcoming", time: "15h", category: "action",
+            estimatedCost: 12, costNote: "Portfolio domain",
             sophiaNote: "Pick a product you use daily. Deep understanding > flashy visuals.",
             sophiaCoaching: "When the time comes, pick a product you already use daily. Depth of understanding always beats flashy visuals in interviews.",
           },
@@ -446,24 +454,34 @@ function PathComparePanel({
   onChoose: (pathId: string) => void;
 }) {
   const [justChose, setJustChose] = useState<string | null>(null);
+  const [showMore, setShowMore] = useState(false);
+
+  // P4: Sort by match, show top 2 by default, rest behind disclosure
+  const sorted = [...phase.paths].sort((a, b) => b.matchPct - a.matchPct);
+  const visible = showMore ? sorted : sorted.slice(0, 2);
+  const hasMore = sorted.length > 2;
+
+  // P1: Contextual Sophia response for non-recommended choice
+  const chosenPath = justChose ? sorted.find(p => p.id === justChose) : null;
+  const choseNonRecommended = chosenPath && !chosenPath.recommended;
 
   const handleChoose = (pathId: string) => {
     onChoose(pathId);
     setJustChose(pathId);
-    setTimeout(() => onClose(), 1200);
+    setTimeout(() => onClose(), 1800); // Slightly longer to read Sophia's context
   };
 
   return (
     <motion.div
-      className="fixed top-0 right-0 bottom-0 w-[420px] z-50 flex flex-col"
+      className="fixed top-0 right-0 bottom-0 w-[640px] z-50 flex flex-col"
       style={{
         background: "rgba(10,12,16,0.97)",
         borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)",
         backdropFilter: "blur(24px)",
       }}
-      initial={{ x: 420 }}
+      initial={{ x: 640 }}
       animate={{ x: 0 }}
-      exit={{ x: 420 }}
+      exit={{ x: 640 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
       <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
@@ -478,14 +496,36 @@ function PathComparePanel({
         </button>
       </div>
 
-      {/* Sophia context */}
+      {/* Sophia context — P1: updates after non-recommended choice */}
       <div className="px-5 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
-        <div className="flex gap-2.5 px-3.5 py-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
-          <SophiaMark size={14} glowing={false} />
-          <p className="text-[11px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
-            I found {phase.paths.length} ways to approach <span className="text-ce-text-primary">{phase.title}</span>. I've ranked them by fit — but you know your situation best.
-          </p>
-        </div>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={choseNonRecommended ? "non-rec" : justChose ? "confirmed" : "default"}
+            className="flex gap-2.5 px-3.5 py-3 rounded-xl"
+            style={{
+              background: choseNonRecommended
+                ? "rgba(var(--ce-role-edgepreneur-rgb),0.04)"
+                : "rgba(var(--ce-role-edgestar-rgb),0.03)",
+              border: `1px solid ${choseNonRecommended
+                ? "rgba(var(--ce-role-edgepreneur-rgb),0.08)"
+                : "rgba(var(--ce-role-edgestar-rgb),0.06)"}`,
+            }}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.25 }}
+          >
+            <SophiaMark size={14} glowing={false} />
+            <p className="text-[11px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>
+              {choseNonRecommended
+                ? <><span className="text-ce-text-primary">{chosenPath.label}</span> is a valid choice. The tradeoff: {chosenPath.matchPct < 80 ? "lower match to your profile means more self-direction needed" : "a different pace and structure"}. I'll adjust your milestones to fit.</>
+                : justChose
+                  ? <>Great choice. <span className="text-ce-text-primary">{chosenPath?.label}</span> aligns well with your profile and timeline.</>
+                  : <>There are <span className="text-ce-text-primary">{sorted.length} different ways</span> to complete <span className="text-ce-text-primary">{phase.title}</span>. Each has different tradeoffs — speed, cost, and structure. I've ranked them by how well they fit your profile.</>
+              }
+            </p>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
       {/* Confirmation toast */}
@@ -506,35 +546,56 @@ function PathComparePanel({
       </AnimatePresence>
 
       <div className="flex-1 overflow-auto px-5 py-4">
-        <div className="flex flex-col gap-3">
-          {phase.paths
-            .sort((a, b) => b.matchPct - a.matchPct)
-            .map((path, i) => {
+        <div className="grid grid-cols-2 gap-3">
+          {visible.map((path, i) => {
               const isChosen = phase.chosenPath === path.id || justChose === path.id;
+              // P2: After selection, non-chosen paths collapse
+              const isDeemphasized = justChose && !isChosen;
+
               return (
                 <motion.div
                   key={path.id}
-                  className="rounded-xl overflow-hidden transition-all duration-300"
+                  className="rounded-xl overflow-hidden"
                   style={{
-                    background: isChosen ? "rgba(var(--ce-role-edgestar-rgb),0.04)" : "rgba(var(--ce-glass-tint),0.02)",
-                    border: `1px solid ${isChosen ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.04)"}`,
+                    background: isChosen
+                      ? "rgba(var(--ce-role-edgestar-rgb),0.04)"
+                      : "rgba(var(--ce-glass-tint),0.02)",
+                    border: `1px solid ${isChosen
+                      ? "rgba(var(--ce-role-edgestar-rgb),0.15)"
+                      : "rgba(var(--ce-glass-tint),0.04)"}`,
+                    // P2: Chosen gets a lime glow pulse
+                    boxShadow: isChosen && justChose ? "0 0 20px rgba(var(--ce-lime-rgb),0.08)" : "none",
                   }}
                   initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.08, duration: 0.3, ease: EASE }}
+                  animate={{
+                    opacity: isDeemphasized ? 0.35 : 1,
+                    y: 0,
+                    scale: isDeemphasized ? 0.97 : 1,
+                    height: isDeemphasized ? 60 : "auto",
+                  }}
+                  transition={{
+                    delay: justChose ? 0 : i * 0.08,
+                    duration: justChose ? 0.4 : 0.3,
+                    ease: EASE,
+                  }}
                 >
                   <div className="px-4 pt-4 pb-3">
                     <div className="flex items-start justify-between mb-2">
                       <div>
                         <div className="flex items-center gap-2 mb-1">
-                          {path.recommended && (
-                            <span className="text-[9px] px-2 py-0.5 rounded-full text-ce-lime flex items-center gap-1" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", fontFamily: "var(--font-body)" }}>
-                              <Star className="w-2.5 h-2.5 fill-[var(--ce-lime)]" /> Recommended
-                            </span>
-                          )}
                           {isChosen && (
                             <span className="text-[9px] px-2 py-0.5 rounded-full text-ce-cyan" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.08)", fontFamily: "var(--font-body)" }}>
-                              Active
+                              Your current path
+                            </span>
+                          )}
+                          {!isChosen && !justChose && (
+                            <span className="text-[9px] px-2 py-0.5 rounded-full text-[var(--ce-text-quaternary)]" style={{ background: "rgba(var(--ce-glass-tint),0.04)", fontFamily: "var(--font-body)" }}>
+                              Alternative
+                            </span>
+                          )}
+                          {path.recommended && (
+                            <span className="text-[9px] px-2 py-0.5 rounded-full text-ce-lime flex items-center gap-1" style={{ background: "rgba(var(--ce-lime-rgb),0.08)", fontFamily: "var(--font-body)" }}>
+                              <Star className="w-2.5 h-2.5 fill-[var(--ce-lime)]" /> Best fit
                             </span>
                           )}
                         </div>
@@ -553,55 +614,74 @@ function PathComparePanel({
                       )}
                     </div>
 
-                    <p className="text-[11px] text-ce-text-tertiary leading-relaxed mb-3" style={{ fontFamily: "var(--font-body)" }}>
-                      {path.sophiaReason}
-                    </p>
+                    {/* Hide detail when deemphasized */}
+                    {!isDeemphasized && (
+                      <>
+                        <p className="text-[11px] text-ce-text-tertiary leading-relaxed mb-3" style={{ fontFamily: "var(--font-body)" }}>
+                          {path.sophiaReason}
+                        </p>
 
-                    <div className="flex items-center gap-3 text-[10px] text-[var(--ce-text-quaternary)] mb-3" style={{ fontFamily: "var(--font-body)" }}>
-                      <span>{path.milestones.length} milestones</span>
-                      <span>·</span>
-                      <span>{path.milestones.reduce((acc, m) => { const h = parseFloat(m.time); return acc + (isNaN(h) ? 0 : h); }, 0)}h estimated</span>
-                    </div>
+                        <div className="flex items-center gap-3 text-[10px] text-[var(--ce-text-quaternary)] mb-3" style={{ fontFamily: "var(--font-body)" }}>
+                          <span>{path.milestones.length} milestones</span>
+                          <span>·</span>
+                          <span>{path.milestones.reduce((acc, m) => { const h = parseFloat(m.time); return acc + (isNaN(h) ? 0 : h); }, 0)}h estimated</span>
+                        </div>
 
-                    {!isChosen && !justChose && (
-                      <button
-                        className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-[12px] cursor-pointer transition-all hover:brightness-110"
-                        style={{
-                          background: path.recommended ? "rgba(var(--ce-cyan-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
-                          border: `1px solid ${path.recommended ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}`,
-                          color: path.recommended ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
-                          fontFamily: "var(--font-display)", fontWeight: 500,
-                        }}
-                        onClick={() => handleChoose(path.id)}
-                      >
-                        Choose this path <ArrowRight className="w-3 h-3" />
-                      </button>
+                        {!isChosen && !justChose && (
+                          <button
+                            className="w-full flex items-center justify-center gap-1.5 px-3 py-2.5 rounded-lg text-[12px] cursor-pointer transition-all hover:brightness-110"
+                            style={{
+                              background: path.recommended ? "rgba(var(--ce-cyan-rgb),0.06)" : "rgba(var(--ce-glass-tint),0.03)",
+                              border: `1px solid ${path.recommended ? "rgba(var(--ce-cyan-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                              color: path.recommended ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
+                              fontFamily: "var(--font-display)", fontWeight: 500,
+                            }}
+                            onClick={() => handleChoose(path.id)}
+                          >
+                            Choose this path <ArrowRight className="w-3 h-3" />
+                          </button>
+                        )}
+                      </>
                     )}
                   </div>
 
-                  {/* Milestone preview */}
-                  <div className="px-4 py-2.5" style={{ background: "rgba(var(--ce-glass-tint),0.01)", borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
-                    <div className="flex flex-wrap gap-1.5">
-                      {path.milestones.slice(0, 5).map(m => (
-                        <span key={m.id} className="text-[9px] px-2 py-0.5 rounded" style={{
-                          background: "rgba(var(--ce-glass-tint),0.03)",
-                          color: m.status === "done" ? "var(--ce-lime)" : "var(--ce-text-tertiary)",
-                          fontFamily: "var(--font-body)",
-                        }}>
-                          {m.status === "done" && <Check className="w-2 h-2 inline mr-0.5" />}
-                          {m.label}
-                        </span>
-                      ))}
-                      {path.milestones.length > 5 && (
-                        <span className="text-[9px] px-2 py-0.5 rounded text-[var(--ce-text-quaternary)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}>
-                          +{path.milestones.length - 5} more
-                        </span>
-                      )}
+                  {/* Milestone preview — hidden when collapsed */}
+                  {!isDeemphasized && (
+                    <div className="px-4 py-2.5" style={{ background: "rgba(var(--ce-glass-tint),0.01)", borderTop: "1px solid rgba(var(--ce-glass-tint),0.03)" }}>
+                      <div className="flex flex-wrap gap-1.5">
+                        {path.milestones.slice(0, 5).map(m => (
+                          <span key={m.id} className="text-[9px] px-2 py-0.5 rounded" style={{
+                            background: "rgba(var(--ce-glass-tint),0.03)",
+                            color: m.status === "done" ? "var(--ce-lime)" : "var(--ce-text-tertiary)",
+                            fontFamily: "var(--font-body)",
+                          }}>
+                            {m.status === "done" && <Check className="w-2 h-2 inline mr-0.5" />}
+                            {m.label}
+                          </span>
+                        ))}
+                        {path.milestones.length > 5 && (
+                          <span className="text-[9px] px-2 py-0.5 rounded text-[var(--ce-text-quaternary)]" style={{ background: "rgba(var(--ce-glass-tint),0.02)", fontFamily: "var(--font-body)" }}>
+                            +{path.milestones.length - 5} more
+                          </span>
+                        )}
+                      </div>
                     </div>
-                  </div>
+                  )}
                 </motion.div>
               );
             })}
+
+          {/* P4: Show more disclosure for 3+ paths */}
+          {hasMore && !showMore && !justChose && (
+            <button
+              className="col-span-2 flex items-center justify-center gap-1.5 py-2.5 text-[11px] cursor-pointer rounded-lg transition-colors hover:bg-[rgba(var(--ce-glass-tint),0.03)]"
+              style={{ color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)", border: "1px dashed rgba(var(--ce-glass-tint),0.08)" }}
+              onClick={() => setShowMore(true)}
+            >
+              <ChevronDown className="w-3 h-3" />
+              Show {sorted.length - 2} more option{sorted.length - 2 > 1 ? "s" : ""}
+            </button>
+          )}
         </div>
       </div>
     </motion.div>
@@ -624,7 +704,7 @@ function getPhaseX(idx: number) {
 
 // ─── Mind Map Canvas ────────────────────────────────────────────────────────
 
-export function MindMapView() {
+export function MindMapView({ onNavigate }: { onNavigate?: (target: string) => void } = {}) {
   const [zoom, setZoom] = useState(0.82);
   const [pan, setPan] = useState({ x: 20, y: 20 });
   const [isPanning, setIsPanning] = useState(false);
@@ -636,6 +716,13 @@ export function MindMapView() {
   const [showOnboarding, setShowOnboarding] = useState(true);
   const [lockedBounce, setLockedBounce] = useState<number | null>(null);
   const [hoveredPhase, setHoveredPhase] = useState<number | null>(null);
+  const [sidebarActive, setSidebarActive] = useState<string>("pathways");
+  const [canvasFilter, setCanvasFilter] = useState<string | null>(null);
+  const [sophiaOverride, setSophiaOverride] = useState<string | null>(null);
+  const [showTimeline, setShowTimeline] = useState(false);
+  const [logSpendMilestone, setLogSpendMilestone] = useState<string | null>(null);
+  const [showAnalytics, setShowAnalytics] = useState(false);
+  const [rightPanel, setRightPanel] = useState<string | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -702,6 +789,7 @@ export function MindMapView() {
 
   // Sophia context message
   const getSophiaMessage = () => {
+    if (sophiaOverride) return sophiaOverride;
     if (showPathCompare) return "Comparing paths — take your time. There's no wrong choice here.";
     if (selectedMilestone) {
       if (selectedMilestone.status === "current")
@@ -1010,6 +1098,7 @@ export function MindMapView() {
                     const isLocked = ms.status === "locked";
                     const isSelected = selectedMilestone?.id === ms.id;
                     const hasSophia = !!ms.sophiaNote || !!ms.sophiaCoaching;
+                    const isFiltered = canvasFilter && ms.category !== canvasFilter;
 
                     return (
                       <motion.div
@@ -1020,9 +1109,12 @@ export function MindMapView() {
                           left: px - 90,
                           top: my - 14,
                           width: 180,
+                          opacity: isFiltered ? 0.15 : undefined,
+                          pointerEvents: isFiltered ? "none" : undefined,
+                          transition: "opacity 0.3s ease",
                         }}
                         initial={{ opacity: 0, x: -12 }}
-                        animate={{ opacity: 1, x: 0 }}
+                        animate={{ opacity: isFiltered ? 0.15 : 1, x: 0 }}
                         transition={{ delay: 0.4 + mi * 0.04, duration: 0.3, ease: EASE }}
                         onClick={() => setSelectedMilestone(ms)}
                       >
@@ -1117,45 +1209,811 @@ export function MindMapView() {
         )}
       </AnimatePresence>
 
-      {/* ── Legend (bottom-left, above zoom) ───────────────────── */}
+      {/* ── Map Sidebar Nav ──────────────────────────────────── */}
       <motion.div
-        className="absolute bottom-[108px] left-5 flex items-center gap-3 px-3 py-2 rounded-xl z-20"
-        style={{ background: "rgba(10,12,16,0.85)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(12px)" }}
-        initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.8, duration: 0.4 }}
+        className="absolute left-5 bottom-16 z-20 flex flex-col gap-2"
+        initial={{ opacity: 0, x: -12 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ delay: 0.5, duration: 0.4, ease: EASE }}
       >
-        {[
-          { color: "var(--ce-lime)", label: "Done" },
-          { color: "var(--ce-role-edgestar)", label: "Active" },
-          { color: "var(--ce-text-tertiary)", label: "Upcoming" },
-          { color: "var(--ce-text-quaternary)", label: "Locked" },
-        ].map(item => (
-          <div key={item.label} className="flex items-center gap-1">
-            <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.color }} />
-            <span className="text-[9px]" style={{ color: item.color, fontFamily: "var(--font-body)" }}>{item.label}</span>
-          </div>
-        ))}
+        {/* Sidebar nav items */}
+        <div
+          className="rounded-xl overflow-hidden"
+          style={{ background: "rgba(10,12,16,0.9)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(16px)" }}
+        >
+          {/* Sidebar nav items — each wired to the correct surfacing pattern */}
+          {[
+            { section: "PLAN", items: [
+              { id: "pathways", icon: Map, label: "Pathways" },
+              { id: "timeline", icon: CalendarClock, label: "Timeline" },
+              { id: "quickwins", icon: Zap, label: "Quick Wins" },
+            ]},
+            { section: "BUILD", items: [
+              { id: "skills", icon: GraduationCap, label: "Skills" },
+              { id: "milestones", icon: Target, label: "Milestones" },
+              { id: "jobs", icon: Briefcase, label: "Jobs" },
+            ]},
+            { section: "TRACK", items: [
+              { id: "activity", icon: Activity, label: "Activity" },
+              { id: "support", icon: Heart, label: "Support", badge: 3 },
+              { id: "budget", icon: DollarSign, label: "Budget" },
+            ]},
+            { section: "INSIGHTS", items: [
+              { id: "analytics", icon: BarChart3, label: "Analytics" },
+              { id: "insights", icon: Lightbulb, label: "Insights" },
+              { id: "compare", icon: GitBranch, label: "Compare" },
+            ]},
+          ].map((group, gi) => (
+            <div key={group.section}>
+              <div className={`px-3 ${gi === 0 ? "pt-2.5" : "pt-3"} pb-1`} style={gi > 0 ? { borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" } : {}}>
+                <span className="text-[8px] tracking-wider text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}>{group.section}</span>
+              </div>
+              {group.items.map(item => {
+                const Icon = item.icon;
+                const active = sidebarActive === item.id;
+                return (
+                  <button
+                    key={item.id}
+                    data-node
+                    className="flex items-center gap-2 w-full px-3 py-2 cursor-pointer transition-all duration-150 text-left"
+                    style={{
+                      background: active ? "rgba(var(--ce-cyan-rgb),0.06)" : "transparent",
+                      color: active ? "var(--ce-cyan)" : "var(--ce-text-tertiary)",
+                    }}
+                    onClick={() => {
+                      // Close everything first
+                      setRightPanel(null); setShowTimeline(false); setShowAnalytics(false); setSophiaOverride(null); setCanvasFilter(null);
+                      setSidebarActive(item.id);
+
+                      // Wire to correct pattern per JBTD mapping
+                      switch (item.id) {
+                        case "pathways": break; // Default — reset everything (already done above)
+                        case "timeline": setShowTimeline(true); break;
+                        case "quickwins": setRightPanel("quickwins"); break;
+                        case "skills":
+                          setCanvasFilter("skill");
+                          setRightPanel("skills");
+                          break;
+                        case "milestones": {
+                          setRightPanel("milestones");
+                          const ap = data.find(p => p.status === "active");
+                          if (ap) setExpandedPhase(ap.id);
+                          break;
+                        }
+                        case "jobs": setRightPanel("jobs"); break;
+                        case "activity":
+                          setSophiaOverride("Completed Figma fundamentals 2 days ago. Started interaction design module today. Got feedback from Alice Chen 3 days ago.");
+                          break;
+                        case "support":
+                          setSophiaOverride("Alice Chen (EdgeGuide) · Next session Friday. \"Focus on one strong case study over two mediocre ones.\"");
+                          break;
+                        case "budget": setRightPanel("budget"); break;
+                        case "analytics": setShowAnalytics(true); break;
+                        case "insights": setRightPanel("insights"); break;
+                        case "compare": {
+                          // Find any phase with multiple paths — prefer active, then expanded
+                          const phaseWithPaths = data.find(p => p.status === "active" && p.paths.length > 1)
+                            || data.find(p => p.id === expandedPhase && p.paths.length > 1)
+                            || data.find(p => p.paths.length > 1);
+                          if (phaseWithPaths) {
+                            setShowPathCompare(phaseWithPaths);
+                          } else {
+                            setSophiaOverride("No phases have alternative paths to compare right now. Sophia will surface options when a genuine fork exists.");
+                          }
+                          break;
+                        }
+                      }
+                    }}
+                  >
+                    <Icon className="w-3.5 h-3.5" />
+                    <span className="text-[11px]" style={{ fontFamily: "var(--font-body)" }}>{item.label}</span>
+                    {"badge" in item && (item as any).badge && (
+                      <span className="ml-auto min-w-[16px] h-4 flex items-center justify-center rounded-full text-[9px] tabular-nums px-1"
+                        style={{ background: "var(--ce-cyan)", color: "var(--ce-void)", fontFamily: "var(--font-display)", fontWeight: 600 }}>
+                        {(item as any).badge}
+                      </span>
+                    )}
+                  </button>
+                );
+              })}
+            </div>
+          ))}
+          <div className="h-1" />
+        </div>
+
+        {/* Legend */}
+        <div
+          className="flex items-center gap-3 px-3 py-2 rounded-xl"
+          style={{ background: "rgba(10,12,16,0.85)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(12px)" }}
+        >
+          {[
+            { color: "var(--ce-lime)", label: "Done" },
+            { color: "var(--ce-role-edgestar)", label: "Active" },
+            { color: "var(--ce-text-tertiary)", label: "Upcoming" },
+            { color: "var(--ce-text-quaternary)", label: "Locked" },
+          ].map(item => (
+            <div key={item.label} className="flex items-center gap-1">
+              <div className="w-1.5 h-1.5 rounded-full" style={{ background: item.color }} />
+              <span className="text-[9px]" style={{ color: item.color, fontFamily: "var(--font-body)" }}>{item.label}</span>
+            </div>
+          ))}
+        </div>
+
+        {/* Zoom Controls */}
+        <div className="flex items-center gap-1 p-1 rounded-xl"
+          style={{ background: "rgba(10,12,16,0.85)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(12px)" }}>
+          <button data-node className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+            onClick={() => setZoom(z => Math.min(z + 0.15, 2))}>
+            <ZoomIn className="w-3.5 h-3.5 text-ce-text-secondary" />
+          </button>
+          <span className="text-[10px] text-ce-text-tertiary px-1 tabular-nums w-10 text-center" style={{ fontFamily: "var(--font-body)" }}>
+            {Math.round(zoom * 100)}%
+          </span>
+          <button data-node className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+            onClick={() => setZoom(z => Math.max(z - 0.15, 0.35))}>
+            <ZoomOut className="w-3.5 h-3.5 text-ce-text-secondary" />
+          </button>
+          <div className="w-[1px] h-4 bg-[rgba(var(--ce-glass-tint),0.06)] mx-0.5" />
+          <button data-node className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+            onClick={() => { setZoom(0.82); setPan({ x: 20, y: 20 }); }}>
+            <Maximize2 className="w-3.5 h-3.5 text-ce-text-secondary" />
+          </button>
+        </div>
       </motion.div>
 
-      {/* ── Zoom Controls ─────────────────────────────────────── */}
-      <div className="absolute bottom-16 left-5 flex items-center gap-1 p-1 rounded-xl z-20"
-        style={{ background: "rgba(10,12,16,0.85)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(12px)" }}>
-        <button data-node className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
-          onClick={() => setZoom(z => Math.min(z + 0.15, 2))}>
-          <ZoomIn className="w-3.5 h-3.5 text-ce-text-secondary" />
-        </button>
-        <span className="text-[10px] text-ce-text-tertiary px-1 tabular-nums w-10 text-center" style={{ fontFamily: "var(--font-body)" }}>
-          {Math.round(zoom * 100)}%
-        </span>
-        <button data-node className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
-          onClick={() => setZoom(z => Math.max(z - 0.15, 0.35))}>
-          <ZoomOut className="w-3.5 h-3.5 text-ce-text-secondary" />
-        </button>
-        <div className="w-[1px] h-4 bg-[rgba(var(--ce-glass-tint),0.06)] mx-0.5" />
-        <button data-node className="w-8 h-8 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
-          onClick={() => { setZoom(0.82); setPan({ x: 20, y: 20 }); }}>
-          <Maximize2 className="w-3.5 h-3.5 text-ce-text-secondary" />
-        </button>
-      </div>
+      {/* ── Right Panels (Quick Wins, Jobs, Insights) ─────────── */}
+      {rightPanel && !selectedMilestone && !showPathCompare && (
+        <>
+          <div
+            className="fixed inset-0 z-40 cursor-pointer"
+            style={{ background: "rgba(var(--ce-shadow-tint),0.35)" }}
+            onClick={() => { setRightPanel(null); setSidebarActive("pathways"); }}
+          />
+        {rightPanel === "quickwins" && (
+          <motion.div
+            className="fixed top-0 right-0 bottom-0 w-[320px] z-50 overflow-y-auto"
+            style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+            initial={{ x: 320 }} animate={{ x: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <div className="flex items-center gap-2">
+                <Zap className="w-4 h-4 text-[var(--ce-role-edgepreneur)]" />
+                <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Quick Wins</span>
+                <span className="text-[10px] text-[var(--ce-role-edgepreneur)] px-1.5 py-0.5 rounded-full" style={{ background: "rgba(var(--ce-role-edgepreneur-rgb),0.06)" }}>3 available</span>
+              </div>
+              <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                onClick={() => { setRightPanel(null); setSidebarActive("pathways"); }}>
+                <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+              </button>
+            </div>
+            <div className="px-4 pt-3 pb-2">
+              <div className="flex gap-2.5 p-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                <SophiaMark size={14} glowing={false} />
+                <div className="flex-1">
+                  <p className="text-[11px] text-ce-text-secondary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                    Quick wins build momentum. Each one takes under 10 minutes and strengthens your profile visibility.
+                  </p>
+                  <button data-node className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] cursor-pointer hover:brightness-110 transition-all"
+                    style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}>
+                    <Sparkles className="w-3 h-3" /> Ask Sophia
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="p-4 pt-1 flex flex-col gap-1">
+              {[
+                { label: "Update LinkedIn headline", time: "5 min", note: "Align with your Phase 2 target role" },
+                { label: "Add design tools to profile", time: "3 min", note: "Figma, FigJam, Maze — recruiters search these" },
+                { label: "Follow 5 design leaders", time: "10 min", note: "Sophia picked leaders at your target companies" },
+              ].map((qw, i) => (
+                <div key={i} className="flex items-start gap-3 p-3 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
+                  style={{ border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <Circle className="w-4 h-4 text-[var(--ce-text-quaternary)] mt-0.5 flex-shrink-0" />
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{qw.label}</span>
+                    <span className="text-[11px] text-ce-text-tertiary block mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{qw.note}</span>
+                  </div>
+                  <span className="text-[10px] text-[var(--ce-text-quaternary)] flex-shrink-0 mt-0.5" style={{ fontFamily: "var(--font-body)" }}>{qw.time}</span>
+                </div>
+              ))}
+            </div>
+            <div className="px-4 py-3" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <button data-node className="w-full text-[12px] text-ce-cyan py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.04)] transition-colors text-center"
+                style={{ fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
+                onClick={() => onNavigate?.("edgeprod")}>
+                Open in EdgeProd →
+              </button>
+            </div>
+          </motion.div>
+        )}
+        {rightPanel === "jobs" && (
+          <motion.div
+            className="fixed top-0 right-0 bottom-0 w-[320px] z-50 overflow-y-auto"
+            style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+            initial={{ x: 320 }} animate={{ x: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <div className="flex items-center gap-2">
+                <Briefcase className="w-4 h-4 text-ce-cyan" />
+                <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Phase 2 Job Matches</span>
+              </div>
+              <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                onClick={() => { setRightPanel(null); setSidebarActive("pathways"); }}>
+                <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+              </button>
+            </div>
+            <div className="px-4 pt-3 pb-2">
+              <div className="flex gap-2.5 p-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                <SophiaMark size={14} glowing={false} />
+                <div className="flex-1">
+                  <p className="text-[11px] text-ce-text-secondary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                    4 jobs match your Phase 2 skills. 2 posted this week. Figma is the strongest fit — your portfolio aligns with their team structure.
+                  </p>
+                  <button data-node className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] cursor-pointer hover:brightness-110 transition-all"
+                    style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}>
+                    <Sparkles className="w-3 h-3" /> Ask Sophia
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div className="px-5 py-3 pt-1">
+              {[
+                { title: "Product Designer", company: "Figma", match: 92 },
+                { title: "UX Designer", company: "Linear", match: 87 },
+                { title: "Design Engineer", company: "Vercel", match: 81 },
+                { title: "Product Designer", company: "Airbnb", match: 78 },
+              ].map((job, i) => (
+                <div key={i} className="flex items-center gap-3 p-3 rounded-xl mb-2 cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
+                  style={{ border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <div className="flex-1 min-w-0">
+                    <span className="text-[13px] text-ce-text-primary block" style={{ fontFamily: "var(--font-body)" }}>{job.title}</span>
+                    <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{job.company}</span>
+                  </div>
+                  <span className="text-[14px] tabular-nums text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{job.match}%</span>
+                </div>
+              ))}
+              <button className="w-full text-[12px] text-ce-cyan py-2.5 mt-2 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.04)] transition-colors text-center"
+                style={{ fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
+                onClick={() => onNavigate?.("jobs")}>
+                View all in EdgeMatch →
+              </button>
+            </div>
+          </motion.div>
+        )}
+        {rightPanel === "insights" && (
+          <motion.div
+            className="fixed top-0 right-0 bottom-0 w-[320px] z-50 overflow-y-auto"
+            style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+            initial={{ x: 320 }} animate={{ x: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <div className="flex items-center gap-2">
+                <Lightbulb className="w-4 h-4 text-[var(--ce-role-edgepreneur)]" />
+                <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Insights</span>
+              </div>
+              <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                onClick={() => { setRightPanel(null); setSidebarActive("pathways"); }}>
+                <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+              </button>
+            </div>
+            <div className="p-4 flex flex-col gap-3">
+              {[
+                { insight: "Interaction design demand up 12% in your target companies this quarter. Prioritize the interaction design module.", accent: "var(--ce-cyan)" },
+                { insight: "Your pace is 15% faster than similar career changers. At this rate you'll complete Phase 2 by April 12.", accent: "var(--ce-lime)" },
+                { insight: "3 of your target companies posted new UX roles this week. Your Phase 2 skills align with 2 of them.", accent: "var(--ce-role-edgepreneur)" },
+              ].map((item, i) => (
+                <div key={i} className="flex items-start gap-2.5 p-3 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <SophiaMark size={14} glowing={false} />
+                  <span className="text-[12px] text-ce-text-secondary leading-relaxed" style={{ fontFamily: "var(--font-body)" }}>{item.insight}</span>
+                </div>
+              ))}
+            </div>
+            <div className="px-4 py-3" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <button data-node className="w-full text-[12px] text-ce-cyan py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.04)] transition-colors text-center"
+                style={{ fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
+                onClick={() => onNavigate?.("analytics")}>
+                View full analytics →
+              </button>
+            </div>
+          </motion.div>
+        )}
+        {rightPanel === "skills" && (
+          <motion.div
+            className="fixed top-0 right-0 bottom-0 w-[320px] z-50 overflow-y-auto"
+            style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+            initial={{ x: 320 }} animate={{ x: 0 }}
+            transition={{ duration: 0.3, ease: EASE }}
+          >
+            <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <div className="flex items-center gap-2">
+                <GraduationCap className="w-4 h-4 text-ce-cyan" />
+                <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Skill Progress</span>
+              </div>
+              <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                onClick={() => { setRightPanel(null); setCanvasFilter(null); setSidebarActive("pathways"); }}>
+                <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+              </button>
+            </div>
+            {/* Sophia card */}
+            <div className="px-4 pt-4 pb-3">
+              <div className="flex gap-2.5 p-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                <SophiaMark size={14} glowing={false} />
+                <div className="flex-1">
+                  <p className="text-[11px] text-ce-text-secondary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                    Interaction Design is your biggest gap — 6 of 8 target companies require it. Completing the current module closes 60% of that gap.
+                  </p>
+                  <button data-node className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] cursor-pointer hover:brightness-110 transition-all"
+                    style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}>
+                    <Sparkles className="w-3 h-3" /> Ask Sophia
+                  </button>
+                </div>
+              </div>
+            </div>
+            {/* Skill bars */}
+            <div className="px-4 pb-4">
+              {[
+                { skill: "Figma", pct: 85, color: "var(--ce-lime)" },
+                { skill: "UX Research", pct: 70, color: "var(--ce-role-edgestar)" },
+                { skill: "Interaction Design", pct: 15, color: "var(--ce-role-edgestar)" },
+                { skill: "Design Systems", pct: 45, color: "var(--ce-text-secondary)" },
+              ].map((s, i) => (
+                <div key={i} className="mb-3 last:mb-0">
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[11px] text-ce-text-secondary" style={{ fontFamily: "var(--font-body)" }}>{s.skill}</span>
+                    <span className="text-[10px] tabular-nums" style={{ color: s.color, fontFamily: "var(--font-body)" }}>{s.pct}%</span>
+                  </div>
+                  <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.04)" }}>
+                    <motion.div className="h-full rounded-full" style={{ background: s.color }}
+                      initial={{ width: 0 }} animate={{ width: `${s.pct}%` }}
+                      transition={{ delay: 0.3 + i * 0.1, duration: 0.6, ease: EASE }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+            {/* Exit */}
+            <div className="px-4 py-3" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+              <button data-node className="w-full text-[12px] text-ce-cyan py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.04)] transition-colors text-center"
+                style={{ fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
+                onClick={() => onNavigate?.("analytics")}>
+                View skill gap analysis →
+              </button>
+            </div>
+          </motion.div>
+        )}
+        {rightPanel === "milestones" && (() => {
+          const activePhase = data.find(p => p.status === "active");
+          const activePath = activePhase?.paths.find(p => p.id === activePhase.chosenPath) || activePhase?.paths[0];
+          const ms = activePath?.milestones || [];
+          const done = ms.filter(m => m.status === "done").length;
+          const total = ms.length;
+          return (
+            <motion.div
+              className="fixed top-0 right-0 bottom-0 w-[320px] z-50 flex flex-col"
+              style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+              initial={{ x: 320 }} animate={{ x: 0 }}
+              transition={{ duration: 0.3, ease: EASE }}
+            >
+              <div className="flex items-center justify-between px-5 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <div className="flex items-center gap-2">
+                  <Target className="w-4 h-4 text-ce-cyan" />
+                  <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Milestones</span>
+                  <span className="text-[10px] tabular-nums text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{done}/{total}</span>
+                </div>
+                <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                  onClick={() => { setRightPanel(null); setSidebarActive("pathways"); }}>
+                  <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+                </button>
+              </div>
+              {/* Sophia card */}
+              <div className="px-4 pt-4 pb-3">
+                <div className="flex gap-2.5 p-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                  <SophiaMark size={14} glowing={false} />
+                  <div className="flex-1">
+                    <p className="text-[11px] text-ce-text-secondary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                      {done} of {total} milestones complete in {activePhase?.title}. Interaction design is your highest-impact next step.
+                    </p>
+                    <button data-node className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] cursor-pointer hover:brightness-110 transition-all"
+                      style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}>
+                      <Sparkles className="w-3 h-3" /> Ask Sophia
+                    </button>
+                  </div>
+                </div>
+              </div>
+              {/* Milestone list */}
+              <div className="flex-1 overflow-y-auto px-4 pb-3 flex flex-col gap-1">
+                {ms.map(m => (
+                  <div key={m.id}
+                    className="flex items-center gap-2 p-2.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
+                    style={{ border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
+                    onClick={() => { setSelectedMilestone(m); setRightPanel(null); setSidebarActive("pathways"); }}
+                  >
+                    {m.status === "done"
+                      ? <Check className="w-3.5 h-3.5 text-ce-lime flex-shrink-0" />
+                      : m.status === "current"
+                        ? <Circle className="w-3.5 h-3.5 text-ce-cyan flex-shrink-0" />
+                        : <Circle className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] flex-shrink-0" />
+                    }
+                    <span className={`text-[12px] flex-1 ${m.status === "done" ? "text-ce-text-tertiary line-through" : "text-ce-text-secondary"}`}
+                      style={{ fontFamily: "var(--font-body)" }}>{m.label}</span>
+                    <span className="text-[9px] text-[var(--ce-text-quaternary)] flex-shrink-0" style={{ fontFamily: "var(--font-body)" }}>{m.time}</span>
+                  </div>
+                ))}
+              </div>
+              {/* Exit */}
+              <div className="flex-shrink-0 px-4 py-3" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <button data-node className="w-full text-[12px] text-ce-cyan py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.04)] transition-colors text-center"
+                  style={{ fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}>
+                  Switch to List View →
+                </button>
+              </div>
+            </motion.div>
+          );
+        })()}
+        {rightPanel === "budget" && (() => {
+          // Compute budget from actual milestone data
+          const activePhase = data.find(p => p.status === "active");
+          const activePath = activePhase?.paths.find(p => p.id === activePhase.chosenPath) || activePhase?.paths[0];
+          const milestones = activePath?.milestones || [];
+          const withCost = milestones.filter(m => m.estimatedCost && m.estimatedCost > 0);
+          const totalEstimated = milestones.reduce((s, m) => s + (m.estimatedCost || 0), 0);
+          const totalSpent = milestones.reduce((s, m) => s + (m.actualCost || 0), 0);
+          const remaining = totalEstimated - totalSpent;
+
+          return (
+            <motion.div
+              className="fixed top-0 right-0 bottom-0 w-[320px] z-50 flex flex-col"
+              style={{ background: "rgba(10,12,16,0.98)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+              initial={{ x: 320 }} animate={{ x: 0 }}
+              transition={{ duration: 0.3, ease: EASE }}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between px-5 py-4 flex-shrink-0" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <div className="flex items-center gap-2">
+                  <DollarSign className="w-4 h-4 text-ce-lime" />
+                  <span className="text-[14px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Budget</span>
+                </div>
+                <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                  onClick={() => { setRightPanel(null); setSidebarActive("pathways"); }}>
+                  <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+                </button>
+              </div>
+
+              {/* Scrollable content */}
+              <div className="flex-1 overflow-y-auto">
+                {/* Sophia card */}
+                <div className="px-4 pt-4 pb-3">
+                  <div className="flex gap-2.5 p-3 rounded-xl" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.06)" }}>
+                    <SophiaMark size={14} glowing={false} />
+                    <div className="flex-1">
+                      <p className="text-[11px] text-ce-text-secondary leading-relaxed mb-2" style={{ fontFamily: "var(--font-body)" }}>
+                        You've invested <span className="text-ce-lime">${totalSpent}</span> of ~${totalEstimated} estimated for{" "}
+                        <span className="text-ce-text-primary">{activePhase?.title || "this phase"}</span>.
+                        {remaining > 0 && <> ${remaining} remaining in planned costs.</>}
+                      </p>
+                      <button data-node className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[10px] cursor-pointer hover:brightness-110 transition-all"
+                        style={{ background: "rgba(var(--ce-cyan-rgb),0.06)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}>
+                        <Sparkles className="w-3 h-3" /> Ask Sophia
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Phase label */}
+                <div className="px-4 pb-2">
+                  <span className="text-[10px] tracking-wider text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 600 }}>
+                    {activePhase?.title?.toUpperCase() || "ACTIVE PHASE"} COSTS
+                  </span>
+                </div>
+
+                {/* Milestone cost list */}
+                <div className="px-4 pb-3 flex flex-col gap-1">
+                  {milestones.filter(m => (m.estimatedCost && m.estimatedCost > 0) || m.actualCost).map(m => {
+                    const isPaid = m.actualCost !== undefined && m.actualCost > 0;
+                    const isLogging = logSpendMilestone === m.id;
+
+                    return (
+                      <div key={m.id} className="p-2.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                        <div className="flex items-center justify-between mb-1">
+                          <div className="flex items-center gap-2 flex-1 min-w-0">
+                            {isPaid
+                              ? <Check className="w-3 h-3 text-ce-lime flex-shrink-0" />
+                              : <Circle className="w-3 h-3 text-[var(--ce-text-quaternary)] flex-shrink-0" />
+                            }
+                            <span className={`text-[12px] truncate ${isPaid ? "text-ce-text-tertiary" : "text-ce-text-secondary"}`} style={{ fontFamily: "var(--font-body)" }}>
+                              {m.costNote || m.label}
+                            </span>
+                          </div>
+                          <div className="flex items-center gap-1.5 flex-shrink-0 ml-2">
+                            {isPaid ? (
+                              <span className="text-[11px] tabular-nums text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                                ${m.actualCost}
+                              </span>
+                            ) : (
+                              <span className="text-[11px] tabular-nums text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                                ${m.estimatedCost}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+
+                        {/* Log spend affordance */}
+                        {!isPaid && !isLogging && (
+                          <button
+                            data-node
+                            className="mt-1 flex items-center gap-1 px-2 py-1 rounded text-[9px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+                            style={{ color: "var(--ce-cyan)", fontFamily: "var(--font-body)" }}
+                            onClick={() => setLogSpendMilestone(m.id)}
+                          >
+                            <Receipt className="w-2.5 h-2.5" /> Log spend
+                          </button>
+                        )}
+
+                        {/* Inline spend input */}
+                        {isLogging && (
+                          <div className="mt-2 flex items-center gap-2">
+                            <div className="flex-1 relative">
+                              <span className="absolute left-2.5 top-1/2 -translate-y-1/2 text-[11px] text-[var(--ce-text-quaternary)]">$</span>
+                              <input
+                                type="number"
+                                autoFocus
+                                placeholder={String(m.estimatedCost || 0)}
+                                className="w-full pl-6 pr-2 py-1.5 rounded-lg text-[11px] text-ce-text-primary outline-none"
+                                style={{
+                                  background: "rgba(var(--ce-glass-tint),0.04)",
+                                  border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
+                                  fontFamily: "var(--font-body)",
+                                }}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter") {
+                                    const val = parseFloat((e.target as HTMLInputElement).value);
+                                    if (!isNaN(val) && val > 0) {
+                                      setData(prev => prev.map(phase => ({
+                                        ...phase,
+                                        paths: phase.paths.map(path => ({
+                                          ...path,
+                                          milestones: path.milestones.map(ms =>
+                                            ms.id === m.id ? { ...ms, actualCost: val } : ms
+                                          ),
+                                        })),
+                                      })));
+                                    }
+                                    setLogSpendMilestone(null);
+                                  }
+                                  if (e.key === "Escape") setLogSpendMilestone(null);
+                                }}
+                              />
+                            </div>
+                            <button
+                              data-node
+                              className="px-2 py-1.5 rounded-lg text-[10px] cursor-pointer"
+                              style={{ color: "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}
+                              onClick={() => setLogSpendMilestone(null)}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        )}
+
+                        {isPaid && m.estimatedCost && m.actualCost !== m.estimatedCost && (
+                          <span className="text-[9px] text-[var(--ce-text-quaternary)] mt-0.5 block" style={{ fontFamily: "var(--font-body)" }}>
+                            est. ${m.estimatedCost}
+                          </span>
+                        )}
+                      </div>
+                    );
+                  })}
+
+                  {/* Free milestones summary */}
+                  {milestones.filter(m => !m.estimatedCost || m.estimatedCost === 0).length > 0 && (
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)] px-1 mt-1" style={{ fontFamily: "var(--font-body)" }}>
+                      + {milestones.filter(m => !m.estimatedCost || m.estimatedCost === 0).length} milestones with no cost
+                    </span>
+                  )}
+                </div>
+
+                {/* Summary */}
+                <div className="mx-4 mb-3 p-3 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Spent</span>
+                    <span className="text-[13px] tabular-nums text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${totalSpent}</span>
+                  </div>
+                  <div className="flex items-center justify-between mb-1">
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Remaining</span>
+                    <span className="text-[13px] tabular-nums text-ce-text-secondary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${remaining > 0 ? remaining : 0}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Estimated total</span>
+                    <span className="text-[13px] tabular-nums text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>${totalEstimated}</span>
+                  </div>
+                </div>
+
+                {/* Log a cost (general) */}
+                <div className="px-4 pb-3">
+                  <button
+                    data-node
+                    className="w-full flex items-center justify-center gap-2 p-3 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
+                    style={{ border: "1px dashed rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span className="text-[11px]">Log a cost</span>
+                  </button>
+                </div>
+              </div>
+
+              {/* Exit to full tracker */}
+              <div className="flex-shrink-0 px-4 py-3" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <button
+                  data-node
+                  className="w-full text-[12px] text-ce-cyan py-2.5 rounded-xl cursor-pointer hover:bg-[rgba(var(--ce-cyan-rgb),0.04)] transition-colors text-center"
+                  style={{ fontFamily: "var(--font-body)", border: "1px solid rgba(var(--ce-cyan-rgb),0.1)" }}
+                  onClick={() => onNavigate?.("budget")}
+                >
+                  Open full budget tracker →
+                </button>
+              </div>
+            </motion.div>
+          );
+        })()}
+        </>
+      )}
+
+      {/* ── Bottom Panels (Timeline, Analytics) ───────────────── */}
+      <AnimatePresence>
+        {(showTimeline || showAnalytics) && (
+          <>
+            <motion.div
+              key="bottom-backdrop"
+              className="fixed inset-0 z-40"
+              style={{ background: "rgba(0,0,0,0.5)", backdropFilter: "blur(4px)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              transition={{ duration: 0.2 }}
+              onClick={() => { setShowTimeline(false); setShowAnalytics(false); setSidebarActive("pathways"); }}
+            />
+            <motion.div
+              key="bottom-panel"
+              className="fixed bottom-12 left-0 right-0 z-50 flex justify-center px-4"
+              initial={{ y: 40, opacity: 0 }} animate={{ y: 0, opacity: 1 }} exit={{ y: 40, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <div className="w-full max-w-[900px] rounded-xl overflow-hidden"
+                style={{ background: "rgba(10,12,16,0.97)", border: "1px solid rgba(var(--ce-glass-tint),0.06)", boxShadow: "0 -20px 60px rgba(0,0,0,0.5)" }}>
+
+                {/* Timeline */}
+                {showTimeline && (() => {
+                  const totalWeeks = 18;
+                  const todayWeek = 10;
+                  const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun"];
+                  const phaseWeeks = [
+                    { start: 0, end: 3 },
+                    { start: 3, end: 8 },
+                    { start: 8, end: 13 },
+                    { start: 13, end: 18 },
+                  ];
+                  return (
+                    <>
+                      <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                        <div className="flex items-center gap-2">
+                          <CalendarClock className="w-3.5 h-3.5 text-ce-cyan" />
+                          <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Timeline</span>
+                        </div>
+                        <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                          onClick={() => { setShowTimeline(false); setSidebarActive("pathways"); }}>
+                          <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+                        </button>
+                      </div>
+                      {/* Month headers */}
+                      <div className="px-5 pt-4 pb-2">
+                        <div className="flex items-center" style={{ paddingLeft: "140px" }}>
+                          {MONTHS.map(month => (
+                            <div key={month} className="flex-1 text-center">
+                              <span className="text-[10px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>{month}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      {/* Gantt bars */}
+                      <div className="px-5 pb-5 space-y-2 relative">
+                        {/* Today marker */}
+                        <div className="absolute top-0 bottom-0 w-[1.5px] z-10"
+                          style={{ left: `calc(140px + ${(todayWeek / totalWeeks) * 100}% * (1 - 140 / 900))`, background: "var(--ce-cyan)", opacity: 0.4 }}>
+                          <div className="absolute -top-1 left-1/2 -translate-x-1/2 px-1.5 py-0.5 rounded-sm whitespace-nowrap"
+                            style={{ background: "rgba(var(--ce-cyan-rgb),0.12)", border: "1px solid rgba(var(--ce-cyan-rgb),0.2)" }}>
+                            <span className="text-[9px] text-ce-cyan" style={{ fontFamily: "var(--font-body)" }}>Today</span>
+                          </div>
+                        </div>
+                        {data.map((phase, pi) => {
+                          const chosenMs = phase.paths.find(p => p.id === phase.chosenPath)?.milestones || phase.paths[0]?.milestones || [];
+                          const done = chosenMs.filter(m => m.status === "done").length;
+                          const total = chosenMs.length;
+                          const pct = total > 0 ? (done / total) * 100 : 0;
+                          const isComplete = phase.status === "complete";
+                          const isActive = phase.status === "active";
+                          const isLocked = phase.status === "locked";
+                          const pw = phaseWeeks[pi] || { start: 0, end: 0 };
+                          const startPct = (pw.start / totalWeeks) * 100;
+                          const widthPct = ((pw.end - pw.start) / totalWeeks) * 100;
+                          return (
+                            <div key={phase.id} className="flex items-center gap-0 h-10">
+                              <div className="w-[140px] flex-shrink-0 pr-3">
+                                <span className={`text-[11px] block truncate ${isLocked ? "text-[var(--ce-text-ghost)]" : "text-ce-text-secondary"}`} style={{ fontFamily: "var(--font-body)" }}>{phase.title}</span>
+                                <span className="text-[9px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>{phase.weeks}</span>
+                              </div>
+                              <div className="flex-1 relative h-6">
+                                <div className="absolute h-full rounded-sm overflow-hidden"
+                                  style={{ left: `${startPct}%`, width: `${widthPct}%`, background: isLocked ? "rgba(var(--ce-glass-tint),0.02)" : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${isLocked ? "rgba(var(--ce-glass-tint),0.03)" : "rgba(var(--ce-glass-tint),0.06)"}` }}>
+                                  {(isComplete || isActive) && (
+                                    <div className="absolute inset-y-0 left-0 rounded-sm" style={{
+                                      width: `${pct}%`,
+                                      background: isComplete
+                                        ? "linear-gradient(90deg, rgba(var(--ce-lime-rgb),0.15), rgba(var(--ce-lime-rgb),0.08))"
+                                        : "linear-gradient(90deg, rgba(var(--ce-role-edgestar-rgb),0.15), rgba(var(--ce-role-edgestar-rgb),0.08))",
+                                    }} />
+                                  )}
+                                  <div className="absolute inset-0 flex items-center px-2">
+                                    <span className="text-[10px] tabular-nums" style={{ color: isComplete ? "var(--ce-lime)" : isActive ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)", fontFamily: "var(--font-body)" }}>
+                                      {isComplete ? "✓" : isLocked ? "🔒" : `${done}/${total}`}
+                                    </span>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          );
+                        })}
+                        {/* Investment summary line */}
+                        <div className="flex items-center gap-0 h-8 mt-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.04)", paddingTop: "8px" }}>
+                          <div className="w-[140px] flex-shrink-0 pr-3">
+                            <span className="text-[10px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>Investment</span>
+                          </div>
+                          <div className="flex-1 flex items-center gap-3">
+                            <span className="text-[12px] tabular-nums text-ce-lime" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>$299</span>
+                            <span className="text-[10px] text-ce-text-quaternary" style={{ fontFamily: "var(--font-body)" }}>of $1,112 estimated</span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+
+                {/* Analytics */}
+                {showAnalytics && (
+                  <>
+                    <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                      <div className="flex items-center gap-2">
+                        <BarChart3 className="w-3.5 h-3.5 text-ce-cyan" />
+                        <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Analytics</span>
+                      </div>
+                      <button data-node className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors"
+                        onClick={() => { setShowAnalytics(false); setSidebarActive("pathways"); }}>
+                        <X className="w-3.5 h-3.5 text-ce-text-quaternary" />
+                      </button>
+                    </div>
+                    <div className="px-5 py-4 grid grid-cols-4 gap-3">
+                      {[
+                        { label: "Overall Progress", value: "46%", color: "var(--ce-role-edgestar)" },
+                        { label: "Milestones Done", value: "11/26", color: "var(--ce-lime)" },
+                        { label: "Pace vs. Plan", value: "+2 weeks", color: "var(--ce-lime)" },
+                        { label: "Time Invested", value: "67h", color: "var(--ce-text-secondary)" },
+                      ].map((stat, i) => (
+                        <div key={i} className="p-3 rounded-xl text-center" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                          <span className="text-[20px] tabular-nums block" style={{ color: stat.color, fontFamily: "var(--font-display)", fontWeight: 500 }}>{stat.value}</span>
+                          <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>{stat.label}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                )}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Old slide-out panel content removed — replaced by right panels + bottom panels above */}
+
+      {/* old panels removed */}
 
       {/* ── Sophia Bar ────────────────────────────────────────── */}
       <motion.div

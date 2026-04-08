@@ -20,7 +20,7 @@ import { SharedTopNav } from "./role-shell";
 import { SophiaBottomBar as SharedSophiaBottomBar, type NavVariation } from "./sophia-patterns";
 import { NavExplorePanel } from "./nav-explore-panel";
 import {
-  Zap, FileText, Search, Compass,
+  Zap, FileText, Search, Compass, DollarSign,
   ChevronRight, Target, BarChart3,
   Check, Sparkles, ArrowUpRight, ArrowRight,
   Users, Calendar, Building2, Star, Sun, Moon,
@@ -34,7 +34,7 @@ const KPIS = [
   { label: "Career Score", value: "72", trend: "+4", icon: <Target className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: 0.72 },
   { label: "Applications", value: "12", trend: "+3 this week", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: null },
   { label: "ATS Score", value: "87", trend: "Resume v3", icon: <FileText className="w-4 h-4" />, color: "var(--ce-lime)", gauge: 0.87 },
-  { label: "EdgeGas", value: "45", trend: "+15 earned", icon: <Zap className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "Invested", value: "$299", trend: "$1,112 est.", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
 ];
 
 // ─── Roadmap Strip (from H1) ────────────────────────────────────────────────
