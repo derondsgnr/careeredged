@@ -589,7 +589,7 @@ function ActiveState({
 
       {/* View content */}
       <AnimatePresence mode="wait">
-        {activeView === "timeline" && <TimelineView key="timeline" events={events} onNavigate={onNavigate} />}
+        {activeView === "timeline" && <TimelineView key="timeline" events={events} onNavigate={onNavigate} onSelectEvent={setSelectedEvent} />}
         {activeView === "week" && <WeekView key="week" events={events} onSelectEvent={setSelectedEvent} />}
         {activeView === "availability" && <AvailabilityView key="availability" blocks={availability} toggle={toggleAvailability} />}
       </AnimatePresence>
@@ -618,7 +618,7 @@ function ActiveState({
               {/* Panel header */}
               <div className="flex items-center justify-between p-5 pb-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 14, color: "var(--ce-text-primary)" }}>
-                  New Event
+                  {newEvent.title ? "Edit Event" : "New Event"}
                 </h2>
                 <button
                   onClick={() => setShowCreatePanel(false)}
@@ -659,40 +659,43 @@ function ActiveState({
                   </select>
                 </div>
 
-                {/* Date */}
-                <div className="flex flex-col gap-1.5">
-                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Date</label>
-                  <input
-                    type="text"
-                    value={newEvent.date}
-                    onChange={(e) => setNewEvent((prev) => ({ ...prev, date: e.target.value }))}
-                    placeholder="2026-03-28"
-                    style={glassInputStyle}
-                  />
-                </div>
-
-                {/* Time */}
-                <div className="flex flex-col gap-1.5">
-                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Time</label>
-                  <input
-                    type="text"
-                    value={newEvent.time}
-                    onChange={(e) => setNewEvent((prev) => ({ ...prev, time: e.target.value }))}
-                    placeholder="2:00 PM"
-                    style={glassInputStyle}
-                  />
+                {/* Date + Time row */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1.5">
+                    <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Date</label>
+                    <input
+                      type="date"
+                      value={newEvent.date}
+                      onChange={(e) => setNewEvent((prev) => ({ ...prev, date: e.target.value }))}
+                      style={{ ...glassInputStyle, colorScheme: "dark" }}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Time</label>
+                    <input
+                      type="time"
+                      value={newEvent.time}
+                      onChange={(e) => setNewEvent((prev) => ({ ...prev, time: e.target.value }))}
+                      style={{ ...glassInputStyle, colorScheme: "dark" }}
+                    />
+                  </div>
                 </div>
 
                 {/* Duration */}
                 <div className="flex flex-col gap-1.5">
                   <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Duration</label>
-                  <input
-                    type="text"
+                  <select
                     value={newEvent.duration}
                     onChange={(e) => setNewEvent((prev) => ({ ...prev, duration: e.target.value }))}
-                    placeholder="1 hour"
-                    style={glassInputStyle}
-                  />
+                    style={{ ...glassInputStyle, appearance: "none" as const }}
+                  >
+                    <option value="15 min">15 minutes</option>
+                    <option value="30 min">30 minutes</option>
+                    <option value="45 min">45 minutes</option>
+                    <option value="1 hour">1 hour</option>
+                    <option value="1.5 hours">1.5 hours</option>
+                    <option value="2 hours">2 hours</option>
+                  </select>
                 </div>
 
                 {/* Location */}
@@ -887,32 +890,88 @@ function ActiveState({
               </div>
 
               {/* Actions footer */}
-              <div className="p-5 pt-4 flex items-center gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
-                <button
-                  onClick={() => {
-                    toast.success("Event rescheduled", `"${selectedEvent.title}" has been rescheduled.`);
-                    setSelectedEvent(null);
-                  }}
-                  className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
-                  style={{
-                    fontFamily: "var(--font-body)", fontWeight: 500,
-                    background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
-                    border: "1px solid rgba(var(--ce-glass-tint),0.08)",
-                  }}
-                >
-                  Reschedule
-                </button>
-                <button
-                  onClick={() => handleCancelEvent(selectedEvent)}
-                  className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
-                  style={{
-                    fontFamily: "var(--font-body)", fontWeight: 500,
-                    background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.08)", color: "var(--ce-status-error)",
-                    border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)",
-                  }}
-                >
-                  Cancel Event
-                </button>
+              <div className="p-5 pt-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                {/* Join Meeting — only for virtual events */}
+                {selectedEvent.isVirtual && (
+                  <button
+                    className="w-full py-2.5 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "var(--ce-role-edgestar)", color: "#000",
+                    }}
+                  >
+                    <Video className="w-3.5 h-3.5" /> Join Meeting
+                  </button>
+                )}
+                <div className="flex items-center gap-2">
+                  {/* Edit — opens create panel with prefilled data */}
+                  <button
+                    onClick={() => {
+                      setNewEvent({
+                        title: selectedEvent.title,
+                        type: selectedEvent.type,
+                        date: selectedEvent.date,
+                        time: selectedEvent.time,
+                        duration: selectedEvent.duration,
+                        location: selectedEvent.location,
+                        isVirtual: selectedEvent.isVirtual,
+                      });
+                      setSelectedEvent(null);
+                      setShowCreatePanel(true);
+                    }}
+                    className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                    }}
+                  >
+                    Edit
+                  </button>
+                  {/* Reschedule — opens create panel with prefilled data */}
+                  <button
+                    onClick={() => {
+                      // Prefill the create form with this event's data so user can change date/time
+                      setNewEvent({
+                        title: selectedEvent.title,
+                        type: selectedEvent.type,
+                        date: "",
+                        time: "",
+                        duration: selectedEvent.duration,
+                        location: selectedEvent.location,
+                        isVirtual: selectedEvent.isVirtual,
+                      });
+                      // Remove the old event
+                      setEvents((prev) => prev.filter((e) => e.id !== selectedEvent.id));
+                      setSelectedEvent(null);
+                      setShowCreatePanel(true);
+                    }}
+                    className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                    }}
+                  >
+                    Reschedule
+                  </button>
+                  {/* Cancel — with confirmation */}
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`Cancel "${selectedEvent.title}"? This cannot be undone.`)) {
+                        handleCancelEvent(selectedEvent);
+                      }
+                    }}
+                    className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.08)", color: "var(--ce-status-error)",
+                      border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>
@@ -924,7 +983,7 @@ function ActiveState({
 
 // ─── Timeline View ───────────────────────────────────────────────────────────
 
-function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavigate: (t: string) => void }) {
+function TimelineView({ events, onNavigate, onSelectEvent }: { events: CalendarEvent[]; onNavigate: (t: string) => void; onSelectEvent: (e: CalendarEvent) => void }) {
   const groups = groupEvents(events);
 
   return (
@@ -947,7 +1006,8 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: gi * 0.08 + ei * 0.04, duration: 0.3, ease: EASE }}
                 >
-                  <GlassCard className="p-3.5 flex items-center gap-3 cursor-pointer transition-all hover:scale-[1.005]" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                  <div onClick={() => onSelectEvent(event)} className="cursor-pointer">
+                  <GlassCard className="p-3.5 flex items-center gap-3 transition-all hover:scale-[1.005]">
                     {/* Time column */}
                     <div className="flex-shrink-0 w-[56px] text-right">
                       <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)", fontWeight: 500 }}>
@@ -1025,6 +1085,7 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                     {/* Action */}
                     <ChevronRight className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ce-text-quaternary)" }} />
                   </GlassCard>
+                  </div>
                 </motion.div>
               );
             })}
@@ -1052,7 +1113,36 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
 // ─── Week View ───────────────────────────────────────────────────────────────
 
 function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelectEvent: (e: CalendarEvent) => void }) {
-  // Build columns: Mon–Sun
+  // Parse time string "2:00 PM" → hour as decimal (14.0)
+  const parseTimeToHour = (time: string): number => {
+    const match = time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!match) return 12;
+    let h = parseInt(match[1]);
+    const m = parseInt(match[2]);
+    const period = match[3].toUpperCase();
+    if (period === "PM" && h !== 12) h += 12;
+    if (period === "AM" && h === 12) h = 0;
+    return h + m / 60;
+  };
+
+  // Parse duration "30 min" or "1 hour" → hours
+  const parseDuration = (d: string): number => {
+    if (d.includes("hour")) {
+      const n = parseFloat(d);
+      return isNaN(n) ? 1 : n;
+    }
+    const mins = parseFloat(d);
+    return isNaN(mins) ? 1 : mins / 60;
+  };
+
+  // Time grid: 8 AM to 8 PM
+  const START_HOUR = 8;
+  const END_HOUR = 20;
+  const HOUR_HEIGHT = 48; // px per hour
+  const totalHeight = (END_HOUR - START_HOUR) * HOUR_HEIGHT;
+  const hours = Array.from({ length: END_HOUR - START_HOUR }, (_, i) => START_HOUR + i);
+
+  // Build columns
   const columns: CalendarEvent[][] = Array.from({ length: 7 }, () => []);
   events.forEach((e) => {
     const dayIdx = getWeekDay(e.date);
@@ -1064,48 +1154,84 @@ function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelect
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
-      <div className="grid grid-cols-7 gap-1.5" style={{ minHeight: 320 }}>
-        {DAY_LABELS.map((day, idx) => (
-          <div key={day} className="flex flex-col gap-1">
-            {/* Day header */}
-            <div
-              className="text-center py-1.5 rounded-md mb-1"
-              style={{
-                fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 500,
-                color: idx < 5 ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)",
-                background: "rgba(var(--ce-glass-tint),0.03)",
-              }}
-            >
-              {day}
+      <div className="flex">
+        {/* Hour labels column */}
+        <div className="flex-shrink-0 w-[48px] pt-[32px]">
+          {hours.map((h) => (
+            <div key={h} style={{ height: HOUR_HEIGHT }} className="flex items-start justify-end pr-2">
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-quaternary)", marginTop: -5 }}>
+                {h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}
+              </span>
             </div>
-            {/* Events in this day */}
-            {columns[idx].length === 0 && (
-              <div className="flex-1 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", minHeight: 48 }} />
-            )}
-            {columns[idx].map((event) => {
-              const cfg = TYPE_CONFIG[event.type];
-              return (
-                <button
-                  key={event.id}
-                  onClick={() => onSelectEvent(event)}
-                  className="text-left p-2 rounded-lg cursor-pointer transition-all hover:scale-[1.02]"
-                  style={{
-                    background: "rgba(var(--ce-glass-tint),0.04)",
-                    border: "1px solid rgba(var(--ce-glass-tint),0.06)",
-                    borderLeft: `2px solid ${cfg.color}`,
-                  }}
-                >
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 10, color: "var(--ce-text-primary)", fontWeight: 500 }} className="truncate mb-0.5">
-                    {event.title}
-                  </p>
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-quaternary)" }}>
-                    {event.time}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Day columns grid */}
+        <div className="flex-1 grid grid-cols-7 gap-px" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>
+          {DAY_LABELS.map((day, idx) => (
+            <div key={day} className="flex flex-col" style={{ background: "var(--ce-void)" }}>
+              {/* Day header */}
+              <div
+                className="text-center py-1.5 sticky top-0 z-10"
+                style={{
+                  fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 500,
+                  color: idx < 5 ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)",
+                  background: "var(--ce-void)",
+                  borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
+                }}
+              >
+                {day}
+              </div>
+
+              {/* Time grid with positioned events */}
+              <div className="relative" style={{ height: totalHeight }}>
+                {/* Hour grid lines */}
+                {hours.map((h) => (
+                  <div
+                    key={h}
+                    className="absolute left-0 right-0"
+                    style={{
+                      top: (h - START_HOUR) * HOUR_HEIGHT,
+                      height: 1,
+                      background: "rgba(var(--ce-glass-tint),0.04)",
+                    }}
+                  />
+                ))}
+
+                {/* Events positioned by time */}
+                {columns[idx].map((event) => {
+                  const cfg = TYPE_CONFIG[event.type];
+                  const hour = parseTimeToHour(event.time);
+                  const duration = parseDuration(event.duration);
+                  const top = Math.max(0, (hour - START_HOUR) * HOUR_HEIGHT);
+                  const height = Math.max(24, duration * HOUR_HEIGHT);
+
+                  return (
+                    <button
+                      key={event.id}
+                      onClick={() => onSelectEvent(event)}
+                      className="absolute left-0.5 right-0.5 text-left px-1.5 py-1 rounded cursor-pointer transition-all hover:brightness-125 overflow-hidden"
+                      style={{
+                        top,
+                        height,
+                        background: `${cfg.color}15`,
+                        borderLeft: `2px solid ${cfg.color}`,
+                        border: `1px solid ${cfg.color}30`,
+                      }}
+                    >
+                      <p style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-primary)", fontWeight: 500 }} className="truncate">
+                        {event.title}
+                      </p>
+                      <p style={{ fontFamily: "var(--font-body)", fontSize: 8, color: "var(--ce-text-tertiary)" }}>
+                        {event.time}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       {/* Sophia insight */}
