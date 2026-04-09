@@ -583,6 +583,44 @@ export function BudgetSurface({ role, onNavigate }: { role?: string; onNavigate?
             </GlassCard>
           </div>
 
+          {/* ─── Recent Activity + Add ──────────────────────────────────── */}
+          <GlassCard className="p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                Recent Activity
+              </span>
+              <button
+                onClick={() => setShowAddTransaction(true)}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-lg text-[11px] cursor-pointer transition-all hover:scale-[1.02]"
+                style={{
+                  fontFamily: "var(--font-body)", fontWeight: 500,
+                  background: "rgba(var(--ce-cyan-rgb),0.08)", color: "var(--ce-cyan)",
+                  border: "1px solid rgba(var(--ce-cyan-rgb),0.12)",
+                }}
+              >
+                <Plus className="w-3 h-3" /> Add
+              </button>
+            </div>
+            <div className="flex flex-col gap-1.5">
+              {budget.transactions.slice(0, 3).map((t) => {
+                const cat = CATEGORY_CONFIG[t.category];
+                return (
+                  <div key={t.id} className="flex items-center gap-2.5 py-1.5">
+                    <div className="w-5 h-5 rounded flex items-center justify-center flex-shrink-0" style={{ background: `${cat.color}15` }}>
+                      {cat.icon}
+                    </div>
+                    <span className="text-[11px] text-[var(--ce-text-secondary)] flex-1 truncate" style={{ fontFamily: "var(--font-body)" }}>
+                      {t.item}
+                    </span>
+                    <span className="text-[11px] tabular-nums text-[var(--ce-text-primary)] flex-shrink-0" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      ${t.amount}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </GlassCard>
+
           {/* ─── Monthly Spending Chart ────────────────────────────────── */}
           <GlassCard className="p-5">
             <div className="flex items-center gap-2 mb-4">

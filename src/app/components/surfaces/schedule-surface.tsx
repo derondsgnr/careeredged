@@ -583,14 +583,14 @@ function ActiveState({
         </div>
         <button
           onClick={() => setShowCreatePanel(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02]"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02] hover:brightness-110"
           style={{
             fontFamily: "var(--font-body)", fontWeight: 500,
-            background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
-            border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+            background: "rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)",
+            border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
           }}
         >
-          <Plus className="w-3 h-3" /> Add Event
+          <Plus className="w-3.5 h-3.5" /> Add Event
         </button>
       </div>
 
@@ -1025,6 +1025,20 @@ function TimelineView({ events, onNavigate, onSelectEvent }: { events: CalendarE
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
+      {/* Sophia insight — top of timeline for orientation */}
+      <motion.div
+        className="mb-5"
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.3, ease: EASE }}
+      >
+        <SophiaInsight
+          variant="inline"
+          message="You have 3 sessions this week. Your next is with Marcus Chen today at 2pm."
+          action={{ label: "Book a session", onClick: () => onNavigate("sessions") }}
+        />
+      </motion.div>
+
       {groups.map((group, gi) => (
         <div key={group.label} className="mb-6">
           <h3 className="mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 13, color: "var(--ce-text-tertiary)" }}>
@@ -1129,19 +1143,6 @@ function TimelineView({ events, onNavigate, onSelectEvent }: { events: CalendarE
         </div>
       ))}
 
-      {/* Sophia insight */}
-      <motion.div
-        className="mt-4"
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.3, ease: EASE }}
-      >
-        <SophiaInsight
-          variant="inline"
-          message="You have 3 sessions this week. Your next is with Marcus Chen today at 2pm."
-          action={{ label: "Book a session", onClick: () => onNavigate("sessions") }}
-        />
-      </motion.div>
     </motion.div>
   );
 }
@@ -1190,7 +1191,13 @@ function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelect
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
-      <div className="flex">
+      {/* Sophia insight — top of week view */}
+      <SophiaInsight
+        variant="inline"
+        message="Your week is taking shape. 4 events across 5 days."
+      />
+
+      <div className="flex mt-4">
         {/* Hour labels column */}
         <div className="flex-shrink-0 w-[48px] pt-[32px]">
           {hours.map((h) => (
@@ -1270,18 +1277,6 @@ function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelect
         </div>
       </div>
 
-      {/* Sophia insight */}
-      <motion.div
-        className="mt-5"
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3, ease: EASE }}
-      >
-        <SophiaInsight
-          variant="inline"
-          message="Your week is taking shape. 4 events across 5 days."
-        />
-      </motion.div>
     </motion.div>
   );
 }

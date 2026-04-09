@@ -32,9 +32,9 @@ import { BuddyDashboardCard } from "./buddy-dashboard-card";
 
 const KPIS = [
   { label: "Career Score", value: "72", trend: "+4", icon: <Target className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: 0.72 },
-  { label: "Applications", value: "12", trend: "+3 this week", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: null },
   { label: "ATS Score", value: "87", trend: "Resume v3", icon: <FileText className="w-4 h-4" />, color: "var(--ce-lime)", gauge: 0.87 },
   { label: "Invested", value: "$299", trend: "$1,112 est.", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "Applications", value: "12", trend: "+3 this week", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: null },
 ];
 
 // ─── Roadmap Strip (from H1) ────────────────────────────────────────────────
@@ -623,6 +623,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
             </div>
             <div className="flex flex-col gap-5">
               <SophiaInsightCard onSophia={handleChipClick} />
+              <TopJobsCompact onNav={handleNavClick} />
               <BuddyDashboardCard
                 roleColor="var(--ce-role-edgestar)"
                 roleRgb="var(--ce-role-edgestar-rgb)"
@@ -630,7 +631,6 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
                 onSophia={handleChipClick}
                 delay={0.3}
               />
-              <TopJobsCompact onNav={handleNavClick} />
             </div>
           </div>
         </div>
