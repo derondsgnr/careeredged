@@ -21,7 +21,8 @@ import {
 } from "lucide-react";
 import type { AppState } from "./state-toggle";
 import type { FamilyVariation, ThemeMode, NavVariation } from "../layouts/root-layout";
-import { Sun, Moon } from "lucide-react";
+import { Sun, Moon, Crown } from "lucide-react";
+import { useEdgePlus } from "./use-edge-plus";
 
 // ─── Role definitions ──────────────────────────────────────────────────────
 
@@ -68,13 +69,15 @@ const LANDING_ROUTES: RouteItem[] = [
 
 function getRoleRoutes(role: string): RouteItem[] {
   return [
-    { path: `/${role}`,             label: "Home",      Icon: Home },
-    { path: `/${role}/edgepath`,    label: "Roadmap",   Icon: Compass },
-    { path: `/${role}/resume`,      label: "Resume",    Icon: FileText },
-    { path: `/${role}/jobs`,        label: "Jobs",      Icon: Search },
-    { path: `/${role}/messages`,    label: "Messages",  Icon: MessageSquare },
-    { path: `/${role}/analytics`,   label: "Analytics", Icon: BarChart3 },
-    { path: `/${role}/taskroom`,    label: "Task Room", Icon: Target },
+    { path: `/${role}`,                label: "Home",       Icon: Home },
+    { path: `/${role}/edgepath`,       label: "Roadmap",    Icon: Compass },
+    { path: `/${role}/resume`,         label: "Resume",     Icon: FileText },
+    { path: `/${role}/jobs`,           label: "Jobs",       Icon: Search },
+    { path: `/${role}/messages`,       label: "Messages",   Icon: MessageSquare },
+    { path: `/${role}/feed`,           label: "SocialEdge", Icon: Sparkles },
+    { path: `/${role}/edge-groups`,    label: "EdgeGroups", Icon: User },
+    { path: `/${role}/analytics`,      label: "Analytics",  Icon: BarChart3 },
+    { path: `/${role}/taskroom`,       label: "Task Room",  Icon: Target },
   ];
 }
 
@@ -108,6 +111,7 @@ interface DevToolsProps {
 export function DevTools({ appState, onStateChange, familyVariation, onFamilyVariationChange, theme, onThemeChange, navVariation, onNavVariationChange }: DevToolsProps) {
   const navigate = useNavigate();
   const location = useLocation();
+  const [edgePlus, setEdgePlus] = useEdgePlus();
 
   // ── Drag position — use MotionValues so drag transform never compounds
   const [isDragging, setIsDragging] = useState(false);
@@ -476,6 +480,40 @@ export function DevTools({ appState, onStateChange, familyVariation, onFamilyVar
                       );
                     })}
                   </div>
+                </div>
+              </div>
+
+              {/* ── EDGE PLUS subscription toggle ─────────────── */}
+              <div style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <div className="px-3 py-2 flex items-center justify-between">
+                  <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)", letterSpacing: "0.06em" }}>
+                    EDGE PLUS
+                  </span>
+                  <button
+                    onClick={() => setEdgePlus(!edgePlus)}
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-md cursor-pointer transition-colors hover:bg-white/[0.03]"
+                    style={{
+                      background: edgePlus ? "rgba(var(--ce-cyan-rgb),0.12)" : "transparent",
+                      border: edgePlus ? "1px solid rgba(var(--ce-cyan-rgb),0.3)" : "1px solid rgba(var(--ce-glass-tint),0.08)",
+                    }}
+                    aria-pressed={edgePlus}
+                    aria-label="Toggle Edge Plus subscription"
+                  >
+                    <Crown
+                      className="w-3 h-3"
+                      style={{ color: edgePlus ? "var(--ce-cyan)" : "var(--ce-text-tertiary)" }}
+                    />
+                    <span
+                      className="text-[10px]"
+                      style={{
+                        color: edgePlus ? "var(--ce-cyan)" : "var(--ce-text-secondary)",
+                        fontFamily: "var(--font-body)",
+                        fontWeight: edgePlus ? 500 : 400,
+                      }}
+                    >
+                      {edgePlus ? "Subscribed" : "Free"}
+                    </span>
+                  </button>
                 </div>
               </div>
 
