@@ -76,7 +76,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c1", name: "Alice Chen", title: "Product Lead at Stripe",
     bio: "10 years in product at Stripe, Notion, and early-stage startups. I help career changers break into PM roles through structured roadmaps and interview prep. My approach focuses on real deliverables — by the end of our sessions, you'll have a portfolio-ready case study and a clear 90-day plan.",
-    initials: "AC", color: "var(--ce-role-edgestar)",
+    initials: "AC", color: "var(--ce-text-secondary)",
     specialties: ["Product Management", "Career Transitions", "Interview Prep"],
     sessionTypes: ["1:1 Mentoring", "Career Coaching", "Mock Interview"],
     price: 75, isFree: false, rating: 4.9, reviewCount: 23, sessionCount: 156,
@@ -93,7 +93,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c2", name: "Marcus Johnson", title: "Senior UX Designer at Figma",
     bio: "Design systems architect by day, volunteer mentor on CareerEdge. I love helping people build portfolios that actually land jobs at top-tier design shops. My sessions focus on portfolio reviews, case study structure, and the design thinking that interviewers actually look for.",
-    initials: "MJ", color: "var(--ce-lime)",
+    initials: "MJ", color: "var(--ce-text-secondary)",
     specialties: ["UX Design", "Interview Prep", "Career Transitions"],
     sessionTypes: ["1:1 Mentoring", "Mock Interview", "Group Workshop"],
     price: 0, isFree: true, rating: 4.7, reviewCount: 45, sessionCount: 89,
@@ -109,7 +109,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c3", name: "Dr. Priya Sharma", title: "International Career Mobility Strategist",
     bio: "PhD in organizational psychology, worked across 4 continents. I help professionals navigate cross-border career opportunities with clarity and a concrete action plan. My specialty is credential transfer, visa strategies, and building a global professional identity.",
-    initials: "PS", color: "var(--ce-role-guide)",
+    initials: "PS", color: "var(--ce-text-secondary)",
     specialties: ["International Mobility", "Career Transitions", "Leadership"],
     sessionTypes: ["Career Coaching", "1:1 Mentoring"],
     price: 100, isFree: false, rating: 5.0, reviewCount: 12, sessionCount: 34,
@@ -125,7 +125,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c4", name: "James Okafor", title: "Engineering Manager at Stripe",
     bio: "EM at Stripe, previously Google. I volunteer because I know how hard technical interviews are — and how much better you can do with the right prep. I focus on system design, behavioral interviews, and the communication patterns that differentiate senior engineers.",
-    initials: "JO", color: "var(--ce-role-edgepreneur)",
+    initials: "JO", color: "var(--ce-text-secondary)",
     specialties: ["Engineering", "Interview Prep", "Leadership"],
     sessionTypes: ["Mock Interview", "1:1 Mentoring", "Office Hours"],
     price: 0, isFree: true, rating: 4.6, reviewCount: 67, sessionCount: 203,
@@ -142,7 +142,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c5", name: "Zara Williams", title: "VP of Data Science at Airbnb",
     bio: "15 years in data, from analyst to VP. I specialize in helping data professionals level up — whether that's breaking into your first DS role or navigating the IC-to-manager transition. I bring frameworks from Airbnb's data culture that I've seen work at scale.",
-    initials: "ZW", color: "var(--ce-role-edu)",
+    initials: "ZW", color: "var(--ce-text-secondary)",
     specialties: ["Data Science", "Leadership", "Career Transitions"],
     sessionTypes: ["1:1 Mentoring", "Career Coaching"],
     price: 125, isFree: false, rating: 4.8, reviewCount: 18, sessionCount: 72,
@@ -157,7 +157,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c6", name: "Tomás Rivera", title: "Founder & Career Coach",
     bio: "Former McKinsey consultant turned career coach. I help people navigate career pivots with the same rigor I brought to Fortune 500 strategy. Specializing in structured thinking, communication, and building a compelling career narrative.",
-    initials: "TR", color: "var(--ce-role-ngo)",
+    initials: "TR", color: "var(--ce-text-secondary)",
     specialties: ["Career Transitions", "Interview Prep", "Leadership"],
     sessionTypes: ["Career Coaching", "Mock Interview", "Group Workshop"],
     price: 90, isFree: false, rating: 4.9, reviewCount: 31, sessionCount: 124,
@@ -173,7 +173,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c7", name: "Fatima Al-Hassan", title: "Tech Recruiter → Career Strategist",
     bio: "10 years as a tech recruiter at Google and Meta, now helping candidates from the other side. I know exactly what hiring managers and recruiters look for — because I was one. My sessions focus on application strategy, resume optimization, and the unwritten rules of tech hiring.",
-    initials: "FA", color: "var(--ce-role-parent)",
+    initials: "FA", color: "var(--ce-text-secondary)",
     specialties: ["Interview Prep", "Career Transitions", "Product Management"],
     sessionTypes: ["1:1 Mentoring", "Mock Interview", "Career Coaching"],
     price: 60, isFree: false, rating: 4.8, reviewCount: 52, sessionCount: 187,
@@ -189,7 +189,7 @@ const MOCK_COACHES: Coach[] = [
   {
     id: "c8", name: "Chen Wei", title: "Staff Engineer at Vercel",
     bio: "Full-stack engineer specializing in React, Next.js, and developer tools. I mentor junior-to-senior engineers on system design, open source contributions, and building a technical brand. My office hours are open to anyone working on web technologies.",
-    initials: "CW", color: "var(--ce-role-agency)",
+    initials: "CW", color: "var(--ce-text-secondary)",
     specialties: ["Engineering", "Interview Prep"],
     sessionTypes: ["Office Hours", "1:1 Mentoring", "Mock Interview"],
     price: 0, isFree: true, rating: 4.5, reviewCount: 28, sessionCount: 95,
@@ -347,8 +347,8 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                         return (
                           <button key={g} onClick={() => setSelectedGoals(prev => sel ? prev.filter(x => x !== g) : [...prev, g])} className="px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-all duration-200" style={{
                             fontFamily: "var(--font-body)",
-                            background: sel ? "rgba(139,92,246,0.15)" : "rgba(var(--ce-glass-tint), 0.04)",
-                            border: `1px solid ${sel ? "rgba(139,92,246,0.3)" : "rgba(var(--ce-glass-tint), 0.08)"}`,
+                            background: sel ? "rgba(var(--ce-glass-tint), 0.10)" : "rgba(var(--ce-glass-tint), 0.04)",
+                            border: `1px solid ${sel ? "rgba(var(--ce-glass-tint), 0.15)" : "rgba(var(--ce-glass-tint), 0.08)"}`,
                             color: sel ? "var(--ce-role-guide)" : "var(--ce-text-secondary)",
                           }}>
                             {sel && <Check className="w-3 h-3 inline mr-1" />}{g}
@@ -370,8 +370,8 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                         return (
                           <button key={s} onClick={() => setPreferredStyle(s)} className="px-4 py-3 rounded-xl text-[12px] text-left cursor-pointer transition-all duration-200" style={{
                             fontFamily: "var(--font-body)",
-                            background: sel ? "rgba(139,92,246,0.12)" : "rgba(var(--ce-glass-tint), 0.04)",
-                            border: `1px solid ${sel ? "rgba(139,92,246,0.25)" : "rgba(var(--ce-glass-tint), 0.08)"}`,
+                            background: sel ? "rgba(var(--ce-glass-tint), 0.10)" : "rgba(var(--ce-glass-tint), 0.04)",
+                            border: `1px solid ${sel ? "rgba(var(--ce-glass-tint), 0.15)" : "rgba(var(--ce-glass-tint), 0.08)"}`,
                             color: sel ? "var(--ce-role-guide)" : "var(--ce-text-secondary)",
                           }}>
                             {sel && <Check className="w-3 h-3 inline mr-1.5" />}{s}
@@ -441,9 +441,9 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                 return (
                   <button key={spec} onClick={() => setFilterSpec(spec as any)} className="px-2.5 py-1 rounded-lg text-[11px] cursor-pointer transition-all duration-200" style={{
                     fontFamily: "var(--font-body)",
-                    background: sel ? "rgba(139,92,246,0.12)" : "rgba(var(--ce-glass-tint), 0.04)",
-                    border: `1px solid ${sel ? "rgba(139,92,246,0.2)" : "rgba(var(--ce-glass-tint), 0.06)"}`,
-                    color: sel ? "var(--ce-role-guide)" : "var(--ce-text-tertiary)",
+                    background: sel ? "rgba(var(--ce-glass-tint), 0.10)" : "rgba(var(--ce-glass-tint), 0.04)",
+                    border: `1px solid ${sel ? "rgba(var(--ce-glass-tint), 0.15)" : "rgba(var(--ce-glass-tint), 0.06)"}`,
+                    color: sel ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
                   }}>
                     {isAll ? "All" : spec}
                   </button>
@@ -463,7 +463,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
 
         {/* Compare bar */}
         {compareList.length > 0 && (
-          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-4 p-3 rounded-xl flex items-center justify-between" style={{ background: "rgba(139,92,246,0.08)", border: "1px solid rgba(139,92,246,0.15)" }}>
+          <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="mb-4 p-3 rounded-xl flex items-center justify-between" style={{ background: "rgba(var(--ce-glass-tint), 0.06)", border: "1px solid rgba(var(--ce-glass-tint), 0.10)" }}>
             <span className="text-[12px]" style={{ fontFamily: "var(--font-body)", color: "var(--ce-role-guide)" }}>
               {compareList.length} coach{compareList.length > 1 ? "es" : ""} selected for comparison
             </span>
@@ -501,7 +501,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                 <div className="p-4">
                   {/* Header */}
                   <div className="flex items-start gap-3 mb-3">
-                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[13px] font-medium" style={{ fontFamily: "var(--font-display)", background: `rgba(${coach.color === "var(--ce-lime)" ? "179,255,59" : "139,92,246"}, 0.12)`, color: coach.color }}>
+                    <div className="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 text-[13px] font-medium" style={{ fontFamily: "var(--font-display)", background: "rgba(var(--ce-glass-tint), 0.08)", color: coach.color }}>
                       {coach.initials}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -510,7 +510,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                           {coach.name}
                         </button>
                         {activeTab === "recommended" && (
-                          <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium" style={{ fontFamily: "var(--font-display)", background: "rgba(139,92,246,0.12)", color: "var(--ce-role-guide)" }}>
+                          <span className="shrink-0 px-1.5 py-0.5 rounded text-[10px] font-medium" style={{ fontFamily: "var(--font-display)", background: "rgba(var(--ce-glass-tint), 0.08)", color: "var(--ce-text-secondary)" }}>
                             {coach.matchScore}% match
                           </span>
                         )}
@@ -537,7 +537,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                   {/* Specialties */}
                   <div className="flex flex-wrap gap-1 mb-3">
                     {coach.specialties.slice(0, 3).map(s => (
-                      <span key={s} className="px-2 py-0.5 rounded text-[10px]" style={{ fontFamily: "var(--font-body)", background: "rgba(139,92,246,0.06)", color: "var(--ce-text-secondary)", border: "1px solid rgba(139,92,246,0.1)" }}>
+                      <span key={s} className="px-2 py-0.5 rounded text-[10px]" style={{ fontFamily: "var(--font-body)", background: "rgba(var(--ce-glass-tint), 0.06)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint), 0.06)" }}>
                         {s}
                       </span>
                     ))}
@@ -569,7 +569,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                       {/* Compare checkbox */}
                       <button onClick={() => {
                         setCompareList(prev => prev.includes(coach.id) ? prev.filter(x => x !== coach.id) : prev.length < 3 ? [...prev, coach.id] : prev);
-                      }} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: compareList.includes(coach.id) ? "rgba(139,92,246,0.12)" : "rgba(var(--ce-glass-tint), 0.04)", border: `1px solid ${compareList.includes(coach.id) ? "rgba(139,92,246,0.2)" : "rgba(var(--ce-glass-tint), 0.08)"}` }} title="Add to compare">
+                      }} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer" style={{ background: compareList.includes(coach.id) ? "rgba(var(--ce-glass-tint), 0.10)" : "rgba(var(--ce-glass-tint), 0.04)", border: `1px solid ${compareList.includes(coach.id) ? "rgba(var(--ce-glass-tint), 0.15)" : "rgba(var(--ce-glass-tint), 0.08)"}` }} title="Add to compare">
                         {compareList.includes(coach.id)
                           ? <Check className="w-3 h-3" style={{ color: "var(--ce-role-guide)" }} />
                           : <Filter className="w-3 h-3" style={{ color: "var(--ce-text-tertiary)" }} />
@@ -589,7 +589,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
         {/* Sophia insight */}
         {activeTab === "recommended" && (
           <div className="mt-5">
-            <SophiaInsight variant="inline" title="Your coaching strategy" insight={`Based on your goals (${selectedGoals.length > 0 ? selectedGoals.join(", ") : "Career growth"}), I recommend starting with ${recommendedCoaches[0]?.name} for a focused 1:1 session. After that, ${recommendedCoaches[1]?.name}'s ${recommendedCoaches[1]?.isFree ? "free " : ""}sessions can complement with a different perspective.`} />
+            <SophiaInsight variant="inline" context="Your coaching strategy" message={`Based on your goals (${selectedGoals.length > 0 ? selectedGoals.join(", ") : "Career growth"}), I recommend starting with ${recommendedCoaches[0]?.name} for a focused 1:1 session. After that, ${recommendedCoaches[1]?.name}'s ${recommendedCoaches[1]?.isFree ? "free " : ""}sessions can complement with a different perspective.`} />
           </div>
         )}
       </div>
@@ -608,7 +608,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
 
                 {/* Avatar + name */}
                 <div className="flex items-center gap-3 mb-4 pr-8">
-                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[16px] font-medium" style={{ fontFamily: "var(--font-display)", background: `rgba(${selectedCoach.color === "var(--ce-lime)" ? "179,255,59" : "139,92,246"}, 0.12)`, color: selectedCoach.color }}>
+                  <div className="w-14 h-14 rounded-2xl flex items-center justify-center text-[16px] font-medium" style={{ fontFamily: "var(--font-display)", background: "rgba(var(--ce-glass-tint), 0.08)", color: selectedCoach.color }}>
                     {selectedCoach.initials}
                   </div>
                   <div>
@@ -656,7 +656,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                   <h4 className="text-[12px] font-medium mb-2" style={{ fontFamily: "var(--font-display)", color: "var(--ce-text-primary)" }}>Specialties</h4>
                   <div className="flex flex-wrap gap-1.5">
                     {selectedCoach.specialties.map(s => (
-                      <span key={s} className="px-2.5 py-1 rounded-lg text-[11px]" style={{ fontFamily: "var(--font-body)", background: "rgba(139,92,246,0.08)", color: "var(--ce-role-guide)", border: "1px solid rgba(139,92,246,0.12)" }}>{s}</span>
+                      <span key={s} className="px-2.5 py-1 rounded-lg text-[11px]" style={{ fontFamily: "var(--font-body)", background: "rgba(var(--ce-glass-tint), 0.06)", color: "var(--ce-text-secondary)", border: "1px solid rgba(var(--ce-glass-tint), 0.06)" }}>{s}</span>
                     ))}
                   </div>
                 </div>
@@ -767,7 +767,7 @@ export function CoachesSurface({ role: propRole, onNavigate }: { role?: RoleId; 
                   return (
                     <div key={c.id} className="p-4 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint), 0.04)", border: "1px solid rgba(var(--ce-glass-tint), 0.08)" }}>
                       {/* Avatar */}
-                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[12px] font-medium mx-auto mb-2" style={{ fontFamily: "var(--font-display)", background: `rgba(${c.color === "var(--ce-lime)" ? "179,255,59" : "139,92,246"}, 0.12)`, color: c.color }}>
+                      <div className="w-10 h-10 rounded-xl flex items-center justify-center text-[12px] font-medium mx-auto mb-2" style={{ fontFamily: "var(--font-display)", background: "rgba(var(--ce-glass-tint), 0.08)", color: c.color }}>
                         {c.initials}
                       </div>
                       <h4 className="text-[13px] font-medium text-center mb-1" style={{ fontFamily: "var(--font-display)", color: "var(--ce-text-primary)" }}>{c.name}</h4>

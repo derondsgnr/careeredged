@@ -20,8 +20,8 @@ import { toast } from "sonner";
 
 const KPIS = [
   { label: "Roadmap Progress", value: "63%", trend: "+12% this month", icon: <Compass className="w-4 h-4" />, color: "var(--ce-role-parent)", gauge: 0.63 },
-  { label: "Tasks Completed", value: "8", trend: "3 this week", icon: <Check className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: null },
-  { label: "Next Session", value: "Fri", trend: "with Alice Chen", icon: <Calendar className="w-4 h-4" />, color: "var(--ce-role-guide)", gauge: null },
+  { label: "Tasks Completed", value: "8", trend: "3 this week", icon: <Check className="w-4 h-4" />, color: "var(--ce-role-parent)", gauge: null },
+  { label: "Next Session", value: "Fri", trend: "with Alice Chen", icon: <Calendar className="w-4 h-4" />, color: "var(--ce-role-parent)", gauge: null },
 ];
 
 const PHASES = [
@@ -32,11 +32,11 @@ const PHASES = [
 ];
 
 const MILESTONES_COMPLETED = [
-  { label: "Resume audit completed", date: "Mar 2", icon: <Check className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-  { label: "Portfolio review finished", date: "Mar 5", icon: <Check className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-  { label: "Target companies identified", date: "Mar 8", icon: <Check className="w-3 h-3" />, color: "var(--ce-lime)" },
-  { label: "LinkedIn profile optimized", date: "Mar 12", icon: <Star className="w-3 h-3" />, color: "var(--ce-lime)" },
-  { label: "First 3 applications sent", date: "Mar 15", icon: <TrendingUp className="w-3 h-3" />, color: "var(--ce-role-parent)" },
+  { label: "Resume audit completed", date: "Mar 2", icon: <Check className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+  { label: "Portfolio review finished", date: "Mar 5", icon: <Check className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+  { label: "Target companies identified", date: "Mar 8", icon: <Check className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+  { label: "LinkedIn profile optimized", date: "Mar 12", icon: <Star className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+  { label: "First 3 applications sent", date: "Mar 15", icon: <TrendingUp className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
 ];
 
 export function EdgeParentDashboard({ onNavigate }: { onNavigate?: NavigateFn }) {
@@ -168,9 +168,9 @@ export function EdgeParentDashboard({ onNavigate }: { onNavigate?: NavigateFn })
               <span className="text-[13px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Coming Up</span>
             </div>
             {[
-              { text: "Mentor session with Alice Chen", date: "Friday, 2 PM", color: "var(--ce-role-guide)" },
-              { text: "Networking outreach milestone due", date: "Monday", color: "var(--ce-role-edgestar)" },
-              { text: "First application batch target", date: "Next Wednesday", color: "var(--ce-lime)" },
+              { text: "Mentor session with Alice Chen", date: "Friday, 2 PM", color: "var(--ce-role-parent)" },
+              { text: "Networking outreach milestone due", date: "Monday", color: "var(--ce-text-tertiary)" },
+              { text: "First application batch target", date: "Next Wednesday", color: "var(--ce-text-tertiary)" },
             ].map((item, i) => (
               <div key={i} className="flex items-center gap-3 py-2.5" style={{ borderBottom: i < 2 ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none" }}>
                 <div className="w-1.5 h-1.5 rounded-full flex-shrink-0" style={{ background: item.color }} />

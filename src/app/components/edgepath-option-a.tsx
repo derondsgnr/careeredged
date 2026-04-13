@@ -25,13 +25,14 @@ import {
   Target, TrendingUp, Users, Briefcase, GraduationCap,
   ArrowRight, FileText, Calendar,
   List, Map, Lock, Trophy, Rocket, X, AlertCircle, Circle,
-  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe,
+  ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe, DollarSign,
 } from "lucide-react";
 import { MindMapView } from "./edgepath-mindmap";
 import { getRoleContext, type EdgePathRoleContext } from "./edgepath-context";
 import { SharedTopNav } from "./role-shell";
 import type { RoleId } from "./role-shell";
 import { EASE } from "./tokens";
+import { toast } from "./ui/feedback";
 
 const SURFACE_ICONS: Record<string, any> = { file: FileText, briefcase: Briefcase, users: Users };
 
@@ -153,8 +154,8 @@ const PHASE_2_MILESTONES: Milestone[] = [
 ];
 
 const CATEGORY_META = {
-  skill: { label: "Skills to Build", icon: GraduationCap, color: "var(--ce-role-edgestar)" },
-  action: { label: "Actions to Take", icon: Target, color: "var(--ce-lime)" },
+  skill: { label: "Skills to Build", icon: GraduationCap, color: "var(--ce-text-secondary)" },
+  action: { label: "Actions to Take", icon: Target, color: "var(--ce-text-secondary)" },
   resource: { label: "Resources to Complete", icon: BookOpen, color: "var(--ce-text-secondary)" },
 };
 
@@ -667,14 +668,29 @@ function PhaseCompletionCelebration({ phaseTitle, nextPhaseTitle, onDismiss }: {
 // Slide-up overlay triggered by "Show timeline" chip in Sophia bar.
 // Same pattern as Path Compare panel — contextual, dismissable, not a mode.
 
-function GanttTimelinePanel({ phases, onClose, onOpenTaskRoom }: {
+function GanttTimelinePanel({ phases, milestones, onClose, onOpenTaskRoom }: {
   phases: PhaseData[];
+  milestones: Milestone[];
   onClose: () => void;
   onOpenTaskRoom?: (milestoneId: string) => void;
 }) {
   // Total weeks span for the Gantt
   const totalWeeks = 18;
   const today = 10; // Current week position (mock — would be computed from dates)
+
+  // ESC key to dismiss
+  useEffect(() => {
+    const handler = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [onClose]);
+
+  // Map milestones to their phase positions for dot rendering
+  const phaseMilestones = (phaseId: number) => milestones.filter(m => {
+    // Phase 2 milestones are the ones we have; for other phases, generate mock dots
+    if (phaseId === 2) return true;
+    return false;
+  });
 
   return (
     <motion.div
@@ -817,6 +833,34 @@ function GanttTimelinePanel({ phases, onClose, onOpenTaskRoom }: {
                         {isComplete ? "✓" : isActive ? `${phase.milestonesDone}/${phase.milestonesTotal}` : isLocked ? "🔒" : `0/${phase.milestonesTotal}`}
                       </span>
                     </div>
+
+                    {/* Milestone dots */}
+                    {!isLocked && (
+                      <div className="absolute inset-0 flex items-center justify-evenly px-6 pointer-events-auto">
+                        {Array.from({ length: phase.milestonesTotal }).map((_, mi) => {
+                          const isDone = mi < phase.milestonesDone;
+                          const isCurrent = mi === phase.milestonesDone && isActive;
+                          const msId = phase.id === 2 && milestones[mi] ? milestones[mi].id : `p${phase.id}-m${mi}`;
+                          return (
+                            <button
+                              key={mi}
+                              className="w-2.5 h-2.5 rounded-full cursor-pointer transition-all duration-200 hover:scale-150 hover:ring-2 hover:ring-offset-1"
+                              style={{
+                                background: isDone ? "var(--ce-lime)" : isCurrent ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.15)",
+                                ringColor: isDone ? "var(--ce-lime)" : "var(--ce-role-edgestar)",
+                                ringOffsetColor: "transparent",
+                              }}
+                              title={phase.id === 2 && milestones[mi] ? milestones[mi].label : `Milestone ${mi + 1}`}
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                onOpenTaskRoom?.(msId);
+                                onClose();
+                              }}
+                            />
+                          );
+                        })}
+                      </div>
+                    )}
                   </motion.div>
                 </div>
               </div>
@@ -937,14 +981,23 @@ function RoadmapSelector({ roadmaps, activeId, onSelect, onTogglePrimary, onCrea
 
 // ─── Overflow Menu ──────────────────────────────────────────────────────────
 
-function OverflowMenu() {
+function OverflowMenu({ onShareInsight }: { onShareInsight?: () => void }) {
   const [open, setOpen] = useState(false);
 
   const items = [
-    { icon: Download, label: "Export as PDF", color: "var(--ce-text-secondary)" },
-    { icon: Share2, label: "Share your insight", color: "var(--ce-text-secondary)" },
-    { icon: RefreshCw, label: "Regenerate roadmap", color: "var(--ce-role-edgepreneur)" },
-    { icon: Archive, label: "Archive roadmap", color: "var(--ce-text-tertiary)" },
+    { icon: Download, label: "Export as PDF", color: "var(--ce-text-secondary)", action: () => {
+      const el = document.createElement("a");
+      el.download = "edgepath-roadmap.pdf";
+      el.href = "#";
+      toast.success("Exporting...", "Your roadmap PDF will download shortly.");
+    }},
+    { icon: Share2, label: "Share your insight", color: "var(--ce-text-secondary)", action: () => onShareInsight?.() },
+    { icon: RefreshCw, label: "Regenerate roadmap", color: "var(--ce-role-edgepreneur)", action: () => {
+      toast("Regenerating", "Sophia is rebuilding your roadmap with latest data...");
+    }},
+    { icon: Archive, label: "Archive roadmap", color: "var(--ce-text-tertiary)", action: () => {
+      toast("Archived", "Roadmap moved to archive. You can restore it anytime.");
+    }},
   ];
 
   return (
@@ -981,7 +1034,7 @@ function OverflowMenu() {
                     key={i}
                     className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
                     style={{ color: item.color, fontFamily: "var(--font-body)" }}
-                    onClick={() => setOpen(false)}
+                    onClick={() => { setOpen(false); item.action(); }}
                   >
                     <Icon className="w-3.5 h-3.5" /> {item.label}
                   </button>
@@ -992,6 +1045,133 @@ function OverflowMenu() {
         )}
       </AnimatePresence>
     </div>
+  );
+}
+
+// ─── Share Insight Modal ────────────────────────────────────────────────────
+
+function ShareInsightModal({ milestones, onClose }: { milestones: Milestone[]; onClose: () => void }) {
+  const [text, setText] = useState("");
+  const [selectedMilestones, setSelectedMilestones] = useState<string[]>([]);
+  const [privacy, setPrivacy] = useState<"network" | "private">("network");
+
+  const completedMilestones = milestones.filter(m => m.status === "done" || m.status === "current");
+
+  return (
+    <motion.div
+      className="fixed inset-0 z-50 flex items-center justify-center"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+    >
+      <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={onClose} />
+      <motion.div
+        className="relative z-10 w-[480px] max-w-[90vw] rounded-2xl overflow-hidden"
+        style={{
+          background: "var(--ce-surface-modal-bg)",
+          border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+          boxShadow: "0 20px 60px rgba(var(--ce-shadow-tint),0.5)",
+        }}
+        initial={{ scale: 0.96, y: 12, opacity: 0 }}
+        animate={{ scale: 1, y: 0, opacity: 1 }}
+        exit={{ scale: 0.96, y: 12, opacity: 0 }}
+        transition={{ duration: 0.25, ease: EASE }}
+      >
+        {/* Header */}
+        <div className="flex items-center justify-between px-5 py-3.5" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+          <div className="flex items-center gap-2">
+            <Share2 className="w-4 h-4" style={{ color: "var(--ce-role-edgestar)" }} />
+            <span className="text-[13px]" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>Share Your Insight</span>
+          </div>
+          <button onClick={onClose} className="w-7 h-7 rounded-lg flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)]">
+            <X className="w-3.5 h-3.5" style={{ color: "var(--ce-text-tertiary)" }} />
+          </button>
+        </div>
+
+        <div className="p-5 space-y-4">
+          {/* Sophia prompt */}
+          <div className="flex items-start gap-2">
+            <SophiaMark size={20} />
+            <p className="text-[12px] leading-relaxed" style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-secondary)" }}>
+              Share a journey update with your network. What have you learned or accomplished recently?
+            </p>
+          </div>
+
+          {/* Text input */}
+          <textarea
+            value={text}
+            onChange={e => setText(e.target.value)}
+            rows={4}
+            placeholder="What's your update? Share a lesson, win, or reflection..."
+            className="w-full px-3.5 py-3 rounded-xl text-[12px] outline-none resize-none"
+            style={{
+              fontFamily: "var(--font-body)",
+              background: "rgba(var(--ce-glass-tint),0.04)",
+              border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+              color: "var(--ce-text-primary)",
+            }}
+            autoFocus
+          />
+
+          {/* Milestone tags */}
+          {completedMilestones.length > 0 && (
+            <div>
+              <span className="text-[11px] block mb-2" style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}>Tag a milestone (optional)</span>
+              <div className="flex flex-wrap gap-1.5">
+                {completedMilestones.map(m => {
+                  const sel = selectedMilestones.includes(m.id);
+                  return (
+                    <button key={m.id} onClick={() => setSelectedMilestones(prev => sel ? prev.filter(x => x !== m.id) : [...prev, m.id])}
+                      className="px-2.5 py-1 rounded-lg text-[10px] cursor-pointer transition-all duration-200"
+                      style={{
+                        fontFamily: "var(--font-body)",
+                        background: sel ? "rgba(var(--ce-role-edgestar-rgb),0.12)" : "rgba(var(--ce-glass-tint),0.04)",
+                        border: `1px solid ${sel ? "rgba(var(--ce-role-edgestar-rgb),0.2)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                        color: sel ? "var(--ce-role-edgestar)" : "var(--ce-text-secondary)",
+                      }}>
+                      {sel && <Check className="w-3 h-3 inline mr-1" />}{m.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
+          {/* Privacy toggle */}
+          <div className="flex items-center gap-2">
+            <span className="text-[11px]" style={{ fontFamily: "var(--font-body)", color: "var(--ce-text-tertiary)" }}>Visibility:</span>
+            {(["network", "private"] as const).map(p => (
+              <button key={p} onClick={() => setPrivacy(p)}
+                className="px-2.5 py-1 rounded-lg text-[11px] cursor-pointer transition-all duration-200"
+                style={{
+                  fontFamily: "var(--font-body)",
+                  background: privacy === p ? "rgba(var(--ce-role-edgestar-rgb),0.1)" : "rgba(var(--ce-glass-tint),0.04)",
+                  border: `1px solid ${privacy === p ? "rgba(var(--ce-role-edgestar-rgb),0.15)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                  color: privacy === p ? "var(--ce-role-edgestar)" : "var(--ce-text-tertiary)",
+                }}>
+                {p === "network" ? "🌐 Network" : "🔒 Private"}
+              </button>
+            ))}
+          </div>
+
+          {/* Actions */}
+          <div className="flex justify-end gap-2 pt-1">
+            <button onClick={onClose} className="px-4 py-2 rounded-xl text-[12px] cursor-pointer" style={{ fontFamily: "var(--font-body)", background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-secondary)" }}>
+              Cancel
+            </button>
+            <button onClick={() => {
+              if (!text.trim()) return;
+              toast.success("Insight shared!", privacy === "network" ? "Your update is now visible to your network." : "Saved as a private reflection.");
+              onClose();
+            }} disabled={!text.trim()} className="px-4 py-2 rounded-xl text-[12px] font-medium cursor-pointer disabled:opacity-70"
+              style={{ fontFamily: "var(--font-display)", background: "var(--ce-role-edgestar)", color: "#fff" }}>
+              <Share2 className="w-3 h-3 inline mr-1.5" />{privacy === "network" ? "Share" : "Save"}
+            </button>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
 
@@ -1400,9 +1580,69 @@ function PhaseDetail({ milestones, onMilestoneCheck, onOpenRoom, onNavigate }: {
   );
 }
 
+// ─── Budget Widget (Right Column) ───────────────────────────────────────────
+
+function BudgetWidget({ phases, onNavigate }: { phases?: PhaseData[]; onNavigate?: (target: string) => void }) {
+  if (!phases || !phases.some(p => (p.estimatedCost ?? 0) > 0)) return null;
+
+  const totalEstimated = phases.reduce((s, p) => s + (p.estimatedCost ?? 0), 0);
+  const totalActual = phases.reduce((s, p) => s + (p.actualCost ?? 0), 0);
+  const pct = totalEstimated > 0 ? Math.round((totalActual / totalEstimated) * 100) : 0;
+
+  return (
+    <motion.div
+      className="rounded-xl p-4"
+      style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)" }}
+      initial={{ opacity: 0, y: 12 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.88, duration: 0.4, ease: EASE }}
+    >
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-2">
+          <DollarSign className="w-3.5 h-3.5 text-ce-text-secondary" />
+          <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Career Investment</span>
+        </div>
+        <button onClick={() => onNavigate?.("budget")} className="text-[10px] text-ce-text-tertiary hover:text-ce-text-secondary cursor-pointer transition-colors" style={{ fontFamily: "var(--font-body)" }}>
+          View details →
+        </button>
+      </div>
+
+      <div className="flex items-baseline gap-2 mb-3">
+        <span className="text-[18px] tabular-nums" style={{ fontFamily: "var(--font-display)", fontWeight: 500, color: "var(--ce-text-primary)" }}>
+          ${totalActual.toLocaleString()}
+        </span>
+        <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
+          of ${totalEstimated.toLocaleString()} estimated
+        </span>
+      </div>
+
+      <div className="h-1.5 rounded-full overflow-hidden mb-3" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }}>
+        <motion.div
+          className="h-full rounded-full"
+          style={{ background: "var(--ce-lime)" }}
+          initial={{ width: 0 }}
+          animate={{ width: `${Math.min(pct, 100)}%` }}
+          transition={{ delay: 1.0, duration: 0.6, ease: EASE }}
+        />
+      </div>
+
+      <div className="space-y-1.5">
+        {phases.filter(p => (p.estimatedCost ?? 0) > 0).map(p => (
+          <div key={p.id} className="flex items-center justify-between">
+            <span className="text-[10px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>{p.title}</span>
+            <span className="text-[10px] tabular-nums" style={{ fontFamily: "var(--font-body)", color: (p.actualCost ?? 0) > 0 ? "var(--ce-lime)" : "var(--ce-text-quaternary)" }}>
+              ${(p.actualCost ?? 0).toLocaleString()} / ${(p.estimatedCost ?? 0).toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── Sophia Panel (Right Column) ────────────────────────────────────────────
 
-function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext; onNavigate?: (target: string) => void }) {
+function SophiaPanel({ onAskSophia, roleContext, onNavigate, phases }: { onAskSophia: (query: string) => void; roleContext?: EdgePathRoleContext; onNavigate?: (target: string) => void; phases?: PhaseData[] }) {
   const panel = roleContext?.sophiaPanel;
 
   if (panel) {
@@ -1497,6 +1737,9 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
             </div>
           ))}
         </motion.div>
+
+        {/* Budget Widget — career investment tracking */}
+        <BudgetWidget phases={phases} onNavigate={onNavigate} />
 
         {/* Job Matches — rendered when showJobMatches: true and jobs data provided */}
         {panel.showJobMatches && panel.jobs && panel.jobs.length > 0 && (
@@ -1685,6 +1928,9 @@ function SophiaPanel({ onAskSophia, roleContext, onNavigate }: { onAskSophia: (q
         ))}
       </motion.div>
 
+      {/* Budget Widget */}
+      <BudgetWidget phases={phases} onNavigate={onNavigate} />
+
       {/* Mentor Connection */}
       <motion.div
         className="rounded-xl p-4"
@@ -1814,6 +2060,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
   const [barMessage, setBarMessage] = useState(roleContext.sophiaActiveDefault);
   const [barChips, setBarChips] = useState(["Quick wins", "What's next?", "Show timeline"]);
   const [showGantt, setShowGantt] = useState(false);
+  const [showShareInsight, setShowShareInsight] = useState(false);
 
   // Roadmap selector — seed from injected data so the selector reflects the actual path title.
   // When the user creates additional roadmaps (via "Create new roadmap"), they are appended here.
@@ -1976,7 +2223,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                 <Map className="w-3.5 h-3.5" /> Map
               </button>
             </div>
-            <OverflowMenu />
+            <OverflowMenu onShareInsight={() => setShowShareInsight(true)} />
           </div>
         </motion.div>
 
@@ -2083,7 +2330,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                   <Map className="w-3.5 h-3.5" /> Map
                 </button>
               </div>
-              <OverflowMenu />
+              <OverflowMenu onShareInsight={() => setShowShareInsight(true)} />
             </div>
           </motion.div>
 
@@ -2118,7 +2365,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
           {/* Two-Column: Milestones left, Sophia panel right */}
           <div className="grid grid-cols-[1fr_320px] gap-5">
             <PhaseDetail milestones={milestones} onMilestoneCheck={handleMilestoneCheck} onOpenRoom={onOpenTaskRoom} onNavigate={onNavigate} />
-            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} onNavigate={onNavigate} />
+            <SophiaPanel onAskSophia={handleAskSophia} roleContext={roleContext} onNavigate={onNavigate} phases={phases} />
           </div>
 
           {/* State demo controls */}
@@ -2186,8 +2433,19 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
         {showGantt && (
           <GanttTimelinePanel
             phases={phases}
+            milestones={milestones}
             onClose={() => setShowGantt(false)}
             onOpenTaskRoom={onOpenTaskRoom}
+          />
+        )}
+      </AnimatePresence>
+
+      {/* Share Insight Modal */}
+      <AnimatePresence>
+        {showShareInsight && (
+          <ShareInsightModal
+            milestones={milestones}
+            onClose={() => setShowShareInsight(false)}
           />
         )}
       </AnimatePresence>

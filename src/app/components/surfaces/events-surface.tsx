@@ -76,11 +76,11 @@ interface CareerEvent {
 // ─── Data ────────────────────────────────────────────────────────────────────
 
 const TYPE_CONFIG: Record<EventType, { label: string; color: string; icon: React.ReactNode }> = {
-  career_fair:    { label: "Career Fair",     color: "var(--ce-role-edu)", icon: <Star className="w-3 h-3" /> },
-  workshop:       { label: "Workshop",        color: "var(--ce-role-guide)", icon: <BookOpen className="w-3 h-3" /> },
-  employer_visit: { label: "Employer Visit",  color: "var(--ce-role-employer)", icon: <Zap className="w-3 h-3" /> },
-  info_session:   { label: "Info Session",    color: "var(--ce-role-edgepreneur)", icon: <Radio className="w-3 h-3" /> },
-  bootcamp:       { label: "Bootcamp",        color: "var(--ce-role-parent)", icon: <TrendingUp className="w-3 h-3" /> },
+  career_fair:    { label: "Career Fair",     color: "var(--ce-text-secondary)", icon: <Star className="w-3 h-3" /> },
+  workshop:       { label: "Workshop",        color: "var(--ce-text-secondary)", icon: <BookOpen className="w-3 h-3" /> },
+  employer_visit: { label: "Employer Visit",  color: "var(--ce-text-secondary)", icon: <Zap className="w-3 h-3" /> },
+  info_session:   { label: "Info Session",    color: "var(--ce-text-secondary)", icon: <Radio className="w-3 h-3" /> },
+  bootcamp:       { label: "Bootcamp",        color: "var(--ce-text-secondary)", icon: <TrendingUp className="w-3 h-3" /> },
 };
 
 const EVENTS: CareerEvent[] = [
@@ -181,21 +181,27 @@ const EVENTS: CareerEvent[] = [
 
 // ─── QR Check-in Modal ────────────────────────────────────────────────────────
 
-function QRModal({ event, onClose }: { event: CareerEvent; onClose: () => void }) {
+function QRModal({ event, onClose, onCheckIn }: { event: CareerEvent; onClose: () => void; onCheckIn: (eventId: string, attendeeId: string) => void }) {
   const [method, setMethod] = useState<QRMethod>("inapp");
   const [scanning, setScanning] = useState(false);
   const [lastScan, setLastScan] = useState<string | null>(null);
 
   const [scanCount, setScanCount] = useState(0);
   const handleScan = () => {
+    // Find next unchecked attendee to simulate scanning
+    const unchecked = event.attendees.filter((a) => !a.checkedIn);
+    if (unchecked.length === 0) {
+      toast.info("All attendees checked in", "Everyone registered for this event has been checked in.");
+      return;
+    }
     setScanning(true);
     setTimeout(() => {
       setScanning(false);
-      const names = ["Sharon Lee", "Marcus Rivera", "Aisha Patel", "James Park"];
-      const name = names[scanCount % names.length];
-      setLastScan(`${name} — Product Design (Checked in ✓)`);
+      const attendee = unchecked[scanCount % unchecked.length];
+      onCheckIn(event.id, attendee.id);
+      setLastScan(`${attendee.name} — ${attendee.role} (Checked in ✓)`);
       setScanCount(c => c + 1);
-      toast.success(`${name} checked in`, event.title);
+      toast.success(`${attendee.name} checked in`, event.title);
     }, 2200);
   };
 
@@ -568,11 +574,13 @@ function EventCard({
   accent,
   onSelect,
   onQR,
+  onRegister,
 }: {
   event: CareerEvent;
   accent: string;
   onSelect: (e: CareerEvent) => void;
   onQR: (e: CareerEvent) => void;
+  onRegister: (eventId: string) => void;
 }) {
   const typeConfig = TYPE_CONFIG[event.type];
   const fillPct = (event.registered / event.capacity) * 100;
@@ -662,6 +670,17 @@ function EventCard({
             transition={{ delay: 0.3, duration: 0.6, ease: EASE }} />
         </div>
       </div>
+
+      {/* Register button — only for upcoming events with remaining capacity */}
+      {!isPast && event.registered < event.capacity && (
+        <button
+          onClick={(e) => { e.stopPropagation(); onRegister(event.id); }}
+          className="mt-3 w-full flex items-center justify-center gap-1.5 py-2 rounded-xl text-[11px] cursor-pointer transition-all active:scale-[0.98]"
+          style={{ background: `${accent}08`, border: `1px solid ${accent}15`, color: accent, fontFamily: "var(--font-display)", fontWeight: 500 }}
+        >
+          <Plus className="w-3 h-3" /> Register a student
+        </button>
+      )}
     </motion.div>
   );
 }
@@ -817,6 +836,48 @@ export function EventsSurface() {
     navigate(paths[target] ?? `/${role}`);
   };
 
+  // Check in an attendee for an event (QR scan)
+  const handleCheckIn = (eventId: string, attendeeId: string) => {
+    setEvents((prev) =>
+      prev.map((ev) =>
+        ev.id === eventId
+          ? {
+              ...ev,
+              checkedIn: ev.checkedIn + (ev.attendees.find((a) => a.id === attendeeId && !a.checkedIn) ? 1 : 0),
+              attendees: ev.attendees.map((a) =>
+                a.id === attendeeId ? { ...a, checkedIn: true } : a
+              ),
+            }
+          : ev
+      )
+    );
+  };
+
+  // Register a new attendee for an upcoming event
+  const handleRegister = (eventId: string) => {
+    const names = ["Amara Obi", "Kai Tanaka", "Sofia Alvarez", "Liam Brooks", "Nadia Hassan", "Ethan Reed", "Mia Zhang", "Oscar Ruiz"];
+    const roles = ["Product Design", "UX Research", "UX Design", "Motion Design", "Design Systems"];
+    const name = names[Math.floor(Math.random() * names.length)];
+    const role = roles[Math.floor(Math.random() * roles.length)];
+    const newAttendee: Attendee = {
+      id: `a${Date.now()}`,
+      name,
+      initial: name[0],
+      role,
+      checkedIn: false,
+      registeredDate: "Today",
+    };
+    setEvents((prev) =>
+      prev.map((ev) =>
+        ev.id === eventId && ev.registered < ev.capacity
+          ? { ...ev, registered: ev.registered + 1, attendees: [...ev.attendees, newAttendee] }
+          : ev
+      )
+    );
+    const ev = events.find((e) => e.id === eventId);
+    toast.success(`${name} registered`, ev?.title ?? "Event");
+  };
+
   const filtered = events.filter((e) =>
     filter === "all" ? true : filter === "upcoming" ? e.status !== "past" : e.status === "past"
   );
@@ -901,7 +962,7 @@ export function EventsSurface() {
             <AnimatePresence>
               {filtered.map((event, i) => (
                 <motion.div key={event.id} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.06, duration: 0.3, ease: EASE }}>
-                  <EventCard event={event} accent={accent} onSelect={setSelectedEvent} onQR={setQrEvent} />
+                  <EventCard event={event} accent={accent} onSelect={setSelectedEvent} onQR={setQrEvent} onRegister={handleRegister} />
                 </motion.div>
               ))}
             </AnimatePresence>
@@ -974,14 +1035,14 @@ export function EventsSurface() {
             <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
               onClick={() => setSelectedEvent(null)} />
-            <EventDetail event={selectedEvent} accent={accent} onClose={() => setSelectedEvent(null)} onQR={(e) => { setSelectedEvent(null); setQrEvent(e); }} />
+            <EventDetail event={events.find((e) => e.id === selectedEvent.id) ?? selectedEvent} accent={accent} onClose={() => setSelectedEvent(null)} onQR={(e) => { setSelectedEvent(null); setQrEvent(e); }} />
           </>
         )}
       </AnimatePresence>
 
       {/* QR modal */}
       <AnimatePresence>
-        {qrEvent && <QRModal event={qrEvent} onClose={() => setQrEvent(null)} />}
+        {qrEvent && <QRModal event={events.find((e) => e.id === qrEvent.id) ?? qrEvent} onClose={() => setQrEvent(null)} onCheckIn={handleCheckIn} />}
       </AnimatePresence>
 
       {/* Create event modal */}

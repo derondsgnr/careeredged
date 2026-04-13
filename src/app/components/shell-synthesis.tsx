@@ -20,10 +20,11 @@ import { SharedTopNav } from "./role-shell";
 import { SophiaBottomBar as SharedSophiaBottomBar, type NavVariation } from "./sophia-patterns";
 import { NavExplorePanel } from "./nav-explore-panel";
 import {
-  Zap, FileText, Search, Compass,
+  Zap, DollarSign, FileText, Search, Compass,
   ChevronRight, Target, BarChart3,
   Check, Sparkles, ArrowUpRight, ArrowRight,
   Users, Calendar, Building2, Star, Sun, Moon,
+  MessageSquare, BookOpen, ShoppingBag, Clock,
 } from "lucide-react";
 import { EASE, TEXT, SURFACE, GLASS_TINT } from "./tokens";
 import { useThemeToggle } from "./ui/use-theme";
@@ -33,8 +34,8 @@ import { BuddyDashboardCard } from "./buddy-dashboard-card";
 const KPIS = [
   { label: "Career Score", value: "72", trend: "+4", icon: <Target className="w-4 h-4" />, color: "var(--ce-role-edgestar)", gauge: 0.72 },
   { label: "Applications", value: "12", trend: "+3 this week", icon: <ArrowUpRight className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: null },
-  { label: "ATS Score", value: "87", trend: "Resume v3", icon: <FileText className="w-4 h-4" />, color: "var(--ce-lime)", gauge: 0.87 },
-  { label: "EdgeGas", value: "45", trend: "+15 earned", icon: <Zap className="w-4 h-4" />, color: "var(--ce-lime)", gauge: null },
+  { label: "ATS Score", value: "87", trend: "Resume v3", icon: <FileText className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: 0.87 },
+  { label: "Invested", value: "$299", trend: "of $1,112", icon: <DollarSign className="w-4 h-4" />, color: "var(--ce-text-secondary)", gauge: 0.27 },
 ];
 
 // ─── Roadmap Strip (from H1) ────────────────────────────────────────────────
@@ -60,7 +61,7 @@ function RoadmapStrip({ onNav }: { onNav: (id: string) => void }) {
           <Compass className="w-4 h-4 text-ce-cyan" />
           <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Product Design Roadmap</span>
         </div>
-        <button onClick={() => onNav("roadmap")} className="flex items-center gap-1 text-[12px] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-tertiary)] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
+        <button onClick={() => onNav("edgepath")} className="flex items-center gap-1 text-[12px] text-[var(--ce-text-secondary)] hover:text-[var(--ce-text-tertiary)] transition-colors cursor-pointer" style={{ fontFamily: "var(--font-body)" }}>
           View full roadmap <ChevronRight className="w-3 h-3" />
         </button>
       </div>
@@ -77,16 +78,16 @@ function ActivityWidget({ onNav }: { onNav?: (id: string) => void }) {
 
   const activities = [
     { time: "2h ago", text: "Resume optimized — ATS score: 87", icon: <FileText className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-    { time: "5h ago", text: "Applied to Product Designer at Figma", icon: <ArrowUpRight className="w-3 h-3" />, color: "var(--ce-lime)" },
-    { time: "Yesterday", text: "Completed milestone: Portfolio review", icon: <Check className="w-3 h-3" />, color: "var(--ce-lime)" },
-    { time: "2 days ago", text: "New job match: UX Lead at Intercom", icon: <Search className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-    { time: "3 days ago", text: "Session with Alice Chen — Career Coaching", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-secondary)", target: "sessions" },
+    { time: "5h ago", text: "Applied to Product Designer at Figma", icon: <ArrowUpRight className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { time: "Yesterday", text: "Completed milestone: Portfolio review", icon: <Check className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { time: "2 days ago", text: "New job match: UX Lead at Intercom", icon: <Search className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { time: "3 days ago", text: "Session with Alice Chen — Career Coaching", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-tertiary)", target: "sessions" },
   ];
 
   const upcoming = [
-    { date: "Today 2:00 PM", text: "Session with Alice Chen — Career Coaching", icon: <Calendar className="w-3 h-3" />, color: "var(--ce-lime)", target: "sessions" },
-    { date: "Friday", text: "LinkedIn optimization due", icon: <Target className="w-3 h-3" />, color: "var(--ce-role-edgestar)" },
-    { date: "Monday", text: "Mock interview with James Okafor", icon: <Users className="w-3 h-3" />, color: "var(--ce-role-guide)", target: "sessions" },
+    { date: "Today 2:00 PM", text: "Session with Alice Chen — Career Coaching", icon: <Calendar className="w-3 h-3" />, color: "var(--ce-role-edgestar)", target: "sessions" },
+    { date: "Friday", text: "LinkedIn optimization due", icon: <Target className="w-3 h-3" />, color: "var(--ce-text-tertiary)" },
+    { date: "Monday", text: "Mock interview with James Okafor", icon: <Users className="w-3 h-3" />, color: "var(--ce-text-tertiary)", target: "sessions" },
   ];
 
   const items = tab === "activity" ? activities : upcoming;
@@ -419,7 +420,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
   const handleNavClick = (id: string) => {
     // SharedTopNav handles routing internally via useNavigate.
     // This handler is only used by SophiaBottomBar chips.
-    if (id === "roadmap" && onNavigate) onNavigate("edgepath");
+    if (id === "edgepath" && onNavigate) onNavigate("edgepath");
     else if (id === "resume" && onNavigate) onNavigate("resume");
     else if (id === "jobs" && onNavigate) onNavigate("jobs");
     else if (id === "sessions" && onNavigate) onNavigate("sessions");
@@ -429,7 +430,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
 
   const handleSophiaChipAction = (action: string) => {
     // Try to navigate, or open Sophia
-    if (["sessions", "jobs", "roadmap", "resume", "analytics", "messages"].includes(action)) {
+    if (["sessions", "jobs", "edgepath", "resume", "analytics", "messages"].includes(action)) {
       handleNavClick(action);
     } else {
       handleChipClick(action);
@@ -451,7 +452,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
           chips: [
             { label: "View session", action: "sessions" },
             { label: "View matches", action: "jobs" },
-            { label: "Open roadmap", action: "roadmap" },
+            { label: "Open roadmap", action: "edgepath" },
           ],
         }}
         onAskSophia={handleAskSophia}
@@ -633,6 +634,7 @@ export function ShellSynthesis({ onNavigate, onOpenTaskRoom }: { onNavigate?: Na
               <TopJobsCompact onNav={handleNavClick} />
             </div>
           </div>
+
         </div>
       </main>
     </div>

@@ -5,7 +5,7 @@ import { EASE } from "../tokens";
  * grant drawer actions, contextual Sophia bottom bar.
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "motion/react";
 import { RoleShell, GlassCard } from "../role-shell";
@@ -18,7 +18,8 @@ import { EmptyState, SkeletonCard, BannerAlert } from "../ui/feedback";
 import {
   Users, TrendingUp, DollarSign, Check,
   ChevronRight, X, ArrowRight, Plus, Calendar,
-  AlertCircle, FileText, Zap, BookOpen,
+  AlertCircle, FileText, Zap, BookOpen, Trash2, Edit3,
+  Send, Clock, Loader2,
 } from "lucide-react";
 
 const ROLE_ACCENT: Record<string, string> = {
@@ -50,7 +51,7 @@ interface Grant {
   funder: string;
   amount: string;
   deadline: string;
-  status: "open" | "applied" | "funded" | "rejected";
+  status: "open" | "applied" | "funded" | "rejected" | "submitted" | "under_review";
   match: number;
   category: string;
   sophiaNote: string;
@@ -110,16 +111,18 @@ const PARTICIPANTS: Participant[] = [
   { id: "pt6", name: "Nadia L.",   initial: "N", program: "Youth Employment",    phase: 1, readiness: 55, lastActive: "3 days ago",  status: "on_track" },
 ];
 
-const GRANT_STATUS_CONFIG = {
-  open:     { label: "Open",     color: "var(--ce-role-edgestar)" },
-  applied:  { label: "Applied",  color: "var(--ce-role-edgepreneur)" },
-  funded:   { label: "Funded",   color: "var(--ce-lime)" },
-  rejected: { label: "Rejected", color: "var(--ce-text-secondary)" },
+const GRANT_STATUS_CONFIG: Record<string, { label: string; color: string }> = {
+  open:         { label: "Open",          color: "var(--ce-role-edgestar)" },
+  applied:      { label: "Applied",       color: "var(--ce-role-edgepreneur)" },
+  funded:       { label: "Funded",        color: "var(--ce-lime)" },
+  rejected:     { label: "Rejected",      color: "var(--ce-text-secondary)" },
+  submitted:    { label: "Submitted",     color: "var(--ce-role-edgepreneur)" },
+  under_review: { label: "Under review",  color: "var(--ce-role-guide)" },
 };
 
 // ─── Grant Detail Drawer ──────────────────────────────────────────────────────
 
-function GrantDrawer({ grant, accent, onClose }: { grant: Grant; accent: string; onClose: () => void }) {
+function GrantDrawer({ grant, accent, onClose, onApply }: { grant: Grant; accent: string; onClose: () => void; onApply?: (g: Grant) => void }) {
   const { openSophia } = useSophia();
   const cfg = GRANT_STATUS_CONFIG[grant.status];
   return (
@@ -161,11 +164,17 @@ function GrantDrawer({ grant, accent, onClose }: { grant: Grant; accent: string;
       <div className="px-5 py-4 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
         {grant.status === "open" && (
           <button
-            onClick={() => openSophia(`Help me start the grant application for "${grant.title}" from ${grant.funder}. Amount: ${grant.amount}, deadline: ${grant.deadline}. Sophia noted: ${grant.sophiaNote}`)}
+            onClick={() => { if (onApply) { onApply(grant); onClose(); } else { openSophia(`Help me start the grant application for "${grant.title}" from ${grant.funder}. Amount: ${grant.amount}, deadline: ${grant.deadline}. Sophia noted: ${grant.sophiaNote}`); } }}
             className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
             style={{ background: `${accent}12`, border: `1px solid ${accent}25`, color: accent, fontFamily: "var(--font-display)", fontWeight: 500 }}>
             <FileText className="w-3.5 h-3.5" /> Start application
           </button>
+        )}
+        {(grant.status === "submitted" || grant.status === "under_review") && (
+          <div className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px]"
+            style={{ background: `${GRANT_STATUS_CONFIG[grant.status].color}08`, border: `1px solid ${GRANT_STATUS_CONFIG[grant.status].color}18`, color: GRANT_STATUS_CONFIG[grant.status].color, fontFamily: "var(--font-body)" }}>
+            {grant.status === "under_review" ? <Clock className="w-3.5 h-3.5" /> : <Check className="w-3.5 h-3.5" />} {GRANT_STATUS_CONFIG[grant.status].label}
+          </div>
         )}
         {grant.status === "applied" && (
           <button
@@ -471,6 +480,297 @@ function ParticipantRow({ p, accent, isLast }: { p: Participant; accent: string;
   );
 }
 
+// ─── Participant Row with Remove ─────────────────────────────────────────────
+
+function ParticipantRowWithRemove({ p, accent, isLast, onRemove }: { p: Participant; accent: string; isLast: boolean; onRemove: () => void }) {
+  const { openSophia } = useSophia();
+  const statusColor = p.status === "ahead" ? "var(--ce-lime)" : p.status === "at_risk" ? "var(--ce-status-error)" : "var(--ce-role-edgestar)";
+  const statusLabel = p.status === "ahead" ? "Ahead" : p.status === "at_risk" ? "At risk" : "On track";
+  return (
+    <motion.div
+      className="grid px-4 py-3 items-center hover:bg-[rgba(var(--ce-glass-tint),0.02)] cursor-pointer transition-colors group/row"
+      style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px 50px", borderBottom: !isLast ? "1px solid rgba(var(--ce-glass-tint),0.03)" : "none", gap: 12 }}
+      onClick={() => openSophia(`Tell me about participant ${p.name} in the ${p.program} program. Phase ${p.phase}, ${p.readiness}% readiness, status: ${statusLabel}, last active: ${p.lastActive}. What should I do to support them?`)}
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
+      <div className="flex items-center gap-2.5">
+        <div className="w-7 h-7 rounded-lg flex items-center justify-center text-[11px] flex-shrink-0"
+          style={{ background: `${accent}12`, color: accent, fontFamily: "var(--font-display)", fontWeight: 600 }}>{p.initial}</div>
+        <div>
+          <span className="text-[12px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-body)" }}>{p.name}</span>
+          <span className="text-[9px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Last: {p.lastActive}</span>
+        </div>
+      </div>
+      <span className="text-[10px] text-[var(--ce-text-secondary)] truncate" style={{ fontFamily: "var(--font-body)" }}>{p.program}</span>
+      <span className="text-[12px] text-[var(--ce-text-tertiary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>Phase {p.phase}</span>
+      <span className="text-[12px] tabular-nums" style={{ color: p.readiness >= 70 ? "var(--ce-lime)" : p.readiness >= 50 ? "var(--ce-role-edgepreneur)" : "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>{p.readiness}%</span>
+      <span className="text-[10px] px-2 py-0.5 rounded-full w-fit" style={{ background: `${statusColor}10`, color: statusColor, border: `1px solid ${statusColor}20`, fontFamily: "var(--font-body)" }}>{statusLabel}</span>
+      <button
+        onClick={(e) => { e.stopPropagation(); onRemove(); }}
+        className="w-6 h-6 rounded-md flex items-center justify-center cursor-pointer opacity-0 group-hover/row:opacity-100 transition-all hover:bg-[rgba(var(--ce-status-error-rgb),0.08)]"
+        aria-label={`Remove ${p.name}`}>
+        <Trash2 className="w-3 h-3 text-[var(--ce-text-quaternary)] hover:text-[var(--ce-status-error)] transition-colors" />
+      </button>
+    </motion.div>
+  );
+}
+
+// ─── Enrollment Modal ────────────────────────────────────────────────────────
+
+function EnrollmentModal({ program, accent, onClose, onEnroll }: {
+  program: Program; accent: string; onClose: () => void; onEnroll: (programId: string) => void;
+}) {
+  const spotsLeft = program.capacity - program.participants;
+  const canEnroll = spotsLeft > 0 && program.status === "enrolling";
+
+  return (
+    <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.6)", backdropFilter: "blur(4px)" }} onClick={onClose} />
+      <motion.div className="relative w-full max-w-[420px] rounded-2xl overflow-hidden"
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
+        initial={{ scale: 0.96, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 20 }} transition={{ duration: 0.3, ease: EASE }}>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+          <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Enroll in program</span>
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+          </button>
+        </div>
+        <div className="px-5 py-5">
+          <div className="rounded-xl p-4 mb-4" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+            <span className="text-[13px] text-[var(--ce-text-primary)] block mb-1" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{program.title}</span>
+            <span className="text-[11px] text-[var(--ce-text-secondary)] block mb-2" style={{ fontFamily: "var(--font-body)" }}>{program.cohort} · {program.startDate} – {program.endDate}</span>
+            <div className="flex items-center justify-between">
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>Capacity</span>
+              <span className="text-[11px] text-[var(--ce-text-primary)] tabular-nums" style={{ fontFamily: "var(--font-body)" }}>{program.participants}/{program.capacity} ({spotsLeft} spots left)</span>
+            </div>
+          </div>
+          <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg mb-4" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
+            <SophiaMark size={12} glowing={false} />
+            <p className="text-[11px] text-[var(--ce-text-secondary)] leading-relaxed flex-1" style={{ fontFamily: "var(--font-body)" }}>
+              {canEnroll
+                ? `This program has ${spotsLeft} spots remaining. Based on your current pipeline, enrollment will bring you to ${Math.round(((program.participants + 1) / program.capacity) * 100)}% capacity — well within range for effective cohort facilitation.`
+                : spotsLeft <= 0
+                  ? "This program is at full capacity. Sophia recommends adding this participant to the waitlist or enrolling in the next cohort."
+                  : "This program is not currently accepting enrollments. The enrollment window opens during the Pre-enrollment phase."}
+            </p>
+          </div>
+        </div>
+        <div className="flex gap-2 px-5 pb-5">
+          <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>Cancel</button>
+          <button onClick={() => { onEnroll(program.id); onClose(); }}
+            disabled={!canEnroll}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ background: canEnroll ? `${accent}12` : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${canEnroll ? `${accent}25` : "rgba(var(--ce-glass-tint),0.08)"}`, color: canEnroll ? accent : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Check className="w-3.5 h-3.5" /> {canEnroll ? "Confirm enrollment" : "Cannot enroll"}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Grant Application Panel ─────────────────────────────────────────────────
+
+function GrantApplicationPanel({ grant, accent, onClose, onSubmit }: {
+  grant: Grant; accent: string; onClose: () => void; onSubmit: (grantId: string) => void;
+}) {
+  const [form, setForm] = useState({ narrative: "", budget: "", timeline: "", impact: "" });
+  const [submitting, setSubmitting] = useState(false);
+
+  const handleSubmit = () => {
+    setSubmitting(true);
+    onSubmit(grant.id);
+    toast.success("Application submitted", `Your application for ${grant.title} has been submitted successfully.`);
+    setTimeout(() => onClose(), 300);
+  };
+
+  const isValid = form.narrative.length > 10 && form.budget && form.timeline && form.impact.length > 10;
+
+  return (
+    <motion.div className="fixed top-0 right-0 bottom-0 w-[440px] z-50 flex flex-col"
+      style={{ background: "var(--ce-surface-modal-bg)", borderLeft: "1px solid rgba(var(--ce-glass-tint),0.06)", backdropFilter: "blur(20px)" }}
+      initial={{ x: 440 }} animate={{ x: 0 }} exit={{ x: 440 }} transition={{ duration: 0.35, ease: EASE }}>
+      <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <div>
+          <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Grant Application</span>
+          <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{grant.title}</span>
+        </div>
+        <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+          <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+        </button>
+      </div>
+      <div className="flex-1 overflow-y-auto px-5 py-4">
+        <div className="flex items-start gap-2 px-3 py-2.5 rounded-lg mb-4" style={{ background: "rgba(var(--ce-role-edgestar-rgb),0.03)", border: "1px solid rgba(var(--ce-role-edgestar-rgb),0.08)" }}>
+          <SophiaMark size={12} glowing={false} />
+          <p className="text-[11px] text-[var(--ce-text-secondary)] leading-relaxed flex-1" style={{ fontFamily: "var(--font-body)" }}>
+            {grant.sophiaNote}
+          </p>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROJECT NARRATIVE</label>
+            <textarea value={form.narrative} onChange={(e) => setForm({ ...form, narrative: e.target.value })}
+              placeholder="Describe the program goals, target population, and delivery approach..."
+              rows={5}
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none resize-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+          </div>
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>BUDGET AMOUNT REQUESTED</label>
+            <FormattedNumberInput value={form.budget} onChange={(v) => setForm({ ...form, budget: v })} placeholder="$85,000"
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+          </div>
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROJECT TIMELINE</label>
+            <input value={form.timeline} onChange={(e) => setForm({ ...form, timeline: e.target.value })}
+              placeholder="e.g. 12 months — Jan 2026 to Dec 2026"
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+          </div>
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>IMPACT STATEMENT</label>
+            <textarea value={form.impact} onChange={(e) => setForm({ ...form, impact: e.target.value })}
+              placeholder="Describe expected outcomes, measurement approach, and community impact..."
+              rows={4}
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none resize-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+          </div>
+        </div>
+      </div>
+      <div className="px-5 py-4 flex gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+          style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>Cancel</button>
+        <button onClick={handleSubmit} disabled={!isValid || submitting}
+          className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+          style={{ background: isValid ? `${accent}12` : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${isValid ? `${accent}25` : "rgba(var(--ce-glass-tint),0.08)"}`, color: isValid ? accent : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+          {submitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : <Send className="w-3.5 h-3.5" />} Submit application
+        </button>
+      </div>
+    </motion.div>
+  );
+}
+
+// ─── Add Participant Form ────────────────────────────────────────────────────
+
+function AddParticipantModal({ accent, onClose, onAdd }: {
+  accent: string; onClose: () => void; onAdd: (p: Participant) => void;
+}) {
+  const [name, setName] = useState("");
+  const [role, setRole] = useState("");
+  const PROGRAM_OPTIONS = ["Workforce Re-entry", "Youth Employment", "Tech Career Pathways"];
+  const [program, setProgram] = useState(PROGRAM_OPTIONS[0]);
+
+  const handleAdd = () => {
+    const newP: Participant = {
+      id: `pt${Date.now()}`,
+      name: name || "New Participant",
+      initial: (name || "N").charAt(0).toUpperCase(),
+      program,
+      phase: 1,
+      readiness: 0,
+      lastActive: "Just added",
+      status: "on_track",
+    };
+    onAdd(newP);
+    toast.success("Participant added", `${newP.name} has been added to ${program}.`);
+    onClose();
+  };
+
+  return (
+    <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.6)", backdropFilter: "blur(4px)" }} onClick={onClose} />
+      <motion.div className="relative w-full max-w-[400px] rounded-2xl overflow-hidden"
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
+        initial={{ scale: 0.96, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 20 }} transition={{ duration: 0.3, ease: EASE }}>
+        <div className="flex items-center justify-between px-5 py-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+          <span className="text-[14px] text-[var(--ce-text-primary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Add participant</span>
+          <button onClick={onClose} className="w-7 h-7 rounded-full flex items-center justify-center cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.06)] transition-colors">
+            <X className="w-4 h-4 text-[var(--ce-text-secondary)]" />
+          </button>
+        </div>
+        <div className="px-5 py-5 flex flex-col gap-4">
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>FULL NAME</label>
+            <input value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. Alex Rivera"
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+          </div>
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>ROLE / NOTES</label>
+            <input value={role} onChange={(e) => setRole(e.target.value)} placeholder="e.g. Career changer, referred by partner org"
+              className="w-full px-3 py-2.5 rounded-xl text-[12px] text-[var(--ce-text-primary)] placeholder:text-[var(--ce-text-quaternary)] outline-none"
+              style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)", fontFamily: "var(--font-body)" }} />
+          </div>
+          <div>
+            <label className="text-[10px] text-[var(--ce-text-secondary)] block mb-1.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>PROGRAM</label>
+            <div className="flex flex-col gap-1.5">
+              {PROGRAM_OPTIONS.map((opt) => (
+                <button key={opt} onClick={() => setProgram(opt)}
+                  className="px-3 py-2.5 rounded-xl cursor-pointer text-[11px] text-left transition-all"
+                  style={{ background: program === opt ? `${accent}10` : "rgba(var(--ce-glass-tint),0.02)", border: `1px solid ${program === opt ? `${accent}25` : "rgba(var(--ce-glass-tint),0.06)"}`, color: program === opt ? accent : "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>
+                  {opt}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className="flex gap-2 px-5 pb-5">
+          <button onClick={onClose} className="px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>Cancel</button>
+          <button onClick={handleAdd} disabled={!name.trim()}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98] disabled:opacity-60 disabled:cursor-not-allowed"
+            style={{ background: name.trim() ? `${accent}12` : "rgba(var(--ce-glass-tint),0.04)", border: `1px solid ${name.trim() ? `${accent}25` : "rgba(var(--ce-glass-tint),0.08)"}`, color: name.trim() ? accent : "var(--ce-text-quaternary)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Plus className="w-3.5 h-3.5" /> Add participant
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+// ─── Remove Participant Confirm ──────────────────────────────────────────────
+
+function RemoveParticipantModal({ participant, accent, onClose, onConfirm }: {
+  participant: Participant; accent: string; onClose: () => void; onConfirm: (id: string) => void;
+}) {
+  return (
+    <motion.div className="fixed inset-0 z-50 flex items-center justify-center p-6"
+      initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}>
+      <div className="absolute inset-0" style={{ background: "rgba(var(--ce-shadow-tint),0.6)", backdropFilter: "blur(4px)" }} onClick={onClose} />
+      <motion.div className="relative w-full max-w-[380px] rounded-2xl overflow-hidden"
+        style={{ background: "var(--ce-surface-modal-bg)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
+        initial={{ scale: 0.96, y: 20 }} animate={{ scale: 1, y: 0 }} exit={{ scale: 0.96, y: 20 }} transition={{ duration: 0.3, ease: EASE }}>
+        <div className="px-5 py-5">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="w-9 h-9 rounded-lg flex items-center justify-center" style={{ background: "rgba(var(--ce-status-error-rgb),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb),0.15)" }}>
+              <Trash2 className="w-4 h-4 text-[var(--ce-status-error)]" />
+            </div>
+            <div>
+              <span className="text-[14px] text-[var(--ce-text-primary)] block" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Remove participant</span>
+              <span className="text-[11px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>This action cannot be undone</span>
+            </div>
+          </div>
+          <p className="text-[12px] text-[var(--ce-text-tertiary)] leading-relaxed mb-4" style={{ fontFamily: "var(--font-body)" }}>
+            Are you sure you want to remove <strong className="text-[var(--ce-text-primary)]">{participant.name}</strong> from the {participant.program} program? Their progress data will be archived.
+          </p>
+        </div>
+        <div className="flex gap-2 px-5 pb-5">
+          <button onClick={onClose} className="flex-1 px-4 py-2.5 rounded-xl text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.04)] transition-colors"
+            style={{ border: "1px solid rgba(var(--ce-glass-tint),0.08)", color: "var(--ce-text-tertiary)", fontFamily: "var(--font-body)" }}>Cancel</button>
+          <button onClick={() => { onConfirm(participant.id); onClose(); }}
+            className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-xl text-[12px] cursor-pointer transition-all active:scale-[0.98]"
+            style={{ background: "rgba(var(--ce-status-error-rgb),0.1)", border: "1px solid rgba(var(--ce-status-error-rgb),0.2)", color: "var(--ce-status-error)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
+            <Trash2 className="w-3.5 h-3.5" /> Remove
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 // ─── Main Export ──────────────────────────────────────────────────────────────
 
 export function ProgramsSurface() {
@@ -484,6 +784,53 @@ export function ProgramsSurface() {
   const [selectedProgram, setSelectedProgram] = useState<Program | null>(null);
   const [createOpen, setCreateOpen] = useState(false);
   const [programs, setPrograms] = useState<Program[]>(PROGRAMS_DATA);
+  const [grants, setGrants] = useState<Grant[]>(GRANTS);
+  const [participants, setParticipants] = useState<Participant[]>(PARTICIPANTS);
+
+  // New modal states
+  const [enrollProgram, setEnrollProgram] = useState<Program | null>(null);
+  const [grantAppTarget, setGrantAppTarget] = useState<Grant | null>(null);
+  const [addParticipantOpen, setAddParticipantOpen] = useState(false);
+  const [removeParticipant, setRemoveParticipant] = useState<Participant | null>(null);
+
+  // Enrollment handler
+  const handleEnroll = (programId: string) => {
+    setPrograms((prev) => prev.map((p) => {
+      if (p.id !== programId) return p;
+      const updated = { ...p, participants: p.participants + 1 };
+      toast.success("Enrolled successfully", `New participant added to ${p.title}. ${updated.capacity - updated.participants} spots remaining.`);
+      return updated;
+    }));
+  };
+
+  // Grant application submit handler with status progression
+  const handleGrantSubmit = (grantId: string) => {
+    setGrants((prev) => prev.map((g) => {
+      if (g.id !== grantId) return g;
+      return { ...g, status: "submitted" as const };
+    }));
+    // Simulate "under review" after 2 seconds
+    setTimeout(() => {
+      setGrants((prev) => prev.map((g) => {
+        if (g.id !== grantId) return g;
+        if (g.status !== "submitted") return g;
+        toast.info("Status update", `Your application for "${g.title}" is now under review.`);
+        return { ...g, status: "under_review" as const };
+      }));
+    }, 2000);
+  };
+
+  // Add participant handler
+  const handleAddParticipant = (p: Participant) => {
+    setParticipants((prev) => [...prev, p]);
+  };
+
+  // Remove participant handler
+  const handleRemoveParticipant = (id: string) => {
+    const p = participants.find((pt) => pt.id === id);
+    setParticipants((prev) => prev.filter((pt) => pt.id !== id));
+    if (p) toast.success("Participant removed", `${p.name} has been removed and their data archived.`);
+  };
 
   const handleNavigate = (target: string) => {
     const paths: Record<string, string> = {
@@ -494,8 +841,8 @@ export function ProgramsSurface() {
   };
 
   const totalParticipants = programs.filter(p => p.status === "active").reduce((a, p) => a + p.participants, 0);
-  const fundedGrants = GRANTS.filter(g => g.status === "funded");
-  const openGrants = GRANTS.filter(g => g.status === "open" || g.status === "applied");
+  const fundedGrants = grants.filter(g => g.status === "funded");
+  const openGrants = grants.filter(g => g.status === "open" || g.status === "applied");
 
   // Contextual bottom bar — updates based on what is selected / which tab is active
   const sophiaOverride = selectedGrant
@@ -634,6 +981,14 @@ export function ProgramsSurface() {
                           <SophiaMark size={11} glowing={false} />
                           <p className="text-[10px] text-[var(--ce-text-secondary)] leading-relaxed flex-1" style={{ fontFamily: "var(--font-body)" }}>{prog.sophiaNote}</p>
                         </div>
+                        {prog.status === "enrolling" && (
+                          <button
+                            onClick={(e) => { e.stopPropagation(); setEnrollProgram(prog); }}
+                            className="mt-3 w-full flex items-center justify-center gap-2 py-2 rounded-xl text-[11px] cursor-pointer transition-all active:scale-[0.98]"
+                            style={{ background: `${accent}08`, border: `1px solid ${accent}18`, color: accent, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                            <Plus className="w-3 h-3" /> Enroll participant
+                          </button>
+                        )}
                       </motion.div>
                     );
                   })}
@@ -643,7 +998,7 @@ export function ProgramsSurface() {
               {/* Grants tab */}
               {tab === "grants" && (
                 <motion.div key="grants" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="flex flex-col gap-2.5">
-                  {GRANTS.map((grant, i) => {
+                  {grants.map((grant, i) => {
                     const cfg = GRANT_STATUS_CONFIG[grant.status];
                     return (
                       <motion.div key={grant.id} className="rounded-xl p-4 cursor-pointer group"
@@ -669,7 +1024,24 @@ export function ProgramsSurface() {
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>Due: {grant.deadline}</span>
-                          <ChevronRight className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                          <div className="flex items-center gap-2">
+                            {grant.status === "open" && (
+                              <button
+                                onClick={(e) => { e.stopPropagation(); setGrantAppTarget(grant); }}
+                                className="text-[10px] px-2.5 py-1 rounded-lg cursor-pointer transition-all hover:opacity-80"
+                                style={{ background: `${accent}10`, border: `1px solid ${accent}20`, color: accent, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                                Apply
+                              </button>
+                            )}
+                            {(grant.status === "submitted" || grant.status === "under_review") && (
+                              <span className="text-[10px] px-2.5 py-1 rounded-lg flex items-center gap-1"
+                                style={{ background: `${cfg.color}10`, border: `1px solid ${cfg.color}20`, color: cfg.color, fontFamily: "var(--font-body)" }}>
+                                {grant.status === "under_review" && <Clock className="w-2.5 h-2.5" />}
+                                {cfg.label}
+                              </span>
+                            )}
+                            <ChevronRight className="w-3.5 h-3.5 text-[var(--ce-text-quaternary)] opacity-0 group-hover:opacity-100 transition-opacity" />
+                          </div>
                         </div>
                       </motion.div>
                     );
@@ -680,14 +1052,22 @@ export function ProgramsSurface() {
               {/* Participants tab */}
               {tab === "participants" && (
                 <motion.div key="participants" initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}>
+                  <div className="flex items-center justify-between mb-3">
+                    <span className="text-[12px] text-[var(--ce-text-secondary)]" style={{ fontFamily: "var(--font-body)" }}>{participants.length} participants</span>
+                    <button onClick={() => setAddParticipantOpen(true)}
+                      className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] cursor-pointer transition-all active:scale-[0.98]"
+                      style={{ background: `${accent}10`, border: `1px solid ${accent}20`, color: accent, fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                      <Plus className="w-3 h-3" /> Add participant
+                    </button>
+                  </div>
                   <div className="rounded-xl overflow-hidden" style={{ background: "rgba(var(--ce-glass-tint),0.015)", border: "1px solid rgba(var(--ce-glass-tint),0.05)" }}>
-                    <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)", gap: 12 }}>
-                      {["PARTICIPANT", "PROGRAM", "PHASE", "READINESS", "STATUS"].map((h) => (
+                    <div className="grid px-4 py-2.5" style={{ gridTemplateColumns: "1fr 120px 80px 80px 80px 50px", borderBottom: "1px solid rgba(var(--ce-glass-tint),0.05)", gap: 12 }}>
+                      {["PARTICIPANT", "PROGRAM", "PHASE", "READINESS", "STATUS", ""].map((h) => (
                         <span key={h} className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>{h}</span>
                       ))}
                     </div>
-                    {PARTICIPANTS.map((p, i) => (
-                      <ParticipantRow key={p.id} p={p} accent={accent} isLast={i === PARTICIPANTS.length - 1} />
+                    {participants.map((p, i) => (
+                      <ParticipantRowWithRemove key={p.id} p={p} accent={accent} isLast={i === participants.length - 1} onRemove={() => setRemoveParticipant(p)} />
                     ))}
                   </div>
                 </motion.div>
@@ -743,7 +1123,7 @@ export function ProgramsSurface() {
           <>
             <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
               initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={() => setSelectedGrant(null)} />
-            <GrantDrawer grant={selectedGrant} accent={accent} onClose={() => setSelectedGrant(null)} />
+            <GrantDrawer grant={selectedGrant} accent={accent} onClose={() => setSelectedGrant(null)} onApply={(g) => setGrantAppTarget(g)} />
           </>
         )}
       </AnimatePresence>
@@ -764,6 +1144,39 @@ export function ProgramsSurface() {
       <AnimatePresence>
         {createOpen && (
           <CreateProgramPanel accent={accent} onClose={() => setCreateOpen(false)} onCreated={(p) => setPrograms((prev) => [...prev, p])} />
+        )}
+      </AnimatePresence>
+
+      {/* Enrollment modal */}
+      <AnimatePresence>
+        {enrollProgram && (
+          <EnrollmentModal program={enrollProgram} accent={accent} onClose={() => setEnrollProgram(null)} onEnroll={handleEnroll} />
+        )}
+      </AnimatePresence>
+
+      {/* Grant application panel */}
+      <AnimatePresence>
+        {grantAppTarget && (
+          <>
+            <motion.div className="fixed inset-0 z-40" style={{ background: "rgba(var(--ce-shadow-tint),0.4)" }}
+              initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+              onClick={() => setGrantAppTarget(null)} />
+            <GrantApplicationPanel grant={grantAppTarget} accent={accent} onClose={() => setGrantAppTarget(null)} onSubmit={handleGrantSubmit} />
+          </>
+        )}
+      </AnimatePresence>
+
+      {/* Add participant modal */}
+      <AnimatePresence>
+        {addParticipantOpen && (
+          <AddParticipantModal accent={accent} onClose={() => setAddParticipantOpen(false)} onAdd={handleAddParticipant} />
+        )}
+      </AnimatePresence>
+
+      {/* Remove participant confirm */}
+      <AnimatePresence>
+        {removeParticipant && (
+          <RemoveParticipantModal participant={removeParticipant} accent={accent} onClose={() => setRemoveParticipant(null)} onConfirm={handleRemoveParticipant} />
         )}
       </AnimatePresence>
     </RoleShell>
