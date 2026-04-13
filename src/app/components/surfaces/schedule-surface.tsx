@@ -150,6 +150,7 @@ const MOCK_AVAILABILITY: AvailabilityBlock[] = [
 const DAY_LABELS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"] as const;
 const DAY_KEYS: ("mon" | "tue" | "wed" | "thu" | "fri" | "sat" | "sun")[] = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 const TIME_PERIODS = ["Morning", "Afternoon", "Evening"] as const;
+const TIME_PERIOD_LABELS: Record<string, string> = { Morning: "9 AM – 12 PM", Afternoon: "1 PM – 5 PM", Evening: "6 PM – 9 PM" };
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -263,6 +264,7 @@ export function ScheduleSurface({ role: roleProp, onNavigate: onNavProp }: Sched
               events={events}
               setEvents={setEvents}
               availability={availability}
+              setAvailability={setAvailability}
               toggleAvailability={toggleAvailability}
               onNavigate={handleNavigate}
             />
@@ -361,9 +363,10 @@ function BuildingState({
 
                   {/* Time rows */}
                   {TIME_PERIODS.map((period) => (
-                    <>
-                      <div key={`label-${period}`} className="flex items-center" style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)" }}>
-                        {period}
+                    <React.Fragment key={period}>
+                      <div className="flex flex-col justify-center" style={{ fontFamily: "var(--font-body)" }}>
+                        <span style={{ fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>{period}</span>
+                        <span style={{ fontSize: 9, color: "var(--ce-text-quaternary)" }}>{TIME_PERIOD_LABELS[period]}</span>
                       </div>
                       {timeSlots.map((slot, dayIdx) => {
                         const periodKey = period.toLowerCase() as "morning" | "afternoon" | "evening";
@@ -372,17 +375,17 @@ function BuildingState({
                           <button
                             key={`${slot.day}-${period}`}
                             onClick={() => toggleSlot(dayIdx, periodKey)}
-                            className="h-9 rounded-md cursor-pointer transition-all hover:scale-[1.04]"
+                            className="h-12 rounded-lg cursor-pointer transition-all hover:scale-[1.04] flex items-center justify-center"
                             style={{
                               background: active ? "rgba(34,211,238,0.18)" : "rgba(var(--ce-glass-tint),0.04)",
-                              border: active ? "1px solid rgba(34,211,238,0.3)" : "1px solid rgba(var(--ce-glass-tint),0.06)",
+                              border: active ? "1.5px solid rgba(34,211,238,0.3)" : "1px solid rgba(var(--ce-glass-tint),0.06)",
                             }}
                           >
-                            {active && <Check className="w-3 h-3 mx-auto" style={{ color: "var(--ce-role-edgestar)" }} />}
+                            {active && <Check className="w-4 h-4" style={{ color: "var(--ce-role-edgestar)" }} />}
                           </button>
                         );
                       })}
-                    </>
+                    </React.Fragment>
                   ))}
                 </div>
               </div>
@@ -479,13 +482,14 @@ function BuildingState({
 // ─── Active State ────────────────────────────────────────────────────────────
 
 function ActiveState({
-  activeView, setActiveView, events, setEvents, availability, toggleAvailability, onNavigate,
+  activeView, setActiveView, events, setEvents, availability, setAvailability, toggleAvailability, onNavigate,
 }: {
   activeView: "timeline" | "week" | "availability";
   setActiveView: (v: "timeline" | "week" | "availability") => void;
   events: CalendarEvent[];
   setEvents: React.Dispatch<React.SetStateAction<CalendarEvent[]>>;
   availability: AvailabilityBlock[];
+  setAvailability: React.Dispatch<React.SetStateAction<AvailabilityBlock[]>>;
   toggleAvailability: (id: string) => void;
   onNavigate: (t: string) => void;
 }) {
@@ -500,8 +504,33 @@ function ActiveState({
   // Detail panel state
   const [selectedEvent, setSelectedEvent] = useState<CalendarEvent | null>(null);
 
+  // Conflict detection helper
+  const checkConflict = (date: string, time: string, duration: string): CalendarEvent | null => {
+    if (!date || !time) return null;
+    const parseH = (t: string) => {
+      const m = t.match(/(\d+):(\d+)\s*(AM|PM)?/i);
+      if (!m) return 12;
+      let h = parseInt(m[1]); const min = parseInt(m[2]); const p = (m[3] || "").toUpperCase();
+      if (p === "PM" && h !== 12) h += 12; if (p === "AM" && h === 12) h = 0;
+      return h + min / 60;
+    };
+    const parseDur = (d: string) => { if (d.includes("hour")) return parseFloat(d) || 1; return (parseFloat(d) || 60) / 60; };
+    const newStart = parseH(time);
+    const newEnd = newStart + parseDur(duration);
+    return events.find((e) => {
+      if (e.date !== date) return false;
+      const eStart = parseH(e.time);
+      const eEnd = eStart + parseDur(e.duration);
+      return newStart < eEnd && newEnd > eStart;
+    }) || null;
+  };
+
   const handleCreateEvent = () => {
     if (!newEvent.title.trim()) return;
+    // Check for conflicts
+    const conflict = checkConflict(newEvent.date, newEvent.time, newEvent.duration);
+    if (conflict && !window.confirm(`This overlaps with "${conflict.title}" at ${conflict.time}. Create anyway?`)) return;
+
     const created: CalendarEvent = {
       id: `user-${Date.now()}`,
       title: newEvent.title,
@@ -554,32 +583,36 @@ function ActiveState({
         </div>
         <button
           onClick={() => setShowCreatePanel(true)}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02]"
+          className="flex items-center gap-1.5 px-4 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02] hover:brightness-110"
           style={{
             fontFamily: "var(--font-body)", fontWeight: 500,
-            background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
-            border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+            background: "rgba(var(--ce-cyan-rgb),0.1)", color: "var(--ce-cyan)",
+            border: "1px solid rgba(var(--ce-cyan-rgb),0.15)",
           }}
         >
-          <Plus className="w-3 h-3" /> Add Event
+          <Plus className="w-3.5 h-3.5" /> Add Event
         </button>
       </div>
 
       {/* Tab bar */}
       <motion.div
         className="flex items-center gap-1 mb-6 p-0.5 rounded-lg w-fit"
+        role="tablist"
         initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.15 }}
         style={{ background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}
       >
         {views.map((v) => (
           <button
             key={v}
+            role="tab"
+            aria-selected={activeView === v}
             onClick={() => setActiveView(v)}
-            className="px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all capitalize"
+            className="px-3 py-1.5 rounded-md text-[12px] cursor-pointer transition-all"
             style={{
-              fontFamily: "var(--font-body)",
-              background: activeView === v ? "rgba(var(--ce-glass-tint),0.08)" : "transparent",
+              fontFamily: "var(--font-body)", fontWeight: activeView === v ? 500 : 400,
+              background: activeView === v ? "rgba(var(--ce-role-edgestar-rgb),0.08)" : "transparent",
               color: activeView === v ? "var(--ce-text-primary)" : "var(--ce-text-tertiary)",
+              border: activeView === v ? "1px solid rgba(var(--ce-role-edgestar-rgb),0.12)" : "1px solid transparent",
             }}
           >
             {v === "timeline" ? "Timeline" : v === "week" ? "Week" : "Availability"}
@@ -589,9 +622,9 @@ function ActiveState({
 
       {/* View content */}
       <AnimatePresence mode="wait">
-        {activeView === "timeline" && <TimelineView key="timeline" events={events} onNavigate={onNavigate} />}
+        {activeView === "timeline" && <TimelineView key="timeline" events={events} onNavigate={onNavigate} onSelectEvent={setSelectedEvent} />}
         {activeView === "week" && <WeekView key="week" events={events} onSelectEvent={setSelectedEvent} />}
-        {activeView === "availability" && <AvailabilityView key="availability" blocks={availability} toggle={toggleAvailability} />}
+        {activeView === "availability" && <AvailabilityView key="availability" blocks={availability} toggle={toggleAvailability} setBlocks={setAvailability} />}
       </AnimatePresence>
 
       {/* ── Create Event Panel ── */}
@@ -618,7 +651,7 @@ function ActiveState({
               {/* Panel header */}
               <div className="flex items-center justify-between p-5 pb-4" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 <h2 style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 14, color: "var(--ce-text-primary)" }}>
-                  New Event
+                  {newEvent.title ? "Edit Event" : "New Event"}
                 </h2>
                 <button
                   onClick={() => setShowCreatePanel(false)}
@@ -659,40 +692,43 @@ function ActiveState({
                   </select>
                 </div>
 
-                {/* Date */}
-                <div className="flex flex-col gap-1.5">
-                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Date</label>
-                  <input
-                    type="text"
-                    value={newEvent.date}
-                    onChange={(e) => setNewEvent((prev) => ({ ...prev, date: e.target.value }))}
-                    placeholder="2026-03-28"
-                    style={glassInputStyle}
-                  />
-                </div>
-
-                {/* Time */}
-                <div className="flex flex-col gap-1.5">
-                  <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Time</label>
-                  <input
-                    type="text"
-                    value={newEvent.time}
-                    onChange={(e) => setNewEvent((prev) => ({ ...prev, time: e.target.value }))}
-                    placeholder="2:00 PM"
-                    style={glassInputStyle}
-                  />
+                {/* Date + Time row */}
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="flex flex-col gap-1.5">
+                    <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Date</label>
+                    <input
+                      type="date"
+                      value={newEvent.date}
+                      onChange={(e) => setNewEvent((prev) => ({ ...prev, date: e.target.value }))}
+                      style={{ ...glassInputStyle, colorScheme: "dark" }}
+                    />
+                  </div>
+                  <div className="flex flex-col gap-1.5">
+                    <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Time</label>
+                    <input
+                      type="time"
+                      value={newEvent.time}
+                      onChange={(e) => setNewEvent((prev) => ({ ...prev, time: e.target.value }))}
+                      style={{ ...glassInputStyle, colorScheme: "dark" }}
+                    />
+                  </div>
                 </div>
 
                 {/* Duration */}
                 <div className="flex flex-col gap-1.5">
                   <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500 }}>Duration</label>
-                  <input
-                    type="text"
+                  <select
                     value={newEvent.duration}
                     onChange={(e) => setNewEvent((prev) => ({ ...prev, duration: e.target.value }))}
-                    placeholder="1 hour"
-                    style={glassInputStyle}
-                  />
+                    style={{ ...glassInputStyle, appearance: "none" as const }}
+                  >
+                    <option value="15 min">15 minutes</option>
+                    <option value="30 min">30 minutes</option>
+                    <option value="45 min">45 minutes</option>
+                    <option value="1 hour">1 hour</option>
+                    <option value="1.5 hours">1.5 hours</option>
+                    <option value="2 hours">2 hours</option>
+                  </select>
                 </div>
 
                 {/* Location */}
@@ -796,8 +832,9 @@ function ActiveState({
                     className="inline-flex px-2 py-0.5 rounded text-[10px]"
                     style={{
                       fontFamily: "var(--font-body)", fontWeight: 500,
-                      color: TYPE_CONFIG[selectedEvent.type].color,
-                      background: "rgba(var(--ce-glass-tint),0.06)",
+                      color: "#000",
+                      background: TYPE_CONFIG[selectedEvent.type].color,
+                      opacity: 0.85,
                     }}
                   >
                     {TYPE_CONFIG[selectedEvent.type].label}
@@ -887,32 +924,88 @@ function ActiveState({
               </div>
 
               {/* Actions footer */}
-              <div className="p-5 pt-4 flex items-center gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
-                <button
-                  onClick={() => {
-                    toast.success("Event rescheduled", `"${selectedEvent.title}" has been rescheduled.`);
-                    setSelectedEvent(null);
-                  }}
-                  className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
-                  style={{
-                    fontFamily: "var(--font-body)", fontWeight: 500,
-                    background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
-                    border: "1px solid rgba(var(--ce-glass-tint),0.08)",
-                  }}
-                >
-                  Reschedule
-                </button>
-                <button
-                  onClick={() => handleCancelEvent(selectedEvent)}
-                  className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
-                  style={{
-                    fontFamily: "var(--font-body)", fontWeight: 500,
-                    background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.08)", color: "var(--ce-status-error)",
-                    border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)",
-                  }}
-                >
-                  Cancel Event
-                </button>
+              <div className="p-5 pt-4 flex flex-col gap-2" style={{ borderTop: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                {/* Join Meeting — only for virtual events */}
+                {selectedEvent.isVirtual && (
+                  <button
+                    className="w-full py-2.5 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01] flex items-center justify-center gap-1.5"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "var(--ce-role-edgestar)", color: "#000",
+                    }}
+                  >
+                    <Video className="w-3.5 h-3.5" /> Join Meeting
+                  </button>
+                )}
+                <div className="flex items-center gap-2">
+                  {/* Edit — opens create panel with prefilled data */}
+                  <button
+                    onClick={() => {
+                      setNewEvent({
+                        title: selectedEvent.title,
+                        type: selectedEvent.type,
+                        date: selectedEvent.date,
+                        time: selectedEvent.time,
+                        duration: selectedEvent.duration,
+                        location: selectedEvent.location,
+                        isVirtual: selectedEvent.isVirtual,
+                      });
+                      setSelectedEvent(null);
+                      setShowCreatePanel(true);
+                    }}
+                    className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                    }}
+                  >
+                    Edit
+                  </button>
+                  {/* Reschedule — opens create panel with prefilled data */}
+                  <button
+                    onClick={() => {
+                      // Prefill the create form with this event's data so user can change date/time
+                      setNewEvent({
+                        title: selectedEvent.title,
+                        type: selectedEvent.type,
+                        date: "",
+                        time: "",
+                        duration: selectedEvent.duration,
+                        location: selectedEvent.location,
+                        isVirtual: selectedEvent.isVirtual,
+                      });
+                      // Remove the old event
+                      setEvents((prev) => prev.filter((e) => e.id !== selectedEvent.id));
+                      setSelectedEvent(null);
+                      setShowCreatePanel(true);
+                    }}
+                    className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "rgba(var(--ce-glass-tint),0.06)", color: "var(--ce-text-secondary)",
+                      border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                    }}
+                  >
+                    Reschedule
+                  </button>
+                  {/* Cancel — with confirmation */}
+                  <button
+                    onClick={() => {
+                      if (window.confirm(`Cancel "${selectedEvent.title}"? This cannot be undone.`)) {
+                        handleCancelEvent(selectedEvent);
+                      }
+                    }}
+                    className="flex-1 py-2 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.01]"
+                    style={{
+                      fontFamily: "var(--font-body)", fontWeight: 500,
+                      background: "rgba(var(--ce-status-error-rgb, 239,68,68),0.08)", color: "var(--ce-status-error)",
+                      border: "1px solid rgba(var(--ce-status-error-rgb, 239,68,68),0.15)",
+                    }}
+                  >
+                    Cancel
+                  </button>
+                </div>
               </div>
             </motion.div>
           </>
@@ -924,7 +1017,7 @@ function ActiveState({
 
 // ─── Timeline View ───────────────────────────────────────────────────────────
 
-function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavigate: (t: string) => void }) {
+function TimelineView({ events, onNavigate, onSelectEvent }: { events: CalendarEvent[]; onNavigate: (t: string) => void; onSelectEvent: (e: CalendarEvent) => void }) {
   const groups = groupEvents(events);
 
   return (
@@ -932,6 +1025,20 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
+      {/* Sophia insight — top of timeline for orientation */}
+      <motion.div
+        className="mb-5"
+        initial={{ opacity: 0, y: 6 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ delay: 0.1, duration: 0.3, ease: EASE }}
+      >
+        <SophiaInsight
+          variant="inline"
+          message="You have 3 sessions this week. Your next is with Marcus Chen today at 2pm."
+          action={{ label: "Book a session", onClick: () => onNavigate("sessions") }}
+        />
+      </motion.div>
+
       {groups.map((group, gi) => (
         <div key={group.label} className="mb-6">
           <h3 className="mb-2.5" style={{ fontFamily: "var(--font-display)", fontWeight: 500, fontSize: 13, color: "var(--ce-text-tertiary)" }}>
@@ -947,7 +1054,8 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: gi * 0.08 + ei * 0.04, duration: 0.3, ease: EASE }}
                 >
-                  <GlassCard className="p-3.5 flex items-center gap-3 cursor-pointer transition-all hover:scale-[1.005]" style={{ border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+                  <div onClick={() => onSelectEvent(event)} className="cursor-pointer">
+                  <GlassCard className="p-3.5 flex items-center gap-3 transition-all hover:scale-[1.005]">
                     {/* Time column */}
                     <div className="flex-shrink-0 w-[56px] text-right">
                       <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)", fontWeight: 500 }}>
@@ -968,8 +1076,10 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                           {event.title}
                         </p>
                         <span className="flex-shrink-0 px-1.5 py-0.5 rounded text-[10px]" style={{
-                          fontFamily: "var(--font-body)", color: cfg.color,
-                          background: `rgba(var(--ce-glass-tint),0.04)`,
+                          fontFamily: "var(--font-body)", fontWeight: 500,
+                          color: "#000",
+                          background: cfg.color,
+                          opacity: 0.85,
                         }}>
                           {cfg.label}
                         </span>
@@ -991,8 +1101,8 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
 
                     {/* Attendee avatars */}
                     {event.attendees.length > 0 && (
-                      <div className="flex-shrink-0 flex -space-x-1.5">
-                        {event.attendees.slice(0, 3).map((a, i) => (
+                      <div className="flex-shrink-0 flex items-center gap-1">
+                        {event.attendees.slice(0, 2).map((a, i) => (
                           <div
                             key={i}
                             className="w-6 h-6 rounded-full flex items-center justify-center text-[10px]"
@@ -1006,7 +1116,7 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                             {a.avatarInitial}
                           </div>
                         ))}
-                        {event.attendees.length > 3 && (
+                        {event.attendees.length > 2 && (
                           <div
                             className="w-6 h-6 rounded-full flex items-center justify-center text-[9px]"
                             style={{
@@ -1016,7 +1126,7 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                               color: "var(--ce-text-quaternary)",
                             }}
                           >
-                            +{event.attendees.length - 3}
+                            +{event.attendees.length - 2}
                           </div>
                         )}
                       </div>
@@ -1025,6 +1135,7 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
                     {/* Action */}
                     <ChevronRight className="w-3.5 h-3.5 flex-shrink-0" style={{ color: "var(--ce-text-quaternary)" }} />
                   </GlassCard>
+                  </div>
                 </motion.div>
               );
             })}
@@ -1032,19 +1143,6 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
         </div>
       ))}
 
-      {/* Sophia insight */}
-      <motion.div
-        className="mt-4"
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.5, duration: 0.3, ease: EASE }}
-      >
-        <SophiaInsight
-          variant="inline"
-          message="You have 3 sessions this week. Your next is with Marcus Chen today at 2pm."
-          action={{ label: "Book a session", onClick: () => onNavigate("sessions") }}
-        />
-      </motion.div>
     </motion.div>
   );
 }
@@ -1052,7 +1150,36 @@ function TimelineView({ events, onNavigate }: { events: CalendarEvent[]; onNavig
 // ─── Week View ───────────────────────────────────────────────────────────────
 
 function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelectEvent: (e: CalendarEvent) => void }) {
-  // Build columns: Mon–Sun
+  // Parse time string "2:00 PM" → hour as decimal (14.0)
+  const parseTimeToHour = (time: string): number => {
+    const match = time.match(/(\d+):(\d+)\s*(AM|PM)/i);
+    if (!match) return 12;
+    let h = parseInt(match[1]);
+    const m = parseInt(match[2]);
+    const period = match[3].toUpperCase();
+    if (period === "PM" && h !== 12) h += 12;
+    if (period === "AM" && h === 12) h = 0;
+    return h + m / 60;
+  };
+
+  // Parse duration "30 min" or "1 hour" → hours
+  const parseDuration = (d: string): number => {
+    if (d.includes("hour")) {
+      const n = parseFloat(d);
+      return isNaN(n) ? 1 : n;
+    }
+    const mins = parseFloat(d);
+    return isNaN(mins) ? 1 : mins / 60;
+  };
+
+  // Time grid: 8 AM to 8 PM
+  const START_HOUR = 8;
+  const END_HOUR = 20;
+  const HOUR_HEIGHT = 48; // px per hour
+  const totalHeight = (END_HOUR - START_HOUR) * HOUR_HEIGHT;
+  const hours = Array.from({ length: END_HOUR - START_HOUR }, (_, i) => START_HOUR + i);
+
+  // Build columns
   const columns: CalendarEvent[][] = Array.from({ length: 7 }, () => []);
   events.forEach((e) => {
     const dayIdx = getWeekDay(e.date);
@@ -1064,75 +1191,136 @@ function WeekView({ events, onSelectEvent }: { events: CalendarEvent[]; onSelect
       initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }}
       transition={{ duration: 0.3, ease: EASE }}
     >
-      <div className="grid grid-cols-7 gap-1.5" style={{ minHeight: 320 }}>
-        {DAY_LABELS.map((day, idx) => (
-          <div key={day} className="flex flex-col gap-1">
-            {/* Day header */}
-            <div
-              className="text-center py-1.5 rounded-md mb-1"
-              style={{
-                fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 500,
-                color: idx < 5 ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)",
-                background: "rgba(var(--ce-glass-tint),0.03)",
-              }}
-            >
-              {day}
+      {/* Sophia insight — top of week view */}
+      <SophiaInsight
+        variant="inline"
+        message="Your week is taking shape. 4 events across 5 days."
+      />
+
+      <div className="flex mt-4">
+        {/* Hour labels column */}
+        <div className="flex-shrink-0 w-[48px] pt-[32px]">
+          {hours.map((h) => (
+            <div key={h} style={{ height: HOUR_HEIGHT }} className="flex items-start justify-end pr-2">
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-quaternary)", marginTop: -5 }}>
+                {h === 0 ? "12 AM" : h < 12 ? `${h} AM` : h === 12 ? "12 PM" : `${h - 12} PM`}
+              </span>
             </div>
-            {/* Events in this day */}
-            {columns[idx].length === 0 && (
-              <div className="flex-1 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", minHeight: 48 }} />
-            )}
-            {columns[idx].map((event) => {
-              const cfg = TYPE_CONFIG[event.type];
-              return (
-                <button
-                  key={event.id}
-                  onClick={() => onSelectEvent(event)}
-                  className="text-left p-2 rounded-lg cursor-pointer transition-all hover:scale-[1.02]"
-                  style={{
-                    background: "rgba(var(--ce-glass-tint),0.04)",
-                    border: "1px solid rgba(var(--ce-glass-tint),0.06)",
-                    borderLeft: `2px solid ${cfg.color}`,
-                  }}
-                >
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 10, color: "var(--ce-text-primary)", fontWeight: 500 }} className="truncate mb-0.5">
-                    {event.title}
-                  </p>
-                  <p style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-quaternary)" }}>
-                    {event.time}
-                  </p>
-                </button>
-              );
-            })}
-          </div>
-        ))}
+          ))}
+        </div>
+
+        {/* Day columns grid */}
+        <div className="flex-1 grid grid-cols-7 gap-px" style={{ background: "rgba(var(--ce-glass-tint),0.03)" }}>
+          {DAY_LABELS.map((day, idx) => (
+            <div key={day} className="flex flex-col" style={{ background: "var(--ce-void)" }}>
+              {/* Day header */}
+              <div
+                className="text-center py-1.5 sticky top-0 z-10"
+                style={{
+                  fontFamily: "var(--font-body)", fontSize: 11, fontWeight: 500,
+                  color: idx < 5 ? "var(--ce-text-secondary)" : "var(--ce-text-quaternary)",
+                  background: "var(--ce-void)",
+                  borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)",
+                }}
+              >
+                {day}
+              </div>
+
+              {/* Time grid with positioned events */}
+              <div className="relative" style={{ height: totalHeight }}>
+                {/* Hour grid lines */}
+                {hours.map((h) => (
+                  <div
+                    key={h}
+                    className="absolute left-0 right-0"
+                    style={{
+                      top: (h - START_HOUR) * HOUR_HEIGHT,
+                      height: 1,
+                      background: "rgba(var(--ce-glass-tint),0.04)",
+                    }}
+                  />
+                ))}
+
+                {/* Events positioned by time */}
+                {columns[idx].map((event) => {
+                  const cfg = TYPE_CONFIG[event.type];
+                  const hour = parseTimeToHour(event.time);
+                  const duration = parseDuration(event.duration);
+                  const top = Math.max(0, (hour - START_HOUR) * HOUR_HEIGHT);
+                  const height = Math.max(24, duration * HOUR_HEIGHT);
+
+                  return (
+                    <button
+                      key={event.id}
+                      onClick={() => onSelectEvent(event)}
+                      className="absolute left-0.5 right-0.5 text-left px-1.5 py-1 rounded cursor-pointer transition-all hover:brightness-125 overflow-hidden"
+                      style={{
+                        top,
+                        height,
+                        background: `${cfg.color}15`,
+                        borderLeft: `2px solid ${cfg.color}`,
+                        border: `1px solid ${cfg.color}30`,
+                      }}
+                    >
+                      <p style={{ fontFamily: "var(--font-body)", fontSize: 9, color: "var(--ce-text-primary)", fontWeight: 500 }} className="truncate">
+                        {event.title}
+                      </p>
+                      <p style={{ fontFamily: "var(--font-body)", fontSize: 8, color: "var(--ce-text-tertiary)" }}>
+                        {event.time}
+                      </p>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
-      {/* Sophia insight */}
-      <motion.div
-        className="mt-5"
-        initial={{ opacity: 0, y: 6 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.3, ease: EASE }}
-      >
-        <SophiaInsight
-          variant="inline"
-          message="Your week is taking shape. 4 events across 5 days."
-        />
-      </motion.div>
     </motion.div>
   );
 }
 
 // ─── Availability View ───────────────────────────────────────────────────────
 
-function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; toggle: (id: string) => void }) {
+function AvailabilityView({ blocks, toggle, setBlocks }: { blocks: AvailabilityBlock[]; toggle: (id: string) => void; setBlocks: React.Dispatch<React.SetStateAction<AvailabilityBlock[]>> }) {
+  const [showAddForm, setShowAddForm] = useState(false);
+  const [newBlock, setNewBlock] = useState({ label: "", days: [] as string[], startTime: "09:00", endTime: "12:00" });
+
   const activeHours = blocks.filter((b) => b.active).reduce((acc, b) => {
     const start = parseTime(b.startTime);
     const end = parseTime(b.endTime);
     return acc + (end - start) * b.days.length;
   }, 0);
   const activeDays = new Set(blocks.filter((b) => b.active).flatMap((b) => b.days)).size;
+
+  const ALL_DAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+  const handleAddBlock = () => {
+    if (!newBlock.label.trim() || newBlock.days.length === 0) return;
+    const block: AvailabilityBlock = {
+      id: `block-${Date.now()}`,
+      label: newBlock.label,
+      days: newBlock.days,
+      startTime: newBlock.startTime.includes(":")
+        ? (() => { const [h, m] = newBlock.startTime.split(":").map(Number); const p = h >= 12 ? "PM" : "AM"; return `${h > 12 ? h - 12 : h || 12}:${String(m).padStart(2, "0")} ${p}`; })()
+        : newBlock.startTime,
+      endTime: newBlock.endTime.includes(":")
+        ? (() => { const [h, m] = newBlock.endTime.split(":").map(Number); const p = h >= 12 ? "PM" : "AM"; return `${h > 12 ? h - 12 : h || 12}:${String(m).padStart(2, "0")} ${p}`; })()
+        : newBlock.endTime,
+      active: true,
+    };
+    setBlocks((prev) => [...prev, block]);
+    setNewBlock({ label: "", days: [], startTime: "09:00", endTime: "12:00" });
+    setShowAddForm(false);
+    toast.success("Block added", `"${block.label}" added to your availability.`);
+  };
+
+  const glassInputStyle: React.CSSProperties = {
+    width: "100%", padding: "8px 10px", borderRadius: 8,
+    background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+    fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)", outline: "none",
+  };
 
   return (
     <motion.div
@@ -1156,7 +1344,7 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
       </div>
 
       {/* Blocks */}
-      <div className="flex flex-col gap-2 mb-6">
+      <div className="flex flex-col gap-2 mb-4">
         {blocks.map((block, i) => (
           <motion.div
             key={block.id}
@@ -1164,24 +1352,16 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: i * 0.04, duration: 0.3, ease: EASE }}
           >
-            <GlassCard
-              className="p-3.5 flex items-center gap-3 cursor-pointer transition-all hover:scale-[1.003]"
-              style={{
-                border: block.active ? "1px solid rgba(34,211,238,0.15)" : "1px solid rgba(var(--ce-glass-tint),0.06)",
-                opacity: block.active ? 1 : 0.7,
-              }}
-              onClick={() => toggle(block.id)}
-            >
-              {/* Toggle indicator */}
+            <div onClick={() => toggle(block.id)} className="cursor-pointer">
+            <GlassCard className={`p-3.5 flex items-center gap-3 transition-all hover:scale-[1.003] ${block.active ? "" : "opacity-60"}`}>
+              {/* Toggle */}
               <div
-                className="w-8 h-4.5 rounded-full flex items-center transition-all flex-shrink-0 px-0.5"
-                style={{
-                  background: block.active ? "rgba(34,211,238,0.2)" : "rgba(var(--ce-glass-tint),0.08)",
-                }}
+                className="w-9 h-5 rounded-full flex items-center transition-all flex-shrink-0 px-0.5"
+                style={{ background: block.active ? "rgba(34,211,238,0.2)" : "rgba(var(--ce-glass-tint),0.08)" }}
               >
                 <motion.div
-                  className="w-3.5 h-3.5 rounded-full"
-                  animate={{ x: block.active ? 14 : 0 }}
+                  className="w-4 h-4 rounded-full"
+                  animate={{ x: block.active ? 16 : 0 }}
                   transition={{ duration: 0.2, ease: EASE }}
                   style={{ background: block.active ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)" }}
                 />
@@ -1192,19 +1372,115 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
                 <p style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)", fontWeight: 500 }}>
                   {block.label}
                 </p>
-                <div className="flex items-center gap-2 mt-0.5">
-                  <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-quaternary)" }}>
-                    {block.days.join(", ")}
-                  </span>
+                <div className="flex items-center gap-2 mt-1 flex-wrap">
+                  {/* Day chips */}
+                  <div className="flex gap-1">
+                    {block.days.map((d) => (
+                      <span key={d} className="px-1.5 py-0.5 rounded text-[9px]" style={{
+                        fontFamily: "var(--font-body)", fontWeight: 500,
+                        background: block.active ? "rgba(34,211,238,0.08)" : "rgba(var(--ce-glass-tint),0.04)",
+                        color: block.active ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)",
+                      }}>
+                        {d}
+                      </span>
+                    ))}
+                  </div>
                   <span style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-quaternary)" }}>
                     {block.startTime} – {block.endTime}
                   </span>
                 </div>
               </div>
             </GlassCard>
+            </div>
           </motion.div>
         ))}
       </div>
+
+      {/* Add Block */}
+      {!showAddForm ? (
+        <button
+          onClick={() => setShowAddForm(true)}
+          className="flex items-center gap-2 px-4 py-2.5 rounded-lg text-[12px] cursor-pointer transition-all hover:scale-[1.02] w-full justify-center mb-4"
+          style={{
+            fontFamily: "var(--font-body)", fontWeight: 500,
+            color: "var(--ce-text-tertiary)",
+            border: "1px dashed rgba(var(--ce-glass-tint),0.1)",
+          }}
+        >
+          <Plus className="w-3 h-3" /> Add availability block
+        </button>
+      ) : (
+        <motion.div
+          className="mb-4 p-4 rounded-xl"
+          style={{ background: "rgba(var(--ce-glass-tint),0.03)", border: "1px solid rgba(var(--ce-glass-tint),0.08)" }}
+          initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: "auto" }}
+          transition={{ duration: 0.2, ease: EASE }}
+        >
+          <div className="flex items-center justify-between mb-3">
+            <span style={{ fontFamily: "var(--font-display)", fontSize: 13, fontWeight: 500, color: "var(--ce-text-primary)" }}>New Block</span>
+            <button onClick={() => setShowAddForm(false)} className="cursor-pointer">
+              <X className="w-3.5 h-3.5" style={{ color: "var(--ce-text-quaternary)" }} />
+            </button>
+          </div>
+          <div className="flex flex-col gap-3">
+            <input
+              type="text"
+              placeholder="e.g. Morning coaching"
+              value={newBlock.label}
+              onChange={(e) => setNewBlock((p) => ({ ...p, label: e.target.value }))}
+              style={glassInputStyle}
+            />
+            {/* Day selector chips */}
+            <div>
+              <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500, display: "block", marginBottom: 6 }}>Days</label>
+              <div className="flex gap-1.5">
+                {ALL_DAYS.map((d) => {
+                  const selected = newBlock.days.includes(d);
+                  return (
+                    <button
+                      key={d}
+                      onClick={() => setNewBlock((p) => ({ ...p, days: selected ? p.days.filter((x) => x !== d) : [...p.days, d] }))}
+                      className="px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-all"
+                      style={{
+                        fontFamily: "var(--font-body)", fontWeight: 500,
+                        background: selected ? "rgba(34,211,238,0.12)" : "rgba(var(--ce-glass-tint),0.04)",
+                        color: selected ? "var(--ce-role-edgestar)" : "var(--ce-text-quaternary)",
+                        border: `1px solid ${selected ? "rgba(34,211,238,0.2)" : "rgba(var(--ce-glass-tint),0.06)"}`,
+                      }}
+                    >
+                      {d}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+            {/* Time range */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500, display: "block", marginBottom: 4 }}>Start</label>
+                <input type="time" value={newBlock.startTime} onChange={(e) => setNewBlock((p) => ({ ...p, startTime: e.target.value }))} style={{ ...glassInputStyle, colorScheme: "dark" }} />
+              </div>
+              <div>
+                <label style={{ fontFamily: "var(--font-body)", fontSize: 11, color: "var(--ce-text-tertiary)", fontWeight: 500, display: "block", marginBottom: 4 }}>End</label>
+                <input type="time" value={newBlock.endTime} onChange={(e) => setNewBlock((p) => ({ ...p, endTime: e.target.value }))} style={{ ...glassInputStyle, colorScheme: "dark" }} />
+              </div>
+            </div>
+            <button
+              onClick={handleAddBlock}
+              disabled={!newBlock.label.trim() || newBlock.days.length === 0}
+              className="w-full py-2 rounded-lg text-[12px] cursor-pointer transition-all flex items-center justify-center gap-1.5"
+              style={{
+                fontFamily: "var(--font-body)", fontWeight: 500,
+                background: newBlock.label.trim() && newBlock.days.length > 0 ? "var(--ce-role-edgestar)" : "rgba(var(--ce-glass-tint),0.06)",
+                color: newBlock.label.trim() && newBlock.days.length > 0 ? "#000" : "var(--ce-text-quaternary)",
+                opacity: newBlock.label.trim() && newBlock.days.length > 0 ? 1 : 0.7,
+              }}
+            >
+              <Plus className="w-3 h-3" /> Add Block
+            </button>
+          </div>
+        </motion.div>
+      )}
 
       {/* Share button */}
       <button
@@ -1222,6 +1498,57 @@ function AvailabilityView({ blocks, toggle }: { blocks: AvailabilityBlock[]; tog
       >
         <Send className="w-3 h-3" /> Share Availability
       </button>
+
+      {/* Scheduling settings */}
+      <div className="mt-5 p-4 rounded-xl" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
+        <h4 className="mb-3" style={{ fontFamily: "var(--font-display)", fontSize: 12, fontWeight: 500, color: "var(--ce-text-secondary)" }}>
+          Scheduling Rules
+        </h4>
+        <div className="flex flex-col gap-3">
+          <div className="flex items-center justify-between">
+            <div>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)" }}>Buffer time</span>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 10, color: "var(--ce-text-quaternary)" }}>Gap between events</p>
+            </div>
+            <select
+              style={{
+                padding: "4px 8px", borderRadius: 6, fontSize: 11,
+                background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)", outline: "none",
+                appearance: "none" as const, colorScheme: "dark",
+              }}
+              defaultValue="15"
+            >
+              <option value="0">None</option>
+              <option value="5">5 min</option>
+              <option value="10">10 min</option>
+              <option value="15">15 min</option>
+              <option value="30">30 min</option>
+            </select>
+          </div>
+          <div className="flex items-center justify-between">
+            <div>
+              <span style={{ fontFamily: "var(--font-body)", fontSize: 12, color: "var(--ce-text-primary)" }}>Minimum notice</span>
+              <p style={{ fontFamily: "var(--font-body)", fontSize: 10, color: "var(--ce-text-quaternary)" }}>How far in advance people can book</p>
+            </div>
+            <select
+              style={{
+                padding: "4px 8px", borderRadius: 6, fontSize: 11,
+                background: "rgba(var(--ce-glass-tint),0.04)", border: "1px solid rgba(var(--ce-glass-tint),0.08)",
+                color: "var(--ce-text-secondary)", fontFamily: "var(--font-body)", outline: "none",
+                appearance: "none" as const, colorScheme: "dark",
+              }}
+              defaultValue="24"
+            >
+              <option value="1">1 hour</option>
+              <option value="4">4 hours</option>
+              <option value="24">24 hours</option>
+              <option value="48">2 days</option>
+              <option value="168">1 week</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
       {/* Sophia insight */}
       <motion.div

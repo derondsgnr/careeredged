@@ -190,15 +190,8 @@ export function EdgeGuideDashboard({ onNavigate }: { onNavigate?: NavigateFn }) 
             </GlassCard>
           )}
 
-          <SophiaInsight
-            message="Sharon just completed a major milestone — a portfolio debrief session would be high-value right now. She has an interview with Figma next week."
-            actionLabel="View session prep"
-            onAction={() => onNavigate?.("sessions")}
-            delay={0.6}
-          />
-
-          {/* Pending reviews */}
-          <GlassCard delay={0.65}>
+          {/* Pending reviews — urgent, needs action, show first */}
+          <GlassCard delay={0.55}>
             <div className="flex items-center gap-2 mb-3">
               <Clock className="w-3.5 h-3.5 text-[var(--ce-role-edgepreneur)]" />
               <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Pending Reviews</span>
@@ -217,8 +210,15 @@ export function EdgeGuideDashboard({ onNavigate }: { onNavigate?: NavigateFn }) 
             ))}
           </GlassCard>
 
+          <SophiaInsight
+            message="Sharon just completed a major milestone — a portfolio debrief session would be high-value right now. She has an interview with Figma next week."
+            actionLabel="View session prep"
+            onAction={() => onNavigate?.("sessions")}
+            delay={0.6}
+          />
+
           {/* Earnings summary */}
-          <GlassCard delay={0.7}>
+          <GlassCard delay={0.65}>
             <div className="flex items-center gap-2 mb-3">
               <DollarSign className="w-3.5 h-3.5 text-ce-lime" />
               <span className="text-[13px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>Earnings</span>

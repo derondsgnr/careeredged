@@ -1669,6 +1669,13 @@ function EdgeStarView({ role, onNavigate }: { role: RoleId; onNavigate?: Navigat
           {/* Find */}
           {tab === "find" && (
             <motion.div key="find" initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.2 }}>
+              {/* Upcoming sessions — surface urgency before browsing */}
+              {UPCOMING_SESSIONS.length > 0 && (
+                <div className="mb-5">
+                  <UpcomingSessionsStrip sessions={UPCOMING_SESSIONS} onOpenThread={() => onNavigate?.("messages")} />
+                </div>
+              )}
+
               {/* Picks / Browse toggle */}
               <div className="flex items-center gap-1 mb-5 p-1 rounded-xl self-start" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.04)", width: "fit-content" }}>
                 {(["picks", "browse"] as const).map((v) => (

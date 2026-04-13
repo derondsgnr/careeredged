@@ -26,6 +26,7 @@ import {
   ArrowRight, FileText, Calendar,
   List, Map, Lock, Trophy, Rocket, X, AlertCircle, Circle,
   ChevronLeft, Plus, Archive, RefreshCw, Download, Share2, Globe,
+  Bell, Settings, Radio,
 } from "lucide-react";
 import { MindMapView } from "./edgepath-mindmap";
 import { getRoleContext, type EdgePathRoleContext } from "./edgepath-context";
@@ -941,9 +942,9 @@ function OverflowMenu() {
   const [open, setOpen] = useState(false);
 
   const items = [
-    { icon: Download, label: "Export as PDF", color: "var(--ce-text-secondary)" },
-    { icon: Share2, label: "Share your insight", color: "var(--ce-text-secondary)" },
-    { icon: RefreshCw, label: "Regenerate roadmap", color: "var(--ce-role-edgepreneur)" },
+    { icon: Share2, label: "Share Your Insight", color: "var(--ce-text-secondary)" },
+    { icon: Download, label: "Export", color: "var(--ce-text-secondary)" },
+    { icon: RefreshCw, label: "Regenerate", color: "var(--ce-role-edgepreneur)" },
     { icon: Archive, label: "Archive roadmap", color: "var(--ce-text-tertiary)" },
   ];
 
@@ -995,7 +996,178 @@ function OverflowMenu() {
   );
 }
 
-// ─���─ Phase Strip ────────────────────────────────────────────────────────────
+// ─── Roadmap Action Bar Buttons ─────────────────────────────────────────────
+// Action bar items matching the live production page:
+// Live toggle, Check Now, Share Your Insight, Export, Notification bell, Regenerate
+
+function ActionBarButton({ icon: Icon, label, onClick, badge }: {
+  icon: any;
+  label: string;
+  onClick?: () => void;
+  badge?: number;
+}) {
+  return (
+    <button
+      className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[11px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.05)] transition-colors relative"
+      style={{
+        color: "var(--ce-text-tertiary)",
+        fontFamily: "var(--font-body)",
+        border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+        background: "rgba(var(--ce-glass-tint),0.02)",
+      }}
+      onClick={onClick}
+    >
+      <Icon className="w-3.5 h-3.5" />
+      <span className="hidden lg:inline">{label}</span>
+      {badge !== undefined && badge > 0 && (
+        <span
+          className="absolute -top-1 -right-1 min-w-[16px] h-4 flex items-center justify-center rounded-full text-[9px] tabular-nums px-1"
+          style={{
+            background: "var(--ce-cyan)",
+            color: "var(--ce-void)",
+            fontFamily: "var(--font-display)",
+            fontWeight: 600,
+          }}
+        >
+          {badge > 9 ? "9+" : badge}
+        </span>
+      )}
+    </button>
+  );
+}
+
+function LiveToggle() {
+  const [isLive, setIsLive] = useState(true);
+
+  return (
+    <button
+      className="flex items-center gap-2 cursor-pointer"
+      onClick={() => setIsLive(!isLive)}
+    >
+      <span
+        className="text-[11px]"
+        style={{
+          fontFamily: "var(--font-display)",
+          fontWeight: 500,
+          color: isLive ? "var(--ce-cyan)" : "var(--ce-text-quaternary)",
+        }}
+      >
+        Live
+      </span>
+      {/* Toggle track */}
+      <div
+        className="w-7 h-4 rounded-full relative transition-colors duration-200"
+        style={{
+          background: isLive ? "rgba(var(--ce-cyan-rgb),0.25)" : "rgba(var(--ce-glass-tint),0.08)",
+        }}
+      >
+        <motion.div
+          className="absolute top-0.5 w-3 h-3 rounded-full"
+          style={{
+            background: isLive ? "var(--ce-cyan)" : "var(--ce-text-quaternary)",
+            boxShadow: isLive ? "0 0 8px rgba(var(--ce-cyan-rgb),0.4)" : "none",
+          }}
+          animate={{ left: isLive ? 14 : 2 }}
+          transition={{ type: "spring", stiffness: 500, damping: 30 }}
+        />
+      </div>
+    </button>
+  );
+}
+
+function RoadmapNotificationBell({ onAskSophia }: { onAskSophia?: (query: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const notificationCount = 3;
+
+  const notifications = [
+    {
+      type: "deadline" as const,
+      message: "Phase 2 deadline in 5 days",
+      time: "2h ago",
+      accent: "var(--ce-status-warning)",
+    },
+    {
+      type: "match" as const,
+      message: "3 new jobs match your Phase 2 skills",
+      time: "Today",
+      accent: "var(--ce-cyan)",
+    },
+    {
+      type: "update" as const,
+      message: "Sophia updated your skill gap analysis",
+      time: "Yesterday",
+      accent: "var(--ce-role-edgestar)",
+    },
+  ];
+
+  return (
+    <div className="relative">
+      <ActionBarButton
+        icon={Bell}
+        label=""
+        badge={notificationCount}
+        onClick={() => setOpen(!open)}
+      />
+
+      <AnimatePresence>
+        {open && (
+          <>
+            <div className="fixed inset-0 z-40" onClick={() => setOpen(false)} />
+            <motion.div
+              className="absolute top-full right-0 mt-2 w-[300px] rounded-xl z-50 overflow-hidden"
+              style={{
+                background: "rgba(12,14,18,0.98)",
+                border: "1px solid rgba(var(--ce-glass-tint),0.06)",
+                boxShadow: "0 16px 48px rgba(var(--ce-shadow-tint),0.5)",
+                backdropFilter: "blur(20px)",
+              }}
+              initial={{ opacity: 0, y: -4, scale: 0.98 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -4, scale: 0.98 }}
+              transition={{ duration: 0.2, ease: EASE }}
+            >
+              <div className="flex items-center justify-between px-4 py-3" style={{ borderBottom: "1px solid rgba(var(--ce-glass-tint),0.04)" }}>
+                <span className="text-[12px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
+                  Roadmap Updates
+                </span>
+                <span className="text-[10px] text-ce-cyan cursor-pointer hover:underline" style={{ fontFamily: "var(--font-body)" }}>
+                  Mark all read
+                </span>
+              </div>
+              <div className="p-1.5">
+                {notifications.map((n, i) => (
+                  <button
+                    key={i}
+                    className="flex items-start gap-2.5 w-full px-3 py-2.5 rounded-lg cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors text-left"
+                    onClick={() => {
+                      setOpen(false);
+                      if (n.type === "match" && onAskSophia) onAskSophia("Show me the new job matches for my current phase");
+                    }}
+                  >
+                    <div
+                      className="w-1.5 h-1.5 rounded-full flex-shrink-0 mt-1.5"
+                      style={{ background: n.accent }}
+                    />
+                    <div className="flex-1 min-w-0">
+                      <span className="text-[12px] text-ce-text-secondary block" style={{ fontFamily: "var(--font-body)" }}>
+                        {n.message}
+                      </span>
+                      <span className="text-[10px] text-[var(--ce-text-quaternary)]" style={{ fontFamily: "var(--font-body)" }}>
+                        {n.time}
+                      </span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          </>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+// ─── Phase Strip ────────────────────────────────────────────────────────────
 
 function PhaseStrip({ phases, activePhase, onPhaseClick, celebratingPhase }: {
   phases: PhaseData[];
@@ -1791,7 +1963,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
   const [edgePathState, setEdgePathState] = useState<EdgePathState>(data ? "active" : "active");
   const initialActivePhase = data?.phases?.find(p => p.status === "active")?.id ?? 2;
   const [activePhase, setActivePhase] = useState(initialActivePhase);
-  const [viewMode, setViewMode] = useState<"list" | "map">("list");
+  const [viewMode, setViewMode] = useState<"list" | "map">("map");
   const [phases, setPhases] = useState<PhaseData[]>(data?.phases ?? INITIAL_PHASES);
   const [milestones, setMilestones] = useState<Milestone[]>(
     data ? (data.milestones[initialActivePhase] ?? []) : PHASE_2_MILESTONES
@@ -1960,7 +2132,12 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
               onTogglePrimary={handleTogglePrimary}
             />
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-3">
+            <LiveToggle />
+            <ActionBarButton icon={RefreshCw} label="Check Now" onClick={() => handleAskSophia("Check my roadmap for any updates or changes")} />
+
+            <div className="w-px h-5" style={{ background: "rgba(var(--ce-glass-tint),0.06)" }} />
+
             <div className="flex items-center gap-0.5 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
               <button
                 className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
@@ -1977,10 +2154,11 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
               </button>
             </div>
             <OverflowMenu />
+            <RoadmapNotificationBell onAskSophia={handleAskSophia} />
           </div>
         </motion.div>
 
-        <MindMapView />
+        <MindMapView onNavigate={onNavigate} />
 
         {/* Sophia Float */}
         <SophiaAsk
@@ -2007,15 +2185,14 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
 
       <main className={`${embedded ? "pb-6" : "mt-14 pb-20"} px-6`}>
         <div className="max-w-[1200px] mx-auto">
-          {/* Roadmap Header */}
+          {/* Roadmap Header — Row 1: Title + Selector + View Toggle */}
           <motion.div
-            className={`pt-8 ${headerExtra ? "pb-4" : "pb-5"} flex ${headerExtra ? "items-start" : "items-center"} justify-between`}
+            className={`pt-8 pb-3 flex ${headerExtra ? "items-start" : "items-center"} justify-between`}
             initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1, duration: 0.4, ease: EASE }}
           >
             <div>
-              {/* Title row — always shows roadmap title + primary star */}
               <div className="flex items-center gap-3 mb-1">
                 <h1 className="text-[20px] text-ce-text-primary" style={{ fontFamily: "var(--font-display)", fontWeight: 500 }}>
                   {data
@@ -2026,7 +2203,6 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                 {activeRoadmap.isPrimary && <Star className="w-4 h-4 text-ce-lime fill-[var(--ce-lime)]" />}
               </div>
 
-              {/* Metadata line — archetype or subtitle for injected data, archetype/assessment for generated */}
               {data ? (
                 data.archetype ? (
                   <span className="text-[11px] text-ce-text-tertiary" style={{ fontFamily: "var(--font-body)" }}>
@@ -2051,12 +2227,10 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                 </div>
               )}
 
-              {/* headerExtra — injected below the title/metadata block (e.g. parent tab switcher) */}
               {headerExtra && <div className="mt-3">{headerExtra}</div>}
             </div>
 
             <div className="flex items-center gap-2">
-              {/* RoadmapSelector — always shown. Seeded from data when injected; uses ROADMAPS for EdgeStar. */}
               <RoadmapSelector
                 roadmaps={roadmaps}
                 activeId={activeRoadmapId}
@@ -2067,7 +2241,6 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                   : setEdgePathState("empty")
                 }
               />
-              {/* View toggle */}
               <div className="flex items-center gap-0.5 p-0.5 rounded-lg" style={{ background: "rgba(var(--ce-glass-tint),0.02)", border: "1px solid rgba(var(--ce-glass-tint),0.06)" }}>
                 <button
                   className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-[11px] cursor-pointer transition-colors"
@@ -2084,7 +2257,19 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                 </button>
               </div>
               <OverflowMenu />
+              <RoadmapNotificationBell onAskSophia={handleAskSophia} />
             </div>
+          </motion.div>
+
+          {/* Action Bar — Row 2: Live toggle, Check Now */}
+          <motion.div
+            className="flex items-center gap-3 pb-4"
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15, duration: 0.4, ease: EASE }}
+          >
+            <LiveToggle />
+            <ActionBarButton icon={RefreshCw} label="Check Now" onClick={() => handleAskSophia("Check my roadmap for any updates or changes")} />
           </motion.div>
 
           {/* Stale Return Bar */}
