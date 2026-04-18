@@ -192,11 +192,19 @@ function getFeatureCatalog(role: RoleId): FeatureGroup[] {
     });
   }
 
-  // CommunityEdge — All roles except Parent
+  // SocialEdge — All roles except Parent (7/8 per IA doc)
   if (role !== "parent") {
     community.push({
-      id: "community", label: "CommunityEdge", description: "Feed, groups & events",
-      icon: Users, color: COLORS.cyan, surfaceId: "community",
+      id: "socialedge", label: "SocialEdge", description: "Professional feed & network",
+      icon: MessageSquare, color: COLORS.cyan, surfaceId: "feed",
+    });
+  }
+
+  // EdgeGroups — All roles except Parent
+  if (role !== "parent") {
+    community.push({
+      id: "edgegroups", label: "EdgeGroups", description: "Communities & coach-led groups",
+      icon: Users, color: COLORS.cyan, surfaceId: "edge-groups",
     });
   }
 

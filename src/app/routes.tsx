@@ -71,6 +71,9 @@ import { EdgeMarketSurface } from "./components/surfaces/edgemarket-surface";
 import { CoursesSurface } from "./components/surfaces/courses-surface";
 import { BudgetSurface } from "./components/surfaces/budget-surface";
 import { CoachesSurface } from "./components/surfaces/coaches-surface";
+import { SocialEdgeSurface } from "./components/surfaces/socialedge-surface";
+import { EdgeGroupsSurface } from "./components/surfaces/edgegroups-surface";
+import { EdgeGroupDetail } from "./components/surfaces/edgegroup-detail";
 
 // ─── Types ──────────────────────────────────────────────────────────
 
@@ -183,6 +186,10 @@ function useRoleNavigation(): {
       resources: `/${role}/resources`,
       schedule:  `/${role}/schedule`,
       community: `/${role}/community`,
+      feed:      `/${role}/feed`,
+      socialedge: `/${role}/feed`,
+      "edge-groups": `/${role}/edge-groups`,
+      edgegroups: `/${role}/edge-groups`,
       market:    `/${role}/market`,
       courses:   `/${role}/courses`,
       budget:    `/${role}/budget`,
@@ -314,6 +321,26 @@ function WorkplacePage() {
 function CommunityPage() {
   const { role, onNavigate } = useRoleNavigation();
   return <CommunitySurface role={role} onNavigate={onNavigate} />;
+}
+
+function SocialEdgePage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <SocialEdgeSurface role={role} onNavigate={onNavigate} />;
+}
+
+function EdgeGroupsPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeGroupsSurface role={role} onNavigate={onNavigate} />;
+}
+
+function EdgeGroupDetailPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeGroupDetail role={role} onNavigate={onNavigate} />;
+}
+
+function EdgeGroupProDetailPage() {
+  const { role, onNavigate } = useRoleNavigation();
+  return <EdgeGroupDetail role={role} onNavigate={onNavigate} isProfessional />;
 }
 
 function MarketPage() {
@@ -539,6 +566,10 @@ export const router = createBrowserRouter([
       { path: ":role/resources",                Component: ResourcesPage },
       { path: ":role/workplace",                Component: WorkplacePage },
       { path: ":role/community",                Component: CommunityPage },
+      { path: ":role/feed",                     Component: SocialEdgePage },
+      { path: ":role/edge-groups",              Component: EdgeGroupsPage },
+      { path: ":role/edge-groups/:groupId",     Component: EdgeGroupDetailPage },
+      { path: ":role/edge-groups/pro/:groupId", Component: EdgeGroupProDetailPage },
       { path: ":role/market",                   Component: MarketPage },
       { path: ":role/courses",                  Component: CoursesPage },
       { path: ":role/budget",                   Component: BudgetPage },

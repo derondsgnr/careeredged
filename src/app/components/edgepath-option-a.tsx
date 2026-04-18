@@ -937,15 +937,22 @@ function RoadmapSelector({ roadmaps, activeId, onSelect, onTogglePrimary, onCrea
 
 // ─── Overflow Menu ──────────────────────────────────────────────────────────
 
-function OverflowMenu() {
+function OverflowMenu({ onNavigate }: { onNavigate?: (target: string) => void }) {
   const [open, setOpen] = useState(false);
 
   const items = [
-    { icon: Download, label: "Export as PDF", color: "var(--ce-text-secondary)" },
-    { icon: Share2, label: "Share your insight", color: "var(--ce-text-secondary)" },
-    { icon: RefreshCw, label: "Regenerate roadmap", color: "var(--ce-role-edgepreneur)" },
-    { icon: Archive, label: "Archive roadmap", color: "var(--ce-text-tertiary)" },
+    { icon: Download, label: "Export as PDF", color: "var(--ce-text-secondary)", action: "export" },
+    { icon: Share2, label: "Share your insight", color: "var(--ce-text-secondary)", action: "share" },
+    { icon: RefreshCw, label: "Regenerate roadmap", color: "var(--ce-role-edgepreneur)", action: "regenerate" },
+    { icon: Archive, label: "Archive roadmap", color: "var(--ce-text-tertiary)", action: "archive" },
   ];
+
+  const handleAction = (action: string) => {
+    setOpen(false);
+    if (action === "share" && onNavigate) {
+      onNavigate("feed");
+    }
+  };
 
   return (
     <div className="relative">
@@ -981,7 +988,7 @@ function OverflowMenu() {
                     key={i}
                     className="flex items-center gap-2.5 w-full px-3 py-2 rounded-lg text-[12px] cursor-pointer hover:bg-[rgba(var(--ce-glass-tint),0.03)] transition-colors"
                     style={{ color: item.color, fontFamily: "var(--font-body)" }}
-                    onClick={() => setOpen(false)}
+                    onClick={() => handleAction(item.action)}
                   >
                     <Icon className="w-3.5 h-3.5" /> {item.label}
                   </button>
@@ -1976,7 +1983,7 @@ export function EdgePathOptionA({ role = "edgestar", data, embedded = false, onO
                 <Map className="w-3.5 h-3.5" /> Map
               </button>
             </div>
-            <OverflowMenu />
+            <OverflowMenu onNavigate={onNavigate} />
           </div>
         </motion.div>
 
