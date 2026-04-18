@@ -6,7 +6,8 @@
  */
 
 import { createBrowserRouter, useNavigate, useParams, useOutletContext } from "react-router";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
+import { BrandPatternDiagonal } from "./components/brand-pattern-diagonal";
 import RootLayout from "./layouts/root-layout";
 import type { AppState } from "./components/state-toggle";
 
@@ -517,6 +518,50 @@ function NotFound() {
   );
 }
 
+// ─── Pattern Preview ────────────────────────────────────────────────
+
+function PatternPreview() {
+  const [key, setKey] = useState(0);
+  return (
+    <div className="min-h-screen flex flex-col items-center justify-center gap-10 p-8" style={{ background: "#08090C" }}>
+      <h1 className="text-[24px] font-semibold" style={{ fontFamily: "'Urbanist', sans-serif", color: "#E8E8ED" }}>
+        Brand Pattern — Diagonal Fold Reveal
+      </h1>
+      {/* Card mimicking the hero green card */}
+      <div
+        className="rounded-2xl overflow-hidden relative"
+        style={{ width: 420, height: 520, background: "#B3FF3B" }}
+      >
+        <div className="absolute inset-0">
+          <BrandPatternDiagonal
+            key={key}
+            staggerDelay={0.1}
+            lineDuration={0.7}
+            delay={0.2}
+            width="100%"
+            height="100%"
+            color="#009EFA"
+          />
+        </div>
+        {/* Content overlay like the real card */}
+        <div className="absolute bottom-0 left-0 right-0 p-8">
+          <p className="text-[72px] leading-[1] tracking-tight font-normal" style={{ color: "#12110E" }}>12K+</p>
+          <p className="text-[14px] mt-2" style={{ color: "rgba(18,17,14,0.7)", fontFamily: "'Satoshi', sans-serif" }}>
+            Roadmaps built for professionals across 190 countries
+          </p>
+        </div>
+      </div>
+      <button
+        onClick={() => setKey(k => k + 1)}
+        className="px-5 py-2.5 rounded-lg text-[13px] font-medium cursor-pointer transition-opacity hover:opacity-80"
+        style={{ background: "#B3FF3B", color: "#08090C", fontFamily: "'Satoshi', sans-serif" }}
+      >
+        Replay Animation
+      </button>
+    </div>
+  );
+}
+
 // ─── Router ─────────────────────────────────────────────────────────
 
 export const router = createBrowserRouter([
@@ -586,6 +631,9 @@ export const router = createBrowserRouter([
       { path: "archive/landing/:variation",     Component: ArchiveLanding },
       { path: "archive/edgepath",               Component: ArchiveEdgePathIndex },
       { path: "archive/edgepath/:option",       Component: ArchiveEdgePath },
+
+      // Preview
+      { path: "preview/pattern", Component: PatternPreview },
 
       // 404
       { path: "*", Component: NotFound },
