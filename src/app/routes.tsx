@@ -10,7 +10,20 @@ import { useCallback } from "react";
 import RootLayout from "./layouts/root-layout";
 import type { AppState } from "./components/state-toggle";
 
-// ─── Existing components (unchanged) ────────────────────────────────
+// ─── New landing page (V10) ─────────────────────────────────────────
+
+import { HomePage as V10HomePage } from "./components/landing/v10/pages/HomePage";
+import { AboutPage as V10AboutPage } from "./components/landing/v10/pages/AboutPage";
+import { PricingPage as V10PricingPage } from "./components/landing/v10/pages/PricingPage";
+import { SolutionIndividualsPage as V10SolutionIndividualsPage } from "./components/landing/v10/pages/SolutionIndividualsPage";
+import { SolutionEmployersPage as V10SolutionEmployersPage } from "./components/landing/v10/pages/SolutionEmployersPage";
+import { SolutionInstitutionsPage as V10SolutionInstitutionsPage } from "./components/landing/v10/pages/SolutionInstitutionsPage";
+import { SolutionGovernmentPage as V10SolutionGovernmentPage } from "./components/landing/v10/pages/SolutionGovernmentPage";
+import { SolutionNGOsPage as V10SolutionNGOsPage } from "./components/landing/v10/pages/SolutionNGOsPage";
+import { EdgeJobsPage as V10EdgeJobsPage } from "./components/landing/v10/pages/EdgeJobsPage";
+import { ExploreCareersPage as V10ExploreCareersPage } from "./components/landing/v10/pages/ExploreCareersPage";
+
+// ─── Archive landing variations (dev-only) ──────────────────────────
 
 import { LandingV1 } from "./components/landing/landing-v1";
 import { LandingV2 } from "./components/landing/landing-v2";
@@ -109,8 +122,7 @@ function useWebsiteNavigate() {
 }
 
 function LandingPage() {
-  const handleNavigate = useWebsiteNavigate();
-  return <LandingHomepage onNavigate={handleNavigate} />;
+  return <V10HomePage />;
 }
 
 function LoginPage() {
@@ -131,11 +143,15 @@ function SignupPage() {
   }} />;
 }
 
-/** Stub for website pages not yet built */
-function WebsiteStubPage() {
-  const handleNavigate = useWebsiteNavigate();
-  return <LandingHomepage onNavigate={handleNavigate} />;
-}
+function NewAboutPage() { return <V10AboutPage />; }
+function NewPricingPage() { return <V10PricingPage />; }
+function NewSolutionIndividualsPage() { return <V10SolutionIndividualsPage />; }
+function NewSolutionEmployersPage() { return <V10SolutionEmployersPage />; }
+function NewSolutionInstitutionsPage() { return <V10SolutionInstitutionsPage />; }
+function NewSolutionGovernmentPage() { return <V10SolutionGovernmentPage />; }
+function NewSolutionNGOsPage() { return <V10SolutionNGOsPage />; }
+function NewEdgeJobsPage() { return <V10EdgeJobsPage />; }
+function NewExploreCareersPage() { return <V10ExploreCareersPage />; }
 
 function OnboardingPage() {
   const navigate = useNavigate();
@@ -443,6 +459,7 @@ function ArchiveLanding() {
   if (variation === "v6a") return <LandingV6A onNavigate={handleNavigate} />;
   if (variation === "v6b") return <LandingV6B onNavigate={handleNavigate} />;
   if (variation === "v6c") return <LandingV6C onNavigate={handleNavigate} />;
+  if (variation === "homepage") return <LandingHomepage onNavigate={handleNavigate} />;
   return <LandingV1 onNavigate={handleNavigate} />;
 }
 
@@ -465,6 +482,7 @@ function ArchiveLandingIndex() {
           { id: "v6a", label: "V6-A — Conviction" },
           { id: "v6b", label: "V6-B — Intimacy" },
           { id: "v6c", label: "V6-C — Precision" },
+          { id: "homepage", label: "Homepage — Cyan Editorial" },
         ].map(v => (
           <button key={v.id} onClick={() => navigate(`/archive/landing/${v.id}`)} className="px-4 py-3 rounded-xl cursor-pointer text-[13px] text-[#E8E8ED]" style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.06)", fontFamily: "var(--font-display)", fontWeight: 500 }}>
             {v.label}
@@ -530,16 +548,16 @@ export const router = createBrowserRouter([
       { path: "signup",     Component: SignupPage },
       { path: "onboarding", Component: OnboardingPage },
 
-      // Website pages (sitemap) — stubs until built
-      { path: "about",                    Component: WebsiteStubPage },
-      { path: "jobs",                     Component: WebsiteStubPage },
-      { path: "edgepath",                 Component: WebsiteStubPage },
-      { path: "pricing",                  Component: WebsiteStubPage },
-      { path: "solutions/individuals",    Component: WebsiteStubPage },
-      { path: "solutions/employers",      Component: WebsiteStubPage },
-      { path: "solutions/institutions",   Component: WebsiteStubPage },
-      { path: "solutions/government",     Component: WebsiteStubPage },
-      { path: "solutions/ngos",           Component: WebsiteStubPage },
+      // Website pages (sitemap)
+      { path: "about",                    Component: NewAboutPage },
+      { path: "pricing",                  Component: NewPricingPage },
+      { path: "solutions/individuals",    Component: NewSolutionIndividualsPage },
+      { path: "solutions/employers",      Component: NewSolutionEmployersPage },
+      { path: "solutions/institutions",   Component: NewSolutionInstitutionsPage },
+      { path: "solutions/government",     Component: NewSolutionGovernmentPage },
+      { path: "solutions/ngos",           Component: NewSolutionNGOsPage },
+      { path: "edgejobs",                 Component: NewEdgeJobsPage },
+      { path: "explore",                  Component: NewExploreCareersPage },
 
       // Role-based surfaces: /:role/*
       { path: ":role",                          Component: DashboardPage },
@@ -577,15 +595,17 @@ export const router = createBrowserRouter([
       { path: ":role/careers",                  Component: CareerDiscovery },
       { path: "careers",                        Component: CareerDiscovery },
 
-      // Archives
-      { path: "archive/onboarding",             Component: ArchiveOnboardingIndex },
-      { path: "archive/onboarding/:hypothesis", Component: ArchiveOnboarding },
-      { path: "archive/shell",                  Component: ArchiveShellIndex },
-      { path: "archive/shell/:hypothesis",      Component: ArchiveShell },
-      { path: "archive/landing",                Component: ArchiveLandingIndex },
-      { path: "archive/landing/:variation",     Component: ArchiveLanding },
-      { path: "archive/edgepath",               Component: ArchiveEdgePathIndex },
-      { path: "archive/edgepath/:option",       Component: ArchiveEdgePath },
+      // Archives (dev-only — tree-shaken from production builds)
+      ...(import.meta.env.DEV ? [
+        { path: "archive/onboarding",             Component: ArchiveOnboardingIndex },
+        { path: "archive/onboarding/:hypothesis", Component: ArchiveOnboarding },
+        { path: "archive/shell",                  Component: ArchiveShellIndex },
+        { path: "archive/shell/:hypothesis",      Component: ArchiveShell },
+        { path: "archive/landing",                Component: ArchiveLandingIndex },
+        { path: "archive/landing/:variation",     Component: ArchiveLanding },
+        { path: "archive/edgepath",               Component: ArchiveEdgePathIndex },
+        { path: "archive/edgepath/:option",       Component: ArchiveEdgePath },
+      ] : []),
 
       // 404
       { path: "*", Component: NotFound },
